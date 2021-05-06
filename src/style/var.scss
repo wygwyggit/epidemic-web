@@ -1,0 +1,54 @@
+/* Color
+-------------------------- */
+
+/// color|1|Brand Color|0
+$--color-body-primary: #323232 !default;
+$--color-primary: #508bff !default;
+$--color-hua-shun-main: #FF7C33 !default;
+$--color-box-shadow-primary: #C7DAFF !default;
+$--color-box-active-primary: #eff6fe !default;
+/// color|1|Background Color|4
+$--color-white: #FFFFFF !default;
+/// color|1|Background Color|4
+$--color-black: #000000 !default;
+
+/* ecf5ff */
+
+/// color|1|Functional Color|1
+$--color-success: #36D132 !default;
+/// color|1|Functional Color|1
+$--color-warning: #FA9243 !default;
+$--color-warning-hover: #FFF7F1 !default;
+/// color|1|Functional Color|1
+$--color-danger: #FF4843 !default;
+/// color|1|Functional Color|1
+$--color-info: #909399 !default;
+$--color-label: #566892 !default;
+$--color-rate: #CBCBCB !default;
+$--color-rate-hot: #FFAF00 !default;
+/// color|1|Font Color|2
+$--color-text-primary: #001653 !default;
+$--color-text-primary-s :#1c2438 !default;
+$--color-text-table-primary: #24282C !default;
+/// color|1|Font Color|2
+$--color-text-regular: #9BA5BC !default;
+$--color-text-tip: #657282 !default;
+/// color|1|Font Color|2
+$--color-text-secondary: #566892 !default;
+/// color|1|Font Color|2
+$--color-text-placeholder: #DCDFE6 !default;
+/// color|1|Border Color|3
+$--border-color-base: #D3D7E1 !default;
+/// color|1|Border Color|3
+$--border-color-light: #EEEEF0 !default;
+/// color|1|Border Color|3
+$--border-color-lighter: #EBEEF5 !default;
+/// color|1|Border Color|3
+$--border-color-extra-light: #F2F6FC !default;
+$--border-color-reg: #D3D3D3;
+// Background
+/// color|1|Background Color|4
+$--background-color-base: #F5F7FA !default;
+$--background-color-light: #F7FBFF !default;
+$--background-color-lighter: #F0F4FB !default;
+$--background-color-btn-paper: #67A5F4 !default;
