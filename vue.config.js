@@ -13,13 +13,13 @@ module.exports = {
         port: 8880,
         // 设置代理
         proxy: {
-            '/api': {
+            '/mapi': {
                 // 目标 API 地址
-                target: 'http://127.0.0.1:3000',
+                target: 'https://c.m.163.com/',
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: {
-                    '^/api': ''
+                    '^/mapi': ''
                 }
             }
         }

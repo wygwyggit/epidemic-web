@@ -22,65 +22,122 @@
         </div>
       </div>
       <div class="main">
-        <div class="article-wrapper">
-          <!-- 文章列表 -->
-          <div class="list">
-            <article-item-card
-              v-for="item in articleList"
-              :key="item.id"
-              :articleInfo="item"
-            >
-            </article-item-card>
+        <div class="category china-s">
+          <div class="title">
+            <div class="point"></div>
+            <div class="text">全国疫情数据</div>
+            <div class="point"></div>
           </div>
-          <div class="empty">
-            <empty-data></empty-data>
+          <div class="sub-title">数据更新至 {{ listData.lastUpdateTime }}</div>
+          <div class="content-list clearfix">
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>境外输入</div>
+                <div class="count" style="color: #ffa352">
+                  {{ (listData.chinaTotal.total || {}).input }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.input }} </span>
+                </div>
+              </div>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>无症状感染者</div>
+                <div class="count" style="color: #791618">
+                  {{ (listData.chinaTotal.extData || {}).noSymptom }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span>
+                    +{{ (listData.chinaTotal.extData || {}).incrNoSymptom }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计确诊</div>
+                <div class="count" style="color: #e44a3d">
+                  {{ (listData.chinaTotal.total || {}).confirm }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.confirm }} </span>
+                </div>
+              </div>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计死亡</div>
+                <div class="count" style="color: #333">
+                  {{ (listData.chinaTotal.total || {}).dead }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.dead }} </span>
+                </div>
+              </div>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计治愈</div>
+                <div class="count" style="color: #34aa70">
+                  {{ (listData.chinaTotal.total || {}).heal }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.heal }} </span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="aside-wrapper">
-          <div class="news" v-if="articleList.length">
-            <div class="title-line">
-              <span>最近更新</span>
-              <span>News</span>
-            </div>
-            <ul>
-              <li>
-                <p class="top">
-                  <span>2020-12-07</span>
-                  <span>236472</span>
-                </p>
-                <p class="bottom">
-                  JTalk 是掘金主办的面向开发者的技术系列活动。理念是分享 &
-                  交流最新、最热的
-                </p>
-              </li>
-            </ul>
+        <div class="category china-s">
+          <div class="title">
+            <div class="point"></div>
+            <div class="text">湖南疫情数据</div>
+            <div class="point"></div>
           </div>
-          <div class="tags">
-            <div class="title-line">
-              <span>热门标签</span>
-              <span>Hot Tags</span>
-            </div>
-            <div class="tags-list">
-              <el-tag v-for="item in labelList" :key="item.id">{{
-                item.name
-              }}</el-tag>
-            </div>
-          </div>
-          <div class="friends">
-            <div class="title-line">
-              <span>友情链接</span>
-              <span>Friendly Link</span>
-            </div>
-            <div class="url-content">
-              <div class="tp">
-                他们同样是一群网虫，却不是每天泡在网上游走在淘宝和网游之间、刷着本来就快要透支的信用卡。他们或许没有踏出国门一步，但同学却不局限在一国一校，而是遍及全球！
-                <a href="">申请交换友链</a>
+          <div class="sub-title">数据更新至 {{ listData.lastUpdateTime }}</div>
+          <div class="content-list clearfix">
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计死亡</div>
+                <div class="count" style="color: #333">
+                  {{ (listData.chinaTotal.extData || {}).noSymptom }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span>
+                    +{{ (listData.chinaTotal.extData || {}).incrNoSymptom }}
+                  </span>
+                </div>
               </div>
-              <div class="tl">
-                <el-tag>标签标签标签一</el-tag>
-                <el-tag>标签一</el-tag>
-                <el-tag>标签一</el-tag>
-                <el-tag>标签一</el-tag>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计确诊</div>
+                <div class="count" style="color: #e44a3d">
+                  {{ (listData.chinaTotal.total || {}).confirm }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.confirm }} </span>
+                </div>
+              </div>
+            </div>
+            <div class="list-card hvr-sweep-to-top">
+              <div>
+                <div class="name"><span>|</span>累计治愈</div>
+                <div class="count" style="color: #34aa70">
+                  {{ (listData.chinaTotal.total || {}).dead }}
+                </div>
+                <div class="added">
+                  较昨日
+                  <span> +{{ listData.chinaTotal.today.dead }} </span>
+                </div>
               </div>
             </div>
           </div>
@@ -91,16 +148,11 @@
 </template>
 
 <script>
-import ArticleItemCard from "@/components/article-item-card";
-import EmptyData from "@/components/empty-data";
 import myAjax from "@/utils/ajax.js";
 import moment from "moment";
 export default {
   name: "home",
-  components: {
-    ArticleItemCard,
-    EmptyData,
-  },
+  components: {},
   props: {},
   data() {
     return {
@@ -109,6 +161,7 @@ export default {
         require("@/assets/images/banner1.jpg"),
         require("@/assets/images/banner2.png"),
       ],
+      listData: {},
       articleList: [],
       labelList: [],
     };
@@ -120,19 +173,24 @@ export default {
   },
   watch: {},
   created() {
-    Promise.all([this.getArticleList(), this.getLabelList()]).then(() => {});
+    Promise.all([this.getList()]).then(() => {});
   },
   mounted() {},
   beforeDestroy() {},
   methods: {
-    getLabelList() {
+    getList() {
       return new Promise((res, rej) => {
         myAjax({
-          url: "label/all",
+          url: "ug/api/wuhan/app/data/list-total",
+          method: "get",
         })
           .then((json) => {
-            if (json.result) {
-              this.labelList = json.data || [];
+            if (json.code == 10000) {
+              this.listData = json.data || {};
+              const arr = this.listData.areaTree.filter((x) => {
+                return x.name == "湖南";
+              });
+              console.log(arr);
             }
             res();
           })
@@ -164,6 +222,45 @@ export default {
 $prefixCls: "views-home";
 
 .#{$prefixCls} {
+  .hvr-sweep-to-top {
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-transform: perspective(1px) translateZ(0);
+    transform: perspective(1px) translateZ(0);
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+    position: relative;
+    -webkit-transition-property: color;
+    transition-property: color;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+  }
+  .hvr-sweep-to-top:before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(140deg, #76b5ff 0%, #508bff 100%);
+    transform: scaleY(0);
+    transform-origin: 50% 100%;
+    transition-property: transform;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out;
+    border-radius: 8px;
+  }
+  .hvr-sweep-to-top:active,
+  .hvr-sweep-to-top:focus,
+  .hvr-sweep-to-top:hover {
+    color: #fff;
+  }
+  .hvr-sweep-to-top:active:before,
+  .hvr-sweep-to-top:focus:before,
+  .hvr-sweep-to-top:hover:before {
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+  }
   .banner-warp {
     img {
       width: 100%;
@@ -187,7 +284,6 @@ $prefixCls: "views-home";
     display: flex;
     justify-content: space-between;
     margin-top: 65px;
-
     .left {
       .txt-content {
         line-height: 23px;
@@ -206,16 +302,69 @@ $prefixCls: "views-home";
 
   .main {
     padding: 10px 0 30px 0;
-    display: flex;
-
-    .article-wrapper {
-      position: relative;
-      flex: 1;
-
-      .empty {
-        position: absolute;
-        top: 120px;
-        left: 50%;
+    .category {
+      padding-bottom: 75px;
+      .title {
+        display: flex;
+        align-items: center;
+        width: 280px;
+        margin: 0 auto;
+        .point {
+          width: 13px;
+          height: 13px;
+          background: $--color-primary;
+        }
+        .text {
+          font-size: 30px;
+          color: #000;
+          margin: 0 30px;
+        }
+      }
+      .sub-title {
+        margin: 10px 0;
+        margin-left: -20px;
+        text-align: center;
+        color: #999;
+      }
+      .content-list {
+        width: 1180px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .list-card {
+        display: flex;
+        justify-content: center;
+        width: 220px;
+        background: #fff;
+        box-shadow: 0 3px 35px 0 rgba(225, 225, 225, 0.5);
+        border-radius: 6px;
+        margin-right: 16px;
+        margin-top: 20px;
+        padding: 23px;
+        cursor: pointer;
+        .name {
+          color: #000;
+          font-size: 25px;
+          span {
+            margin-right: 5px;
+            color: #508bff;
+          }
+        }
+        .count {
+          margin: 10px 0;
+          font-size: 38px;
+        }
+        .added {
+          color: #999;
+        }
+        &:hover {
+          .name,
+          span,
+          .added {
+            color: #fff;
+          }
+        }
       }
     }
 
