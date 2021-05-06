@@ -174,7 +174,6 @@ $prefixCls: "views-home";
 
   // 统一的标题样式
   .title-line {
-<<<<<<< HEAD
     padding-left: 10px;
     position: relative;
     border-left: 4px solid $--color-primary;
@@ -220,76 +219,6 @@ $prefixCls: "views-home";
       }
     }
 
-=======
-    position: relative;
-
-    span {
-      display: inline-block;
-
-      &:first-child {
-        line-height: 53px;
-        font-size: 30px;
-        border-bottom: 2px solid $--color-primary;
-      }
-
-      &:last-child {
-        height: 45px;
-        line-height: 45px;
-        margin-left: 10px;
-        font-size: 18px;
-        color: #666;
-        vertical-align: middle;
-      }
-    }
-
-    &::after {
-      content: "";
-      height: 1px;
-      width: 175px;
-      position: absolute;
-      left: 120px;
-      bottom: 1px;
-      background-color: $--border-color-base;
-    }
-  }
-
-  .about-blog {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 65px;
-
-    .left {
-      .txt-content {
-        line-height: 23px;
-        padding: 40px 0 46px 0;
-      }
-    }
-
-    .right {
-      margin-left: 140px;
-
-      img {
-        width: 200px;
-      }
-    }
-  }
-
-  .main {
-    padding: 10px 0 30px 0;
-    display: flex;
-
-    .article-wrapper {
-      position: relative;
-      flex: 1;
-
-      .empty {
-        position: absolute;
-        top: 120px;
-        left: 50%;
-      }
-    }
-
->>>>>>> 1d71c4b73870c9d0c30be07b1a96c8434778136b
     .aside-wrapper {
       width: 296px;
       margin-left: 42px;
@@ -313,21 +242,12 @@ $prefixCls: "views-home";
           margin-right: 0;
         }
       }
-<<<<<<< HEAD
 
       .news {
         ul li {
           margin-top: 21px;
           border-bottom: 1px dashed $--border-color-base;
 
-=======
-
-      .news {
-        ul li {
-          margin-top: 21px;
-          border-bottom: 1px dashed $--border-color-base;
-
->>>>>>> 1d71c4b73870c9d0c30be07b1a96c8434778136b
           .top {
             display: flex;
             justify-content: space-between;
