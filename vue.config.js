@@ -51,7 +51,7 @@ module.exports = {
     },
     chainWebpack: config => {
         config.plugin('html').tap(args => {
-            args[0].title = 'heiyg-博客';
+            args[0].title = '新冠疫情';
             return args;
         })
     }
