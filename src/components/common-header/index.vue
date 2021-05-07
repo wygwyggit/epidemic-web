@@ -43,7 +43,7 @@ export default {
           path: "impact",
         },
         {
-          text: "政府处理措施",
+          text: "隔离政策",
           name: "measures",
           path: "measures",
         },
