@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <img src="@/assets/images/banner1.jpg" class="banner">
+    <img src="@/assets/images/development-banner.jpg" class="banner">
     <div class="wrap">
         <el-timeline>
             <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.date" placement="top">
@@ -45,7 +45,6 @@ $prefixCls: "views-development";
 
   .banner {
         width: 100%;
-        height: 300px;
       }
 
   .wrap {

@@ -115,7 +115,6 @@ $prefixCls: "views-impact";
 
   .banner {
         width: 100%;
-        height: 300px;
       }
 
   .impact-item {
