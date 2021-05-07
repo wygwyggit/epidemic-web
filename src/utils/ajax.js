@@ -24,7 +24,7 @@ const myAjax = (options) => {
         }).then(json => {
             const data = json.data || {};
             // 如果后端返回错误消息
-            if (!data.result && !options.isPassFalse) {
+            if (data.code != 10000 && !options.isPassFalse) {
                 Message.closeAll();
                 Message({
                     type: 'error',

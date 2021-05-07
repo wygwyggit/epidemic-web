@@ -114,7 +114,9 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {},
+  created() {
+    window.scrollTo(0, 0);
+  },
   mounted() {
     Promise.all([this.getTotalList(), this.getHuNanTimeNumber()]).then(() => {
       this.$nextTick(() => {
@@ -469,6 +471,7 @@ $prefixCls: "views-statistical";
     }
   }
   .content {
+    margin-top: 15px;
     margin-bottom: 100px;
     li {
       display: flex;
