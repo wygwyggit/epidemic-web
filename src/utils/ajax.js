@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {
     apiBasePath,
+    napiBasePath
 } from '@/config/config'
 import {
     Message
@@ -11,7 +12,7 @@ let isLogout = false
 const myAjax = (options) => {
     return new Promise((res, rej) => {
         if (isLogout) return res()
-        const url = apiBasePath + options.url
+        const url = (options.isN ? napiBasePath : apiBasePath) + options.url
         const data = options.data || {}
         axios({
             url: url,

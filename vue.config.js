@@ -21,6 +21,15 @@ module.exports = {
                 pathRewrite: {
                     '^/mapi': ''
                 }
+            },
+            '/napi': {
+                // 目标 API 地址
+                target: 'https://ent.163.com/',
+                changeOrigin: true,
+                secure: false,
+                pathRewrite: {
+                    '^/napi': ''
+                }
             }
         }
     },
