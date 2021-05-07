@@ -1,5 +1,6 @@
 <template>
   <div :class="prefixCls">
+    <img src="@/assets/images/banner1.jpg" class="banner">
     <div class="wrap">
         <el-timeline>
             <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.date" placement="top">
@@ -42,8 +43,23 @@ $prefixCls: "views-development";
 .#{$prefixCls} {
   padding: 20px;
 
+  .banner {
+        width: 100%;
+        height: 300px;
+      }
+
   .wrap {
-      
+
+      margin-top: 20px;
+
+      .el-card.is-always-shadow {
+            box-shadow: none;
+      }
+
+      .el-card.is-always-shadow:hover {
+        box-shadow: 0 1px 6px RGB(0 0 0 / 20%);
+        border-color: #eee;
+      }
   }
 }
 </style>
