@@ -34,8 +34,8 @@ export default {
         },
         {
           text: "新冠发展",
-          name: "develop",
-          path: "develop",
+          name: "development",
+          path: "development",
         },
         {
           text: "新冠影响",
@@ -63,6 +63,7 @@ export default {
   beforeDestroy() {},
   methods: {
     redirectTo(tab) {
+      this.currentTab = tab.name;
       this.$router.push({
         path: tab.path,
       });
