@@ -3,7 +3,7 @@
     <div class="banner-wrap">
       <div class="top cover-time">
         <h2>湖南疫情地图</h2>
-        <p>截止{{ listData.lastUpdateTime }}</p>
+        <span>截止{{ listData.lastUpdateTime }}</span>
       </div>
       <div class="cover-data">
         <div class="cover-confirm">
@@ -39,18 +39,58 @@
       </div>
     </div>
     <div class="content">
-      <div class="item-warp hunan-number">
-        <div class="td">
-          <span class="dot"></span>
-          <span class="txt">疫情地图</span>
+      <li>
+        <div class="item-warp hunan-number">
+          <div class="td">
+            <span class="dot"></span>
+            <span class="txt">湖南累计疫情图</span>
+          </div>
+          <div class="bd">
+            <div
+              id="myHuNanData"
+              :style="{ width: '100%', height: '480px' }"
+            ></div>
+          </div>
         </div>
-        <div class="bd">
-          <div
-            id="myHuNanData"
-            :style="{ width: '100%', height: '300px' }"
-          ></div>
+        <div class="item-warp hunan-number">
+          <div class="td">
+            <span class="dot"></span>
+            <span class="txt">湖南疫情新增趋势</span>
+          </div>
+          <div class="bd">
+            <div
+              id="myHuNanzenData"
+              :style="{ width: '100%', height: '480px' }"
+            ></div>
+          </div>
         </div>
-      </div>
+      </li>
+      <li>
+        <div class="item-warp hunan-number">
+          <div class="td">
+            <span class="dot"></span>
+            <span class="txt">湖南疫情累计趋势</span>
+          </div>
+          <div class="bd">
+            <div
+              id="myHuNanleiData"
+              :style="{ width: '100%', height: '480px' }"
+            ></div>
+          </div>
+        </div>
+        <div class="item-warp hunan-number">
+          <div class="td">
+            <span class="dot"></span>
+            <span class="txt">湖南病例</span>
+          </div>
+          <div class="bd">
+            <div
+              id="myHuNanbinliData"
+              :style="{ width: '100%', height: '480px' }"
+            ></div>
+          </div>
+        </div>
+      </li>
     </div>
   </div>
 </template>
@@ -68,15 +108,20 @@ export default {
       isLoading: true,
       listData: {},
       provinceData: {},
+      huNanNumberList: [],
+      huNanTodayAddNumberList: [],
     };
   },
   computed: {},
   watch: {},
   created() {},
   mounted() {
-    Promise.all([this.getTotalList()]).then(() => {
+    Promise.all([this.getTotalList(), this.getHuNanTimeNumber()]).then(() => {
       this.$nextTick(() => {
         this.drawLine();
+        this.drawLineZen();
+        this.drawLineLei();
+        this.drawLineBin();
       });
 
       this.isLoading = false;
@@ -84,6 +129,24 @@ export default {
   },
   beforeDestroy() {},
   methods: {
+    getHuNanTimeNumber() {
+      return new Promise((res, rej) => {
+        myAjax({
+          url:
+            "ug/api/wuhan/app/data/list-by-area-code?areaCode=430000&t=1620392519105",
+          method: "get",
+        })
+          .then((json) => {
+            if (json.code == 10000) {
+              this.huNanTodayAddNumberList = json.data.list || [];
+            }
+            res();
+          })
+          .catch((err) => {
+            rej(err);
+          });
+      });
+    },
     getTotalList() {
       return new Promise((res, rej) => {
         myAjax({
@@ -99,7 +162,18 @@ export default {
               this.provinceData = (arrObj.children || []).find((x) => {
                 return x.name == "湖南";
               });
-              console.log(this.provinceData);
+              this.huNanNumberList = (this.provinceData.children || []).map(
+                (x) => ({
+                  value: x.total.confirm,
+                  dead: x.total.dead,
+                  heal: x.total.heal,
+                  name:
+                    x.name == "湘西自治州市"
+                      ? "湘西土家族苗族自治州"
+                      : x.name + "市",
+                })
+              );
+              console.log(this.huNanNumberList);
             }
             res();
           })
@@ -113,40 +187,218 @@ export default {
       var option;
 
       option = {
+        backgroundColor: "#fff",
+        title: {
+          text: "湖南",
+          top: 25,
+          left: "center",
+          textStyle: {
+            fontSize: 25,
+            fontWeight: 650,
+            color: "#fff",
+          },
+        },
         tooltip: {
           trigger: "item",
+          formatter: function (val) {
+            return val.data.name + "<br>人数: " + val.data.value + "人";
+          },
         },
-        legend: {
-          top: "5%",
-          left: "center",
+        toolbox: {
+          show: true,
+          orient: "vertical",
+          left: "right",
+          top: "center",
+          feature: {
+            dataView: { readOnly: false },
+            restore: {},
+            saveAsImage: {},
+          },
         },
         series: [
           {
-            name: "访问来源",
-            type: "pie",
-            radius: ["40%", "70%"],
-            avoidLabelOverlap: false,
-            label: {
-              show: false,
-              position: "center",
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: "40",
-                fontWeight: "bold",
+            type: "map",
+            map: "湖南", //这里需要注意呀,
+            //mapType: "浙江",
+            // 是否开启鼠标缩放和平移漫游 默认不开启
+            itemStyle: {
+              normal: {
+                areaColor: "#fff",
+                borderColor: "#111",
+              },
+              emphasis: {
+                areaColor: "#508bff",
+                label: {
+                  show: true,
+                  color: "white",
+                },
               },
             },
-            labelLine: {
-              show: false,
+            roam: true,
+            top: 70,
+            label: {
+              show: true, // 是否显示对应地名
             },
-            data: [
-              { value: 1048, name: "搜索引擎" },
-              { value: 735, name: "直接访问" },
-              { value: 580, name: "邮件营销" },
-              { value: 484, name: "联盟广告" },
-              { value: 300, name: "视频广告" },
-            ],
+            data: this.huNanNumberList,
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
+    drawLineBin() {
+      var chartDom = document.getElementById("myHuNanbinliData");
+      var myChart = echarts.init(chartDom);
+      var option;
+      option = {
+        xAxis: {
+          type: "category",
+          data: this.huNanNumberList.map((x) => x.name),
+        },
+        yAxis: {
+          type: "value",
+        },
+        legend: {
+          data: ["确诊", "治愈", "死亡"],
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        series: [
+          {
+            name: "确诊",
+            type: "line",
+            stack: "人数",
+            data: this.huNanNumberList.map((x) => x.value),
+          },
+          {
+            name: "治愈",
+            type: "line",
+            stack: "人数",
+            data: this.huNanNumberList.map((x) => x.heal),
+          },
+          {
+            name: "死亡",
+            type: "line",
+            stack: "人数",
+            data: this.huNanNumberList.map((x) => x.dead),
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
+    drawLineLei() {
+      var chartDom = document.getElementById("myHuNanleiData");
+      var myChart = echarts.init(chartDom);
+      var option;
+      option = {
+        xAxis: {
+          type: "category",
+          data: this.huNanTodayAddNumberList.map((x) => x.date),
+        },
+        yAxis: {
+          type: "value",
+        },
+        legend: {
+          data: ["确诊", "治愈", "死亡"],
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        series: [
+          {
+            name: "确诊",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.total.confirm),
+          },
+          {
+            name: "治愈",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.total.heal),
+          },
+          {
+            name: "死亡",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.total.dead),
+          },
+        ],
+      };
+
+      option && myChart.setOption(option);
+    },
+    drawLineZen() {
+      var chartDom = document.getElementById("myHuNanzenData");
+      var myChart = echarts.init(chartDom);
+      var option;
+      option = {
+        xAxis: {
+          type: "category",
+          data: this.huNanTodayAddNumberList.map((x) => x.date),
+        },
+        yAxis: {
+          type: "value",
+        },
+        legend: {
+          data: ["确诊", "治愈", "死亡"],
+        },
+        tooltip: {
+          trigger: "axis",
+        },
+        grid: {
+          left: "3%",
+          right: "4%",
+          bottom: "3%",
+          containLabel: true,
+        },
+        toolbox: {
+          feature: {
+            saveAsImage: {},
+          },
+        },
+        series: [
+          {
+            name: "确诊",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.today.confirm),
+          },
+          {
+            name: "治愈",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.today.heal),
+          },
+          {
+            name: "死亡",
+            type: "line",
+            stack: "人数",
+            data: this.huNanTodayAddNumberList.map((x) => x.today.dead),
           },
         ],
       };
@@ -184,15 +436,17 @@ $prefixCls: "views-statistical";
     }
     .top {
       h2 {
+        display: inline-block;
         font-size: 38px;
         color: #fff;
       }
-      p {
-        margin: 10px 0;
+      span {
+        margin-left: 15px;
         color: #fff;
       }
     }
     .cover-data {
+      margin-top: 18px;
       > div {
         width: 220px;
         display: inline-block;
@@ -215,9 +469,17 @@ $prefixCls: "views-statistical";
     }
   }
   .content {
-    display: flex;
+    margin-bottom: 100px;
+    li {
+      display: flex;
+    }
+
     .item-warp {
       margin-top: 25px;
+      flex: 1;
+      &:last-of-type {
+        margin-left: 20px;
+      }
       .td {
         margin-bottom: 15px;
         .dot {
