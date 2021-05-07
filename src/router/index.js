@@ -3,38 +3,43 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 const routes = [{
+    path: '/',
+    name: 'Main',
+    // 主路由在main中
+    component: () =>
+        import( /* webpackChunkName: "main" */ '@/Main.vue'),
+    children: [{
         path: '/',
-        name: 'Main',
-        // 主路由在main中
+        redirect: '/home'
+    }, {
+        path: '/home',
+        name: 'home',
         component: () =>
-            import ( /* webpackChunkName: "main" */ '@/Main.vue'),
-        children: [{
-            path: '/',
-            redirect: '/home'
-        }, {
-            path: '/home',
-            name: 'home',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '@/views/home/index.vue')
-        }, {
-            path: '/about',
-            name: 'about',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '@/views/about/index.vue')
-        },
-        {
-            path: '/development',
-            name: 'development',
-            component: () =>
-                import ( /* webpackChunkName: "home" */ '@/views/development/index.vue')
-        }]
+            import( /* webpackChunkName: "home" */ '@/views/home/index.vue')
+    }, {
+        path: '/about',
+        name: 'about',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/about/index.vue')
     },
     {
-        path: '/about',
-        name: 'About',
+        path: '/development',
+        name: 'development',
         component: () =>
-            import ( /* webpackChunkName: "about" */ '../views/About.vue')
-    }
+            import( /* webpackChunkName: "home" */ '@/views/development/index.vue')
+    }, {
+        path: '/statistical',
+        name: 'statistical',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/statistical/index.vue')
+    }]
+},
+{
+    path: '/about',
+    name: 'About',
+    component: () =>
+        import( /* webpackChunkName: "about" */ '../views/About.vue')
+}
 ]
 
 const router = new VueRouter({
