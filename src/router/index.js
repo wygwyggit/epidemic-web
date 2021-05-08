@@ -42,7 +42,7 @@ const routes = [{
         path: '/measures',
         name: 'measures',
         component: () =>
-            import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
+            import( /* webpackChunkName: "home" */ '@/views/measures/index.vue')
     },{
        path: '/avoidRumors',
        name: 'avoidRumors',
