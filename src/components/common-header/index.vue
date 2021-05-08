@@ -48,6 +48,11 @@ export default {
           path: "measures",
         },
         {
+          text: "避谣一线",
+          name: "avoidRumors",
+          path: "avoidRumors",
+        },
+        {
           text: "关于新冠",
           name: "about",
           path: "about",

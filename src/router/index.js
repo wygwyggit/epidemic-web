@@ -43,6 +43,11 @@ const routes = [{
         name: 'measures',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/measures/index.vue')
+    },{
+       path: '/avoidRumors',
+       name: 'avoidRumors',
+       component: () => 
+       import( /* webpackChunkName: "home" */ '@/views/avoidRumors/index.vue') 
     }]
 },
 {
