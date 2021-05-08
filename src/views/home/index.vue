@@ -376,7 +376,7 @@ $prefixCls: "views-home";
         margin-right: 20px;
         margin-top: 20px;
         padding: 23px;
-        cursor: pointer;
+        text-align: center;
         .name {
           color: #000;
           font-size: 25px;
