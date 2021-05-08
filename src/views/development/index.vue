@@ -4,7 +4,7 @@
     <div class="title">时实播报</div>
     <div class="wrap">
         <el-timeline>
-            <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top">
+            <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top" :class="{ 'one-time':  index === 0}">
                 <el-card>
                     <h4>{{ item.title }}</h4>
                 </el-card>
@@ -110,6 +110,25 @@ $prefixCls: "views-development";
 
      /deep/ .el-timeline-item__tail {
         border-left: 2px dashed $--color-primary;
+      }
+
+      /deep/ .el-timeline-item__timestamp {
+        position: relative;
+        font-size: 16px;
+      }
+
+     /deep/ .one-time .el-timeline-item__timestamp::before {
+        content: "最新";
+        width: 60px;
+        height: 30px;
+        background-color: $--color-primary;
+        font: 16px/30px -apple-system-font,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif,Helvetica Neue,PingFang SC,Hiragino Sans GB,Microsoft YaHei UI,Microsoft YaHei,Arial;
+        color: #fff;
+        text-align: center;
+        border-radius: 4px;
+        position: absolute;
+        left: 160px;
+        top: -4px;
       }
   }
 }
