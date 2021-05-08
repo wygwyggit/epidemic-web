@@ -1,7 +1,7 @@
 <template>
-  <div :class="prefixCls + ' w'">
+  <div :class="prefixCls">
     <img src="@/assets/images/impact-banner.png" class="banner">
-    <ul class="impact-list">
+    <ul class="impact-list w">
         <li class="impact-item">
             <h5 class="title">先看影响</h5>
             <div class="content">
@@ -111,7 +111,6 @@ export default {
 $prefixCls: "views-impact";
 
 .#{$prefixCls} {
-  padding: 20px;
 
   .banner {
         width: 100%;

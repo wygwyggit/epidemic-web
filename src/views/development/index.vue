@@ -1,15 +1,17 @@
 <template>
-  <div :class="prefixCls + ' w'">
+  <div :class="prefixCls">
     <img src="@/assets/images/development-banner.jpg" class="banner">
-    <div class="title">时实播报</div>
-    <div class="wrap">
-        <el-timeline>
-            <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top" :class="{ 'one-time':  index === 0}">
-                <el-card>
-                    <h4>{{ item.title }}</h4>
-                </el-card>
-            </el-timeline-item>
-        </el-timeline>
+    <div class="w">
+      <div class="title">时实播报</div>
+        <div class="wrap">
+            <el-timeline>
+                <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top" :class="{ 'one-time':  index === 0}">
+                    <el-card>
+                        <h4>{{ item.title }}</h4>
+                    </el-card>
+                </el-timeline-item>
+            </el-timeline>
+        </div>
     </div>
   </div>
 </template>
@@ -63,7 +65,6 @@ export default {
 $prefixCls: "views-development";
 
 .#{$prefixCls} {
-  padding: 20px;
 
   .banner {
         width: 100%;
