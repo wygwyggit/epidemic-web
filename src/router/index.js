@@ -38,6 +38,11 @@ const routes = [{
         name: 'impact',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
+    },{
+       path: '/avoidRumors',
+       name: 'avoidRumors',
+       component: () => 
+       import( /* webpackChunkName: "home" */ '@/views/avoidRumors/index.vue') 
     }]
 },
 {

@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls" v-loading="isLoading">
     <img src="@/assets/images/development-banner.jpg" class="banner">
     <div class="w">
       <div class="title">时实播报</div>
@@ -27,6 +27,7 @@ export default {
   data() {
     return {
       prefixCls: "views-development",
+      isLoading: true,
       developments: []
     };
   },
@@ -45,12 +46,13 @@ export default {
     getDevelopments() {
       return new Promise((res, rej) => {
         myAjax({
-          url: "/special/00035080/virus_report_data.js?_=1620398781405",
+          url: "/special/00035080/virus_report_data.js?_=" + new Date().getTime(),
           method: "get",
           isN: true
         })
           .then((json) => {
             eval(json)
+            this.isLoading = false;
             res();
           })
           .catch((err) => {
@@ -65,6 +67,7 @@ export default {
 $prefixCls: "views-development";
 
 .#{$prefixCls} {
+  min-height: 100vh;
 
   .banner {
         width: 100%;
