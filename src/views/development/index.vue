@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls + ' w'">
     <img src="@/assets/images/development-banner.jpg" class="banner">
     <div class="title">时实播报</div>
     <div class="wrap">
@@ -115,6 +115,10 @@ $prefixCls: "views-development";
       /deep/ .el-timeline-item__timestamp {
         position: relative;
         font-size: 16px;
+      }
+
+      /deep/ .el-timeline-item__timestamp.is-top {
+        margin-bottom: 15px;
       }
 
      /deep/ .one-time .el-timeline-item__timestamp::before {
