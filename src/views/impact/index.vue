@@ -1,5 +1,5 @@
 <template>
-  <div :class="prefixCls">
+  <div :class="prefixCls + ' w'">
     <img src="@/assets/images/impact-banner.png" class="banner">
     <ul class="impact-list">
         <li class="impact-item">
