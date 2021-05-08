@@ -1,6 +1,7 @@
 <template>
   <div :class="prefixCls">
     <img src="@/assets/images/development-banner.jpg" class="banner">
+    <div class="title">时实播报</div>
     <div class="wrap">
         <el-timeline>
             <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top">
@@ -68,6 +69,28 @@ $prefixCls: "views-development";
         width: 100%;
       }
 
+  .title {
+    position: relative;
+    padding-left: 9px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .title::before {
+      content: "";
+      display: inline-block;
+      height: 16px;
+      width: 5px;
+      background-color: $--color-primary;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      -webkit-transform: translateY(-50%);
+      transform: translateY(-50%);
+      border-radius: 2.5px;
+  }
+
   .wrap {
 
       margin-top: 20px;
@@ -79,6 +102,14 @@ $prefixCls: "views-development";
       .el-card.is-always-shadow:hover {
         box-shadow: 0 1px 6px RGB(0 0 0 / 20%);
         border-color: #eee;
+      }
+
+     /deep/ .el-timeline-item__node {
+        background-color: $--color-primary;
+      }
+
+     /deep/ .el-timeline-item__tail {
+        border-left: 2px dashed $--color-primary;
       }
   }
 }
