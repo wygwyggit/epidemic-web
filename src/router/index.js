@@ -32,6 +32,12 @@ const routes = [{
         name: 'statistical',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/statistical/index.vue')
+    },
+    {
+        path: '/impact',
+        name: 'impact',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
     }]
 },
 {
