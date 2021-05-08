@@ -28,14 +28,19 @@ const routes = [{
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/development/index.vue')
     }, {
+        path: '/impact',
+        name: 'impact',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
+    }, {
         path: '/statistical',
         name: 'statistical',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/statistical/index.vue')
     },
     {
-        path: '/impact',
-        name: 'impact',
+        path: '/measures',
+        name: 'measures',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
     },{
