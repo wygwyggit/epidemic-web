@@ -39,10 +39,10 @@ const routes = [{
             import( /* webpackChunkName: "home" */ '@/views/statistical/index.vue')
     },
     {
-        path: '/impact',
-        name: 'impact',
+        path: '/measures',
+        name: 'measures',
         component: () =>
-            import( /* webpackChunkName: "home" */ '@/views/impact/index.vue')
+            import( /* webpackChunkName: "home" */ '@/views/measures/index.vue')
     }]
 },
 {
