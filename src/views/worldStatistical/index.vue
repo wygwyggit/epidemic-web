@@ -9,38 +9,38 @@
         <div class="cover-confirm">
           <h4>累计确诊</h4>
           <div class="number" style="color: #a31d13">
-            {{ (provinceData.total || {}).confirm }}
+            {{ (listData.chinaTotal.total || {}).confirm }}
           </div>
           <p class="added">
             较昨日
-            <span>+{{ (provinceData.today || {}).confirm }}</span>
+            <span>+{{ listData.chinaTotal.today.confirm }}</span>
           </p>
         </div>
         <div class="cover-dead">
           <h4>累计死亡</h4>
           <div class="number" style="color: #333">
-            {{ (provinceData.total || {}).dead }}
+            {{ (listData.chinaTotal.total || {}).dead }}
           </div>
           <p class="added">
             较昨日
-            <span>+{{ (provinceData.today || {}).dead }} </span>
+            <span>+{{ listData.chinaTotal.today.dead }} </span>
           </p>
         </div>
         <div class="cover-heal">
           <h4>累计治愈</h4>
           <div class="number" style="color: #fff">
-            {{ (provinceData.total || {}).heal }}
+            {{ (listData.chinaTotal.total || {}).heal }}
           </div>
           <p class="added">
             较昨日
-            <span>+{{ (provinceData.today || {}).heal }} </span>
+            <span>+{{ listData.chinaTotal.today.heal }} </span>
           </p>
         </div>
       </div>
     </div>
     <div class="content">
       <li>
-        <div class="item-warp hunan-number">
+        <div class="item-warp hunan-number" v-if="!isToday">
           <div class="td">
             <span class="dot"></span>
             <span class="txt">中国/海外新增确诊对比</span>
@@ -51,43 +51,72 @@
               :style="{ width: '100%', height: '480px' }"
             ></div>
           </div>
+          <div class="switch-wrap">
+            <el-button @click="handleSwitch(false)">中国/海外&nbsp;新增确诊</el-button>
+            <el-button @click="handleSwitch(true)">中国/海外&nbsp;新增确诊</el-button>
+          </div>
         </div>
-        <div class="item-warp hunan-number">
+        <div class="item-warp hunan-number" v-if="isToday">
           <div class="td">
             <span class="dot"></span>
-            <span class="txt">湖南疫情新增趋势</span>
+            <span class="txt">中国/海外新增确诊对比</span>
           </div>
           <div class="bd">
             <div
-              id="myHuNanzenData"
+              id="myHuNanData2"
               :style="{ width: '100%', height: '480px' }"
             ></div>
           </div>
-        </div>
-      </li>
-      <li>
-        <div class="item-warp hunan-number">
-          <div class="td">
-            <span class="dot"></span>
-            <span class="txt">湖南疫情累计趋势</span>
-          </div>
-          <div class="bd">
-            <div
-              id="myHuNanleiData"
-              :style="{ width: '100%', height: '480px' }"
-            ></div>
+          <div class="switch-wrap">
+            <el-button @click="handleSwitch(false)">中国/海外&nbsp;新增确诊</el-button>
+            <el-button @click="handleSwitch(true)">中国/海外&nbsp;新增确诊</el-button>
           </div>
         </div>
         <div class="item-warp hunan-number">
           <div class="td">
             <span class="dot"></span>
-            <span class="txt">湖南病例</span>
+            <span class="txt">世界病例</span>
           </div>
           <div class="bd">
-            <div
-              id="myHuNanbinliData"
-              :style="{ width: '100%', height: '480px' }"
-            ></div>
+            <el-table
+            class="page-table"
+            :data="listData.areaTree"
+            border
+            style="width: 100%;">
+            <el-table-column
+            prop="name"
+            label="地区">
+            </el-table-column>
+            <el-table-column
+            label="新增确诊">
+              <template slot-scope="scope">
+                {{ scope.row.today.confirm }}
+              </template>
+            </el-table-column>
+            <el-table-column
+            label="累计确诊">
+                <template slot-scope="scope">
+                {{ scope.row.total.confirm }}
+              </template>
+            </el-table-column>
+            <el-table-column
+            label="死亡">
+                <template slot-scope="scope">
+                {{ scope.row.total.dead }}
+                </template>
+            </el-table-column>
+            <el-table-column
+            label="治愈">
+                <template slot-scope="scope">
+                {{ scope.row.total.heal }}
+                </template>
+            </el-table-column>
+            <el-table-column
+            prop="address"
+            label="疫情"
+            width="60">
+            </el-table-column>
+            </el-table>
           </div>
         </div>
       </li>
@@ -106,10 +135,11 @@ export default {
     return {
       prefixCls: "views-world-statistical",
       isLoading: true,
+      isToday: false,
       listData: {},
-      provinceData: {},
-      huNanNumberList: [],
-      huNanTodayAddNumberList: [],
+      tableData: [],
+      chinaTodayAddNumberList: [],
+      worldTodayAddNumberList: [],
     };
   },
   computed: {},
@@ -118,12 +148,9 @@ export default {
     window.scrollTo(0, 0);
   },
   mounted() {
-    Promise.all([this.getTotalList(), this.getHuNanTimeNumber()]).then(() => {
+    Promise.all([this.getTotalList(), this.getChinaTodayAddNumberList(), this.getWorldTodayAddNumberList()]).then(() => {
       this.$nextTick(() => {
         this.drawLine();
-        this.drawLineZen();
-        this.drawLineLei();
-        this.drawLineBin();
       });
 
       this.isLoading = false;
@@ -131,16 +158,62 @@ export default {
   },
   beforeDestroy() {},
   methods: {
+    handleSwitch(type) {
+        this.isToday = type;
+        this.$nextTick(() => {
+            if(type) {
+                this.drawLine2();
+            } else {
+                this.drawLine();
+            }
+        })
+    },
     getHuNanTimeNumber() {
       return new Promise((res, rej) => {
         myAjax({
           url:
-            "ug/api/wuhan/app/data/list-by-area-code?areaCode=430000&t=1620392519105",
+            "ug/api/wuhan/app/data/list-by-area-code?areaCode=66&t=1620538792031",
           method: "get",
         })
           .then((json) => {
             if (json.code == 10000) {
-              this.huNanTodayAddNumberList = json.data.list || [];
+              this.chinaTodayAddNumberList = json.data.list || [];
+            }
+            res();
+          })
+          .catch((err) => {
+            rej(err);
+          });
+      });
+    },
+    getChinaTodayAddNumberList() {
+      return new Promise((res, rej) => {
+        myAjax({
+          url:
+            "ug/api/wuhan/app/data/list-by-area-code?areaCode=66&t=1620538792031",
+          method: "get",
+        })
+          .then((json) => {
+            if (json.code == 10000) {
+              this.chinaTodayAddNumberList = json.data.list || [];
+            }
+            res();
+          })
+          .catch((err) => {
+            rej(err);
+          });
+      });
+    },
+    getWorldTodayAddNumberList() {
+      return new Promise((res, rej) => {
+        myAjax({
+          url:
+            "ug/api/wuhan/app/data/list-by-area-code?areaCode=420000&t=1620538794038",
+          method: "get",
+        })
+          .then((json) => {
+            if (json.code == 10000) {
+              this.worldTodayAddNumberList = json.data.list || [];
             }
             res();
           })
@@ -158,24 +231,6 @@ export default {
           .then((json) => {
             if (json.code == 10000) {
               this.listData = json.data || {};
-              const arrObj = this.listData.areaTree.find((x) => {
-                return x.name == "中国";
-              });
-              this.provinceData = (arrObj.children || []).find((x) => {
-                return x.name == "湖南";
-              });
-              this.huNanNumberList = (this.provinceData.children || []).map(
-                (x) => ({
-                  value: x.total.confirm,
-                  dead: x.total.dead,
-                  heal: x.total.heal,
-                  name:
-                    x.name == "湘西自治州市"
-                      ? "湘西土家族苗族自治州"
-                      : x.name + "市",
-                })
-              );
-              console.log(this.huNanNumberList);
             }
             res();
           })
@@ -189,224 +244,95 @@ export default {
       var option;
 
       option = {
-        backgroundColor: "#fff",
-        title: {
-          text: "湖南",
-          top: 25,
-          left: "center",
-          textStyle: {
-            fontSize: 25,
-            fontWeight: 650,
-            color: "#fff",
-          },
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: function (val) {
-            return val.data.name + "<br>人数: " + val.data.value + "人";
-          },
-        },
-        toolbox: {
-          show: true,
-          orient: "vertical",
-          left: "right",
-          top: "center",
-          feature: {
-            dataView: { readOnly: false },
-            restore: {},
-            saveAsImage: {},
-          },
-        },
-        series: [
-          {
-            type: "map",
-            map: "湖南", //这里需要注意呀,
-            //mapType: "浙江",
-            // 是否开启鼠标缩放和平移漫游 默认不开启
-            itemStyle: {
-              normal: {
-                areaColor: "#fff",
-                borderColor: "#111",
-              },
-              emphasis: {
-                areaColor: "#508bff",
-                label: {
-                  show: true,
-                  color: "white",
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['中国新增', '海外新增']
+            },
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: this.chinaTodayAddNumberList.map((x) => x.date)
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '中国新增',
+                    type: 'line',
+                    stack: '总量',
+                    data: this.chinaTodayAddNumberList.map((x) => x.today.confirm)
                 },
-              },
+                {
+                    name: '海外新增',
+                    type: 'line',
+                    stack: '总量',
+                    data: this.worldTodayAddNumberList.map((x) => x.today.confirm),
+                }
+            ]
+        };
+      option && myChart.setOption(option);
+    },
+    drawLine2() {
+      let myChart = echarts.init(document.getElementById("myHuNanData2"));
+      var option;
+
+      option = {
+            tooltip: {
+                trigger: 'axis'
             },
-            roam: true,
-            top: 70,
-            label: {
-              show: true, // 是否显示对应地名
+            legend: {
+                data: ['中国新增', '海外新增']
             },
-            data: this.huNanNumberList,
-          },
-        ],
-      };
-
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            },
+            toolbox: {
+                feature: {
+                    saveAsImage: {}
+                }
+            },
+            xAxis: {
+                type: 'category',
+                boundaryGap: false,
+                data: this.chinaTodayAddNumberList.map((x) => x.date)
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    name: '中国新增',
+                    type: 'line',
+                    stack: '总量',
+                    data: this.chinaTodayAddNumberList.map((x) => x.total.confirm)
+                },
+                {
+                    name: '海外新增',
+                    type: 'line',
+                    stack: '总量',
+                    data: this.worldTodayAddNumberList.map((x) => x.total.confirm),
+                }
+            ]
+        };
       option && myChart.setOption(option);
-    },
-    drawLineBin() {
-      var chartDom = document.getElementById("myHuNanbinliData");
-      var myChart = echarts.init(chartDom);
-      var option;
-      option = {
-        xAxis: {
-          type: "category",
-          data: this.huNanNumberList.map((x) => x.name),
-        },
-        yAxis: {
-          type: "value",
-        },
-        legend: {
-          data: ["确诊", "治愈", "死亡"],
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true,
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
-        series: [
-          {
-            name: "确诊",
-            type: "line",
-            stack: "人数",
-            data: this.huNanNumberList.map((x) => x.value),
-          },
-          {
-            name: "治愈",
-            type: "line",
-            stack: "人数",
-            data: this.huNanNumberList.map((x) => x.heal),
-          },
-          {
-            name: "死亡",
-            type: "line",
-            stack: "人数",
-            data: this.huNanNumberList.map((x) => x.dead),
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
-    },
-    drawLineLei() {
-      var chartDom = document.getElementById("myHuNanleiData");
-      var myChart = echarts.init(chartDom);
-      var option;
-      option = {
-        xAxis: {
-          type: "category",
-          data: this.huNanTodayAddNumberList.map((x) => x.date),
-        },
-        yAxis: {
-          type: "value",
-        },
-        legend: {
-          data: ["确诊", "治愈", "死亡"],
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true,
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
-        series: [
-          {
-            name: "确诊",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.total.confirm),
-          },
-          {
-            name: "治愈",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.total.heal),
-          },
-          {
-            name: "死亡",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.total.dead),
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
-    },
-    drawLineZen() {
-      var chartDom = document.getElementById("myHuNanzenData");
-      var myChart = echarts.init(chartDom);
-      var option;
-      option = {
-        xAxis: {
-          type: "category",
-          data: this.huNanTodayAddNumberList.map((x) => x.date),
-        },
-        yAxis: {
-          type: "value",
-        },
-        legend: {
-          data: ["确诊", "治愈", "死亡"],
-        },
-        tooltip: {
-          trigger: "axis",
-        },
-        grid: {
-          left: "3%",
-          right: "4%",
-          bottom: "3%",
-          containLabel: true,
-        },
-        toolbox: {
-          feature: {
-            saveAsImage: {},
-          },
-        },
-        series: [
-          {
-            name: "确诊",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.today.confirm),
-          },
-          {
-            name: "治愈",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.today.heal),
-          },
-          {
-            name: "死亡",
-            type: "line",
-            stack: "人数",
-            data: this.huNanTodayAddNumberList.map((x) => x.today.dead),
-          },
-        ],
-      };
-
-      option && myChart.setOption(option);
-    },
+    }
   },
 };
 </script>
@@ -483,6 +409,13 @@ $prefixCls: "views-world-statistical";
       &:last-of-type {
         margin-left: 20px;
       }
+      .switch-wrap {
+          text-align: center;
+
+          .el-button {
+              width: 200px;
+          }
+      }
       .td {
         margin-bottom: 15px;
         .dot {
@@ -498,6 +431,16 @@ $prefixCls: "views-world-statistical";
       }
       .bd {
         box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+
+        /deep/ .page-table {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+       /deep/ .page-table tr th,
+       /deep/ .page-table tr td  {
+            text-align: center;
+        }
       }
     }
   }
