@@ -69,7 +69,7 @@
           </div>
           <div class="switch-wrap">
             <el-button @click="handleSwitch(false)">中国/海外&nbsp;新增确诊</el-button>
-            <el-button @click="handleSwitch(true)">中国/海外&nbsp;新增确诊</el-button>
+            <el-button @click="handleSwitch(true)">中国/海外&nbsp;累计确诊</el-button>
           </div>
         </div>
         <div class="item-warp hunan-number">
