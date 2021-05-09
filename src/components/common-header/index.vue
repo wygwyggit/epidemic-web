@@ -53,6 +53,11 @@ export default {
           path: "/avoidRumors",
         },
         {
+          text: "防护知识",
+          name: "information",
+          path: "/information",
+        },
+        {
           text: "关于新冠",
           name: "about",
           path: "/about",

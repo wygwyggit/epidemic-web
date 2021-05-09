@@ -23,6 +23,12 @@ const routes = [{
             import( /* webpackChunkName: "home" */ '@/views/about/index.vue')
     },
     {
+        path: '/information',
+        name: 'information',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/information/index.vue')
+    },
+    {
         path: '/development',
         name: 'development',
         component: () =>
@@ -59,6 +65,10 @@ const routes = [{
         name: 'detail',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/detail/index.vue')
+    }, {
+        path: '*',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/404/index.vue')
     }]
 },
 ]
