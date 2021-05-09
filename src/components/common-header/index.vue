@@ -30,32 +30,32 @@ export default {
         {
           text: "首页",
           name: "home",
-          path: "home",
+          path: "/home",
         },
         {
           text: "新冠发展",
           name: "development",
-          path: "development",
+          path: "/development",
         },
         {
           text: "新冠影响",
           name: "impact",
-          path: "impact",
+          path: "/impact",
         },
         {
           text: "隔离政策",
           name: "measures",
-          path: "measures",
+          path: "/measures",
         },
         {
           text: "避谣一线",
           name: "avoidRumors",
-          path: "avoidRumors",
+          path: "/avoidRumors",
         },
         {
           text: "关于新冠",
           name: "about",
-          path: "about",
+          path: "/about",
         },
       ],
       currentTab: "home",

@@ -43,19 +43,18 @@ const routes = [{
         name: 'measures',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/measures/index.vue')
-    },{
-       path: '/avoidRumors',
-       name: 'avoidRumors',
-       component: () => 
-       import( /* webpackChunkName: "home" */ '@/views/avoidRumors/index.vue') 
+    }, {
+        path: '/avoidRumors',
+        name: 'avoidRumors',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/avoidRumors/index.vue')
+    }, {
+        path: '/avoidRumors/detail',
+        name: 'detail',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/detail/index.vue')
     }]
 },
-{
-    path: '/about',
-    name: 'About',
-    component: () =>
-        import( /* webpackChunkName: "about" */ '../views/About.vue')
-}
 ]
 
 const router = new VueRouter({

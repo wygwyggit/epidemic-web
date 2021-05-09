@@ -30,7 +30,17 @@ module.exports = {
                 pathRewrite: {
                     '^/napi': ''
                 }
-            }
+            },
+            '/capi': {
+                // 目标 API 地址
+                target: 'https://comment.api.163.com',
+                changeOrigin: true,
+                secure: false,
+                pathRewrite: {
+                    '^/capi': ''
+                }
+            },
+
         }
     },
     configureWebpack: {
