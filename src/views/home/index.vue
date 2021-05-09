@@ -115,6 +115,78 @@
               </div>
             </div>
           </div>
+          <div class="category world-s">
+            <div class="title">
+              <div class="point"></div>
+              <div class="text">世界疫情数据</div>
+              <div class="point"></div>
+            </div>
+            <div class="sub-title">
+              数据更新至 {{ listData.lastUpdateTime }}
+            </div>
+            <div class="content-list clearfix">
+              <div class="list-card hvr-sweep-to-top">
+                <div>
+                  <div class="name"><span>|</span>累计确诊</div>
+                  <div class="count" style="color: #e44a3d">
+                    {{ worldData.total.confirm }}
+                  </div>
+                  <div class="added">
+                    较昨日
+                    <span> +{{ worldData.today.confirm }} </span>
+                  </div>
+                </div>
+              </div>
+              <div class="list-card hvr-sweep-to-top">
+                <div>
+                  <div class="name"><span>|</span>现有确诊</div>
+                  <div class="count" style="color: #791618">
+                    {{
+                      worldData.total.confirm -
+                      worldData.total.dead -
+                      worldData.total.heal
+                    }}
+                  </div>
+                  <div class="added">
+                    较昨日
+                    <span>
+                      +{{ worldData.today.confirm -
+                          worldData.today.dead -
+                          worldData.today.heal
+                       }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="list-card hvr-sweep-to-top">
+                <div>
+                  <div class="name"><span>|</span>累计死亡</div>
+                  <div class="count" style="color: #333">
+                    {{ worldData.total.dead }}
+                  </div>
+                  <div class="added">
+                    较昨日
+                    <span> +{{ worldData.today.dead }} </span>
+                  </div>
+                </div>
+              </div>
+              <div class="list-card hvr-sweep-to-top">
+                <div>
+                  <div class="name"><span>|</span>累计治愈</div>
+                  <div class="count" style="color: #34aa70">
+                    {{ worldData.total.heal }}
+                  </div>
+                  <div class="added">
+                    较昨日
+                    <span> +{{ worldData.today.heal }} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <router-link to="/worldStatistical" tag="div" class="see-more"
+        >了解更多>>></router-link
+      >
           <div class="category china-s">
             <div class="title">
               <div class="point"></div>
@@ -188,6 +260,7 @@ export default {
         require("@/assets/images/banner2.png"),
       ],
       listData: {},
+      worldData: {},
       provinceData: {},
       articleList: [],
       labelList: [],
@@ -222,7 +295,43 @@ export default {
               this.provinceData = (arrObj.children || []).find((x) => {
                 return x.name == "湖南";
               });
-              console.log(this.provinceData);
+
+              const worldData = this.listData.areaTree;
+              let todayConfirm = 0,
+                  totalConfirm = 0,
+                  todyDead = 0,
+                  totalDead = 0,
+                  todyHeal = 0,
+                  totalHeal = 0,
+                  existingConfirm = 0,
+                  existingTodayConfirm = 0;
+              worldData.forEach(x => {
+                // 累计数据
+                if(x.today) {
+                  todayConfirm += x.today.confirm;
+                  todyDead += x.today.dead;
+                  todyHeal += x.today.heal;
+                }
+                // 昨日新增
+                if(x.total) {
+                  totalConfirm += x.total.confirm;
+                  totalDead += x.total.dead;
+                  totalHeal += x.total.heal;
+                }
+              })
+
+              this.worldData = {
+                  today: {
+                    confirm: todayConfirm,
+                    dead: todyDead,
+                    heal: todyHeal,
+                  },
+                  total: {
+                    confirm: totalConfirm,
+                    dead: totalDead,
+                    heal: totalHeal
+                  }
+              };
             }
             res();
           })
