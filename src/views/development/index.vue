@@ -2,7 +2,7 @@
   <div :class="prefixCls" v-loading="isLoading">
     <img src="@/assets/images/development-banner.jpg" class="banner">
     <div class="w">
-      <div class="title">时实播报</div>
+      <div class="title">实时播报</div>
         <div class="wrap">
             <el-timeline>
                 <el-timeline-item v-for="(item, index) in developments" :key="index" :timestamp="item.time" placement="top" :class="{ 'one-time':  index === 0}">
