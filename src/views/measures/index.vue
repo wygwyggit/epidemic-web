@@ -1,7 +1,9 @@
 <template>
   <div :class="prefixCls">
     <img src="../../assets/images/set_out.png" alt="" />
-    <div class="select-panel w"></div>
+    <div class="select-panel w">
+      <router-link to="catogary">查看各地疫情情况</router-link>
+    </div>
     <div class="content w">
       <div>
         <el-card class="box-card">
