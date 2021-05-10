@@ -58,6 +58,11 @@ export default {
           path: "/information",
         },
         {
+          text: "英雄事迹",
+          name: "heroicDeeds",
+          path: "/heroicDeeds",
+        },
+        {
           text: "关于新冠",
           name: "about",
           path: "/about",
