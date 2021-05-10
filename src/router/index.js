@@ -51,6 +51,12 @@ const routes = [{
             import( /* webpackChunkName: "home" */ '@/views/worldStatistical/index.vue')
     },
     {
+        path: '/catogary',
+        name: 'catogary',
+        component: () =>
+            import( /* webpackChunkName: "home" */ '@/views/catogary/index.vue')
+    },
+    {
         path: '/measures',
         name: 'measures',
         component: () =>
