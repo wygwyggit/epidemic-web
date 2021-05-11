@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixCls">
-    <img src="../../assets/images/set_out.png" alt="" />
+    <img src="../../assets/images/set_out.jpg" alt="" />
     <div class="select-panel w">
       <router-link to="catogary">查看各地疫情情况</router-link>
     </div>
@@ -105,6 +105,9 @@ export default {
 $prefixCls: "views-measures";
 .#{$prefixCls} {
   padding-bottom: 40px;
+  img {
+    width: 100%;
+  }
   .select-panel {
     position: relative;
     height: 90px;

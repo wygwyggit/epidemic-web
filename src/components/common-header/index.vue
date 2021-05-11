@@ -48,6 +48,11 @@ export default {
           path: "/measures",
         },
         {
+          text: "政府政策",
+          name: "option",
+          path: "/option",
+        },
+        {
           text: "避谣一线",
           name: "avoidRumors",
           path: "/avoidRumors",
