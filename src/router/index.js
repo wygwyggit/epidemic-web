@@ -77,7 +77,14 @@ const routes = [{
         name: 'heroicDeeds',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/heroicDeeds/index.vue')
-    }, {
+    }, 
+    {
+        path: '/lessonInspired',
+        name: 'lessonInspired',
+        component: () =>
+        import( /* webpackChunkName: "home" */ '@/views/lessonInspired/index.vue')
+    },
+    {
         path: '*',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/404/index.vue')
