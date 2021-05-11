@@ -72,6 +72,11 @@ export default {
           name: "about",
           path: "/about",
         },
+        {
+          text: "教训和启发",
+          name: "lessonInspired",
+          path: "/lessonInspired",
+        }
       ],
       currentTab: "home",
     };
