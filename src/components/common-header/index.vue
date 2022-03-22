@@ -132,7 +132,7 @@
                 cursor: pointer;
                 opacity: 1;
                 color: #CBE8FF;
-                font-size: 12px;
+                font-size: 18px;
                 transition: color 0.7s;
 
                 &.tab-active {
