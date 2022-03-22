@@ -62,7 +62,7 @@
     $prefixCls: "components-common-footer";
 
     .#{$prefixCls} {
-        height: 240px;
+        height: 135px;
         background: #0B0F15;
         text-align: center;
         color: #aaaaaa;
@@ -70,11 +70,11 @@
         .item-box {
             display: flex;
             justify-content: space-between;
-            padding: 60px 0 74px 0;
+            padding: 38px 0 45px 0;
 
             .left {
-                width: 140px;
-                height: 45px;
+                width: 79px;
+                height: 25px;
                 background: url('../../assets/images/logo.png');
                 background-size: 100% 100%;
             }
@@ -85,7 +85,7 @@
 
                     a {
                         color: #fff;
-                        font-size: 18px;
+                        font-size: 12px;
                     }
 
                     img {
@@ -93,17 +93,22 @@
                     }
 
                     &.item {
-                        margin-right: 40px;
+                        margin-right: 23px;
                     }
 
                     &.item-img {
-                        padding-left: 30px;
+                        padding-left: 17px;
+                        img {
+                            width: 14px;
+                            height: 14px;
+                        }
                     }
                 }
             }
         }
 
         .copyright {
+            font-size: 12px;
             color: rgba(255, 255, 255, 0.56);
         }
     }
