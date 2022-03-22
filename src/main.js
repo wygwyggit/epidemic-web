@@ -5,7 +5,6 @@ import store from './store'
 import './style/common.scss'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-import '../node_modules/echarts/map/js/province/hunan.js'
 
 
 Vue.config.productionTip = false

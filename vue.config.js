@@ -70,7 +70,7 @@ module.exports = {
     },
     chainWebpack: config => {
         config.plugin('html').tap(args => {
-            args[0].title = '新冠疫情';
+            args[0].title = 'DogeNFT';
             return args;
         })
     }
