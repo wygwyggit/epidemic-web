@@ -14,9 +14,9 @@
                                 <span>Filter ({{checkListFilter.length}})</span>
                                 <a href="javascript:;">clear</a>
                             </div>
-                            <div class="filter-val">
+                            <div class="filter-val filter">
                                 <el-checkbox-group v-model="checkListFilter">
-                                    <el-checkbox label="Yellow" class="yellow">Yellow</el-checkbox>
+                                    <el-checkbox label="Yellow" class="yellow" >Yellow</el-checkbox>
                                     <el-checkbox label="Orange" class="orange">Orange</el-checkbox>
                                     <el-checkbox label="Red" class="red">Red</el-checkbox>
                                     <el-checkbox label="Blue" class="blue">Blue</el-checkbox>
@@ -105,7 +105,7 @@
             background: #14181f;
 
             .left {
-                width: 149px;
+                width: 265px;
                 background: #0B0F15;
 
                 li {
@@ -118,12 +118,15 @@
                         height: 46px;
                         line-height: 46px;
                         border-bottom: 1px solid #29374B;
-                        font-size: 12px;
+                        font-size: 20px;
                         color: #fff;
                     }
 
                     .filter-val {
                         padding: 17px 10px;
+                        &.filter .el-checkbox {
+                            display: block;
+                        }
                     }
                 }
             }
