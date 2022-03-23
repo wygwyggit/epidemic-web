@@ -28,7 +28,7 @@
         </div>
 
         <el-dialog title="Connect wallet" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
-            :close-on-click-modal="false" width="225px" :before-close="handleClose">
+            :close-on-click-modal="false" width="400px" >
             <ul>
                 <li class="c1">MetaMask</li>
                 <li class="c2">TokenPocket</li>
@@ -99,7 +99,7 @@
         justify-content: space-between;
         padding: 0 34px;
         width: 100%;
-        height: 56px;
+        height: 100px;
         background: #32A3FF;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
         z-index: 999;
@@ -115,8 +115,8 @@
             font-weight: 700;
 
             img {
-                width: 96px;
-                height: 34px;
+                width: 170px;
+                height: 60px;
             }
         }
 
@@ -128,11 +128,11 @@
                 position: relative;
                 margin-right: 17px;
                 padding: 0 10px;
-                line-height: 56px;
+                line-height: 100px;
                 cursor: pointer;
                 opacity: 1;
                 color: #CBE8FF;
-                font-size: 12px;
+                font-size: 18px;
                 transition: color 0.7s;
 
                 &.tab-active {
@@ -147,48 +147,51 @@
             align-items: center;
 
             .connect {
+                height: 40px;
+                line-height: 40px;
                 border: 1px solid #fff;
                 border-radius: 51px;
-                margin-right: 6px;
-                padding: 5px 10px;
-                font-size: 12px;
+                margin-right: 10px;
+                padding: 0 10px;
+                font-size: 14px;
                 color: #fff;
+                cursor: pointer;
             }
 
             .lang {
-                width: 30px;
-                height: 25px;
+                width: 51px;
+                height: 40px;
                 border-radius: 51px;
                 background: #fff;
                 color: #32A3FF;
                 text-align: center;
-                line-height: 23px;
-                font-size: 12px;
+                line-height: 40px;
+                font-size: 14px;
             }
         }
 
         .connect-dialog {
             li {
-                margin-bottom: 10px;
-                padding-left: 56px;
-                width: 191px;
-                height: 45px;
-                line-height: 45px;
+                margin-bottom: 20px;
+                padding-left: 100px;
+                width: 100%;
+                height: 80px;
+                line-height: 80px;
                 cursor: pointer;
-                font-size: 12px;
+                font-size: 18px;
 
                 &.c1 {
                     background: #1D2633 url('../../assets/images/c1.png');
                     background-repeat: no-repeat;
-                    background-position: 23px center;
-                    background-size: 23px 21px;
+                    background-position: 40px center;
+                    background-size: 40px 40px;
                 }
 
                 &.c2 {
                     background: #1D2633 url('../../assets/images/c2.png');
                     background-repeat: no-repeat;
-                    background-position: 23px center;
-                    background-size: 23px 21px;
+                    background-position: 40px center;
+                    background-size: 40px 40px;
                 }
             }
         }

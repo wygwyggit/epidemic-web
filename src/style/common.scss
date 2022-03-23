@@ -175,7 +175,12 @@ body {
 [v-cloak] {
     display: none;
 }
-
+.l {
+    float: left;
+}
+.r {
+    float: right;
+}
 .w {
     max-width: 1120px;
     margin: 0 auto;
@@ -194,15 +199,15 @@ body {
     .el-dialog__title,.el-dialog__close {
         line-height: 0;
         color: #777E90;
-        font-size: 14px;
+        font-size: 24px;
     }
     .el-dialog__body {
-        padding: 21px 17px;
+        padding: 38px 30px;
     }
 }
 .el-checkbox__inner {
-    width: 10px;
-    height: 10px;
+    width: 14px;
+    height: 14px;
     &::after {
         width: 1px;
     }
@@ -210,6 +215,7 @@ body {
 }
 .el-checkbox__label {
     color: #fff;
+    font-size: 16px;
 }
 .yellow .el-checkbox__label {
     color: #F3BA2F;
