@@ -1,7 +1,7 @@
 <template>
   <div class="details-wrap">
     <div class="detail-con">
-      <div class="detail-main">
+      <div class="detail-main w">
         <div class="blind-box">
           <div class="left">
             <img src="../../assets/images/product.png" />
@@ -362,8 +362,7 @@ export default {
     }
 
     .sale-history {
-      width: 80%;
-      margin: 45px auto 0 auto;
+      margin-top: 45px;
 
       /deep/ .el-table,
       /deep/ .el-table__expanded-cell,
@@ -396,8 +395,7 @@ export default {
     }
 
     .recommend-wrap {
-      width: 80%;
-      margin: 110px auto 0 auto;
+      margin-top: 110px;
 
       .rd-top {
         display: flex;

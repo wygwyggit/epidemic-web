@@ -180,3 +180,49 @@ body {
     max-width: 1120px;
     margin: 0 auto;
 }
+
+.el-button--primary {
+    background: #32A3FF;
+    border-color: #32A3FF;
+}
+.el-dialog {
+    background: #131922;
+    border-radius: 6px;
+    .el-dialog__header {
+        padding-bottom: 0;
+    }
+    .el-dialog__title,.el-dialog__close {
+        line-height: 0;
+        color: #777E90;
+        font-size: 14px;
+    }
+    .el-dialog__body {
+        padding: 21px 17px;
+    }
+}
+.el-checkbox__inner {
+    width: 10px;
+    height: 10px;
+    &::after {
+        width: 1px;
+    }
+
+}
+.el-checkbox__label {
+    color: #fff;
+}
+.yellow .el-checkbox__label {
+    color: #F3BA2F;
+}
+.orange .el-checkbox__label {
+    color: #FF7A00;
+}
+.red .el-checkbox__label {
+    color: #FF3D00;
+}
+.blue .el-checkbox__label {
+    color: #32A3FF;
+}
+.purple .el-checkbox__label {
+    color: #9E00FF;
+}
