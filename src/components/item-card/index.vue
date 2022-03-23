@@ -106,6 +106,7 @@
             .btn {
                 display: inline-block;
                 margin-top: 12px;
+                width: 100%;
                 height: 40px;
                 line-height: 40px;
                 color: #fff;

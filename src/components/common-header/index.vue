@@ -41,8 +41,8 @@
         <el-dialog title="Connect wallet" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" width="400px">
             <ul>
-                <li class="c1" @click="doConnect">MetaMask</li>
-                <li class="c2">TokenPocket</li>
+                <li class="c1">MetaMask</li>
+                <li class="c2" @click="openCodeDialog">TokenPocket</li>
             </ul>
         </el-dialog>
     </div>
@@ -58,6 +58,7 @@
                 prefixCls: "components-common-header",
                 isConnect: false,
                 isShowConnectDialog: false,
+                isShowCodeDialog: false,
                 tabs: [{
                         text: "Home",
                         name: "home",
@@ -97,9 +98,8 @@
             openConnectDialog() {
                 this.isShowConnectDialog = true
             },
-            doConnect() {
-                this.isConnect = true
-                this.isShowConnectDialog = false
+            openCodeDialog() {
+                this.isShowCodeDialog = true
             }
         },
     };

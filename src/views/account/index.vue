@@ -15,7 +15,7 @@
                                 <a href="javascript:;">clear</a>
                             </div>
                             <div class="filter-val filter">
-                                <el-checkbox-group v-model="checkListFilter">
+                                <el-checkbox-group v-model="checkListFilter" @change="doSearch">
                                     <el-checkbox label="Yellow" class="yellow">Yellow</el-checkbox>
                                     <el-checkbox label="Orange" class="orange">Orange</el-checkbox>
                                     <el-checkbox label="Red" class="red">Red</el-checkbox>
@@ -30,7 +30,7 @@
                                 <span>Sale</span>
                             </div>
                             <div class="filter-val" style="padding-top: 0">
-                                <el-checkbox-group v-model="checkListSale">
+                                <el-checkbox-group v-model="checkListSale" @change="doSearch">
                                     <el-checkbox label="For sale">For sale</el-checkbox>
                                     <el-checkbox label="Not sold">Not sale</el-checkbox>
                                 </el-checkbox-group>
@@ -42,7 +42,7 @@
                                 <a href="javascript:;">clear</a>
                             </div>
                             <div class="filter-val">
-                                <el-checkbox-group v-model="checkListLvel">
+                                <el-checkbox-group v-model="checkListLvel" @change="doSearch">
                                     <el-checkbox label="Lv-1">Lv-1</el-checkbox>
                                     <el-checkbox label="Lv-2">Lv-2</el-checkbox>
                                     <el-checkbox label="Lv-3">Lv-3</el-checkbox>
@@ -74,7 +74,8 @@
                         <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"></item-card>
                     </div>
                     <div class="page r">
-                        <el-pagination background layout="total, sizes, prev, pager, next, jumper" :total="netList.length" v-if="netList.length">
+                        <el-pagination background layout="total, sizes, prev, pager, next, jumper"
+                            :total="netList.length" v-if="netList.length">
                         </el-pagination>
                     </div>
                 </div>
@@ -142,7 +143,20 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
-
+            doSearch() {
+                let n = Math.floor(Math.random() * 10 + 1)
+                let arr = Array.from({
+                    length: n
+                }, (v, i) => ({
+                    id: '010001',
+                    type: 'Diamond',
+                    name: 'CZ Hoodie Limited NFT',
+                    lv: 'lv-2',
+                    price: i % 2 === 0 ? '' : '1,000,000,000 Adoge'
+                }))
+                console.log(arr)
+                this.netList = arr
+            }
         },
     }
 </script>
@@ -219,6 +233,7 @@
                         &.filter .el-checkbox {
                             display: block;
                         }
+
                         .el-checkbox {
                             margin-bottom: 10px;
                         }
@@ -229,6 +244,7 @@
             .right {
                 flex: 1;
                 margin-left: 20px;
+
                 .top-search {
                     display: flex;
                     justify-content: space-between;
