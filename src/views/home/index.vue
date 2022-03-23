@@ -49,7 +49,7 @@
                     # 0001001
                 </div>
                 <div class="img-box">
-                    <img src="" alt="">
+                    <img src="../../assets/images/product.png" alt="">
                 </div>
                 <div class="name">
                     CZ Hoodie Limited NFT
@@ -227,6 +227,7 @@
             color: #fff;
             font-size: 24px;
             border-radius: 10px;
+            cursor: pointer;
         }
 
         .blindBox-dialog {

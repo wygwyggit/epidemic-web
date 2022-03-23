@@ -43,14 +43,14 @@
                             </div>
                             <div class="filter-val">
                                 <el-checkbox-group v-model="checkListLvel">
-                                    <el-checkbox label="Yellow">Lv-1</el-checkbox>
-                                    <el-checkbox label="Orange">Lv-2</el-checkbox>
-                                    <el-checkbox label="Red">Lv-3</el-checkbox>
-                                    <el-checkbox label="Blue">Lv-4</el-checkbox>
-                                    <el-checkbox label="Purple">Lv-5</el-checkbox>
-                                    <el-checkbox label="Diamond">Lv-6</el-checkbox>
-                                    <el-checkbox label="Purple">Lv-7</el-checkbox>
-                                    <el-checkbox label="Diamond">Lv-8</el-checkbox>
+                                    <el-checkbox label="Lv-1">Lv-1</el-checkbox>
+                                    <el-checkbox label="Lv-2">Lv-2</el-checkbox>
+                                    <el-checkbox label="Lv-3">Lv-3</el-checkbox>
+                                    <el-checkbox label="Lv-4">Lv-4</el-checkbox>
+                                    <el-checkbox label="Lv-5">Lv-5</el-checkbox>
+                                    <el-checkbox label="Lv-6">Lv-6</el-checkbox>
+                                    <el-checkbox label="Lv-7">Lv-7</el-checkbox>
+                                    <el-checkbox label="Lv-8">Lv-8</el-checkbox>
                                 </el-checkbox-group>
                             </div>
                         </li>

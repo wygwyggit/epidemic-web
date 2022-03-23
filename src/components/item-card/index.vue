@@ -8,7 +8,7 @@
                 <div class="r">{{itemInfo.type}}</div>
             </div>
             <div class="img-content">
-                <img src="">
+                <img src="../../assets/images/product.png">
             </div>
             <div class="name">
                 {{itemInfo.name}}
@@ -111,6 +111,7 @@
                 color: #fff;
                 font-size: 16px;
                 border-radius: 5px;
+                cursor: pointer;
             }
 
             .sale-btn {

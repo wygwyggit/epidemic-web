@@ -14,23 +14,34 @@
 
         <div class="right">
             <template v-if="!isConnect">
-                <div class="connect" @click=openConnectDialog>
-                    Connect Wollet
+                <div class="user">
+                    <div class="connect" @click=openConnectDialog>
+                        Connect Wollet
+                    </div>
                 </div>
             </template>
-            <el-dropdown>
-                <div class="lang">EN</div>
-                <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>EN</el-dropdown-item>
-                    <el-dropdown-item>ZH</el-dropdown-item>
-                </el-dropdown-menu>
-            </el-dropdown>
+            <template v-else>
+                <p class="adoge-num">10,000,000,000 Adoge</p>
+                <div class="user">
+                    <div class="wallet">
+                        <img src="../../assets/images/wallet.png" alt="">
+                        0xf235...2809</div>
+                    <div class="dis-connect">
+                        Disconnect
+                        <img src="../../assets/images/out.png" alt="">
+                    </div>
+                </div>
+            </template>
+            <div class="lang-opt">
+                <div class="item current">EN</div>
+                <div class="item other">ZH</div>
+            </div>
         </div>
 
         <el-dialog title="Connect wallet" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
-            :close-on-click-modal="false" width="400px" >
+            :close-on-click-modal="false" width="400px">
             <ul>
-                <li class="c1">MetaMask</li>
+                <li class="c1" @click="doConnect">MetaMask</li>
                 <li class="c2">TokenPocket</li>
             </ul>
         </el-dialog>
@@ -85,6 +96,10 @@
             },
             openConnectDialog() {
                 this.isShowConnectDialog = true
+            },
+            doConnect() {
+                this.isConnect = true
+                this.isShowConnectDialog = false
             }
         },
     };
@@ -146,27 +161,77 @@
             display: flex;
             align-items: center;
 
-            .connect {
+            .user {
+                position: relative;
+                margin-right: 20px;
+            }
+
+            .connect,
+            .wallet,
+            .dis-connect {
                 height: 40px;
                 line-height: 40px;
                 border: 1px solid #fff;
                 border-radius: 51px;
-                margin-right: 10px;
                 padding: 0 10px;
                 font-size: 14px;
                 color: #fff;
                 cursor: pointer;
+
+                img {
+                    vertical-align: middle;
+                }
             }
 
-            .lang {
-                width: 51px;
-                height: 40px;
-                border-radius: 51px;
-                background: #fff;
-                color: #32A3FF;
+            .wallet:hover+.dis-connect {
+                opacity: 1;
+            }
+
+            .dis-connect {
+                position: absolute;
+                bottom: -45px;
+                right: 0;
+                width: 100%;
+                background-color: #131922;
+                border-color: #131922;
                 text-align: center;
-                line-height: 40px;
-                font-size: 14px;
+                opacity: 0;
+                transition: all .3s;
+            }
+
+            .adoge-num {
+                margin-right: 20px;
+                color: #fff;
+                font-size: 18px;
+                line-height: 100px;
+            }
+
+            .lang-opt {
+                position: relative;
+
+                .item {
+                    width: 51px;
+                    height: 40px;
+                    border-radius: 51px;
+                    background: #fff;
+                    color: #32A3FF;
+                    text-align: center;
+                    line-height: 40px;
+                    font-size: 14px;
+
+                    &.current:hover+.other {
+                        opacity: 1;
+                    }
+
+                    &.other {
+                        position: absolute;
+                        bottom: -45px;
+                        background: #131922;
+                        color: #fff;
+                        opacity: 0;
+                        transition: all .3s;
+                    }
+                }
             }
         }
 
