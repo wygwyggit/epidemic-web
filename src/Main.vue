@@ -10,7 +10,6 @@
     import CommonHeader from '@/components/common-header'
     import CommonFooter from '@/components/common-footer'
     export default {
-        name: 'app',
         components: {
             CommonHeader,
             CommonFooter
