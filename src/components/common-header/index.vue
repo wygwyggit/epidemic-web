@@ -7,7 +7,7 @@
             <div class="page-tabs">
                 <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
                     :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
-                    {{ tab.text }}
+                    {{$t(`common.${tab.text}`)}}
                 </div>
             </div>
         </div>
@@ -60,22 +60,22 @@
                 isShowConnectDialog: false,
                 isShowCodeDialog: false,
                 tabs: [{
-                        text: "Home",
+                        text: "home",
                         name: "home",
                         path: "/home",
                     },
                     {
-                        text: "Blind box",
+                        text: "blind-box",
                         name: "Blind",
                         path: "/blind",
                     },
                     {
-                        text: "Marketplace",
+                        text: "marketplace",
                         name: "Marketplace",
                         path: "/marketplace",
                     },
                     {
-                        text: "My account",
+                        text: "my-account",
                         name: "account",
                         path: "/account",
                     }
