@@ -105,6 +105,7 @@
                 },
                 options: [{
                     value: 0,
+                    key: 'latest',
                     label: 'latest'
                 }],
                 netList: [{
@@ -146,7 +147,11 @@
             }
         },
         watch: {},
-        created() {},
+        created() {
+            this.options.forEach(x => {
+                x.label = this.$t(`account.${x.key}`)
+            });
+        },
         mounted() {},
         beforeDestroy() {},
         methods: {
