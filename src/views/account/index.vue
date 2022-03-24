@@ -2,7 +2,7 @@
     <div :class="prefixCls">
         <div class="top">
             <div class="w">
-                My account
+                {{$t("account.my-account")}}
             </div>
         </div>
         <div class="main">
@@ -11,35 +11,35 @@
                     <ul>
                         <li>
                             <div class="title">
-                                <span>Filter ({{checkListFilter.length}})</span>
-                                <a href="javascript:;">clear</a>
+                                <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
+                                <a href="javascript:;">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val filter">
                                 <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                                    <el-checkbox label="Yellow" class="yellow">Yellow</el-checkbox>
-                                    <el-checkbox label="Orange" class="orange">Orange</el-checkbox>
-                                    <el-checkbox label="Red" class="red">Red</el-checkbox>
-                                    <el-checkbox label="Blue" class="blue">Blue</el-checkbox>
-                                    <el-checkbox label="Purple" class="purple">Purple</el-checkbox>
-                                    <el-checkbox label="Diamond">Diamond</el-checkbox>
+                                    <el-checkbox label="Yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
+                                    <el-checkbox label="Orange" class="orange">{{$t("account.orange")}}</el-checkbox>
+                                    <el-checkbox label="Red" class="red">{{$t("account.red")}}</el-checkbox>
+                                    <el-checkbox label="Blue" class="blue">{{$t("account.blue")}}</el-checkbox>
+                                    <el-checkbox label="Purple" class="purple">{{$t("account.purple")}}</el-checkbox>
+                                    <el-checkbox label="Diamond">{{$t("account.diamond")}}</el-checkbox>
                                 </el-checkbox-group>
                             </div>
                         </li>
                         <li>
                             <div class="title" style="border-bottom: 0;">
-                                <span>Sale</span>
+                                <span>{{$t("account.sale")}}</span>
                             </div>
                             <div class="filter-val" style="padding-top: 0">
                                 <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                    <el-checkbox label="For sale">For sale</el-checkbox>
-                                    <el-checkbox label="Not sold">Not sale</el-checkbox>
+                                    <el-checkbox label="For sale">{{$t("account.for-sale")}}</el-checkbox>
+                                    <el-checkbox label="Not sold">{{$t("account.not-sale")}}</el-checkbox>
                                 </el-checkbox-group>
                             </div>
                         </li>
                         <li>
                             <div class="title">
-                                <span>Lvel ({{checkListLvel.length}})</span>
-                                <a href="javascript:;">clear</a>
+                                <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
+                                <a href="javascript:;">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val">
                                 <el-checkbox-group v-model="checkListLvel" @change="doSearch">
@@ -60,10 +60,10 @@
                     <div class="top-search">
                         <div class="total">20 NFTs</div>
                         <div class="search">
-                            <el-input placeholder="Search ID or Name" v-model="query.keywords" class="input-keywords">
+                            <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                                 <a href="javascript:;" slot="append" class="search-icon"></a>
                             </el-input>
-                            <el-select v-model="query.latest" placeholder="请选择">
+                            <el-select v-model="query.latest" placeholder="">
                                 <el-option v-for="item in options" :key="item.value" :label="item.label"
                                     :value="item.value">
                                 </el-option>
@@ -101,9 +101,12 @@
                 checkListSale: [],
                 query: {
                     keywords: '',
-                    latest: ''
+                    latest: 0
                 },
-                options: [],
+                options: [{
+                    value: 0,
+                    label: 'latest'
+                }],
                 netList: [{
                     id: '010001',
                     type: 'Diamond',
@@ -137,7 +140,11 @@
                 }]
             }
         },
-        computed: {},
+        computed: {
+            placeholderTxt() {
+                return this.$t("account.search-id-name")
+            }
+        },
         watch: {},
         created() {},
         mounted() {},

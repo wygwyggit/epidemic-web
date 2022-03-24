@@ -7,16 +7,16 @@
                 <div class="right">
                     <ul>
                         <li class="item">
-                            <a href="">Home</a>
+                            <a href="">{{$t("common.home")}}</a>
                         </li>
                         <li class="item">
-                            <a href="">Blind box</a>
+                            <a href="">{{$t("common.blind-box")}}</a>
                         </li>
                         <li class="item">
-                            <a href="">Marketplace</a>
+                            <a href="">{{$t("common.marketplace")}}</a>
                         </li>
                         <li class="item">
-                            <a href="">Help</a>
+                            <a href="">{{$t("common.help")}}</a>
                         </li>
                         <li class="item-img">
                             <a href="">

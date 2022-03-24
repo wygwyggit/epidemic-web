@@ -3,6 +3,56 @@
         "home": "Home",
         "blind-box": "Blind box",
         "marketplace": "Marketplace",
-        "my-account": "My account"
+        "my-account": "My account",
+        "connect": "Connect Wallet",
+        "disConnect": "Disconnect",
+        "tokenPocket": "TokenPocket",
+        "result": "Result",
+        "accept": "Accept",
+        "help": "help",
+        "back": "Back"
+    },
+    "home": {
+        "open-blind-box": "Open Blindbox",
+        "open-tip-l": "You can open",
+        "open-tip-r": "more boxes today",
+        "open": "Open",
+        "your-invitation": "Your invitation",
+        "copy": "COPY",
+        "you-reward": "Your reward",
+        "receive": "RECEIVE"
+    },
+    "account": {
+        "my-account": "My account",
+        "filter": "Filter",
+        "clear": "Clear",
+        "yellow": "Yellow",
+        "orange": "Orange",
+        "red": "Red",
+        "blue": "Blue",
+        "purple": "Purple",
+        "diamond": "Diamond",
+        "sale": "Sale",
+        "for-sale": "For sale",
+        "not-sale": "Not sale",
+        "level": "Level",
+        "search-id-name": "Search ID or Name",
+        "latest": "Latest",
+        "price": "Price",
+        "revise": "Revise",
+        "cancel-sale": "Cancel Sale"
+    },
+    "detail": {
+        "attribute": "Attribute",
+        "color": "Color",
+        "owner": "Owner",
+        "sale-history": "Sale history",
+        "buyer": "Buyer",
+        "seller": "Seller",
+        "date": "Date",
+        "txn-hash": "Txn hash",
+        "recommend": "Recommend",
+        "more": "More",
+        "buy": "Buy"
     }
 }

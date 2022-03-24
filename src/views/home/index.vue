@@ -4,32 +4,33 @@
         </div>
         <div class="content-box">
             <div class="blind-box">
+                <div class="before-txt">{{$t("home.open-blind-box")}}</div>
             </div>
-            <p>You can open <span class="num">10</span> more boxes today</p>
+            <p>{{$t("home.open-tip-l")}} <span class="num">10</span> {{$t("home.open-tip-r")}}</p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
-                <el-button type="primary" @click="openBlindBox">OPEN</el-button>
+                <el-button type="primary" @click="openBlindBox">{{$t("home.open")}}</el-button>
             </div>
         </div>
         <div class="invitation-reward">
             <div class="w">
                 <div class="left">
-                    <p class="label">Your invitation</p>
+                    <p class="label">{{$t("home.your-invitation")}}</p>
                     <div class="val">
                         https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj
-                        <el-button type="primary">OPEN</el-button>
+                        <el-button type="primary">{{$t("home.copy")}}</el-button>
                     </div>
                 </div>
                 <div class="right">
-                    <p class="label">Your reward</p>
+                    <p class="label">{{$t("home.you-reward")}}</p>
                     <div class="val" style="font-size: 24px;">
                         1,000,000,000 Adoge
-                        <el-button type="primary">receive</el-button>
+                        <el-button type="primary">{{$t("home.receive")}}</el-button>
                     </div>
                 </div>
             </div>
         </div>
-        <el-dialog title="Result" custom-class="token-dialog" :visible.sync="isShowTokenDialog"
+        <el-dialog :title="resultTxt" custom-class="token-dialog" :visible.sync="isShowTokenDialog"
             :close-on-click-modal="false" width="400px" >
             <div class="dialog-content">
                 <div class="img-box">
@@ -40,9 +41,9 @@
                     <p class="sub-txt">Adoge token</p>
                 </div>
             </div>
-            <div class="accept-btn">Accept</div>
+            <div class="accept-btn">{{$t("common.accept")}}</div>
         </el-dialog>
-        <el-dialog title="Result" custom-class="blindBox-dialog" :visible.sync="isShowBlindBoxDialog"
+        <el-dialog :title="resultTxt" custom-class="blindBox-dialog" :visible.sync="isShowBlindBoxDialog"
             :close-on-click-modal="false" width="400px">
             <div class="dialog-content">
                 <div class="index">
@@ -55,10 +56,10 @@
                     CZ Hoodie Limited NFT
                 </div>
                 <p class="lv">Lv-1</p>
-                <p class="txt yellow">Yellow</p>
+                <p class="txt yellow">{{$t("account.yellow")}}</p>
 
             </div>
-            <div class="accept-btn">Accept</div>
+            <div class="accept-btn">{{$t("common.accept")}}</div>
         </el-dialog>
     </div>
 </template>
@@ -75,7 +76,11 @@
                 isShowTokenDialog: false,
             };
         },
-        computed: {},
+        computed: {
+            resultTxt() {
+                return this.$t("common.result")
+            }
+        },
         watch: {},
         created() {},
         mounted() {},
@@ -123,8 +128,7 @@
                 cursor: pointer;
                 text-align: center;
 
-                &::before {
-                    content: "Open Blindbox";
+                .before-txt {
                     position: relative;
                     top: -90px;
                     left: 15px;

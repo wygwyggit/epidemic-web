@@ -17,15 +17,15 @@
                 <div class="sale">
                     <div class="lv">{{itemInfo.lv}}</div>
                 </div>
-                <div class="sale-btn btn">Sale</div>
+                <div class="sale-btn btn">{{$t("account.sale")}}</div>
             </template>
             <template v-else>
                 <div class="on-sale">
-                    <p class="price-txt">Price</p>
+                    <p class="price-txt">{{$t("account.price")}}</p>
                     <p class="price">{{itemInfo.price}}</p>
                 </div>
-                <div class="revise-btn btn">Revise</div>
-                <div class="cancel-btn btn">Cancel Sale</div>
+                <div class="revise-btn btn">{{$t("account.revise")}}</div>
+                <div class="cancel-btn btn">{{$t("account.cancel-sale")}}</div>
             </template>
         </li>
     </div>

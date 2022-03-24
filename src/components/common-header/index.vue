@@ -16,7 +16,7 @@
             <template v-if="!isConnect">
                 <div class="user">
                     <div class="connect" @click=openConnectDialog>
-                        Connect Wollet
+                        {{$t("common.connect")}}
                     </div>
                 </div>
             </template>
@@ -27,22 +27,30 @@
                         <img src="../../assets/images/wallet.png" alt="">
                         0xf235...2809</div>
                     <div class="dis-connect">
-                        Disconnect
+                        {{$t("common.disConnect")}}
                         <img src="../../assets/images/out.png" alt="">
                     </div>
                 </div>
             </template>
             <div class="lang-opt">
-                <div class="item current">EN</div>
-                <div class="item other">ZH</div>
+                <!-- <div class="item current">EN</div>
+                <div class="item other">ZH</div> -->
+                <el-dropdown @command="doChangeLang">
+                    <span class="el-dropdown-link">
+                        <div class="item current">{{lang}}</div>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item>{{otherLang}}</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
             </div>
         </div>
 
-        <el-dialog title="Connect wallet" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
+        <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" width="400px">
             <ul>
                 <li class="c1">MetaMask</li>
-                <li class="c2" @click="openCodeDialog">TokenPocket</li>
+                <li class="c2" @click="openCodeDialog">{{$t("common.tokenPocket")}}</li>
             </ul>
         </el-dialog>
     </div>
@@ -59,6 +67,8 @@
                 isConnect: false,
                 isShowConnectDialog: false,
                 isShowCodeDialog: false,
+                lang: '',
+                otherLang: '',
                 tabs: [{
                         text: "home",
                         name: "home",
@@ -83,12 +93,38 @@
                 currentTab: "home",
             };
         },
-        computed: {},
-        watch: {},
-        created() {},
+        computed: {
+            connectTitle() {
+                return this.$t("common.connect")
+            }
+        },
+        watch: {
+            $route: {
+                immediate: true,
+                deep: true,
+                handler(val, oldval) {
+                    switch (val.path.replace('/', '')) {
+                        case 'home':
+                            this.currentTab = val.path.replace('/', '')
+                            break;
+                        default:
+                            this.currentTab = val.path.replace('/', '')
+                            break;
+                    }
+                }
+            }
+        },
+        created() {
+            this.lang = localStorage.getItem('lang') || 'EN'
+            this.otherLang = this.lang === 'EN' ? 'ZH' : 'EN'
+        },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doChangeLang() {
+                localStorage.setItem('lang', this.otherLang)
+                location.reload()
+            },
             redirectTo(tab) {
                 this.currentTab = tab.name;
                 this.$router.push({
