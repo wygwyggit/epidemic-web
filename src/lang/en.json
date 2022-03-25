@@ -10,7 +10,8 @@
         "result": "Result",
         "accept": "Accept",
         "help": "help",
-        "back": "Back"
+        "back": "Back",
+        "language": "Language"
     },
     "home": {
         "open-blind-box": "Open Blindbox",
@@ -19,6 +20,7 @@
         "open": "Open",
         "your-invitation": "Your invitation",
         "copy": "COPY",
+        "copy-success": "Copy Success",
         "you-reward": "Your reward",
         "receive": "RECEIVE"
     },

@@ -1,7 +1,11 @@
 <template>
     <div class="details-wrap">
+
         <div class="detail-con">
             <div class="detail-main w">
+                <div class="back" @click="goBack">
+                    {{$t("common.back")}}
+                </div>
                 <div class="blind-box">
                     <div class="left">
                         <img src="../../assets/images/product.png" />
@@ -198,6 +202,11 @@
                 ],
             };
         },
+        methods: {
+            goBack() {
+                this.$router.back(-1)
+            }
+        }
     };
 </script>
 
@@ -208,6 +217,22 @@
         background-color: #131922;
 
         .detail-main {
+            .back {
+                width: 136px;
+                height: 56px;
+                padding-left: 10px;
+                line-height: 50px;
+                color: #32A3FF;
+                margin: 50px 0;
+                border-radius: 90px;
+                border: 2px solid #004D8C;
+                background: url('../../assets/images/back.png');
+                background-repeat: no-repeat;
+                background-position: 15px center;
+                cursor: pointer;
+                font-size: 18px;
+            }
+
             .border {
                 border: 1px solid #152132;
             }

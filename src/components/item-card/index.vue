@@ -7,7 +7,7 @@
                 </div>
                 <div class="r">{{itemInfo.type}}</div>
             </div>
-            <div class="img-content">
+            <div class="img-content" @click="onClickHandle(itemInfo.id)">
                 <img src="../../assets/images/product.png">
             </div>
             <div class="name">
@@ -54,7 +54,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
-
+            onClickHandle(id) {
+                this.$emit('select', id)
+            }
         },
     }
 </script>
@@ -81,6 +83,7 @@
                 height: 245px;
                 border-radius: 10px;
                 overflow: hidden;
+                cursor: pointer;
 
                 img {
                     width: 100%;

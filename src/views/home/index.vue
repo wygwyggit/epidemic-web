@@ -1,10 +1,11 @@
 <template>
     <div :class="prefixCls">
         <div class="banner">
+            {{$t("home.open-blind-box")}}
         </div>
         <div class="content-box">
             <div class="blind-box">
-                <div class="before-txt">{{$t("home.open-blind-box")}}</div>
+                <div class="before-txt"></div>
             </div>
             <p>{{$t("home.open-tip-l")}} <span class="num">10</span> {{$t("home.open-tip-r")}}</p>
             <div class="open-btn-info">
@@ -17,8 +18,8 @@
                 <div class="left">
                     <p class="label">{{$t("home.your-invitation")}}</p>
                     <div class="val">
-                        https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj
-                        <el-button type="primary">{{$t("home.copy")}}</el-button>
+                        {{ shareUrl }}
+                        <el-button type="primary" @click="copyLink">{{$t("home.copy")}}</el-button>
                     </div>
                 </div>
                 <div class="right">
@@ -31,7 +32,7 @@
             </div>
         </div>
         <el-dialog :title="resultTxt" custom-class="token-dialog" :visible.sync="isShowTokenDialog"
-            :close-on-click-modal="false" width="400px" >
+            :close-on-click-modal="false" width="400px">
             <div class="dialog-content">
                 <div class="img-box">
                     <img src="../../assets/images/reward-token.png" alt="">
@@ -65,6 +66,8 @@
 </template>
 
 <script>
+    import Vue from "vue"
+    import VueClipboard from "vue-clipboard2"
     export default {
         name: "home",
         components: {},
@@ -74,6 +77,7 @@
                 prefixCls: "views-home",
                 isShowBlindBoxDialog: false,
                 isShowTokenDialog: false,
+                shareUrl: 'https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj'
             };
         },
         computed: {
@@ -83,9 +87,16 @@
         },
         watch: {},
         created() {},
-        mounted() {},
+        mounted() {
+            Vue.use(VueClipboard)
+        },
         beforeDestroy() {},
         methods: {
+            copyLink() {
+                this.$copyText(this.shareUrl).then(() => {
+                    alert(`${this.$t("home.copy-success")}`);
+                });
+            },
             openBlindBox() {
                 let n = Math.random()
                 if (n > 0.5) {
@@ -313,6 +324,14 @@
                 }
             }
         }
+    }
 
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            .banner {
+                height: 6.88rem;
+                background: linear-gradient(180deg, #131922 15%, #1E9AFF 100%);
+            }
+        }
     }
 </style>

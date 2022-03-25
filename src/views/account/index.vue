@@ -71,7 +71,7 @@
                         </div>
                     </div>
                     <div class="list clearfix" v-if="netList.length">
-                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"></item-card>
+                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"></item-card>
                     </div>
                     <div class="page r">
                         <el-pagination background layout="total, sizes, prev, pager, next, jumper"
@@ -155,6 +155,14 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            goDetail(id) {
+                this.$router.push({
+                    path: '/details',
+                    query: {
+                        id
+                    }
+                })
+            },
             doSearch() {
                 let n = Math.floor(Math.random() * 10 + 1)
                 let arr = Array.from({

@@ -10,7 +10,8 @@
         "result": "结果",
         "accept": "确认",
         "help": "帮助",
-        "back": "返回"
+        "back": "返回",
+        "language": "语言"
     },
     "home": {
         "open-blind-box": "开启NFT盲盒",
@@ -19,6 +20,7 @@
         "open": "抽取",
         "your-invitation": "你的推广链接",
         "copy": "复制",
+        "copy-success": "复制成功",
         "you-reward": "你的推广奖励",
         "receive": "领取"
     },

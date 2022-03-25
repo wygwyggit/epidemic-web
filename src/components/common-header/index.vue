@@ -13,6 +13,9 @@
         </div>
 
         <div class="right">
+            <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
+                <img src="../../assets/images/line.png" alt="">
+            </a>
             <template v-if="!isConnect">
                 <div class="user">
                     <div class="connect" @click=openConnectDialog>
@@ -22,7 +25,7 @@
             </template>
             <template v-else>
                 <p class="adoge-num">10,000,000,000 Adoge</p>
-                <div class="user">
+                <div class="user-pc">
                     <div class="wallet">
                         <img src="../../assets/images/wallet.png" alt="">
                         0xf235...2809</div>
@@ -45,6 +48,63 @@
                 </el-dropdown>
             </div>
         </div>
+        <div class="header-slideout" :style="{'width': isShowSlider ? '100%' : '0' }">
+            <div class="content" v-show="isShowSlider">
+                <div class="close" @click="closeSlider">
+                </div>
+                <nav>
+                    <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text">
+                        <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name=== 'home'">
+                        <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'Blind'">
+                        <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'Marketplace'">
+                        <img src="../../assets/images/nav-my-account.png" alt="" v-if="tab.name=== 'account'">
+                        {{$t(`common.${tab.text}`)}}</a>
+                    <a href="javascript:;" class="item">
+                        <img src="../../assets/images/nav-lang.png" alt="">
+                        {{$t("common.language")}}
+                    </a>
+                    <a href="javascript:;" v-if="isConnect" class="item wallet">
+                        <img src="../../assets/images/wallet.png" alt="">
+                        0xf235...2809
+                    </a>
+                </nav>
+                <div class="bottom">
+                    <div class="user-info">
+                        <template v-if="!isConnect">
+                            <div class="user-h5">
+                                <div class="connect" @click=openConnectDialog>
+                                    {{$t("common.connect")}}
+                                </div>
+                            </div>
+                        </template>
+                        <template v-else>
+                            <div class="user-h5">
+                                <div class="head-img">
+                                    <img src="../../assets/images/reward-token.png" alt="">
+                                </div>
+                                <div class="num-info">
+                                    <p>BALANCE</p>
+                                    <p class="num">10,000,000,000 Adoge</p>
+                                </div>
+                                <div class="buy-btn">
+                                    {{$t("detail.buy")}}
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="out-link">
+                        <a href="">
+                            <img src="../../assets/images/Twitter.png" alt="">
+                        </a>
+                        <a href="">
+                            <img src="../../assets/images/Telegram App.png" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
 
         <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" width="400px">
@@ -64,9 +124,10 @@
         data() {
             return {
                 prefixCls: "components-common-header",
-                isConnect: false,
+                isConnect: true,
                 isShowConnectDialog: false,
                 isShowCodeDialog: false,
+                isShowSlider: false,
                 lang: '',
                 otherLang: '',
                 tabs: [{
@@ -121,6 +182,12 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            openSlider() {
+                this.isShowSlider = true
+            },
+            closeSlider() {
+                this.isShowSlider = false
+            },
             doChangeLang() {
                 localStorage.setItem('lang', this.otherLang)
                 location.reload()
@@ -174,12 +241,15 @@
         .page-tabs {
             display: flex;
             align-items: center;
+            height: 100px;
 
             .tab-item {
+                display: flex;
+                align-items: center;
                 position: relative;
                 margin-right: 17px;
                 padding: 0 10px;
-                line-height: 100px;
+                height: 100%;
                 cursor: pointer;
                 opacity: 1;
                 color: #CBE8FF;
@@ -196,6 +266,10 @@
         .right {
             display: flex;
             align-items: center;
+
+            .header-above-slideicon {
+                display: none;
+            }
 
             .user {
                 position: relative;
@@ -236,14 +310,18 @@
             }
 
             .adoge-num {
+                // width: 100px;
+                // white-space: nowrap;
+                // overflow: hidden;
+                // text-overflow: ellipsis;
                 margin-right: 20px;
                 color: #fff;
                 font-size: 18px;
-                line-height: 100px;
             }
 
             .lang-opt {
                 position: relative;
+                margin-left: 20px;
 
                 .item {
                     width: 51px;
@@ -294,6 +372,148 @@
                     background-position: 40px center;
                     background-size: 40px 40px;
                 }
+            }
+        }
+
+        .header-slideout {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            background: #1D2633;
+            color: #fff;
+            z-index: 1;
+            transition: all .3s;
+
+            .content {
+                margin: 1.28rem .853333333333333rem 1.333333333333333rem .853333333333333rem;
+            }
+
+            .close {
+                margin-bottom: .64rem;
+                width: .853333333333333rem;
+                height: .853333333333333rem;
+                background: url('../../assets/images/close.png');
+                background-size: 100% 100%;
+                cursor: pointer;
+            }
+
+            nav {
+                .item {
+                    display: block;
+                    width: 100%;
+                    height: 1.92rem;
+                    line-height: 1.92rem;
+                    font-size: .48rem;
+                    color: #fff;
+                    background: url('../../assets/images/link.png');
+                    background-repeat: no-repeat;
+                    background-position: right center;
+
+                    img {
+                        margin-right: .2rem;
+                        vertical-align: text-top;
+                    }
+
+                    &.wallet {
+
+                        background: url('../../assets/images/out.png');
+                        background-repeat: no-repeat;
+                        background-position: right center;
+                    }
+                }
+            }
+
+            .bottom {
+                margin-top: 2.666666666666667rem;
+
+                .user-h5 {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+
+                    .head-img {
+                        img {
+                            width: 1.066666666666667rem;
+                            height: 1.066666666666667rem;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    .num-info {
+                        margin: 0 .4rem;
+                        font-size: .426666666666667rem;
+                    }
+
+                    .buy-btn {
+                        padding: 0 .4rem;
+                        height: .8rem;
+                        line-height: .8rem;
+                        background: #00CF08;
+                        font-size: .373333333333333rem;
+                        border-radius: .533333333333333rem;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            .user-info {
+                .connect {
+                    margin: 0 auto;
+                    width: 7.333333333333333rem;
+                    height: 1.6rem;
+                    line-height: 1.6rem;
+                    text-align: center;
+                    border: 2px solid #fff;
+                    color: #fff;
+                    border-radius: .8rem;
+                    font-size: .586666666666667rem;
+                    cursor: pointer;
+                }
+            }
+
+            .out-link {
+                margin-top: .773333333333333rem;
+                text-align: center;
+
+                a {
+                    img {
+                        width: .72rem;
+                        height: .72rem;
+                    }
+
+                    &:first-child img {
+                        margin-right: .8rem;
+                    }
+                }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            height: 2.186666666666667rem;
+            background: #14181f;
+
+            .page-logo {
+                img {
+                    width: 3.093333333333333rem;
+                    height: 1.2rem;
+                }
+            }
+
+            .page-tabs {
+                display: none;
+            }
+
+            .user-pc,
+            .adoge-num,
+            .lang-opt {
+                display: none;
+            }
+
+            .header-above-slideicon {
+                display: block !important;
             }
         }
     }

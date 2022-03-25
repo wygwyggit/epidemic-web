@@ -3,10 +3,10 @@ import VueI18n from 'vue-i18n'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import './style/common.scss'
+import '../rem.js'
 import en from '@/lang/en.json' //英文语言包
 import zh from '@/lang/zh.json' //中文语言包
 import enLocale from 'element-ui/lib/locale/lang/en'

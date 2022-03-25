@@ -1,0 +1,11 @@
+@media (max-width: 768px) {
+    .components-common-header {
+        background: #14181f;
+        .page-tabs {
+            display: none;
+        }
+        .right {
+            display: none;
+        }
+    }
+}
