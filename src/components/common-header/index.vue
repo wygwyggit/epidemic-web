@@ -114,6 +114,12 @@
                 <li class="c2" @click="openCodeDialog">{{$t("common.tokenPocket")}}</li>
             </ul>
         </el-dialog>
+        <el-dialog custom-class="code-dialog" :visible.sync="isShowCodeDialog" :close-on-click-modal="false"
+            :width="dialogWidth">
+            <img src="../../assets/images/code.png" />
+            <p class="tit">{{$t("common.connect")}}</p>
+            <p class="tip">Open on your mobile phone and scan <i>TokenPocket</i> </p>
+        </el-dialog>
         <el-dialog custom-class="lang-dialog" :visible.sync="isShowLangDialog" :close-on-click-modal="false"
             width="8.9rem">
             <ul>
@@ -134,9 +140,9 @@
                 prefixCls: "components-common-header",
                 isConnect: false,
                 isShowConnectDialog: false,
-                isShowCodeDialog: false,
                 isShowSlider: false,
                 isShowLangDialog: false,
+                isShowCodeDialog: false,
                 dialogWidth: '400px',
                 lang: '',
                 otherLang: '',
@@ -392,6 +398,27 @@
                 }
             }
         }
+        .code-dialog {
+            text-align: center;
+            img {
+                margin-bottom: .266666666666667rem;
+                width: 240px;
+                height: 240px;
+                border-radius: 15px;
+            }
+            .tit {
+                color: #777E90;
+                font-size: 24px;
+            }
+            .tip {
+                margin-top: 5px;
+                color: #777E90;
+                font-size: 12px;
+                i {
+                    color: #32A3FF;
+                }
+            }
+        }
 
         .header-slideout {
             position: absolute;
@@ -542,6 +569,7 @@
                     }
                 }
             }
+
             .lang-dialog {
                 .el-dialog__body {
                     li {
@@ -554,6 +582,7 @@
                         padding-left: .266666666666667rem;
                         font-size: .533333333333333rem;
                         color: #fff;
+
                         &:first-child {
                             color: #32A3FF;
                         }
