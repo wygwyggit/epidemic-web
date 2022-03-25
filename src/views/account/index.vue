@@ -58,7 +58,12 @@
                 </div>
                 <div class="right">
                     <div class="top-search">
-                        <div class="total">20 NFTs</div>
+                        <div class="total">
+                            <span class="txt">20 NFTs</span>
+                            <span class="filter" @click="openFilterDrawer">
+                                Filter(<i>4</i>)
+                            </span>
+                        </div>
                         <div class="search">
                             <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                                 <a href="javascript:;" slot="append" class="search-icon"></a>
@@ -71,17 +76,68 @@
                         </div>
                     </div>
                     <div class="list clearfix" v-if="netList.length">
-                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"></item-card>
+                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail">
+                        </item-card>
                     </div>
                     <div class="page r">
-                        <el-pagination background layout="total, sizes, prev, pager, next, jumper"
-                            :total="netList.length" v-if="netList.length">
+                        <el-pagination background layout="total, sizes, prev, pager, next" :total="netList.length"
+                            v-if="netList.length">
                         </el-pagination>
                     </div>
                 </div>
             </div>
 
         </div>
+        <el-drawer :visible.sync="isShowFilter" direction="btt">
+            <div class="filter-content">
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
+                        <a href="javascript:;">Clear</a>
+                    </div>
+                    <div class="filter-val filter">
+                        <el-checkbox-group v-model="checkListFilter" @change="doSearch">
+                            <el-checkbox label="Yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
+                            <el-checkbox label="Orange" class="orange">{{$t("account.orange")}}</el-checkbox>
+                            <el-checkbox label="Red" class="red">{{$t("account.red")}}</el-checkbox>
+                            <el-checkbox label="Blue" class="blue">{{$t("account.blue")}}</el-checkbox>
+                            <el-checkbox label="Purple" class="purple">{{$t("account.purple")}}</el-checkbox>
+                            <el-checkbox label="Diamond">{{$t("account.diamond")}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.sale")}}</span>
+                        <a href="javascript:;">Clear</a>
+                    </div>
+                    <div class="filter-val">
+                        <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                            <el-checkbox label="For sale">{{$t("account.for-sale")}}</el-checkbox>
+                            <el-checkbox label="Not sold">{{$t("account.not-sale")}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
+                        <a href="javascript:;">Clear</a>
+                    </div>
+                    <div class="filter-val">
+                        <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                            <el-checkbox label="Lv-1">Lv-1</el-checkbox>
+                            <el-checkbox label="Lv-2">Lv-2</el-checkbox>
+                            <el-checkbox label="Lv-3">Lv-3</el-checkbox>
+                            <el-checkbox label="Lv-4">Lv-4</el-checkbox>
+                            <el-checkbox label="Lv-5">Lv-5</el-checkbox>
+                            <el-checkbox label="Lv-6">Lv-6</el-checkbox>
+                            <el-checkbox label="Lv-7">Lv-7</el-checkbox>
+                            <el-checkbox label="Lv-8">Lv-8</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
@@ -99,6 +155,7 @@
                 checkListFilter: [],
                 checkListLvel: [],
                 checkListSale: [],
+                isShowFilter: false,
                 query: {
                     keywords: '',
                     latest: 0
@@ -155,6 +212,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            openFilterDrawer() {
+                this.isShowFilter = true
+            },
             goDetail(id) {
                 this.$router.push({
                     path: '/details',
@@ -185,6 +245,40 @@
     $prefixCls: "views-account";
 
     .#{$prefixCls} {
+        .el-drawer {
+            height: 90% !important;
+            background: #000;
+            overflow-y: scroll;
+
+            .filter-content {
+                .filter-item {
+                    border-top: 1px solid #29374B;
+
+                    .title {
+                        padding: 0 .746666666666667rem;
+                        height: 1.52rem;
+                        line-height: 1.52rem;
+                        color: #fff;
+                        font-weight: 600;
+                        font-size: .533333333333333rem;
+                        border-bottom: 1px solid #29374B;
+
+                        a {
+                            float: right;
+                        }
+                    }
+                }
+
+                .filter-val {
+                    padding: .373333333333333rem .746666666666667rem;
+
+                    .el-checkbox {
+                        width: 3.2rem;
+                        height: .853333333333333rem
+                    }
+                }
+            }
+        }
 
         .el-input__inner,
         .el-select {
@@ -228,6 +322,7 @@
             }
 
             .left {
+                margin-right: 20px;
                 width: 265px;
                 max-height: 830px;
                 background: #0B0F15;
@@ -263,7 +358,7 @@
 
             .right {
                 flex: 1;
-                margin-left: 20px;
+
 
                 .top-search {
                     display: flex;
@@ -275,8 +370,15 @@
                 }
 
                 .total {
-                    color: #32A3FF;
                     font-size: 32px;
+
+                    .txt {
+                        color: #32A3FF;
+                    }
+
+                    .filter {
+                        display: none;
+                    }
                 }
 
                 .input-keywords {
@@ -288,13 +390,105 @@
 
             .components-item-card {
                 float: left;
-                margin-top: 17px;
+                margin-top: .32rem;
                 margin-right: 20px;
                 width: 265px;
 
                 &:nth-child(3n) {
                     margin-right: 0;
                 }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            .top {
+                height: 3.093333333333333rem;
+                line-height: 3.093333333333333rem;
+                font-size: .64rem;
+                text-align: center;
+            }
+
+            .main {
+                padding: .5rem;
+
+                .left {
+                    display: none;
+                }
+
+                .right {
+                    width: 100%;
+
+                    .top-search {
+                        flex-direction: column;
+
+                        .total {
+                            display: flex;
+                            justify-content: space-between;
+                            font-size: .48rem;
+
+                            .filter {
+                                display: block;
+                                padding-left: .6rem;
+                                color: #777E90;
+                                background: url('../../assets/images/filter.png');
+                                background-repeat: no-repeat;
+                                background-position: left center;
+
+                                i {
+                                    color: #32A3FF;
+                                }
+                            }
+                        }
+
+                        .search {
+                            margin-top: .4rem;
+
+                            .input-keywords {
+                                margin-right: .266666666666667rem;
+                            }
+
+                            .el-input {
+                                font-size: .2rem;
+                            }
+
+                            .el-input-group__append {
+                                padding: 0 .2rem;
+
+                                .search-icon {
+                                    width: .426666666666667rem;
+                                    height: .426666666666667rem;
+                                    background-size: contain;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .list {
+                .components-item-card {
+                    margin-right: .266666666666667rem;
+                    width: 48.5%;
+
+                    >li {
+                        margin-bottom: 0;
+                    }
+
+                    &:nth-child(2n) {
+                        margin-right: 0;
+                    }
+
+                    &:nth-child(3n) {
+                        margin-right: .266666666666667rem;
+                    }
+                }
+            }
+
+            .page {
+                margin-top: .266666666666667rem;
+                width: 100%;
             }
         }
     }

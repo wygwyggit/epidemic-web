@@ -24,8 +24,10 @@
                     <p class="price-txt">{{$t("account.price")}}</p>
                     <p class="price">{{itemInfo.price}}</p>
                 </div>
-                <div class="revise-btn btn">{{$t("account.revise")}}</div>
-                <div class="cancel-btn btn">{{$t("account.cancel-sale")}}</div>
+                <div class="btn-groups">
+                    <div class="revise-btn btn">{{$t("account.revise")}}</div>
+                    <div class="cancel-btn btn">{{$t("account.cancel-sale")}}</div>
+                </div>
             </template>
         </li>
     </div>
@@ -66,7 +68,7 @@
 
     .#{$prefixCls} {
         >li {
-            padding: 10px 10px 26px 10px;
+            padding: .266666666666667rem .266666666666667rem .453333333333333rem .266666666666667rem;
             width: 100%;
             margin-bottom: 20px;
             border: 1px solid #004D8C;
@@ -75,12 +77,12 @@
 
             .index {
                 color: #D7D7D7;
+                font-size: .213333333333333rem;
             }
 
             .img-content {
-                margin: 20px 0;
-                width: 245px;
-                height: 245px;
+                margin: .133333333333333rem 0;
+                width: 100%;
                 border-radius: 10px;
                 overflow: hidden;
                 cursor: pointer;
@@ -93,7 +95,7 @@
 
             .name {
                 padding-bottom: 10px;
-                font-size: 18px;
+                font-size: .266666666666667rem;
                 color: #fff;
                 border-bottom: 1px solid #29374B;
             }
@@ -102,8 +104,11 @@
                 .price {
                     margin-top: 5px;
                     color: #32A3FF;
-                    font-size: 18px;
+                    font-size: .266666666666667rem;
                 }
+            }
+            .btn-groups {
+                display: flex;
             }
 
             .btn {
@@ -116,6 +121,7 @@
                 font-size: 16px;
                 border-radius: 5px;
                 cursor: pointer;
+                flex: 1;
             }
 
             .sale-btn {
@@ -124,13 +130,11 @@
             }
 
             .revise-btn {
-                width: 90px;
                 background: #777E90;
             }
 
             .cancel-btn {
                 margin-left: 3px;
-                width: 150px;
                 background: #FF5E19;
             }
 
@@ -181,6 +185,14 @@
                         color: #86909c;
                     }
                 }
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            .btn {
+                font-size: .266666666666667rem !important;
             }
         }
     }

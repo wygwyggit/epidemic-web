@@ -5,7 +5,7 @@
                 <div class="left">
                 </div>
                 <div class="right">
-                    <ul>
+                    <ul class="clearfix">
                         <li class="item">
                             <a href="">{{$t("common.home")}}</a>
                         </li>
@@ -18,6 +18,8 @@
                         <li class="item">
                             <a href="">{{$t("common.help")}}</a>
                         </li>
+                    </ul>
+                    <ul class="clearfix">
                         <li class="item-img">
                             <a href="">
                                 <img src="../../assets/images/Twitter.png" alt="">
@@ -112,6 +114,44 @@
             padding: 10px 0;
             font-size: 16px;
             color: rgba(255, 255, 255, 0.56);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            height: auto;
+            padding: .906666666666667rem .853333333333333rem;
+
+            .item-box {
+                flex-direction: column;
+                padding: 0;
+
+                ul {
+                    margin-top: .533333333333333rem;
+                    display: flex;
+                }
+
+                .right {
+                    li.item {
+                        margin-right: .533333333333333rem;
+
+                        a {
+                            font-size: .32rem;
+                        }
+                    }
+                    li.item-img {
+                        padding-left: 0;
+                        padding-right: .8rem;
+                    }
+                }
+            }
+            .copyright {
+                margin-top: .533333333333333rem;
+                padding-top: .533333333333333rem;
+                padding-bottom: 2.133333333333333rem;
+                border-top: 1px solid #29374B;
+                font-size: .32rem;
+            }
         }
     }
 </style>

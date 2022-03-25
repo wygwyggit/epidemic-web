@@ -17,7 +17,7 @@
                 <img src="../../assets/images/line.png" alt="">
             </a>
             <template v-if="!isConnect">
-                <div class="user">
+                <div class="user-pc">
                     <div class="connect" @click=openConnectDialog>
                         {{$t("common.connect")}}
                     </div>
@@ -53,13 +53,14 @@
                 <div class="close" @click="closeSlider">
                 </div>
                 <nav>
-                    <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text">
+                    <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
+                        @click="redirectTo(tab)">
                         <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name=== 'home'">
                         <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'Blind'">
                         <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'Marketplace'">
                         <img src="../../assets/images/nav-my-account.png" alt="" v-if="tab.name=== 'account'">
                         {{$t(`common.${tab.text}`)}}</a>
-                    <a href="javascript:;" class="item">
+                    <a href="javascript:;" class="item" @click="selectLang">
                         <img src="../../assets/images/nav-lang.png" alt="">
                         {{$t("common.language")}}
                     </a>
@@ -107,10 +108,17 @@
         </div>
 
         <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
-            :close-on-click-modal="false" width="400px">
+            :close-on-click-modal="false" :width="dialogWidth">
             <ul>
                 <li class="c1">MetaMask</li>
                 <li class="c2" @click="openCodeDialog">{{$t("common.tokenPocket")}}</li>
+            </ul>
+        </el-dialog>
+        <el-dialog custom-class="lang-dialog" :visible.sync="isShowLangDialog" :close-on-click-modal="false"
+            width="8.9rem">
+            <ul>
+                <li>{{ lang }}</li>
+                <li @click="doChangeLang">{{ otherLang }}</li>
             </ul>
         </el-dialog>
     </div>
@@ -124,10 +132,12 @@
         data() {
             return {
                 prefixCls: "components-common-header",
-                isConnect: true,
+                isConnect: false,
                 isShowConnectDialog: false,
                 isShowCodeDialog: false,
                 isShowSlider: false,
+                isShowLangDialog: false,
+                dialogWidth: '400px',
                 lang: '',
                 otherLang: '',
                 tabs: [{
@@ -178,10 +188,17 @@
         created() {
             this.lang = localStorage.getItem('lang') || 'EN'
             this.otherLang = this.lang === 'EN' ? 'ZH' : 'EN'
+            let width = window.innerWidth
+            if (width < 768) {
+                this.dialogWidth = '8.9rem'
+            }
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            selectLang() {
+                this.isShowLangDialog = true
+            },
             openSlider() {
                 this.isShowSlider = true
             },
@@ -193,6 +210,7 @@
                 location.reload()
             },
             redirectTo(tab) {
+                this.isShowSlider = false
                 this.currentTab = tab.name;
                 this.$router.push({
                     path: tab.path,
@@ -208,7 +226,7 @@
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     $prefixCls: "components-common-header";
 
     .#{$prefixCls} {
@@ -382,7 +400,7 @@
             width: 0;
             background: #1D2633;
             color: #fff;
-            z-index: 1;
+            z-index: 99;
             transition: all .3s;
 
             .content {
@@ -469,6 +487,7 @@
                     border-radius: .8rem;
                     font-size: .586666666666667rem;
                     cursor: pointer;
+                    -webkit-tap-highlight-color: transparent;
                 }
             }
 
@@ -495,6 +514,53 @@
             height: 2.186666666666667rem;
             background: #14181f;
 
+            .el-dialog {
+                .el-dialog__header {
+                    padding: .266666666666667rem .4rem 0 .4rem;
+
+                    .el-dialog__title {
+                        font-size: .48rem;
+                    }
+                }
+
+
+            }
+
+            .connect-dialog {
+                .el-dialog__body {
+                    padding: .8rem .533333333333333rem;
+
+                    li {
+                        padding-left: 2.133333333333333rem;
+                        height: 1.6rem;
+                        line-height: 1.6rem;
+                        border: 1px solid #004D8C;
+                        border-radius: .266666666666667rem;
+                        font-size: .426666666666667rem;
+                        background-size: 1.066666666666667rem 1.066666666666667rem;
+                        background-position: .533333333333333rem center;
+                    }
+                }
+            }
+            .lang-dialog {
+                .el-dialog__body {
+                    li {
+                        margin-bottom: .3rem;
+                        width: 100%;
+                        height: 1.6rem;
+                        line-height: 1.6rem;
+                        border: 1px solid #004D8C;
+                        border-radius: .266666666666667rem;
+                        padding-left: .266666666666667rem;
+                        font-size: .533333333333333rem;
+                        color: #fff;
+                        &:first-child {
+                            color: #32A3FF;
+                        }
+                    }
+                }
+            }
+
             .page-logo {
                 img {
                     width: 3.093333333333333rem;
@@ -514,6 +580,7 @@
 
             .header-above-slideicon {
                 display: block !important;
+
             }
         }
     }

@@ -5,7 +5,11 @@
 
 
 /*样式初始化*/
-
+@media screen and (min-width: 750px) {
+    html {
+        font-size: 75px !important;
+    }
+}
 body,
 html {
     width: 100%;
@@ -46,7 +50,14 @@ ul {
 * {
     box-sizing: border-box;
 }
-
+a {
+    -webkit-tap-highlight-color: transparent;
+    background-color: transparent;
+    text-decoration: none;
+    /* 1 */
+    -webkit-text-decoration-skip: objects;
+    /* 2 */
+}
 fieldset,
 img {
     border: 0
