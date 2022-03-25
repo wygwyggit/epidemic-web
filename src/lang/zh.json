@@ -55,6 +55,9 @@
         "txn-hash": "交易哈希",
         "recommend": "推荐",
         "more": "更多",
-        "buy": "购买"
+        "buy": "购买",
+        "revise": "修改",
+        "cancelSale": "取消销售",
+        "sale": "出售"
     }
 }
