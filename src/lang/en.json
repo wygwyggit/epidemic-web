@@ -55,6 +55,9 @@
         "txn-hash": "Txn hash",
         "recommend": "Recommend",
         "more": "More",
-        "buy": "Buy"
+        "buy": "Buy",
+        "revise": "Revise",
+        "cancelSale": "Cancel Sale",
+        "sale": "Sale"
     }
 }
