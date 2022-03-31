@@ -16,17 +16,27 @@ const routes = [{
         name: 'blindBox',
         component: () =>
             import( /* webpackChunkName: "home" */ '@/views/blind-box/index.vue')
+    },{
+        path: '/marketplace',
+        name: 'marketplace',
+        component: () =>
+            import( /* webpackChunkName: "marketplace" */ '@/views/market-place/index.vue')
     },
     {
         path: '/details',
         name: 'details',
         component: () =>
-            import( /* webpackChunkName: "home" */ '@/views/details/index.vue')
+            import( /* webpackChunkName: "details" */ '@/views/details/index.vue')
     }, {
         path: '/account',
         name: 'account',
         component: () =>
-            import( /* webpackChunkName: "home" */ '@/views/account/index.vue')
+            import( /* webpackChunkName: "account" */ '@/views/account/index.vue')
+    }, {
+        path: '/netMining',
+        name: 'netMining',
+        component: () =>
+            import( /* webpackChunkName: "netMining" */ '@/views/net-mining/index.vue')
     }]
 },
 ]

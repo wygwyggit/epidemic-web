@@ -2,9 +2,55 @@
     <div :class="prefixCls">
         <div class="top">
             <div class="w">
-                <img src="../../assets/images/nav-my-account.png" alt="">
-                {{$t("account.my-account")}}
+                <div class="tit-tab">
+                    <p>
+                        <img src="../../assets/images/nav-marketplace.png" alt="">
+                        Marketplace</p>
+                    <!-- <div class="tab-filter">
+                        <li :class="{'active': query.tabFilterIndex === index}" v-for="(item, index) of tabFilterList"
+                            :key="index" @click="selectTabFilter(index)">
+                            {{$t(`marketplace.${item.name}`)}}
+                        </li>
+                    </div>
+                    <div class="tab-filter-h5">
+                        <div>
+                            {{$t(`marketplace.${(tabFilterList[query.tabFilterIndex]).name}`)}}
+                            <img src="../../assets/images/down.png" alt="">
+                        </div>
+                    </div> -->
+                </div>
+                <div class="bnb-box clearfix">
+                    <div class="bnb-item">
+                        <div class="num">
+                            <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
+                            10,000 BNB
+                        </div>
+                        <div class="sub-info">Total value</div>
+                    </div>
+                    <div class="bnb-item">
+                        <div class="num">
+                            <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
+                            20.00 <span>BNB</span>
+                        </div>
+                        <div class="sub-info">Total value</div>
+                    </div>
+                    <div class="bnb-item">
+                        <div class="num">
+                            <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
+                            2.05 <span>BNB</span>
+                        </div>
+                        <div class="sub-info">Total value</div>
+                    </div>
+                    <div class="bnb-item">
+                        <div class="num">
+                            <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
+                            5.25 <span>BNB</span>
+                        </div>
+                        <div class="sub-info">Total value</div>
+                    </div>
+                </div>
             </div>
+
         </div>
         <div class="main">
             <div class="w">
@@ -29,14 +75,13 @@
                         </li>
                         <li>
                             <div class="title" style="border-bottom: 0;">
-                                <span>{{$t("account.sale")}}</span>
+                                <span>{{$t("marketplace.my-sale")}}</span>
                                 <a href="javascript:;"
                                     @click="doClearSearchQuery('checkListSale')">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val" style="padding-top: 0">
                                 <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                    <el-checkbox label="For sale">{{$t("account.for-sale")}}</el-checkbox>
-                                    <el-checkbox label="Not sold">{{$t("account.not-sale")}}</el-checkbox>
+                                    <el-checkbox label="my sale">{{$t("marketplace.my-sale")}}</el-checkbox>
                                 </el-checkbox-group>
                             </div>
                         </li>
@@ -80,10 +125,6 @@
                             </el-select>
                         </div>
                     </div>
-                    <!-- <div class="list clearfix" v-if="netList.length">
-                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail">
-                        </item-card>
-                    </div> -->
                     <div class="list">
                         <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
@@ -93,11 +134,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="page r">
-                        <el-pagination background layout="total, sizes, prev, pager, next" :total="netList.length"
-                            v-if="netList.length">
-                        </el-pagination>
-                    </div> -->
                 </div>
             </div>
 
@@ -122,13 +158,12 @@
                 </div>
                 <div class="filter-item">
                     <div class="title">
-                        <span>{{$t("account.sale")}}</span>
+                        <span>{{$t("marketplace.my-sale")}}</span>
                         <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
                     </div>
                     <div class="filter-val">
                         <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                            <el-checkbox label="For sale">{{$t("account.for-sale")}}</el-checkbox>
-                            <el-checkbox label="Not sold">{{$t("account.not-sale")}}</el-checkbox>
+                            <el-checkbox label="my sale">{{$t("marketplace.my-sale")}}</el-checkbox>
                         </el-checkbox-group>
                     </div>
                 </div>
@@ -156,109 +191,74 @@
 </template>
 
 <script>
-    // import itemCard from '@/components/item-card'
     export default {
         name: '',
-        components: {
-            // itemCard
-        },
+        components: {},
         props: {},
         data() {
             return {
-                prefixCls: 'views-account',
+                prefixCls: 'views-market-place',
                 checkListFilter: [],
-                checkListLvel: [],
                 checkListSale: [],
-                isShowFilter: false,
+                checkListLvel: [],
                 query: {
                     keywords: '',
-                    latest: 0
+                    latest: 0,
+                    tabFilterIndex: 0
                 },
                 options: [{
                     value: 0,
                     key: 'latest',
                     label: 'latest'
                 }],
-                netList: [{
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: '1,000,000,000 Adoge'
+                isShowFilter: false,
+                tabFilterList: [{
+                    id: 0,
+                    name: 'all'
                 }, {
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: '1,000,000,000 Adoge'
+                    id: 1,
+                    name: 'last-24'
                 }, {
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: '1,000,000,000 Adoge'
+                    id: 2,
+                    name: '7-days'
                 }, {
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: '1,000,000,000 Adoge'
-                }, {
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: '1,000,000,000 Adoge'
-                }]
+                    id: 3,
+                    name: '30days'
+                }],
+
             }
         },
-        computed: {
-            placeholderTxt() {
-                return this.$t("account.search-id-name")
-            }
-        },
+        computed: {},
         watch: {},
         created() {
             this.options.forEach(x => {
                 x.label = this.$t(`account.${x.key}`)
             });
         },
+        computed: {
+            placeholderTxt() {
+                return this.$t("account.search-id-name")
+            }
+        },
         mounted() {},
         beforeDestroy() {},
         methods: {
-            doClearSearchQuery(val) {
-                this[val] = []
+            doClearSearchQuery() {
+
             },
+            doSearch() {},
             openFilterDrawer() {
                 this.isShowFilter = true
             },
-            goDetail(id) {
-                this.$router.push({
-                    path: '/details',
-                    query: {
-                        id
-                    }
-                })
-            },
-            doSearch() {
-                let n = Math.floor(Math.random() * 10 + 1)
-                let arr = Array.from({
-                    length: n
-                }, (v, i) => ({
-                    id: '010001',
-                    type: 'Diamond',
-                    name: 'CZ Hoodie Limited NFT',
-                    lv: 'lv-2',
-                    price: i % 2 === 0 ? '' : '1,000,000,000 Adoge'
-                }))
-                this.netList = arr
+            selectTabFilter(idx) {
+                this.query.tabFilterIndex = idx
             }
         },
     }
 </script>
 
 <style lang="scss">
-    $prefixCls: "views-account";
+    $prefixCls: "views-market-place";
 
     .#{$prefixCls} {
         .el-drawer {
@@ -296,6 +296,85 @@
             }
         }
 
+        .top {
+            padding: 64px 0 40px;
+            background: #0B0F15;
+            color: #fff;
+
+            .tit-tab {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 44px;
+
+                p {
+                    font-size: 48px;
+                    font-weight: 600;
+
+                    img {
+                        display: none;
+                        margin-right: .266666666666667rem;
+                    }
+                }
+            }
+
+            .tab-filter {
+                li {
+                    float: left;
+                    margin-left: 5px;
+                    width: 80px;
+                    height: 40px;
+                    line-height: 40px;
+                    border: 1px solid $--border-color-base;
+                    border-radius: 10px;
+                    text-align: center;
+                    font-size: 14px;
+                    cursor: pointer;
+
+                    &.active {
+                        background: $--color-primary;
+                        border: 0;
+                    }
+                }
+            }
+
+            .tab-filter-h5 {
+                display: none;
+            }
+
+            .bnb-box {
+                display: flex;
+                justify-content: space-between;
+
+                .bnb-item {
+                    width: 265px;
+                    padding: 15px 0;
+                    text-align: center;
+                    border: 1px solid $--border-color-base;
+                    border-radius: 12px;
+
+                    .num {
+                        position: relative;
+                        margin: 0 auto .16rem;
+                        width: max-content;
+                        font-size: 30px;
+
+                        .icon {
+                            width: 24px;
+                            height: 24px;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    .sub-info {
+                        color: #777E90;
+                        font-size: 14px;
+
+                    }
+                }
+            }
+        }
+
         .el-input__inner,
         .el-select {
             border-color: #004D8C;
@@ -316,21 +395,6 @@
                 width: 24px;
                 height: 24px;
                 background: url('../../assets/images/icon-search.png');
-            }
-        }
-
-        .top {
-            height: 157px;
-            line-height: 157px;
-            background: #0B0F15;
-            color: #fff;
-            font-size: 48px;
-            font-weight: 600;
-
-            img {
-                width: .8rem;
-                height: .8rem;
-                vertical-align: text-bottom;
             }
         }
 
@@ -381,28 +445,6 @@
             .right {
                 flex: 1;
 
-                .list {
-                    .soon-box {
-                        position: relative;
-                        width: max-content;
-                        margin: 63px auto 0;
-                        text-align: center;
-
-                        img {
-                            width: 230px;
-                            height: 230px;
-                        }
-
-                        div {
-                            position: absolute;
-                            right: -60px;
-                            top: 8px;
-                            color: #FFE2C3;
-                            font-size: 18px;
-                            text-align: left;
-                        }
-                    }
-                }
 
                 .top-search {
                     display: flex;
@@ -430,16 +472,28 @@
                     margin-right: 20px;
                     background: #14181f;
                 }
-            }
 
-            .components-item-card {
-                float: left;
-                margin-top: .32rem;
-                margin-right: 20px;
-                width: 265px;
+                .list {
+                    .soon-box {
+                        position: relative;
+                        width: max-content;
+                        margin: 63px auto 0;
+                        text-align: center;
 
-                &:nth-child(3n) {
-                    margin-right: 0;
+                        img {
+                            width: 230px;
+                            height: 230px;
+                        }
+
+                        div {
+                            position: absolute;
+                            right: -60px;
+                            top: 8px;
+                            color: #FFE2C3;
+                            font-size: 18px;
+                            text-align: left;
+                        }
+                    }
                 }
             }
         }
@@ -448,10 +502,89 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             .top {
-                height: 3.093333333333333rem;
-                line-height: 3.093333333333333rem;
-                font-size: .64rem;
-                text-align: center;
+                padding: .8rem .533333333333333rem .533333333333333rem;
+
+                .tit-tab {
+                    margin-bottom: .533333333333333rem;
+                    flex-direction: column;
+
+                    p {
+                        font-size: .64rem;
+
+                        img {
+                            display: inline-block;
+                        }
+                    }
+
+                    .tab-filter {
+                        display: none;
+                    }
+
+                    .tab-filter-h5 {
+                        display: block;
+                        margin-top: .266666666666667rem;
+                        height: .64rem;
+                        line-height: .64rem;
+                        padding: 0 .16rem;
+                        border: 1px solid #29374B;
+                        border-radius: .133333333333333rem;
+
+                        img {
+                            width: .426666666666667rem;
+                            height: .426666666666667rem;
+                            margin-left: .1rem;
+                            vertical-align: middle;
+                        }
+                    }
+                }
+
+                .bnb-box {
+                    display: initial;
+
+                    .bnb-item {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        float: left;
+                        width: 33.3%;
+                        border-color: #29374B;
+                        border-top-left-radius: 0;
+                        border-top-right-radius: 0;
+                        text-align: left;
+
+                        .num {
+                            font-size: .64rem;
+
+                            span {
+                                display: none;
+                            }
+                        }
+
+                        .sub-info {
+                            font-size: .373333333333333rem;
+                        }
+
+                        &:first-child {
+                            width: 100%;
+                            border-radius: .32rem;
+                            border-bottom-left-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+
+                        &:nth-child(2) {
+                            border-bottom-right-radius: 0;
+                        }
+
+                        &:nth-child(4) {
+                            border-bottom-left-radius: 0;
+                        }
+
+                        &:nth-child(3) {
+                            border-bottom-left-radius: 0;
+                            border-bottom-right-radius: 0;
+                        }
+                    }
+                }
             }
 
             .main {
@@ -463,12 +596,6 @@
 
                 .right {
                     width: 100%;
-
-                    .list {
-                        .soon-box {
-                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
-                        }
-                    }
 
                     .top-search {
                         flex-direction: column;
@@ -514,31 +641,13 @@
                             }
                         }
                     }
-                }
-            }
 
-            .list {
-                .components-item-card {
-                    margin-right: .266666666666667rem;
-                    width: 47%;
-
-                    >li {
-                        margin-bottom: 0;
-                    }
-
-                    &:nth-child(2n) {
-                        margin-right: 0;
-                    }
-
-                    &:nth-child(3n) {
-                        margin-right: .266666666666667rem;
+                    .list {
+                        .soon-box {
+                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
+                        }
                     }
                 }
-            }
-
-            .page {
-                margin-top: .266666666666667rem;
-                width: 100%;
             }
         }
     }

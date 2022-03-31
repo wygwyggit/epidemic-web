@@ -3,8 +3,29 @@
         <div class="banner">
             <div class="before-txt">
                 <span>
-                    {{$t("home.open-blind-box")}}
+                    <!-- {{$t("home.open-blind-box")}} -->
                 </span>
+                <div class="timer-countdown">
+                    <div class="days">
+                        <p class="val">{{ timer.days }}</p>
+                        <p class="txt">{{$t("home.days")}}</p>
+                    </div>
+                    <div class="dot">:</div>
+                    <div class="hrs">
+                        <p class="val">{{ timer.hrs }}</p>
+                        <p class="txt">{{$t("home.hrs")}}</p>
+                    </div>
+                    <div class="dot">:</div>
+                    <div class="mins">
+                        <p class="val">{{ timer.mins }}</p>
+                        <p class="txt">{{$t("home.mins")}}</p>
+                    </div>
+                    <div class="dot">:</div>
+                    <div class="secs">
+                        <p class="val">{{ timer.secs }}</p>
+                        <p class="txt">{{$t("home.secs")}}</p>
+                    </div>
+                </div>
                 <el-popover placement="bottom-start" width="340" trigger="click" :visible-arrow="false"
                     popper-class="el-popover-black">
                     <div class="pop-tip" slot="reference">{{$t("common.rules")}}</div>
@@ -109,7 +130,13 @@
                 isShowTokenDialog: false,
                 dialogWidth: "400px",
                 reward: "1,000,000,000",
-                shareUrl: 'https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj'
+                shareUrl: 'https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj',
+                timer: {
+                    days: '',
+                    hrs: '',
+                    mins: '',
+                    secs: ''
+                }
             };
         },
         computed: {
@@ -118,7 +145,9 @@
             }
         },
         watch: {},
-        created() {},
+        created() {
+            this.countTime()
+        },
         mounted() {
             let width = window.innerWidth
             if (width < 768) {
@@ -128,6 +157,21 @@
         },
         beforeDestroy() {},
         methods: {
+            countTime() {
+                let data = new Date(),
+                    dataTime = data.getTime(),
+                    str = "2022/04/05 12:00:00",
+                    endTime = new Date(str),
+                    end = endTime.getTime(),
+                    leftTime = end - dataTime;
+                if (leftTime > 0) {
+                    this.timer.days = (Math.floor(leftTime / 1000 / 60 / 60 / 24)).toString().padStart(2, '0');
+                    this.timer.hrs = (Math.floor(leftTime / 1000 / 60 / 60 % 24)).toString().padStart(2, '0');
+                    this.timer.mins = (Math.floor(leftTime / 1000 / 60 % 60)).toString().padStart(2, '0');
+                    this.timer.secs = (Math.floor(leftTime / 1000 % 60)).toString().padStart(2, '0');
+                }
+                setTimeout(this.countTime, 1000);
+            },
             doAccept() {
                 this.isShowBlindBoxDialog = this.isShowTokenDialog = false
             },
@@ -171,14 +215,28 @@
             .before-txt {
                 position: relative;
                 display: inline-block;
-                font-size: .64rem;
-                color: #fff;
-                font-weight: 600;
+
+                .timer-countdown {
+                    margin-bottom: 10px;
+                    display: flex;
+
+                    .val,
+                    .dot {
+                        font-size: .64rem;
+                        color: #fff;
+                        font-weight: 600;
+                    }
+
+                    .txt {
+                        color: #7B7B7B;
+                        font-size: 14px;
+                    }
+                }
             }
 
             .pop-tip {
                 position: absolute;
-                right: -1.28rem;
+                right: -2.2rem;
                 top: -.2rem;
                 padding-left: .4rem;
                 padding-right: .13rem;
@@ -198,7 +256,7 @@
 
             .blind-box {
                 position: absolute;
-                top: 1.6rem;
+                top: 1.7rem;
                 left: 50%;
                 width: 480px;
                 height: 449px;
@@ -212,7 +270,7 @@
 
         >.content-box {
             position: relative;
-            padding-top: 130px;
+            padding-top: 135px;
             height: 320px;
             background: #16161C;
             text-align: center;
@@ -314,6 +372,7 @@
 
                     &:first-child {
                         padding-right: 70px;
+
                         .val {
                             width: 594px;
                         }
@@ -428,9 +487,19 @@
                 padding-top: 0;
                 height: 6.88rem;
                 background: linear-gradient(180deg, #131922 44%, #163858 100%);
-
+                .before-txt {
+                    .timer-countdown {
+                        .val,.dot {
+                            font-size: .96rem;
+                            font-weight: 500;
+                        }
+                        .txt {
+                            font-size: .213333333333333rem;
+                        }
+                    }
+                }
                 .blind-box {
-                    top: 1.2rem;
+                    top: 1.5rem;
                     margin: 0 auto;
                     width: 10rem;
                     height: 9.5rem;
@@ -507,6 +576,7 @@
                                 line-height: .7rem;
                             }
                         }
+
                         .val-t {
                             font-size: .426666666666667rem;
                         }

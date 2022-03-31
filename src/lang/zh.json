@@ -4,6 +4,7 @@
         "blind-box": "盲盒",
         "marketplace": "市场",
         "my-account": "我的",
+        "net-mining": "NFT挖矿",
         "connect": "连接钱包",
         "disConnect": "断开连接",
         "tokenPocket": "TP钱包",
@@ -18,6 +19,10 @@
     },
     "home": {
         "open-blind-box": "开启NFT盲盒",
+        "days": "天",
+        "hrs": "时",
+        "mins": "分",
+        "secs": "秒",
         "open-tip-l": "你今天还可以开启",
         "open-tip-r": "个盲盒",
         "open": "抽取",
@@ -74,5 +79,17 @@
         "revise": "修改",
         "cancelSale": "取消销售",
         "sale": "出售"
+    },
+    "marketplace": {
+        "all": "All",
+        "last-24": "Last 24h",
+        "7-days": "7 days",
+        "30days": "30days",
+        "my-sale": ""
+    },
+    "net-mining": {
+        "participate": "参与质押挖矿",
+        "total-reward": "全部奖励",
+        "reward": "奖励"
     }
 }

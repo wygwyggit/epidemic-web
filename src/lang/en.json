@@ -4,6 +4,7 @@
         "blind-box": "Blind box",
         "marketplace": "Marketplace",
         "my-account": "My account",
+        "net-mining": "NFT Mining",
         "connect": "Connect Wallet",
         "disConnect": "Disconnect",
         "tokenPocket": "TokenPocket",
@@ -18,6 +19,10 @@
     },
     "home": {
         "open-blind-box": "Open Blindbox",
+        "days": "DAYS",
+        "hrs": "HRS",
+        "mins": "MINS",
+        "secs": "SECS",
         "open-tip-l": "You can open",
         "open-tip-r": "more boxes today",
         "open": "OPEN",
@@ -74,5 +79,17 @@
         "revise": "Revise",
         "cancelSale": "Cancel Sale",
         "sale": "Sale"
+    },
+    "marketplace": {
+        "all": "All",
+        "last-24": "Last 24h",
+        "7-days": "7 days",
+        "30days": "30days",
+        "my-sale": "My Sale"
+    },
+    "net-mining": {
+        "participate": "Participate",
+        "total-reward": "Total Reward",
+        "reward": "Reward"
     }
 }

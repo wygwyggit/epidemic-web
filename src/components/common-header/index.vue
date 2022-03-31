@@ -57,8 +57,9 @@
                         @click="redirectTo(tab)">
                         <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name=== 'home'">
                         <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'blindBox'">
-                        <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'Marketplace'">
+                        <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'marketplace'">
                         <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name=== 'account'">
+                         <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name=== 'netMining'">
                         {{$t(`common.${tab.text}`)}}</a>
                     <a href="javascript:;" class="item lang" @click="selectLang">
                         <img src="../../assets/images/nav-lang.png" alt="">
@@ -159,13 +160,17 @@
                     },
                     {
                         text: "marketplace",
-                        name: "Marketplace",
+                        name: "marketplace",
                         path: "/marketplace",
                     },
                     {
                         text: "my-account",
                         name: "account",
                         path: "/account",
+                    }, {
+                        text: "net-mining",
+                        name: "netMining",
+                        path: "/netMining"
                     }
                 ],
                 currentTab: "home",
