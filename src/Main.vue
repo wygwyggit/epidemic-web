@@ -2,7 +2,7 @@
     <div :class="prefixCls">
         <common-header></common-header>
         <router-view class="router-view "></router-view>
-        <common-footer></common-footer>
+        <common-footer v-if="isShowFooter"></common-footer>
     </div>
 </template>
 
@@ -17,12 +17,33 @@
         props: {},
         data() {
             return {
-                prefixCls: ''
+                prefixCls: '',
+                isShowFooter: true
             }
         },
         computed: {},
-        watch: {},
-        created() {},
+        watch: {
+            $route: {
+                immediate: true,
+                deep: true,
+                handler(val, oldval) {
+                    let width = window.innerWidth
+                    switch (val.path.replace('/', '')) {
+                        case 'details':
+                            if (width < 768) {
+                                this.isShowFooter = false
+                            }
+                            break;
+                        default:
+                            this.isShowFooter = true
+                            break;
+                    }
+                }
+            }
+        },
+        created() {
+
+        },
         mounted() {},
         beforeDestroy() {},
         methods: {
@@ -32,5 +53,4 @@
 </script>
 
 <style lang="scss" scoped>
-
 </style>

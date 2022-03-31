@@ -10,12 +10,12 @@ const routes = [{
         import( /* webpackChunkName: "main" */ '@/Main.vue'),
     children: [{
         path: '/',
-        redirect: '/details'
+        redirect: '/blindBox'
     }, {
-        path: '/home',
-        name: 'home',
+        path: '/blindBox',
+        name: 'blindBox',
         component: () =>
-            import( /* webpackChunkName: "home" */ '@/views/home/index.vue')
+            import( /* webpackChunkName: "home" */ '@/views/blind-box/index.vue')
     },
     {
         path: '/details',

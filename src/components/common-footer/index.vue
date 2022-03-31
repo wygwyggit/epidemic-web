@@ -7,16 +7,16 @@
                 <div class="right">
                     <ul class="clearfix">
                         <li class="item">
-                            <a href="">{{$t("common.home")}}</a>
+                            <router-link tag="a" :to="{path: 'home'}">{{$t("common.home")}}</router-link>
                         </li>
                         <li class="item">
-                            <a href="">{{$t("common.blind-box")}}</a>
+                            <router-link tag="a" :to="{path: 'blindBox'}">{{$t("common.blind-box")}}</router-link>
                         </li>
                         <li class="item">
-                            <a href="">{{$t("common.marketplace")}}</a>
+                            <router-link tag="a" :to="{path: 'marketplace'}">{{$t("common.marketplace")}}</router-link>
                         </li>
                         <li class="item">
-                            <a href="">{{$t("common.help")}}</a>
+                            <router-link tag="a" :to="{}">{{$t("common.staking")}}</router-link>
                         </li>
                     </ul>
                     <ul class="clearfix">
@@ -64,7 +64,6 @@
     $prefixCls: "components-common-footer";
 
     .#{$prefixCls} {
-        height: 240px;
         background: #0B0F15;
         text-align: center;
         color: #aaaaaa;
@@ -82,6 +81,8 @@
             }
 
             .right {
+                display: flex;
+
                 li {
                     float: left;
 
@@ -111,8 +112,9 @@
         }
 
         .copyright {
-            padding: 10px 0;
+            padding: 28px 0;
             font-size: 16px;
+            border-top: 1px solid #29374B;
             color: rgba(255, 255, 255, 0.56);
         }
     }
@@ -132,6 +134,8 @@
                 }
 
                 .right {
+                    display: block;
+
                     li.item {
                         margin-right: .533333333333333rem;
 
@@ -139,17 +143,18 @@
                             font-size: .32rem;
                         }
                     }
+
                     li.item-img {
                         padding-left: 0;
                         padding-right: .8rem;
                     }
                 }
             }
+
             .copyright {
                 margin-top: .533333333333333rem;
                 padding-top: .533333333333333rem;
                 padding-bottom: 2.133333333333333rem;
-                border-top: 1px solid #29374B;
                 font-size: .32rem;
             }
         }

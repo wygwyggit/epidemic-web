@@ -1,10 +1,10 @@
-/*
-* 公共样式处理，注意：PC端页面和移动H5页面都公用了这个文件，所以不要随意在里面加只适合某一端的样式代码
-*
-*/
 
+/**
+ * @description common-style
+   @note: this file is common to both PC and mobile H5 pages, so don't add style code that only applies to one side
+ * @author wyg
+ */
 
-/*样式初始化*/
 @media screen and (min-width: 750px) {
     html {
         font-size: 75px !important;
@@ -178,11 +178,6 @@ body {
     font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
 }
 
-#app {
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #000000;
-}
 
 [v-cloak] {
     display: none;
@@ -198,37 +193,7 @@ body {
     margin: 0 auto;
 }
 
-.el-button--primary {
-    background: #32A3FF;
-    border-color: #32A3FF;
-}
-.el-dialog {
-    background: #131922;
-    border-radius: 6px;
-    .el-dialog__header {
-        padding-bottom: 0;
-    }
-    .el-dialog__title,.el-dialog__close {
-        line-height: 0;
-        color: #777E90;
-        font-size: 24px;
-    }
-    .el-dialog__body {
-        padding: 38px 30px;
-    }
-}
-.el-checkbox__inner {
-    width: 14px;
-    height: 14px;
-    &::after {
-        width: 1px;
-    }
 
-}
-.el-checkbox__label {
-    color: #fff;
-    font-size: 16px;
-}
 .yellow .el-checkbox__label {
     color: #F3BA2F;
 }
@@ -239,7 +204,7 @@ body {
     color: #FF3D00;
 }
 .blue .el-checkbox__label {
-    color: #32A3FF;
+    color: $--color-success;
 }
 .purple .el-checkbox__label {
     color: #9E00FF;

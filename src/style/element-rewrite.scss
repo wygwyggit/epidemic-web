@@ -1,0 +1,74 @@
+/**
+ * @description rewrite element-ui-style
+ * @author wyg
+ */
+.el-button--primary {
+    background: $--color-success;
+    border-color: $--color-success;
+}
+.el-dialog {
+    background: #131922;
+    border-radius: 6px;
+    .el-dialog__header {
+        padding-bottom: 0;
+    }
+    .el-dialog__title,.el-dialog__close {
+        line-height: 0;
+        color: #777E90;
+        font-size: 24px;
+    }
+    .el-dialog__body {
+        padding: 38px 30px;
+    }
+}
+.el-checkbox__inner {
+    width: 14px;
+    height: 14px;
+    &::after {
+        width: 1px;
+    }
+
+}
+.el-popover-black {
+    background: #131922;
+    border-color: #131922;
+    color: #A6A6A6;
+    border-radius: .266666666666667rem;
+    .highlight-color {
+        color: $--color-success;
+    }
+    .item {
+        margin-bottom: .2rem;
+    }
+}
+.el-message {
+    background: #131922;
+    color: #BBBBBB;
+    border-color: #131922;
+    border-radius: 10px;
+    &.el-message--success {
+        .el-message__content,.el-icon-success {
+            color: $--color-success;
+        }
+    }
+    &.el-message--error {
+        .el-message__content,.el-icon-error {
+            color: $--color-danger;
+        }
+    }
+}
+@media (max-width: 768px) {
+    .el-popover-black {
+        border-color: $--color-success;
+    }
+    .el-message {
+        min-width: auto;
+        border-color: #004D8C;
+        border-width: 2px;
+        width: 8.7rem;
+    }
+}
+.el-checkbox__label {
+    color: #fff;
+    font-size: 16px;
+}

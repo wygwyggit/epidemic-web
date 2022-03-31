@@ -1,7 +1,37 @@
 <template>
     <div :class="prefixCls">
         <div class="banner">
-            <span class="before-txt">{{$t("home.open-blind-box")}}</span>
+            <div class="before-txt">
+                <span>
+                    {{$t("home.open-blind-box")}}
+                </span>
+                <el-popover placement="bottom-start" width="340" trigger="click" :visible-arrow="false"
+                    popper-class="el-popover-black">
+                    <div class="pop-tip" slot="reference">{{$t("common.rules")}}</div>
+                    <div class="item">
+                        <p class="highlight-color">{{$t("home.pay-with-adoge-tokens")}}</p>
+                        <p>
+                            <span class="highlight-color">{{$t("account.price")}}:</span>
+                            {{$t("home.price-int")}}
+                        </p>
+                        <p>
+                            <span class="highlight-color">{{$t("home.limit")}}:</span>
+                            {{$t("home.limit-int")}}
+                        </p>
+                        <p>
+                            <span class="highlight-color">{{$t("home.probability")}}:</span>
+                            {{$t("home.probability-int")}}
+                        </p>
+                    </div>
+                    <div class="item">
+                        <p class="highlight-color">{{$t("home.invitation-reward")}}</p>
+                        <p>
+                            {{$t("home.invitation-reward-int")}}
+                        </p>
+                    </div>
+                </el-popover>
+            </div>
+
             <div class="blind-box">
             </div>
         </div>
@@ -20,12 +50,13 @@
                         <span class="val-t">{{ shareUrl }}</span>
                         <el-button type="primary" @click="copyLink">{{$t("home.copy")}}</el-button>
                     </div>
+                    <p class="small-tip">{{$t("home.invitation-reward-txt")}}</p>
                 </div>
                 <div class="right">
                     <p class="label">{{$t("home.you-reward")}}</p>
                     <div class="val">
-                        <span class="val-t">1,000,000,000 Adoge</span>
-                        <el-button type="primary">{{$t("home.receive")}}</el-button>
+                        <span class="val-t">{{reward}} Adoge</span>
+                        <el-button type="primary" @click="reciveReward">{{$t("home.receive")}}</el-button>
                     </div>
                 </div>
             </div>
@@ -41,7 +72,7 @@
                     <p class="sub-txt">Adoge token</p>
                 </div>
             </div>
-            <div class="accept-btn">{{$t("common.accept")}}</div>
+            <div class="accept-btn" @click="doAccept">{{$t("common.accept")}}</div>
         </el-dialog>
         <el-dialog :title="resultTxt" custom-class="blindBox-dialog" :visible.sync="isShowBlindBoxDialog"
             :close-on-click-modal="false" :width="dialogWidth">
@@ -59,7 +90,7 @@
                 <p class="txt yellow">{{$t("account.yellow")}}</p>
 
             </div>
-            <div class="accept-btn">{{$t("common.accept")}}</div>
+            <div class="accept-btn" @click="doAccept">{{$t("common.accept")}}</div>
         </el-dialog>
     </div>
 </template>
@@ -73,10 +104,11 @@
         props: {},
         data() {
             return {
-                prefixCls: "views-home",
+                prefixCls: "views-blind-box",
                 isShowBlindBoxDialog: false,
                 isShowTokenDialog: false,
                 dialogWidth: "400px",
+                reward: "1,000,000,000",
                 shareUrl: 'https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj'
             };
         },
@@ -96,51 +128,83 @@
         },
         beforeDestroy() {},
         methods: {
+            doAccept() {
+                this.isShowBlindBoxDialog = this.isShowTokenDialog = false
+            },
+            reciveReward() {
+                if (this.reward <= 0) {
+                    this.$showInfo(`${this.$t("home.no-reward-yet")}`)
+                } else {
+                    this.$showOk(`${this.$t("home.received-suc")}`)
+                }
+            },
             copyLink() {
                 this.$copyText(this.shareUrl).then(() => {
-                    alert(`${this.$t("home.copy-success")}`);
+                    this.$showOk(`${this.$t("home.copy-success")}`)
                 });
             },
             openBlindBox() {
                 let n = Math.random()
                 if (n > 0.5) {
                     this.isShowBlindBoxDialog = true
+                } else if (n < 0.2) {
+                    this.$showError(`${this.$t(("common.pay-fail"))}`)
                 } else {
                     this.isShowTokenDialog = true
                 }
-
             }
         },
     };
 </script>
 <style lang="scss" scoped>
-    $prefixCls: "views-home";
+    $prefixCls: "views-blind-box";
 
     .#{$prefixCls} {
         .banner {
             position: relative;
-            padding-top: .533333333333333rem;
+            padding-top: .65rem;
             height: 440px;
             background: url('../../assets/images/home-bg.png');
             background-size: cover;
             text-align: center;
 
             .before-txt {
+                position: relative;
+                display: inline-block;
                 font-size: .64rem;
                 color: #fff;
                 font-weight: 600;
+            }
+
+            .pop-tip {
+                position: absolute;
+                right: -1.28rem;
+                top: -.2rem;
+                padding-left: .4rem;
+                padding-right: .13rem;
+                height: .48rem;
+                line-height: .48rem;
+                border: 1px solid $--color-success;
+                border-radius: .8rem;
+                font-size: .266666666666667rem;
+                color: $--color-success;
+                background: url("../../assets/images/tip.png");
+                background-repeat: no-repeat;
+                background-position: left center;
+                background-size: .373333333333333rem .373333333333333rem;
+                vertical-align: top;
+                cursor: pointer;
             }
 
             .blind-box {
                 position: absolute;
                 top: 1.6rem;
                 left: 50%;
-                width: 594px;
-                height: 506px;
+                width: 480px;
+                height: 449px;
                 background: url('../../assets/images/blindbox.png');
-                transform: translate(-55%, 0);
+                transform: translate(-50%, 0);
                 background-size: 100% 100%;
-                cursor: pointer;
                 text-align: center;
                 z-index: 9;
             }
@@ -158,7 +222,7 @@
                 font-size: 18px;
 
                 .num {
-                    color: #32A3FF;
+                    color: $--color-success;
                     font-size: 28px;
                 }
             }
@@ -173,10 +237,10 @@
                     margin-bottom: .266666666666667rem;
                     margin-right: 10px;
                     padding: 14px 0;
-                    width: 100%;
+                    width: 300px;
                     border: 2px solid #004D8C;
-                    border-radius: .266666666666667rem;
-                    color: #32A3FF;
+                    border-radius: 10px;
+                    color: $--color-success;
                     font-size: 24px;
                     text-align: center;
                 }
@@ -188,7 +252,8 @@
                     height: 60px;
                     text-align: center;
                     font-size: 24px;
-                    border-radius: .266666666666667rem;
+                    border-radius: 10px;
+
                 }
             }
         }
@@ -203,6 +268,12 @@
                 >div {
                     flex: 1;
 
+                    .small-tip {
+                        padding-top: 16px;
+                        color: #A6A6A6;
+                        font-size: 14px;
+                    }
+
                     .label {
                         margin-bottom: 10px;
                         color: #fff;
@@ -213,7 +284,7 @@
                         position: relative;
                         display: flex;
                         align-items: center;
-                        height: .8rem;
+                        height: 52px;
                         padding-left: 10px;
                         border: 1px solid #fff;
                         border-radius: 10px;
@@ -222,31 +293,35 @@
 
                         .val-t {
                             display: inline-block;
-                            width: 5.386666666666667rem;
+                            width: 6.5rem;
                             white-space: nowrap;
                             overflow: hidden;
                             text-overflow: ellipsis;
+                            font-weight: bolder;
                         }
 
                         .el-button--primary {
                             position: absolute;
                             right: 4px;
                             padding: 0;
-                            width: 1.6rem;
-                            height: .7rem;
-                            line-height: .7rem;
+                            width: 120px;
+                            height: 42px;
+                            line-height: 42px;
                             text-align: center;
                             font-size: 18px;
                         }
                     }
 
                     &:first-child {
-                        margin-right: 39px;
+                        padding-right: 70px;
+                        .val {
+                            width: 594px;
+                        }
                     }
 
                     &.right {
                         .val-t {
-                            font-size: .426666666666667rem;
+                            font-size: 24px;
                         }
                     }
                 }
@@ -259,7 +334,7 @@
             height: 50px;
             line-height: 50px;
             text-align: center;
-            background: #32A3FF;
+            background: $--color-success;
             color: #fff;
             font-size: 24px;
             border-radius: 10px;
@@ -316,7 +391,7 @@
                 height: 50px;
                 line-height: 50px;
                 text-align: center;
-                background: #32A3FF;
+                background: $--color-success;
                 color: #fff;
                 font-size: 24px;
                 border-radius: 10px;
@@ -350,29 +425,48 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             .banner {
+                padding-top: 0;
                 height: 6.88rem;
-                background: linear-gradient(180deg, #131922 15%, #1E9AFF 100%);
+                background: linear-gradient(180deg, #131922 44%, #163858 100%);
 
                 .blind-box {
-                    width: 9.573333333333334rem;
-                    height: 8.4rem;
+                    top: 1.2rem;
+                    margin: 0 auto;
+                    width: 10rem;
+                    height: 9.5rem;
+                    background: url('../../assets/images/blindbox-h5.png');
+                    background-size: 100% 100%;
+                }
+
+                .pop-tip {
+                    right: -2rem;
+                    top: -.3rem;
                 }
             }
 
             >.content-box {
-                height: 7.6rem;
+                height: auto;
                 padding-top: 2.186666666666667rem;
+                overflow: hidden;
+
+                .num {
+                    font-weight: bolder;
+                }
 
                 .open-btn-info {
-                    margin-top: .3rem;
+                    margin: .186666666666667rem auto .613333333333333rem;
                     flex-direction: column;
 
                     .ipt {
                         flex: 1;
+                        width: 100%;
+                        border-radius: .266666666666667rem;
                     }
 
                     .el-button--primary {
                         width: 100%;
+                        font-weight: bolder;
+                        border-radius: .266666666666667rem;
                     }
                 }
             }
@@ -385,9 +479,14 @@
                     flex-direction: column;
 
                     >div {
+                        .small-tip {
+                            display: none;
+                        }
+
                         &.left {
                             margin-bottom: .266666666666667rem;
-                            margin-right: 0;
+                            padding-right: 0;
+
                         }
 
                         .label {
@@ -395,14 +494,21 @@
                         }
 
                         .val {
+                            width: 100% !important;
+                            height: 1.066666666666667rem;
                             font-size: .32rem;
                             border-color: #0077D8;
                             border-radius: .2rem;
 
                             .el-button--primary {
                                 font-size: .32rem;
-
+                                width: 1.6rem;
+                                height: .7rem;
+                                line-height: .7rem;
                             }
+                        }
+                        .val-t {
+                            font-size: .426666666666667rem;
                         }
                     }
                 }

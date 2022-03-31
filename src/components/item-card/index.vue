@@ -17,7 +17,7 @@
                 <div class="sale">
                     <div class="lv">{{itemInfo.lv}}</div>
                 </div>
-                <div class="sale-btn btn">{{$t("account.sale")}}</div>
+                <div class="sale-btn btn">{{$t("account.open-soon")}}</div>
             </template>
             <template v-else>
                 <div class="on-sale">
@@ -103,7 +103,7 @@
             .on-sale {
                 .price {
                     margin-top: 5px;
-                    color: #32A3FF;
+                    color: $--color-success;
                     font-size: .266666666666667rem;
                 }
             }

@@ -2,6 +2,7 @@
     <div :class="prefixCls">
         <div class="top">
             <div class="w">
+                <img src="../../assets/images/nav-my-account.png" alt="">
                 {{$t("account.my-account")}}
             </div>
         </div>
@@ -12,7 +13,7 @@
                         <li>
                             <div class="title">
                                 <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                                <a href="javascript:;">{{$t("account.clear")}}</a>
+                                <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val filter">
                                 <el-checkbox-group v-model="checkListFilter" @change="doSearch">
@@ -28,6 +29,7 @@
                         <li>
                             <div class="title" style="border-bottom: 0;">
                                 <span>{{$t("account.sale")}}</span>
+                                                                <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val" style="padding-top: 0">
                                 <el-checkbox-group v-model="checkListSale" @change="doSearch">
@@ -39,7 +41,7 @@
                         <li>
                             <div class="title">
                                 <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                                <a href="javascript:;">{{$t("account.clear")}}</a>
+                                <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">{{$t("account.clear")}}</a>
                             </div>
                             <div class="filter-val">
                                 <el-checkbox-group v-model="checkListLvel" @change="doSearch">
@@ -64,7 +66,7 @@
                                 Filter(<i>4</i>)
                             </span>
                         </div>
-                        <div class="search">
+                        <!-- <div class="search">
                             <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                                 <a href="javascript:;" slot="append" class="search-icon"></a>
                             </el-input>
@@ -73,7 +75,7 @@
                                     :value="item.value">
                                 </el-option>
                             </el-select>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="list clearfix" v-if="netList.length">
                         <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail">
@@ -93,7 +95,7 @@
                 <div class="filter-item">
                     <div class="title">
                         <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                        <a href="javascript:;">Clear</a>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">Clear</a>
                     </div>
                     <div class="filter-val filter">
                         <el-checkbox-group v-model="checkListFilter" @change="doSearch">
@@ -109,7 +111,7 @@
                 <div class="filter-item">
                     <div class="title">
                         <span>{{$t("account.sale")}}</span>
-                        <a href="javascript:;">Clear</a>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
                     </div>
                     <div class="filter-val">
                         <el-checkbox-group v-model="checkListSale" @change="doSearch">
@@ -121,7 +123,7 @@
                 <div class="filter-item">
                     <div class="title">
                         <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                        <a href="javascript:;">Clear</a>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">Clear</a>
                     </div>
                     <div class="filter-val">
                         <el-checkbox-group v-model="checkListLvel" @change="doSearch">
@@ -212,6 +214,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doClearSearchQuery(val) {
+                this[val] = []
+            },
             openFilterDrawer() {
                 this.isShowFilter = true
             },
@@ -310,6 +315,11 @@
             color: #fff;
             font-size: 48px;
             font-weight: 600;
+            img {
+                width: .8rem;
+                height: .8rem;
+                vertical-align: text-bottom;
+            }
         }
 
         .main {
@@ -373,7 +383,7 @@
                     font-size: 32px;
 
                     .txt {
-                        color: #32A3FF;
+                        color: $--color-success;
                     }
 
                     .filter {
@@ -437,7 +447,7 @@
                                 background-position: left center;
 
                                 i {
-                                    color: #32A3FF;
+                                    color: $--color-success;
                                 }
                             }
                         }
@@ -470,7 +480,7 @@
             .list {
                 .components-item-card {
                     margin-right: .266666666666667rem;
-                    width: 48.5%;
+                    width: 47%;
 
                     >li {
                         margin-bottom: 0;

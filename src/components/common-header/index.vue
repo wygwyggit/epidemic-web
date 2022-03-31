@@ -56,13 +56,14 @@
                     <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
                         @click="redirectTo(tab)">
                         <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name=== 'home'">
-                        <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'Blind'">
+                        <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'blindBox'">
                         <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'Marketplace'">
-                        <img src="../../assets/images/nav-my-account.png" alt="" v-if="tab.name=== 'account'">
+                        <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name=== 'account'">
                         {{$t(`common.${tab.text}`)}}</a>
-                    <a href="javascript:;" class="item" @click="selectLang">
+                    <a href="javascript:;" class="item lang" @click="selectLang">
                         <img src="../../assets/images/nav-lang.png" alt="">
                         {{$t("common.language")}}
+                        <span class="r">{{lang}}</span>
                     </a>
                     <a href="javascript:;" v-if="isConnect" class="item wallet">
                         <img src="../../assets/images/wallet.png" alt="">
@@ -153,8 +154,8 @@
                     },
                     {
                         text: "blind-box",
-                        name: "Blind",
-                        path: "/blind",
+                        name: "blindBox",
+                        path: "/blindBox",
                     },
                     {
                         text: "marketplace",
@@ -213,7 +214,7 @@
             },
             doChangeLang() {
                 localStorage.setItem('lang', this.otherLang)
-                location.reload()
+                window.location.href = 'https://www.heiyg.com'
             },
             redirectTo(tab) {
                 this.isShowSlider = false
@@ -242,7 +243,7 @@
         padding: 0 34px;
         width: 100%;
         height: 100px;
-        background: #32A3FF;
+        background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
         z-index: 999;
 
@@ -352,7 +353,7 @@
                     height: 40px;
                     border-radius: 51px;
                     background: #fff;
-                    color: #32A3FF;
+                    color: $--color-success;
                     text-align: center;
                     line-height: 40px;
                     font-size: 14px;
@@ -415,7 +416,7 @@
                 color: #777E90;
                 font-size: 12px;
                 i {
-                    color: #32A3FF;
+                    color: $--color-success;
                 }
             }
         }
@@ -425,6 +426,7 @@
             top: 0;
             left: 0;
             width: 0;
+            min-height: 100%;
             background: #1D2633;
             color: #fff;
             z-index: 99;
@@ -439,7 +441,7 @@
                 width: .853333333333333rem;
                 height: .853333333333333rem;
                 background: url('../../assets/images/close.png');
-                background-size: 100% 100%;
+                background-size: cover;
                 cursor: pointer;
             }
 
@@ -456,6 +458,8 @@
                     background-position: right center;
 
                     img {
+                        width: .586666666666667rem;
+                        height: .586666666666667rem;
                         margin-right: .2rem;
                         vertical-align: text-top;
                     }
@@ -465,6 +469,12 @@
                         background: url('../../assets/images/out.png');
                         background-repeat: no-repeat;
                         background-position: right center;
+                    }
+                    &.lang {
+                        background: none;
+                        span {
+                            font-weight: bolder;
+                        }
                     }
                 }
             }
@@ -514,6 +524,7 @@
                     border-radius: .8rem;
                     font-size: .586666666666667rem;
                     cursor: pointer;
+                    font-weight: bolder;
                     -webkit-tap-highlight-color: transparent;
                 }
             }
@@ -584,7 +595,7 @@
                         color: #fff;
 
                         &:first-child {
-                            color: #32A3FF;
+                            color: $--color-success;
                         }
                     }
                 }
