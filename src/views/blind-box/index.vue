@@ -3,51 +3,51 @@
         <div class="banner">
             <div class="before-txt">
                 <span>
-                    <!-- {{$t("home.open-blind-box")}} -->
+                    <!-- {{$t("blind-box.open-blind-box")}} -->
                 </span>
                 <div class="timer-countdown">
                     <div class="days">
                         <p class="val">{{ timer.days }}</p>
-                        <p class="txt">{{$t("home.days")}}</p>
+                        <p class="txt">{{$t("blind-box.days")}}</p>
                     </div>
                     <div class="dot">:</div>
                     <div class="hrs">
                         <p class="val">{{ timer.hrs }}</p>
-                        <p class="txt">{{$t("home.hrs")}}</p>
+                        <p class="txt">{{$t("blind-box.hrs")}}</p>
                     </div>
                     <div class="dot">:</div>
                     <div class="mins">
                         <p class="val">{{ timer.mins }}</p>
-                        <p class="txt">{{$t("home.mins")}}</p>
+                        <p class="txt">{{$t("blind-box.mins")}}</p>
                     </div>
                     <div class="dot">:</div>
                     <div class="secs">
                         <p class="val">{{ timer.secs }}</p>
-                        <p class="txt">{{$t("home.secs")}}</p>
+                        <p class="txt">{{$t("blind-box.secs")}}</p>
                     </div>
                 </div>
                 <el-popover placement="bottom-start" width="340" trigger="click" :visible-arrow="false"
                     popper-class="el-popover-black">
                     <div class="pop-tip" slot="reference">{{$t("common.rules")}}</div>
                     <div class="item">
-                        <p class="highlight-color">{{$t("home.pay-with-adoge-tokens")}}</p>
+                        <p class="highlight-color">{{$t("blind-box.pay-with-adoge-tokens")}}</p>
                         <p>
                             <span class="highlight-color">{{$t("account.price")}}:</span>
-                            {{$t("home.price-int")}}
+                            {{$t("blind-box.price-int")}}
                         </p>
                         <p>
-                            <span class="highlight-color">{{$t("home.limit")}}:</span>
-                            {{$t("home.limit-int")}}
+                            <span class="highlight-color">{{$t("blind-box.limit")}}:</span>
+                            {{$t("blind-box.limit-int")}}
                         </p>
                         <p>
-                            <span class="highlight-color">{{$t("home.probability")}}:</span>
-                            {{$t("home.probability-int")}}
+                            <span class="highlight-color">{{$t("blind-box.probability")}}:</span>
+                            {{$t("blind-box.probability-int")}}
                         </p>
                     </div>
                     <div class="item">
-                        <p class="highlight-color">{{$t("home.invitation-reward")}}</p>
+                        <p class="highlight-color">{{$t("blind-box.invitation-reward")}}</p>
                         <p>
-                            {{$t("home.invitation-reward-int")}}
+                            {{$t("blind-box.invitation-reward-int")}}
                         </p>
                     </div>
                 </el-popover>
@@ -57,27 +57,27 @@
             </div>
         </div>
         <div class="content-box">
-            <p>{{$t("home.open-tip-l")}} <span class="num">10</span> {{$t("home.open-tip-r")}}</p>
+            <p>{{$t("blind-box.open-tip-l")}} <span class="num">10</span> {{$t("blind-box.open-tip-r")}}</p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
-                <el-button type="primary" @click="openBlindBox">{{$t("home.open")}}</el-button>
+                <el-button type="primary" @click="openBlindBox">{{$t("blind-box.open")}}</el-button>
             </div>
         </div>
         <div class="invitation-reward">
             <div class="w">
                 <div class="left">
-                    <p class="label">{{$t("home.your-invitation")}}</p>
+                    <p class="label">{{$t("blind-box.your-invitation")}}</p>
                     <div class="val">
                         <span class="val-t">{{ shareUrl }}</span>
-                        <el-button type="primary" @click="copyLink">{{$t("home.copy")}}</el-button>
+                        <el-button type="primary" @click="copyLink">{{$t("blind-box.copy")}}</el-button>
                     </div>
-                    <p class="small-tip">{{$t("home.invitation-reward-txt")}}</p>
+                    <p class="small-tip">{{$t("blind-box.invitation-reward-txt")}}</p>
                 </div>
                 <div class="right">
-                    <p class="label">{{$t("home.you-reward")}}</p>
+                    <p class="label">{{$t("blind-box.you-reward")}}</p>
                     <div class="val">
                         <span class="val-t">{{reward}} Adoge</span>
-                        <el-button type="primary" @click="reciveReward">{{$t("home.receive")}}</el-button>
+                        <el-button type="primary" @click="reciveReward">{{$t("blind-box.receive")}}</el-button>
                     </div>
                 </div>
             </div>
@@ -177,14 +177,14 @@
             },
             reciveReward() {
                 if (this.reward <= 0) {
-                    this.$showInfo(`${this.$t("home.no-reward-yet")}`)
+                    this.$showInfo(`${this.$t("blind-box.no-reward-yet")}`)
                 } else {
-                    this.$showOk(`${this.$t("home.received-suc")}`)
+                    this.$showOk(`${this.$t("blind-box.received-suc")}`)
                 }
             },
             copyLink() {
                 this.$copyText(this.shareUrl).then(() => {
-                    this.$showOk(`${this.$t("home.copy-success")}`)
+                    this.$showOk(`${this.$t("blind-box.copy-success")}`)
                 });
             },
             openBlindBox() {

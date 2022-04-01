@@ -18,6 +18,12 @@
         "wait-serve": "Please wait,do not close the page"
     },
     "home": {
+        "amazing-doge": "AmazingDoge",
+        "amazing-tip": "Have a surprise everyday",
+        "buy-adoge": "Buy Adoge",
+        "contract": "Contract"
+    },
+    "blind-box": {
         "open-blind-box": "Open Blindbox",
         "days": "DAYS",
         "hrs": "HRS",

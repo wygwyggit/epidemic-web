@@ -16,21 +16,50 @@
                             <router-link tag="a" :to="{path: 'marketplace'}">{{$t("common.marketplace")}}</router-link>
                         </li>
                         <li class="item">
-                            <router-link tag="a" :to="{}">{{$t("common.staking")}}</router-link>
+                            <router-link tag="a" :to="{path: 'netMining'}">{{$t("common.net-mining")}}</router-link>
+                        </li>
+                        <li class="item">
+                            <router-link tag="a" :to="{path: 'account'}">{{$t("common.my-account")}}</router-link>
                         </li>
                     </ul>
-                    <ul class="clearfix">
-                        <li class="item-img">
-                            <a href="">
-                                <img src="../../assets/images/Twitter.png" alt="">
-                            </a>
-                        </li>
-                        <li class="item-img">
-                            <a href="">
-                                <img src="../../assets/images/Telegram App.png" alt="">
-                            </a>
-                        </li>
-                    </ul>
+                    <div class="out-link">
+                        <ul class="clearfix">
+                            <li class="item-img">
+                                <a href="https://twitter.com/AmazingDogeCoin/" target="_blank">
+                                    <img src="../../assets/images/Twitter.png" alt="">
+                                </a>
+                            </li>
+                            <li class="item-img">
+                                <a href="https://t.me/amazingdoge_cn" target="_blank">
+                                    <img src="../../assets/images/Telegram App.png" alt="">
+                                </a>
+                            </li>
+                            <li class="item-img">
+                                <a href="https://www.instagram.com/accounts/login/?next=/amazingdogecoin/" target="_blank">
+                                    <img src="../../assets/images/ig.png" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="clearfix">
+                            <li class="item-img">
+                                <a href="https://github.com/AmazingDogebsc" target="_blank">
+                                    <img src="../../assets/images/github.png" alt="">
+                                </a>
+                            </li>
+                            <li class="item-img">
+                                <a href="https://coinmarketcap.com/currencies/amazingdoge/" target="_blank">
+                                    <img src="../../assets/images/cmc.png" alt="">
+                                </a>
+                            </li>
+                            <li class="item-img">
+                                <a href="https://bscscan.com/address/0x0EBc30459551858e81306d583025d12C7d795FA2" target="_blank">
+                                    <img src="../../assets/images/bsc.png" alt="">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+
                 </div>
             </div>
             <div class="copyright">
@@ -71,9 +100,10 @@
         .item-box {
             display: flex;
             justify-content: space-between;
-            padding: 60px 0 74px 0;
+            padding: 60px 0 18px 0;
 
             .left {
+                margin-top: -18px;
                 width: 140px;
                 height: 45px;
                 background: url('../../assets/images/logo.png');
@@ -89,6 +119,7 @@
                     a {
                         color: #fff;
                         font-size: 18px;
+                        font-weight: 600;
                     }
 
                     img {
@@ -100,6 +131,7 @@
                     }
 
                     &.item-img {
+                        margin-bottom: 20px;
                         padding-left: 30px;
 
                         img {
@@ -122,7 +154,7 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             height: auto;
-            padding: .906666666666667rem .853333333333333rem;
+            padding: .906666666666667rem .7rem;
 
             .item-box {
                 flex-direction: column;
@@ -137,16 +169,21 @@
                     display: block;
 
                     li.item {
-                        margin-right: .533333333333333rem;
-
+                        margin-right: .4rem;
+                        &:last-child {
+                            margin: 0;
+                        }
                         a {
-                            font-size: .32rem;
+                            font-size: .266666666666667rem;
                         }
                     }
 
                     li.item-img {
                         padding-left: 0;
                         padding-right: .8rem;
+                    }
+                    .out-link {
+                        display: flex;
                     }
                 }
             }

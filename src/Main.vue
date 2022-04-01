@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <common-header></common-header>
+        <common-header :bgColor="bgColor"></common-header>
         <router-view class="router-view "></router-view>
         <common-footer v-if="isShowFooter"></common-footer>
     </div>
@@ -18,7 +18,8 @@
         data() {
             return {
                 prefixCls: '',
-                isShowFooter: true
+                isShowFooter: true,
+                bgColor: ""
             }
         },
         computed: {},
@@ -28,13 +29,20 @@
                 deep: true,
                 handler(val, oldval) {
                     let width = window.innerWidth
+                    console.log(val.path.replace('/', ''))
                     switch (val.path.replace('/', '')) {
+                        case 'home': {
+                            this.bgColor = "#31BCFF"
+                            break;
+                        }
                         case 'details':
                             if (width < 768) {
                                 this.isShowFooter = false
                             }
+                            this.bgColor = "#32A3FF"
                             break;
                         default:
+                            this.bgColor = "#32A3FF"
                             this.isShowFooter = true
                             break;
                     }

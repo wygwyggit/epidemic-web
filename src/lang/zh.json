@@ -18,6 +18,12 @@
         "wait-serve": "请稍等，不要关闭页面"
     },
     "home": {
+        "amazing-doge": "AmazingDoge",
+        "amazing-tip": "Have a surprise everyday",
+        "buy-adoge": "购买 Adoge",
+        "contract": "合约"
+    },
+    "blind-box": {
         "open-blind-box": "开启NFT盲盒",
         "days": "天",
         "hrs": "时",

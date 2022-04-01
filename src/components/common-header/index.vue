@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls">
+    <div :class="prefixCls" :style="{'background': myBgColor}">
         <div class="left">
             <div class="page-logo">
                 <img src="../../assets/images/logo.png" alt="">
@@ -59,7 +59,7 @@
                         <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name=== 'blindBox'">
                         <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name=== 'marketplace'">
                         <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name=== 'account'">
-                         <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name=== 'netMining'">
+                        <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name=== 'netMining'">
                         {{$t(`common.${tab.text}`)}}</a>
                     <a href="javascript:;" class="item lang" @click="selectLang">
                         <img src="../../assets/images/nav-lang.png" alt="">
@@ -136,12 +136,18 @@
     export default {
         name: "common-header",
         components: {},
-        props: {},
+        props: {
+            bgColor: {
+                type: String,
+                default: ''
+            }
+        },
         data() {
             return {
                 prefixCls: "components-common-header",
                 isConnect: false,
                 isShowConnectDialog: false,
+                myBgColor: "",
                 isShowSlider: false,
                 isShowLangDialog: false,
                 isShowCodeDialog: false,
@@ -189,8 +195,15 @@
                     switch (val.path.replace('/', '')) {
                         case 'home':
                             this.currentTab = val.path.replace('/', '')
+                            this.myBgColor = this.bgColor
                             break;
                         default:
+                            let width = window.innerWidth
+                            if (width < 768) {
+                                this.myBgColor = '#14181f'
+                            } else {
+                                this.myBgColor = this.bgColor
+                            }
                             this.currentTab = val.path.replace('/', '')
                             break;
                     }
@@ -219,7 +232,7 @@
             },
             doChangeLang() {
                 localStorage.setItem('lang', this.otherLang)
-                window.location.href = 'https://www.heiyg.com'
+                window.location.reload()
             },
             redirectTo(tab) {
                 this.isShowSlider = false
@@ -404,22 +417,27 @@
                 }
             }
         }
+
         .code-dialog {
             text-align: center;
+
             img {
                 margin-bottom: .266666666666667rem;
                 width: 240px;
                 height: 240px;
                 border-radius: 15px;
             }
+
             .tit {
                 color: #777E90;
                 font-size: 24px;
             }
+
             .tip {
                 margin-top: 5px;
                 color: #777E90;
                 font-size: 12px;
+
                 i {
                     color: $--color-success;
                 }
@@ -475,8 +493,10 @@
                         background-repeat: no-repeat;
                         background-position: right center;
                     }
+
                     &.lang {
                         background: none;
+
                         span {
                             font-weight: bolder;
                         }

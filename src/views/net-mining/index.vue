@@ -40,7 +40,7 @@
                                     <span>1,000,000</span> Adoge
                                 </p>
                             </div>
-                            <el-button type="primary"> {{$t("home.receive")}}</el-button>
+                            <el-button type="primary"> {{$t("blind-box.receive")}}</el-button>
                             <p class="tip">Update every day at <span class="timer">0:00 UTC</span> </p>
 
                         </li>
