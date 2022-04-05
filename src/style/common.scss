@@ -1,4 +1,3 @@
-
 /**
  * @description common-style
    @note: this file is common to both PC and mobile H5 pages, so don't add style code that only applies to one side
@@ -10,6 +9,7 @@
         font-size: 75px !important;
     }
 }
+
 body,
 html {
     width: 100%;
@@ -50,6 +50,7 @@ ul {
 * {
     box-sizing: border-box;
 }
+
 a {
     -webkit-tap-highlight-color: transparent;
     background-color: transparent;
@@ -58,6 +59,7 @@ a {
     -webkit-text-decoration-skip: objects;
     /* 2 */
 }
+
 fieldset,
 img {
     border: 0
@@ -182,12 +184,15 @@ body {
 [v-cloak] {
     display: none;
 }
+
 .l {
     float: left;
 }
+
 .r {
     float: right;
 }
+
 .w {
     max-width: 1120px;
     margin: 0 auto;
@@ -197,15 +202,116 @@ body {
 .yellow .el-checkbox__label {
     color: #F3BA2F;
 }
+
 .orange .el-checkbox__label {
     color: #FF7A00;
 }
+
 .red .el-checkbox__label {
     color: #FF3D00;
 }
+
 .blue .el-checkbox__label {
     color: $--color-success;
 }
+
 .purple .el-checkbox__label {
     color: #9E00FF;
+}
+
+.sale-revise-dialog {
+    .el-dialog__header {
+        padding: .373333333333333rem .266666666666667rem 0 .266666666666667rem;
+    }
+    .el-dialog__body {
+        padding: .533333333333333rem .266666666666667rem;
+    }
+    .tit {
+        font-weight: 600;
+        color: #777E90;
+        font-size: .32rem;
+    }
+
+    .input-box {
+        display: flex;
+        align-items: center;
+        padding: .2rem 0;
+        margin: .133333333333333rem 0 .293333333333333rem;
+        font-size: .32rem;
+        border-radius: .133333333333333rem;
+        background: #1D2633;
+
+        .label {
+            padding-left: .65rem;
+            width: 1.933333333333333rem;
+            height: .666666666666667rem;
+            line-height: .666666666666667rem;
+            color: $--color-primary;
+            font-weight: bold;
+            background: url('../assets/images/info.png');
+            background-repeat: no-repeat;
+            background-position: .133333333333333rem center;
+            background-size: .32rem .32rem;
+            border-right: 1px solid #131922;
+        }
+
+        .el-input {
+            width: 3.2rem;
+        }
+
+        .el-input__inner {
+            padding: .12rem .26rem;
+            height: .666666666666667rem;
+            color: #fff;
+            font-weight: 500;
+            font-size: .426666666666667rem;
+            background: transparent;
+            border: 0;
+
+            &::placeholder {
+                color: #777E90;
+                font-size: .24rem;
+            }
+        }
+    }
+    .tip {
+        padding-bottom: .133333333333333rem;
+        text-align: center;
+        color: $--color-warning;
+        font-size: .186666666666667rem;
+
+    }
+
+    .opt-btn {
+        .btn {
+            width: 100%;
+            height: .8rem;
+            line-height: .8rem;
+            text-align: center;
+            border: 0;
+            font-size: .32rem;
+            color: #fff;
+            border-radius: .133333333333333rem;
+            background: #777E90;
+            cursor: not-allowed;
+
+            &.confirmed {
+                background: #00A73A;
+                cursor: pointer;
+            }
+        }
+
+    }
+}
+.dis-connect {
+    display: flex;
+    align-items: center;
+    border: 1px solid #fff;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    background-color: #131922;
+    border-color: #131922;
+    text-align: center;
+    box-sizing: border-box;
 }

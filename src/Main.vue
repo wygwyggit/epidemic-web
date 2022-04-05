@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <common-header :bgColor="bgColor"></common-header>
+        <common-header :bgColor="bgColor" ref="commonHeader"></common-header>
         <router-view class="router-view "></router-view>
         <common-footer v-if="isShowFooter"></common-footer>
     </div>
@@ -9,6 +9,12 @@
 <script>
     import CommonHeader from '@/components/common-header'
     import CommonFooter from '@/components/common-footer'
+    import {
+        mapMutations,
+    } from 'vuex'
+    import {
+        getWeb3Provider
+    } from '@/utils/adpp'
     export default {
         components: {
             CommonHeader,
@@ -29,7 +35,6 @@
                 deep: true,
                 handler(val, oldval) {
                     let width = window.innerWidth
-                    console.log(val.path.replace('/', ''))
                     switch (val.path.replace('/', '')) {
                         case 'home': {
                             this.bgColor = "#31BCFF"
@@ -52,10 +57,18 @@
         created() {
 
         },
-        mounted() {},
+        async mounted() {
+            let web3Provider = await getWeb3Provider()
+            this.UPDATE_WEB3PROVIDER(web3Provider)
+        },
         beforeDestroy() {},
         methods: {
-
+            ...mapMutations({
+                UPDATE_WEB3PROVIDER: 'UPDATE_WEB3PROVIDER'
+            }),
+            doConnectAccount() {
+                this.$refs.commonHeader.connectWalletMetaMask(true)
+            }
         },
     }
 </script>

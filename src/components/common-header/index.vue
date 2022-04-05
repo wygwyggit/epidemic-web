@@ -16,36 +16,48 @@
             <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
                 <img src="../../assets/images/line.png" alt="">
             </a>
-            <template v-if="!isConnect">
+            <template v-if="!account">
                 <div class="user-pc">
-                    <div class="connect" @click=openConnectDialog>
+                    <div class="connect" @click=connectWalletMetaMask(false)>
                         {{$t("common.connect")}}
                     </div>
                 </div>
             </template>
             <template v-else>
-                <p class="adoge-num">10,000,000,000 Adoge</p>
+                <p class="adoge-num"></p>
                 <div class="user-pc">
-                    <div class="wallet">
-                        <img src="../../assets/images/wallet.png" alt="">
-                        0xf235...2809</div>
-                    <div class="dis-connect">
-                        {{$t("common.disConnect")}}
-                        <img src="../../assets/images/out.png" alt="">
-                    </div>
+                    <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
+                        popper-class="el-popover-black">
+                        <div class="pop-tip" slot="reference">
+                            <div class="wallet">
+                                <img src="../../assets/images/wallet.png" alt="">
+                                {{ smallAccount }}</div>
+                        </div>
+                        <div class="dis-connect" @click="disconnected">
+                            {{$t("common.disConnect")}}
+                            <img src="../../assets/images/out.png" alt="">
+                        </div>
+                    </el-popover>
                 </div>
             </template>
             <div class="lang-opt">
                 <!-- <div class="item current">EN</div>
                 <div class="item other">ZH</div> -->
-                <el-dropdown @command="doChangeLang">
+                <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
+                    popper-class="el-popover-black">
+                    <div class="pop-tip" slot="reference">
+                        <div class="item current">{{lang}}</div>
+                    </div>
+                    <div class="other-lang" style="cursor:pointer" @click="doChangeLang">{{otherLang}}</div>
+                </el-popover>
+                <!-- <el-dropdown @command="doChangeLang">
                     <span class="el-dropdown-link">
                         <div class="item current">{{lang}}</div>
                     </span>
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item>{{otherLang}}</el-dropdown-item>
                     </el-dropdown-menu>
-                </el-dropdown>
+                </el-dropdown> -->
             </div>
         </div>
         <div class="header-slideout" :style="{'width': isShowSlider ? '100%' : '0' }">
@@ -73,9 +85,9 @@
                 </nav>
                 <div class="bottom">
                     <div class="user-info">
-                        <template v-if="!isConnect">
+                        <template v-if="!account">
                             <div class="user-h5">
-                                <div class="connect" @click=openConnectDialog>
+                                <div class="connect" @click=connectWalletMetaMask(false)>
                                     {{$t("common.connect")}}
                                 </div>
                             </div>
@@ -96,10 +108,10 @@
                         </template>
                     </div>
                     <div class="out-link">
-                        <a href="">
+                        <a href="https://twitter.com/AmazingDogeCoin" target="_blank">
                             <img src="../../assets/images/Twitter.png" alt="">
                         </a>
-                        <a href="">
+                        <a href="https://t.me/amazingdoge_cn" target="_blank">
                             <img src="../../assets/images/Telegram App.png" alt="">
                         </a>
                     </div>
@@ -109,13 +121,13 @@
 
         </div>
 
-        <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
+        <!-- <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" :width="dialogWidth">
             <ul>
-                <li class="c1">MetaMask</li>
+                <li class="c1" @click="connectWalletMetaMask(false)">MetaMask</li>
                 <li class="c2" @click="openCodeDialog">{{$t("common.tokenPocket")}}</li>
             </ul>
-        </el-dialog>
+        </el-dialog> -->
         <el-dialog custom-class="code-dialog" :visible.sync="isShowCodeDialog" :close-on-click-modal="false"
             :width="dialogWidth">
             <img src="../../assets/images/code.png" />
@@ -133,6 +145,16 @@
 </template>
 
 <script>
+    import {
+        mainDomain
+    } from '@/config/config.js'
+    import Cookie from '@/utils/cookie.js'
+    import utils from '@/utils'
+    import myAjax from '@/utils/ajax.js'
+    import eventBus from '@/utils/eventBus'
+    import {
+        mapState
+    } from 'vuex'
     export default {
         name: "common-header",
         components: {},
@@ -145,6 +167,8 @@
         data() {
             return {
                 prefixCls: "components-common-header",
+                account: null,
+                chainId: 0,
                 isConnect: false,
                 isShowConnectDialog: false,
                 myBgColor: "",
@@ -185,7 +209,16 @@
         computed: {
             connectTitle() {
                 return this.$t("common.connect")
-            }
+            },
+            smallAccount() {
+                let firstCode = this.account.slice(0, 6)
+                let lastCode = this.account.slice(-4)
+                return `${firstCode}...${lastCode}`
+            },
+            ...mapState({
+                web3Provider: state => state.web3Provider,
+            }),
+
         },
         watch: {
             $route: {
@@ -210,7 +243,9 @@
                 }
             }
         },
-        created() {
+        async created() {
+            this.initRewardRef()
+            this.initAccount()
             this.lang = localStorage.getItem('lang') || 'EN'
             this.otherLang = this.lang === 'EN' ? 'ZH' : 'EN'
             let width = window.innerWidth
@@ -221,6 +256,67 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            initRewardRef() {
+                let ref = utils.getQueryString('ref')
+                Cookie.setCookie('__rewardRef__', ref)
+                if (location.pathname === '/blindBox' && ref) {
+                    location.replace(`${mainDomain}blindBox`)
+                }
+            },
+            initAccount() {
+                const account = Cookie.getCookie('__account__')
+                this.account = account ? account : null
+            },
+            async accountChanged(accounts, flag) {
+                if (accounts.length === 0) {
+                    this.disconnected();
+                } else {
+                    this.account = accounts[0];
+                    Cookie.setCookie('__account__', this.account)
+                    flag && eventBus.$emit('connect')
+                    this.regUser()
+                }
+                //this.isShowConnectDialog = false
+            },
+            regUser() {
+                myAjax({
+                    url: 'user/sign',
+                    data: {
+                        addr: this.account,
+                        inviter: Cookie.getCookie('__rewardRef__')
+                    }
+                })
+            },
+            chainChanged(chainId) {
+                this.chainId = parseInt(chainId, 16);
+                //this.isShowConnectDialog = false
+            },
+            async disconnected() {
+                Cookie.delCookie('__account__')
+                this.account = null;
+                location.reload()
+            },
+            async connectWalletMetaMask(flag) {
+                if (!this.web3Provider) {
+                    this.$showError('there is no web3 provider.');
+                    return false;
+                }
+                try {
+                    this.accountChanged(await window.ethereum.request({
+                        method: 'eth_requestAccounts',
+                    }), flag);
+                    this.chainChanged(await window.ethereum.request({
+                        method: 'eth_chainId'
+                    }));
+                    window.ethereum.on('disconnect', this.disconnected);
+                    window.ethereum.on('accountsChanged', this.accountChanged);
+                    window.ethereum.on('chainChanged', this.chainChanged);
+                } catch (e) {
+                    console.error('could not get a wallet connection.', e);
+                    return false;
+                }
+                return true;
+            },
             selectLang() {
                 this.isShowLangDialog = true
             },
@@ -248,6 +344,7 @@
                 this.isShowCodeDialog = true
             }
         },
+
     };
 </script>
 
@@ -303,6 +400,10 @@
                     color: #fff;
                     border-bottom: 2px solid #fff;
                 }
+
+                &:last-child {
+                    margin-right: 0;
+                }
             }
         }
 
@@ -320,8 +421,9 @@
             }
 
             .connect,
-            .wallet,
-            .dis-connect {
+            .wallet {
+                display: flex;
+                align-items: center;
                 height: 40px;
                 line-height: 40px;
                 border: 1px solid #fff;
@@ -336,21 +438,8 @@
                 }
             }
 
-            .wallet:hover+.dis-connect {
-                opacity: 1;
-            }
 
-            .dis-connect {
-                position: absolute;
-                bottom: -45px;
-                right: 0;
-                width: 100%;
-                background-color: #131922;
-                border-color: #131922;
-                text-align: center;
-                opacity: 0;
-                transition: all .3s;
-            }
+
 
             .adoge-num {
                 // width: 100px;
@@ -375,19 +464,8 @@
                     text-align: center;
                     line-height: 40px;
                     font-size: 14px;
+                    cursor: pointer;
 
-                    &.current:hover+.other {
-                        opacity: 1;
-                    }
-
-                    &.other {
-                        position: absolute;
-                        bottom: -45px;
-                        background: #131922;
-                        color: #fff;
-                        opacity: 0;
-                        transition: all .3s;
-                    }
                 }
             }
         }

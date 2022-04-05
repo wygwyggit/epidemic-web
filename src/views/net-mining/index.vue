@@ -15,7 +15,7 @@
                                     {{$t("net-mining.participate")}}
                                 </p>
                                 <p class="val p-val">
-                                    <span>10</span>NFTs
+                                    <span>0</span>NFTs
                                 </p>
                             </div>
 
@@ -26,7 +26,7 @@
                                     {{$t("net-mining.total-reward")}}
                                 </p>
                                 <p class="val">
-                                    <span>10,000,000</span> Adoge
+                                    <span>0</span> Adoge
                                 </p>
                             </div>
 
@@ -37,7 +37,7 @@
                                     {{$t("net-mining.reward")}}
                                 </p>
                                 <p class="val reward-val">
-                                    <span>1,000,000</span> Adoge
+                                    <span>0</span> Adoge
                                 </p>
                             </div>
                             <el-button type="primary"> {{$t("blind-box.receive")}}</el-button>
@@ -63,13 +63,13 @@
                         </div>
                     </div>
                     <div class="list">
-                        <div class="soon-box">
+                        <!-- <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
                             <div>
                                 <p>Coming soon...</p>
                                 <p>Stay tuned!</p>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -377,6 +377,7 @@
                             margin-top: .4rem;
 
                             .input-keywords {
+                                flex: 1;
                                 margin-right: .266666666666667rem;
                             }
 

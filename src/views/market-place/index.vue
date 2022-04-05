@@ -23,28 +23,28 @@
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            10,000 BNB
+                            0 BNB
                         </div>
                         <div class="sub-info">Total value</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            20.00 <span>BNB</span>
+                            0 <span>BNB</span>
                         </div>
                         <div class="sub-info">Total value</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            2.05 <span>BNB</span>
+                            0 <span>BNB</span>
                         </div>
                         <div class="sub-info">Total value</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            5.25 <span>BNB</span>
+                            0 <span>BNB</span>
                         </div>
                         <div class="sub-info">Total value</div>
                     </div>
@@ -623,6 +623,7 @@
                             margin-top: .4rem;
 
                             .input-keywords {
+                                flex: 1;
                                 margin-right: .266666666666667rem;
                             }
 

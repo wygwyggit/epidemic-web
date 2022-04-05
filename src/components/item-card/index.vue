@@ -5,28 +5,32 @@
                 <div class="l">
                     # {{itemInfo.id}}
                 </div>
-                <div class="r">{{itemInfo.type}}</div>
+                <div class="r">{{$t(`account.${itemInfo.color}`)}}</div>
             </div>
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
-                <img src="../../assets/images/product.png">
+                <img :src="netImgBaseUrl + itemInfo.image_url">
             </div>
             <div class="name">
                 {{itemInfo.name}}
             </div>
-            <template v-if="!itemInfo.price">
-                <div class="sale">
-                    <div class="lv">{{itemInfo.lv}}</div>
+            <template v-if="type === 'sale'">
+                <div class="card-info" v-if="!itemInfo.on_sale">
+                    <div class="sale">
+                        <div class="lv">LV-{{itemInfo.class}}</div>
+                    </div>
+                    <div class="btn-groups">
+                        <div class="sale-btn btn" @click="sale(itemInfo.id)">{{$t("account.sale")}}</div>
+                    </div>
                 </div>
-                <div class="sale-btn btn">{{$t("account.open-soon")}}</div>
-            </template>
-            <template v-else>
-                <div class="on-sale">
-                    <p class="price-txt">{{$t("account.price")}}</p>
-                    <p class="price">{{itemInfo.price}}</p>
-                </div>
-                <div class="btn-groups">
-                    <div class="revise-btn btn">{{$t("account.revise")}}</div>
-                    <div class="cancel-btn btn">{{$t("account.cancel-sale")}}</div>
+                <div class="card-info" v-else>
+                    <div class="on-sale">
+                        <p class="price-txt">{{$t("account.price")}}</p>
+                        <p class="price">{{itemInfo.price}} Adoge</p>
+                    </div>
+                    <div class="btn-groups">
+                        <div class="revise-btn btn" @click="doRevise(itemInfo)">{{$t("account.revise")}}</div>
+                        <div class="cancel-btn btn" @click="cancel(itemInfo.id)">{{$t("account.cancel-sale")}}</div>
+                    </div>
                 </div>
             </template>
         </li>
@@ -34,6 +38,9 @@
 </template>
 
 <script>
+    import {
+        netImgBaseUrl
+    } from '@/config/config.js'
     export default {
         name: 'item-card',
         components: {},
@@ -43,11 +50,16 @@
                 default: () => {
                     return {}
                 }
+            },
+            type: {
+                type: String,
+                require: true
             }
         },
         data() {
             return {
-                prefixCls: 'components-item-card'
+                prefixCls: 'components-item-card',
+                netImgBaseUrl,
             }
         },
         computed: {},
@@ -56,6 +68,15 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doRevise(row) {
+                this.$emit('revise', row)
+            },
+            cancel(id) {
+                this.$emit('cancel', id)
+            },
+            sale(id) {
+                this.$emit('sale', id)
+            },
             onClickHandle(id) {
                 this.$emit('select', id)
             }
@@ -100,57 +121,65 @@
                 border-bottom: 1px solid #29374B;
             }
 
-            .on-sale {
-                .price {
-                    margin-top: 5px;
-                    color: $--color-success;
-                    font-size: .266666666666667rem;
+            .card-info {
+                margin-top: .1rem;
+
+                .sale,
+                .on-sale {
+                    height: 50px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                }
+
+                .on-sale {
+                    .price {
+                        margin-top: 5px;
+                        color: $--color-success;
+                        font-size: .266666666666667rem;
+                    }
+                }
+
+                .lv,
+                .price-txt {
+                    color: #777E90;
+                    font-size: 14px;
+                }
+
+                .btn-groups {
+                    display: flex;
+
+                    .btn {
+                        display: inline-block;
+                        margin-top: 12px;
+                        width: 100%;
+                        height: 40px;
+                        line-height: 40px;
+                        color: #fff;
+                        font-size: 16px;
+                        border-radius: 5px;
+                        cursor: pointer;
+                        flex: 1;
+
+                        &.sale-btn {
+                            text-align: center;
+                            background: #45B26B;
+                        }
+
+                        &.revise-btn {
+                            background: #777E90;
+                        }
+
+                        &.cancel-btn {
+                            margin-left: 3px;
+                            background: #FF5E19;
+                        }
+                    }
+
                 }
             }
-            .btn-groups {
-                display: flex;
-            }
 
-            .btn {
-                display: inline-block;
-                margin-top: 12px;
-                width: 100%;
-                height: 40px;
-                line-height: 40px;
-                color: #fff;
-                font-size: 16px;
-                border-radius: 5px;
-                cursor: pointer;
-                flex: 1;
-            }
 
-            .sale-btn {
-                text-align: center;
-                background: #45B26B;
-            }
-
-            .revise-btn {
-                background: #777E90;
-            }
-
-            .cancel-btn {
-                margin-left: 3px;
-                background: #FF5E19;
-            }
-
-            .sale,
-            .on-sale {
-                height: 50px;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-            }
-
-            .lv,
-            .price-txt {
-                color: #777E90;
-                font-size: 14px;
-            }
 
             &:hover {
                 box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);

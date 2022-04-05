@@ -13,34 +13,15 @@ module.exports = {
         port: 8880,
         // 设置代理
         proxy: {
-            '/mapi': {
+            '/api': {
                 // 目标 API 地址
-                target: 'https://c.m.163.com/',
+                target: 'http://154.19.242.84:5000/',
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: {
-                    '^/mapi': ''
+                    '^/api': ''
                 }
             },
-            '/napi': {
-                // 目标 API 地址
-                target: 'https://ent.163.com/',
-                changeOrigin: true,
-                secure: false,
-                pathRewrite: {
-                    '^/napi': ''
-                }
-            },
-            '/capi': {
-                // 目标 API 地址
-                target: 'https://comment.api.163.com',
-                changeOrigin: true,
-                secure: false,
-                pathRewrite: {
-                    '^/capi': ''
-                }
-            },
-
         }
     },
     configureWebpack: {

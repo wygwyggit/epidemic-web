@@ -25,7 +25,8 @@
                     </div>
                 </div>
                 <div class="contract" @click="copyContractTxt">
-                    <span>{{$t("home.contract")}}: </span> {{contractTxt}}
+                    <span class="con-key">{{$t("home.contract")}}: </span> 
+                    <span class="con-txt">{{contractTxt}}</span>
                 </div>
             </div>
             <ul class="img-ul clearfix">
@@ -178,8 +179,7 @@
 
     @media (max-width: 768px) {
         .#{$prefixCls} {
-            padding: 0 .533333333333333rem;
-
+            padding-bottom: 0;
             .amazing-doge {
                 padding: 0;
                 padding-bottom: 1.28rem;
@@ -206,12 +206,18 @@
                 }
 
                 .contract {
+                    display: flex;
+                    margin: 7.7rem .533333333333333rem 0;
 
-                    margin-top: 7.7rem;
-                    width: 100%;
-
-                    >span {
+                    .con-key {
                         display: none;
+                    }
+                    .con-txt {
+                        display: inline-block;
+                        width: 7.6rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
                     }
                 }
             }
@@ -220,6 +226,7 @@
                 position: relative;
                 top: -1rem;
                 display: block;
+                padding: 0 .533333333333333rem;
 
                 .item-img {
                     margin-bottom: .133333333333333rem;
