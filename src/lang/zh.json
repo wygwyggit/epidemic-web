@@ -49,7 +49,7 @@
         "price-int": "1千万 Adoge/个。",
         "limit": "限制",
         "probability": "概率",
-        "limit-int": "每日每个地址仅限10个。",
+        "limit-int": "每日每个地址仅限20个。",
         "probability-int": "100%抽到NFT或Adoge代币。",
         "invitation-reward-int": "每次被邀请者打开一个盲盒，你将收到100万个Adoge代币。",
         "invitation-reward-txt": "每打开一个盲盒，您将获得1,000,000 adogge奖励。",
