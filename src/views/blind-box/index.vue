@@ -289,17 +289,18 @@
                     return false
                 }
                 this.vote(act).then(res => {
-                    this.doOpen()
+                    this.doOpen(res.hash)
                 }).catch(err => {
                     this.$showError(this.$t("common.pay-fail"))
                 })
             },
-            doOpen() {
+            doOpen(hash) {
                 this.openIsLoading = this.isShowResultDialog = true
                 myAjax({
                     url: 'nft/lottery',
                     data: {
-                        addr: this.account
+                        addr: this.account,
+                        tx: hash
                     }
                 }).then(res => {
                     if (res.ok) {
