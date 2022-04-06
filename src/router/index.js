@@ -10,7 +10,7 @@ const routes = [{
         import( /* webpackChunkName: "main" */ '@/Main.vue'),
     children: [{
         path: '/',
-        redirect: '/blindBox'
+        redirect: '/home'
     },{
         path: '/home',
         name: 'home',

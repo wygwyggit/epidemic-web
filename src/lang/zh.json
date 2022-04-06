@@ -15,7 +15,13 @@
         "language": "语言",
         "rules": "规则",
         "pay-fail": "支付失败",
-        "wait-serve": "请稍等，不要关闭页面"
+        "wait-serve": "请稍等，不要关闭页面",
+        "confirmed": "确认",
+        "remind": "提示",
+        "cancel-sale-tip": "取消出售",
+        "yes": "确认",
+        "net-price-modified-tip": "你的NFT价格将会被修改",
+        "please-enter-price": "请输入价格"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -32,6 +38,7 @@
         "open-tip-l": "你今天还可以开启",
         "open-tip-r": "个盲盒",
         "open": "抽取",
+        "open-fail": "抽取失败",
         "your-invitation": "你的推广链接",
         "invitation-reward": "推广和奖励",
         "copy": "复制",

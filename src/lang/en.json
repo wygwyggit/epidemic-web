@@ -15,7 +15,13 @@
         "language": "Language",
         "rules": "Rules",
         "pay-fail": "Payment failed",
-        "wait-serve": "Please wait,do not close the page"
+        "wait-serve": "Please wait,do not close the page",
+        "confirmed": "Confirmed",
+        "remind": "Remind",
+        "cancel-sale-tip": "Cancel the sale",
+        "yes": "Yes",
+        "net-price-modified-tip": "Your NFT price will be modified",
+        "please-enter-price": "Please enter the price"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -32,6 +38,7 @@
         "open-tip-l": "You can open",
         "open-tip-r": "more boxes today",
         "open": "OPEN",
+        "open-fail": "Open fail",
         "your-invitation": "Your invitation",
         "invitation-reward": "Invitation reward",
         "copy": "COPY",
@@ -69,6 +76,7 @@
         "revise": "Revise",
         "cancel-sale": "Cancel Sale",
         "open-soon": "Open Soon"
+
     },
     "detail": {
         "attribute": "Attribute",

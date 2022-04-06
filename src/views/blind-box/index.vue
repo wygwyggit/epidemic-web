@@ -2,10 +2,10 @@
     <div :class="prefixCls">
         <div class="banner">
             <div class="before-txt">
-                <span>
-                    <!-- {{$t("blind-box.open-blind-box")}} -->
+                <span v-if="!timerS">
+                    {{$t("blind-box.open-blind-box")}}
                 </span>
-                <div class="timer-countdown">
+                <div class="timer-countdown" v-else>
                     <div class="days">
                         <p class="val">{{ timer.days }}</p>
                         <p class="txt">{{$t("blind-box.days")}}</p>
@@ -57,7 +57,8 @@
             </div>
         </div>
         <div class="content-box">
-            <p>{{$t("blind-box.open-tip-l")}} <span class="num">10</span> {{$t("blind-box.open-tip-r")}}</p>
+            <p>{{$t("blind-box.open-tip-l")}} <span class="num">{{(userInfo && userInfo.left_chance) || 0}}</span>
+                {{$t("blind-box.open-tip-r")}}</p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
                 <el-button type="primary" @click="openBlindBox">{{$t("blind-box.open")}}</el-button>
@@ -68,7 +69,7 @@
                 <div class="left">
                     <p class="label">{{$t("blind-box.your-invitation")}}</p>
                     <div class="val">
-                        <span class="val-t">{{ shareUrl }}</span>
+                        <span class="val-t">{{ userInfo && userInfo.promo_link }}</span>
                         <el-button type="primary" @click="copyLink">{{$t("blind-box.copy")}}</el-button>
                     </div>
                     <p class="small-tip">{{$t("blind-box.invitation-reward-txt")}}</p>
@@ -76,42 +77,52 @@
                 <div class="right">
                     <p class="label">{{$t("blind-box.you-reward")}}</p>
                     <div class="val">
-                        <span class="val-t">{{reward}} Adoge</span>
+                        <span class="val-t">{{userInfo && userInfo.award}}
+                            <i v-if="userInfo">Adoge</i></span>
                         <el-button type="primary" @click="reciveReward">{{$t("blind-box.receive")}}</el-button>
                     </div>
                 </div>
             </div>
         </div>
-        <el-dialog :title="resultTxt" custom-class="token-dialog" :visible.sync="isShowTokenDialog"
+        <el-dialog :title="resultTxt" custom-class="blindBox-dialog" :visible.sync="isShowResultDialog"
             :close-on-click-modal="false" :width="dialogWidth">
-            <div class="dialog-content">
-                <div class="img-box">
-                    <img src="../../assets/images/reward-token.png" alt="">
-                </div>
-                <div class="token-num">
-                    <p class="num">2,000,000</p>
-                    <p class="sub-txt">Adoge token</p>
-                </div>
-            </div>
-            <div class="accept-btn" @click="doAccept">{{$t("common.accept")}}</div>
-        </el-dialog>
-        <el-dialog :title="resultTxt" custom-class="blindBox-dialog" :visible.sync="isShowBlindBoxDialog"
-            :close-on-click-modal="false" :width="dialogWidth">
-            <div class="dialog-content">
-                <div class="index">
-                    # 0001001
-                </div>
-                <div class="img-box">
-                    <img src="../../assets/images/product.png" alt="">
-                </div>
-                <div class="name">
-                    CZ Hoodie Limited NFT
-                </div>
-                <p class="lv">Lv-1</p>
-                <p class="txt yellow">{{$t("account.yellow")}}</p>
+            <div class="dialog-content" v-loading="openIsLoading">
+                <template v-if="!openIsLoading">
+                    <div class="dialog-info">
+                        <template v-if="openResultType === 1">
+                            <div class="index">
+                                # {{ nft_info.id }}
+                            </div>
+                            <div class="img-box">
+                                <img :src="netImgBaseUrl + nft_info.image_url" alt="">
+                            </div>
+                            <div class="name">
+                                {{ nft_info.name }}
+                            </div>
+                            <p class="lv">Lv-{{ nft_info.class }}</p>
+                            <p class="txt" :class="nft_info.color">{{$t("account."+ nft_info.color +"")}}</p>
+                        </template>
+                        <template v-if="openResultType === 2">
+                            <div class="token-img-box">
+                                <img src="../../assets/images/reward-token.png" alt="">
+                            </div>
+                            <div class="token-num">
+                                <p class="num">{{ token_info && token_info.amount }}</p>
+                                <p class="sub-txt">Adoge token</p>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="accept-btn" @click="doAccept">{{$t("common.accept")}}</div>
+                </template>
 
             </div>
-            <div class="accept-btn" @click="doAccept">{{$t("common.accept")}}</div>
+        </el-dialog>
+        <el-dialog :width="dialogWidth" custom-class="loading-dialog" :close-on-click-modal="false" :show-close="false"
+            :visible.sync="isShowLoadingDialog">
+            <div class="loading-content" v-loading="isShowLoadingDialog"
+                :element-loading-text="$t('common.wait-serve')">
+
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -119,6 +130,19 @@
 <script>
     import Vue from "vue"
     import VueClipboard from "vue-clipboard2"
+    import eventBus from '@/utils/eventBus'
+    import myAjax from '@/utils/ajax.js'
+    import cookie from '@/utils/cookie.js'
+    import {
+        netImgBaseUrl,
+        payAddress,
+        payAmount,
+        contractAddress
+    } from '@/config/config.js'
+    import {
+        mapState
+    } from 'vuex'
+    import VOTE_ABI from "@/contracts/vote.js"
     export default {
         name: "home",
         components: {},
@@ -126,29 +150,43 @@
         data() {
             return {
                 prefixCls: "views-blind-box",
-                isShowBlindBoxDialog: false,
-                isShowTokenDialog: false,
+                contract: null,
+                isShowResultDialog: false,
+                openIsLoading: false,
+                isShowLoadingDialog: false,
+                netImgBaseUrl,
                 dialogWidth: "400px",
-                reward: "1,000,000,000",
-                shareUrl: 'https://amazingdogebsc.com/nft?ref=5q9h4j1gyad8v1sao5ljzctgwm810uj',
+                userInfo: null,
                 timer: {
                     days: '',
                     hrs: '',
                     mins: '',
                     secs: ''
-                }
+                },
+                timerS: null,
+                openResultType: '',
+                nft_info: null,
+                token_info: null,
             };
         },
         computed: {
             resultTxt() {
                 return this.$t("common.result")
-            }
+            },
+            ...mapState({
+                web3Provider: state => state.web3Provider,
+            }),
         },
         watch: {},
-        created() {
+        async created() {
+            this.initData()
             this.countTime()
         },
         mounted() {
+            eventBus.$on('connect', () => {
+                this.initData()
+                this.openBlindBox()
+            })
             let width = window.innerWidth
             if (width < 768) {
                 this.dialogWidth = '8.9rem'
@@ -157,10 +195,49 @@
         },
         beforeDestroy() {},
         methods: {
+            initData() {
+                this.account = cookie.getCookie('__account__')
+                this.getUserInfo()
+            },
+            vote(act) {
+                this.isShowLoadingDialog = true
+                return new Promise((resolve, reject) => {
+                    this.contract = new ethers.Contract(contractAddress, VOTE_ABI, this.web3Provider
+                    .getSigner())
+                    this.contract.transfer(payAddress, payAmount).then(res => {
+                        resolve(res)
+                    }).catch(err => {
+                        reject(err)
+                    }).finally(() => {
+                        this.isShowLoadingDialog = false
+                    })
+                })
+
+                // let tx = await this.contract.transfer(payAddress, payAmount);
+                // await tx.wait(1);
+                // console.log(tx)
+            },
+            getUserInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: "user/user_info",
+                        data: {
+                            addr: this.account
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.userInfo = res.data
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
             countTime() {
                 let data = new Date(),
                     dataTime = data.getTime(),
-                    str = "2022/04/05 12:00:00",
+                    str = "2022/04/06 08:00:00",
                     endTime = new Date(str),
                     end = endTime.getTime(),
                     leftTime = end - dataTime;
@@ -169,38 +246,81 @@
                     this.timer.hrs = (Math.floor(leftTime / 1000 / 60 / 60 % 24)).toString().padStart(2, '0');
                     this.timer.mins = (Math.floor(leftTime / 1000 / 60 % 60)).toString().padStart(2, '0');
                     this.timer.secs = (Math.floor(leftTime / 1000 % 60)).toString().padStart(2, '0');
+                    this.timerS = setTimeout(this.countTime, 1000);
+                } else {
+                    clearInterval(this.timerS)
+                    this.timerS = null
                 }
-                setTimeout(this.countTime, 1000);
+
             },
             doAccept() {
-                this.isShowBlindBoxDialog = this.isShowTokenDialog = false
+                this.isShowResultDialog = false
             },
             reciveReward() {
-                if (this.reward <= 0) {
+                if (!this.userInfo) return
+                if (this.userInfo.award <= 0) {
                     this.$showInfo(`${this.$t("blind-box.no-reward-yet")}`)
                 } else {
-                    this.$showOk(`${this.$t("blind-box.received-suc")}`)
+                    myAjax({
+                        url: 'user/get_award',
+                        data: {
+                            addr: this.account
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.$showOk(`${this.$t("blind-box.received-suc")}`)
+                        }
+                    })
                 }
             },
             copyLink() {
-                this.$copyText(this.shareUrl).then(() => {
+                if (!this.userInfo || !this.userInfo.promo_link) return
+                this.$copyText(this.userInfo.promo_link).then(() => {
                     this.$showOk(`${this.$t("blind-box.copy-success")}`)
                 });
             },
-            openBlindBox() {
-                let n = Math.random()
-                if (n > 0.5) {
-                    this.isShowBlindBoxDialog = true
-                } else if (n < 0.2) {
-                    this.$showError(`${this.$t(("common.pay-fail"))}`)
-                } else {
-                    this.isShowTokenDialog = true
+            openBlindBox(act) {
+                if (!this.web3Provider) return this.$showError('there is no web3 provider')
+                if (!this.account) {
+                    this.$parent.doConnectAccount()
+                    return false
                 }
+                this.vote(act).then(res => {
+                    this.doOpen()
+                }).catch(err => {
+                    this.$showError(this.$t("common.pay-fail"))
+                })
+            },
+            doOpen() {
+                this.openIsLoading = this.isShowResultDialog = true
+                myAjax({
+                    url: 'nft/lottery',
+                    data: {
+                        addr: this.account
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        const {
+                            type,
+                            nft_info,
+                            token_info
+                        } = res.data
+                        this.openResultType = type
+                        if (this.openResultType === 1) {
+                            this.nft_info = nft_info
+                        } else if (this.openResultType === 2) {
+                            this.token_info = token_info || {}
+                        }
+                    } else {
+                        this.$showError(this.$t("blind-box.open-fail"))
+                    }
+                    this.openIsLoading = false
+                })
             }
         },
     };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
     $prefixCls: "views-blind-box";
 
     .#{$prefixCls} {
@@ -215,6 +335,12 @@
             .before-txt {
                 position: relative;
                 display: inline-block;
+
+                >span {
+                    font-size: .64rem;
+                    color: #fff;
+                    font-weight: 600;
+                }
 
                 .timer-countdown {
                     margin-bottom: 10px;
@@ -311,7 +437,7 @@
                     text-align: center;
                     font-size: 24px;
                     border-radius: 10px;
-
+                    cursor: pointer;
                 }
             }
         }
@@ -400,14 +526,61 @@
             cursor: pointer;
         }
 
+        .loading-dialog {
+            .el-dialog__header {
+                display: none;
+            }
+
+            .loading-content {
+                min-height: 1.5rem;
+
+                .el-loading-text {
+                    color: #BBBBBB;
+                    font-size: 18px;
+                }
+            }
+        }
+
         .blindBox-dialog {
             .dialog-content {
-                padding: 10px 10px 21px 10px;
+                min-height: 4rem;
+            }
+
+            .dialog-info {
+                padding: .133333333333333rem .133333333333333rem .28rem .133333333333333rem;
                 margin: 0 auto;
                 width: 265px;
+                min-height: 2.4rem;
                 border: 1px solid #004D8C;
                 border-radius: 10px;
                 text-align: center;
+
+                .token-img-box {
+                    width: 160px;
+                    height: 160px;
+                    margin: .8rem auto;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                .token-num {
+                    text-align: center;
+
+                    .num {
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: .426666666666667rem;
+                    }
+
+                    .sub-txt {
+                        margin-top: 5px;
+                        color: #C4C4C4;
+                        font-size: 14px;
+                    }
+                }
 
                 .img-box {
                     margin-top: 15px;
@@ -423,19 +596,21 @@
                 }
 
                 .name {
-                    padding: 10px 0;
+                    padding: .2rem 0 .133333333333333rem 0;
                     color: #fff;
                     font-size: 18px;
+                    font-weight: bold;
                     border-bottom: 1px solid #131922;
                 }
 
                 .lv {
-                    margin-top: 10px;
                     color: #777E90;
                     font-size: 18px;
                 }
 
                 .txt {
+                    margin-top: .133333333333333rem;
+
                     &.yellow {
                         margin-top: 10px;
                         font-size: 18px;
@@ -457,47 +632,46 @@
             }
         }
 
-        .token-dialog {
-            .img-box {
-                width: 160px;
-                height: 160px;
-                margin: 60px auto;
-            }
-
-            .token-num {
-                text-align: center;
-
-                .num {
-                    color: #fff;
-                    font-size: 32px;
-                }
-
-                .sub-txt {
-                    margin-top: 5px;
-                    color: #C4C4C4;
-                    font-size: 14px;
-                }
-            }
-        }
+        .token-dialog {}
     }
 
     @media (max-width: 768px) {
         .#{$prefixCls} {
+            .blindBox-dialog {
+                .dialog-info {
+                    border: 0;
+
+                    .token-img-box {
+                        width: 4.266666666666667rem;
+                        height: 4.266666666666667rem;
+                    }
+
+                    .name {
+                        font-size: .48rem;
+                    }
+                }
+            }
+
             .banner {
                 padding-top: 0;
                 height: 6.88rem;
                 background: linear-gradient(180deg, #131922 44%, #163858 100%);
+
                 .before-txt {
                     .timer-countdown {
-                        .val,.dot {
+
+                        .val,
+                        .dot {
                             font-size: .96rem;
                             font-weight: 500;
                         }
+
                         .txt {
                             font-size: .213333333333333rem;
                         }
                     }
                 }
+
                 .blind-box {
                     top: 1.5rem;
                     margin: 0 auto;
