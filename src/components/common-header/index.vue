@@ -112,7 +112,7 @@
         <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" :width="dialogWidth">
             <ul>
-                <li class="c1">MetaMask</li>
+                <li class="c1" @click="connectWalletMetaMask">MetaMask</li>
                 <li class="c2" @click="openCodeDialog">{{$t("common.tokenPocket")}}</li>
             </ul>
         </el-dialog>
@@ -131,8 +131,10 @@
         </el-dialog>
     </div>
 </template>
-
 <script>
+    import {
+        getWeb3Provider
+    } from '../../utils/dapp'
     export default {
         name: "common-header",
         components: {},
@@ -221,6 +223,38 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            accountChanged(accounts) {
+                console.log('wallet account changed:', accounts.length === 0 ? null : accounts[0]);
+                // if (accounts.length === 0) {
+                //     this.disconnected();
+                // } else {
+                //     this.account = accounts[0];
+                //     document.cookie = '__account__=' + this.account + ';max-age=1296000';
+                // }
+            },
+            async connectWalletMetaMask() {
+                if (getWeb3Provider() === null) {
+                    console.error('there is no web3 provider.');
+                    return false;
+                }
+                try {
+                    // 获取当前连接的账户地址:
+                    this.accountChanged(await window.ethereum.request({
+                        method: 'eth_requestAccounts',
+                    }));
+                    // 获取当前连接的链ID:
+                    let chainId = await window.ethereum.request({
+                        method: 'eth_chainId'
+                    });
+                    console.log(account, chainId)
+                } catch (err) {
+                    console.error('could not get a wallet connection.', err);
+                    return false;
+                }
+                console.log('wallet connected.');
+                return true;
+
+            },
             selectLang() {
                 this.isShowLangDialog = true
             },
