@@ -285,6 +285,9 @@
                     this.$parent.doConnectAccount()
                     return false
                 }
+                if (this.userInfo.left_chance <= 0) {
+                    return false
+                }
                 this.vote(act).then(res => {
                     this.doOpen()
                 }).catch(err => {
@@ -314,6 +317,7 @@
                     } else {
                         this.$showError(this.$t("blind-box.open-fail"))
                     }
+                    this.getUserInfo()
                     this.openIsLoading = false
                 })
             }
