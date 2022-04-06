@@ -184,8 +184,9 @@
         },
         mounted() {
             eventBus.$on('connect', () => {
-                this.initData()
-                this.openBlindBox()
+                this.initData().then(() => {
+                    this.openBlindBox()
+                })
             })
             let width = window.innerWidth
             if (width < 768) {
@@ -196,14 +197,21 @@
         beforeDestroy() {},
         methods: {
             initData() {
-                this.account = cookie.getCookie('__account__')
-                this.getUserInfo()
+                return new Promise((resolve, reject) => {
+                    this.account = cookie.getCookie('__account__')
+                    this.getUserInfo().then(res => {
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
             },
             vote(act) {
                 this.isShowLoadingDialog = true
                 return new Promise((resolve, reject) => {
                     this.contract = new ethers.Contract(contractAddress, VOTE_ABI, this.web3Provider
-                    .getSigner())
+                        .getSigner())
                     this.contract.transfer(payAddress, payAmount).then(res => {
                         resolve(res)
                     }).catch(err => {
