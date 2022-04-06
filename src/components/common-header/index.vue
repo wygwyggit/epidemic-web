@@ -78,10 +78,11 @@
                         {{$t("common.language")}}
                         <span class="r">{{lang}}</span>
                     </a>
-                    <a href="javascript:;" v-if="isConnect" class="item wallet">
+                    <div v-if="account" class="item wallet">
                         <img src="../../assets/images/wallet.png" alt="">
-                        0xf235...2809
-                    </a>
+                        {{ smallAccount }}
+                        <span @click="disconnected"></span>
+                    </div>
                 </nav>
                 <div class="bottom">
                     <div class="user-info">
@@ -99,7 +100,7 @@
                                 </div>
                                 <div class="num-info">
                                     <p>BALANCE</p>
-                                    <p class="num">10,000,000,000 Adoge</p>
+                                    <!-- <p class="num">10,000,000,000 Adoge</p> -->
                                 </div>
                                 <div class="buy-btn">
                                     {{$t("detail.buy")}}
@@ -565,10 +566,18 @@
                     }
 
                     &.wallet {
-
+                        position: relative;
                         background: url('../../assets/images/out.png');
                         background-repeat: no-repeat;
                         background-position: right center;
+
+                        >span {
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            height: 1.92rem;
+                            width: 1rem;
+                        }
                     }
 
                     &.lang {
@@ -656,9 +665,11 @@
 
             .el-dialog {
                 .el-dialog__header {
+                    min-height: 1rem;
                     padding: .266666666666667rem .4rem 0 .4rem;
 
                     .el-dialog__title {
+
                         font-size: .48rem;
                     }
                 }
