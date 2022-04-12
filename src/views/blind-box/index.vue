@@ -55,6 +55,11 @@
 
             <div class="blind-box">
             </div>
+            <div class="buy-history" @click="openBuyHistoryDialog">
+                {{$t("blind-box.history")}}
+            </div>
+            <div class="buy-history-h5" @click="openBuyHistoryDrawer">
+            </div>
         </div>
         <div class="content-box">
             <p>{{$t("blind-box.open-tip-l")}} <span class="num">{{(userInfo && userInfo.left_chance) || 0}}</span>
@@ -124,6 +129,93 @@
 
             </div>
         </el-dialog>
+        <el-dialog :visible.sync="isShowBuyHistoryDialog" width="12rem" custom-class="buy-history-dialog"
+            :close-on-click-modal="false">
+            <div slot="title">
+                <img src="../../assets/images/clock.png" alt="" width="24" height="24">
+                <span>
+                    {{$t("blind-box.blindbox-history")}}
+                </span>
+            </div>
+            <div class="content">
+                <table>
+                    <thead>
+                        <th>ID</th>
+                        <th>Txn Hash</th>
+                        <th>Date UTC</th>
+                        <th>Prize</th>
+                        <th>Receive</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) of buy_history_list" :key="index">
+                            <td class="hot">
+                                {{item.id}}
+                            </td>
+                            <td class="hot">
+                                {{item.hash}}
+                            </td>
+                            <td>
+                                {{item.dateTime}}
+                            </td>
+                            <td class="hot">
+                                {{item.prize}}
+                            </td>
+                            <td>
+                                <template v-if="!item.is_Received">
+                                    <el-button type="primary">{{$t("blind-box.receive")}}</el-button>
+                                </template>
+                                <template v-else>
+                                    <span>Received</span>
+                                </template>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </el-dialog>
+        <el-drawer :visible.sync="buyHistoryDrawer" direction="btt">
+            <div slot="title">
+                <img src="../../assets/images/clock.png" alt="">
+                <span>
+                    {{$t("blind-box.blindbox-history")}}
+                </span>
+            </div>
+            <div class="content">
+                <table>
+                    <thead>
+                        <th>Txn Hash</th>
+                        <th>Date UTC</th>
+                        <th>Prize</th>
+                        <th>Receive</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) of buy_history_list" :key="index">
+                            <td class="hot">
+                                {{item.hash}}
+                            </td>
+                            <td>
+                                {{item.dateTime}}
+                            </td>
+                            <td class="hot">
+                                {{item.prize}}
+                            </td>
+                            <td>
+                                <template v-if="!item.is_Received">
+                                    <el-button type="primary">{{$t("blind-box.receive")}}</el-button>
+                                </template>
+                                <template v-else>
+                                    <span>Received</span>
+                                </template>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </el-drawer>
     </div>
 </template>
 
@@ -154,6 +246,8 @@
                 isShowResultDialog: false,
                 openIsLoading: false,
                 isShowLoadingDialog: false,
+                isShowBuyHistoryDialog: false,
+                buyHistoryDrawer: false,
                 netImgBaseUrl,
                 dialogWidth: "400px",
                 userInfo: null,
@@ -167,6 +261,67 @@
                 openResultType: '',
                 nft_info: null,
                 token_info: null,
+                buy_history_list: [{
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: true
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }, {
+                    id: 'bd00009',
+                    hash: '0xee5808...839f',
+                    dateTime: '2022-03-13 14:26:50',
+                    prize: '4000000 Adoge',
+                    is_Received: false
+                }]
             };
         },
         computed: {
@@ -196,6 +351,12 @@
         },
         beforeDestroy() {},
         methods: {
+            openBuyHistoryDrawer() {
+                this.buyHistoryDrawer = true
+            },
+            openBuyHistoryDialog() {
+                this.isShowBuyHistoryDialog = true
+            },
             initData() {
                 return new Promise((resolve, reject) => {
                     this.account = cookie.getCookie('__account__')
@@ -337,6 +498,57 @@
     $prefixCls: "views-blind-box";
 
     .#{$prefixCls} {
+        .el-drawer {
+            height: 55% !important;
+            background: #000;
+            overflow-y: scroll;
+
+            .el-drawer__header {
+                padding:.1rem .533333333333333rem;
+                margin-bottom: .1rem;
+                img {
+                    vertical-align: middle;
+                    width: .426666666666667rem;
+                    height: .426666666666667rem;
+                }
+
+                span {
+                    margin-left: .266666666666667rem;
+                    font-size: .32rem;
+                    color: #fff;
+                }
+            }
+
+            .content {
+                padding: 0 .533333333333333rem;
+                table {
+                    color: #777E90;
+                    font-size: .266666666666667rem;
+                    thead {
+                        th {
+                            height: .533333333333333rem;
+                            line-height: .533333333333333rem;
+                            border-top: 1px solid #152132;
+                        }
+                    }
+                    tbody {
+                        td {
+                            height: .853333333333333rem;
+                            line-height: .853333333333333rem;
+                            border-top: 1px solid #152132;
+                            .el-button {
+                                padding: .2rem;
+                                font-size: 12px;
+                            }
+                            &.hot {
+                                color: #5B82E3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         .banner {
             position: relative;
             padding-top: .65rem;
@@ -344,6 +556,40 @@
             background: url('../../assets/images/home-bg.png');
             background-size: cover;
             text-align: center;
+
+            .buy-history {
+                position: absolute;
+                top: .2rem;
+                right: 2.1rem;
+                padding: 0 .16rem 0 .4rem;
+                height: .506666666666667rem;
+                line-height: .506666666666667rem;
+                font-size: .24rem;
+                color: $--color-primary;
+                border-radius: .133333333333333rem;
+                background: #fff url('../../assets/images/clock.png');
+                background-position: .02rem center;
+                background-size: .373333333333333rem .373333333333333rem;
+                background-repeat: no-repeat;
+                cursor: pointer;
+
+                &::after {
+                    position: absolute;
+                    right: -0.106666666666667rem;
+                    top: -0.106666666666667rem;
+                    content: "";
+                    width: .213333333333333rem;
+                    height: .213333333333333rem;
+                    border-radius: 50%;
+                    background: #FF3D00;
+
+                }
+
+            }
+
+            .buy-history-h5 {
+                display: none;
+            }
 
             .before-txt {
                 position: relative;
@@ -375,7 +621,7 @@
 
             .pop-tip {
                 position: absolute;
-                right: -2.2rem;
+                right: -1.3rem;
                 top: -.2rem;
                 padding-left: .4rem;
                 padding-right: .13rem;
@@ -554,6 +800,51 @@
             }
         }
 
+        .buy-history-dialog {
+            .el-dialog__header {
+                img {
+                    vertical-align: middle;
+                }
+
+                span {
+                    color: #fff;
+                    font-size: .32rem
+                }
+            }
+
+            .content {
+                height: 6rem;
+                overflow-y: scroll;
+            }
+
+            table {
+                width: 100%;
+
+                thead {
+                    th {
+                        height: .533333333333333rem;
+                        line-height: .533333333333333rem;
+                        border-top: 1px solid #152132;
+                    }
+                }
+
+                tbody {
+                    tr {
+                        td {
+                            height: 1.066666666666667rem;
+                            line-height: 1.066666666666667rem;
+                            border-top: 1px solid #152132;
+
+                            &.hot {
+                                color: #5B82E3;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
         .blindBox-dialog {
             .dialog-content {
                 min-height: 4rem;
@@ -669,6 +960,32 @@
                 padding-top: 0;
                 height: 6.88rem;
                 background: linear-gradient(180deg, #131922 44%, #163858 100%);
+
+                .buy-history {
+                    display: none;
+                }
+
+                .buy-history-h5 {
+                    position: absolute;
+                    right: .7rem;
+                    top: .4rem;
+                    display: block;
+                    width: .746666666666667rem;
+                    height: .746666666666667rem;
+                    background: url('../../assets/images/clock_w.png');
+                    background-size: 100% 100%;
+
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        width: .266666666666667rem;
+                        height: .266666666666667rem;
+                        background: #FF3D00;
+                        border-radius: 50%;
+                    }
+                }
 
                 .before-txt {
                     .timer-countdown {

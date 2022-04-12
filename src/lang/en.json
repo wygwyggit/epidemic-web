@@ -54,7 +54,9 @@
         "invitation-reward-int": "Each time an invitee opens a blind box, you will receive one million Adoge tokens.",
         "invitation-reward-txt": "Every time the invitee opens a blind box,you will get a 1,000,000 Adoge reward.",
         "no-reward-yet": "No promotion rewards yet",
-        "received-suc": "Received successfully"
+        "received-suc": "Received successfully",
+        "history": "History",
+        "blindbox-history": "Blindbox history"
     },
     "account": {
         "my-account": "My account",
@@ -104,6 +106,9 @@
     "net-mining": {
         "participate": "Participate",
         "total-reward": "Total Reward",
-        "reward": "Reward"
+        "reward": "Reward",
+        "cancel-staking": "Cancel Staking",
+        "cancel-staking-tip": "Cancel the Staking",
+        "staking-tip": "Staking the NFT"
     }
 }

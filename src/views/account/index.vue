@@ -302,6 +302,7 @@
                 this.$confirm(`${this.$t("common.cancel-sale-tip")}?`, this.$t("common.remind"), {
                     confirmButtonText: this.$t("common.yes"),
                     showCancelButton: false,
+                    closeOnClickModal: false,
                     width: '6.4rem'
                 }).then(async () => {
 

@@ -33,6 +33,20 @@
                     </div>
                 </div>
             </template>
+            <template v-else-if="type === 'staking'">
+                <div class="card-info">
+                    <div class="sale">
+                        <div class="lv">LV-{{itemInfo.class}}</div>
+                    </div>
+                    <div class="btn-groups">
+                        <div class="cancel-btn btn" @click="cancelStaking(itemInfo.id)" v-if="itemInfo.on_staking">
+                            {{$t("net-mining.cancel-staking")}}</div>
+                        <div class="sale-btn btn" @click="staking(itemInfo.id)" v-else>
+                            {{$t("common.staking")}}</div>
+
+                    </div>
+                </div>
+            </template>
         </li>
     </div>
 </template>
@@ -79,6 +93,12 @@
             },
             onClickHandle(id) {
                 this.$emit('select', id)
+            },
+            cancelStaking(id) {
+                this.$emit('cancel-staking', id)
+            },
+            staking(id) {
+                this.$emit('staking', id)
             }
         },
     }

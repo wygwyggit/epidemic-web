@@ -49,7 +49,7 @@
                 <div class="right">
                     <div class="top-search">
                         <div class="total">
-                            <span class="txt">0 NFTs</span>
+                            <span class="txt">{{total}} NFTs</span>
                         </div>
                         <div class="search">
                             <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
@@ -63,6 +63,12 @@
                         </div>
                     </div>
                     <div class="list">
+                        <el-empty description="暂无数据" v-if="!list.length && !isLoading"></el-empty>
+                        <template v-if="list.length && !isLoading">
+                            <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail"
+                                @staking="doStaking" @cancel-staking="doCancelStaking" type="staking">
+                            </item-card>
+                        </template>
                         <!-- <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
                             <div>
@@ -70,6 +76,13 @@
                                 <p>Stay tuned!</p>
                             </div>
                         </div> -->
+                    </div>
+                    <div class="page r" v-if="list.length && !isLoading">
+                        <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                            @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                            :page-size="Number(page.pageSize)" :total="Number(total)"
+                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
+                        </el-pagination>
                     </div>
                 </div>
             </div>
@@ -79,13 +92,22 @@
 </template>
 
 <script>
+    import itemCard from '@/components/item-card'
     export default {
         name: '',
-        components: {},
+        components: {
+            itemCard
+        },
         props: {},
         data() {
             return {
                 prefixCls: 'views-net-mining',
+                isLoading: false,
+                page: {
+                    pageSize: 20,
+                    curPage: 1
+                },
+                total: 0,
                 query: {
                     keywords: '',
                     latest: 0
@@ -95,6 +117,37 @@
                     key: 'latest',
                     label: 'latest'
                 }],
+                list: [{
+                    id: '010001',
+                    color: 'yellow',
+                    class: 2,
+                    name: '哈哈哈',
+                    on_staking: true
+                }, {
+                    id: '010001',
+                    color: 'yellow',
+                    class: 2,
+                    name: '哈哈哈',
+                    on_staking: false
+                }, {
+                    id: '010001',
+                    color: 'yellow',
+                    class: 2,
+                    name: '哈哈哈',
+                    on_staking: true
+                }, {
+                    id: '010001',
+                    color: 'yellow',
+                    class: 2,
+                    name: '哈哈哈',
+                    on_staking: true
+                }, {
+                    id: '010001',
+                    color: 'yellow',
+                    class: 2,
+                    name: '哈哈哈',
+                    on_staking: true
+                }]
             }
         },
         computed: {
@@ -111,7 +164,32 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            onPageChange() {
 
+            },
+            onSizeChange() {
+
+            },
+            doStaking(id) {
+                this.$confirm(`${this.$t("net-mining.cancel-staking-tip")}?`, this.$t("common.remind"), {
+                    confirmButtonText: this.$t("common.yes"),
+                    showCancelButton: false,
+                    closeOnClickModal: false,
+                    width: '6.4rem'
+                }).then(async () => {
+
+                })
+            },
+            doCancelStaking() {
+                this.$confirm(`${this.$t("net-mining.staking-tip")}?`, this.$t("common.remind"), {
+                    confirmButtonText: this.$t("common.yes"),
+                    showCancelButton: false,
+                    closeOnClickModal: false,
+                    width: '6.4rem'
+                }).then(async () => {
+
+                })
+            }
         },
     }
 </script>
@@ -150,6 +228,7 @@
             color: #fff;
             font-size: .64rem;
             font-weight: 600;
+
             img {
                 display: none;
             }
@@ -227,6 +306,17 @@
                 flex: 1;
 
                 .list {
+                    .components-item-card {
+                        float: left;
+                        margin-top: .32rem;
+                        margin-right: 20px;
+                        width: 265px;
+
+                        &:nth-child(3n) {
+                            margin-right: 0;
+                        }
+                    }
+
                     .soon-box {
                         position: relative;
                         width: max-content;
@@ -333,14 +423,17 @@
                             padding: .266666666666667rem .533333333333333rem;
                             width: 100%;
                             border-top: 1px solid #29374B !important;
-                            > div {
+
+                            >div {
                                 flex: 1;
                             }
+
                             .el-button {
                                 width: 2.4rem;
                                 height: .8rem;
                                 line-height: .8rem;
                             }
+
                             .tip {
                                 display: none;
                             }
@@ -398,9 +491,34 @@
                     }
 
                     .list {
+                        .components-item-card {
+                            margin-right: .266666666666667rem;
+                            width: 48.5%;
+
+                            >li {
+                                margin-bottom: 0;
+                            }
+
+
+
+                            &:nth-child(3n) {
+                                margin-right: .266666666666667rem;
+                            }
+
+                            &:nth-child(2n) {
+                                margin-right: 0 !important;
+                            }
+
+                        }
+
                         .soon-box {
                             margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
                         }
+                    }
+
+                    .page {
+                        margin-top: .266666666666667rem;
+                        width: 100%;
                     }
                 }
             }
