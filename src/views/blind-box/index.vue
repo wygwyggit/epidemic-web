@@ -88,7 +88,7 @@
                     </div>
                     <p class="small-tip">{{ $t("blind-box.invitation-reward-txt") }}</p>
                 </div>
-                <div class="right">
+                <!-- <div class="right">
                     <p class="label">{{ $t("blind-box.you-reward") }}</p>
                     <div class="val">
                         <span class="val-t">{{ userInfo && userInfo.award }}
@@ -97,7 +97,7 @@
               $t("blind-box.receive")
             }}</el-button>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
         <el-dialog :title="resultTxt" custom-class="blindBox-dialog" :visible.sync="isShowResultDialog"
@@ -752,12 +752,17 @@
                     flex: 1;
 
                     .small-tip {
+                        margin: 0 auto;
+                        width: 594px;
+                        margin: 0 auto;
                         padding-top: 16px;
                         color: #a6a6a6;
                         font-size: 14px;
                     }
 
                     .label {
+                        margin: 0 auto;
+                        width: 594px;
                         margin-bottom: 10px;
                         color: #fff;
                         font-size: 18px;
@@ -796,9 +801,9 @@
                     }
 
                     &:first-child {
-                        padding-right: 70px;
 
                         .val {
+                            margin: 0 auto;
                             width: 594px;
                         }
                     }
