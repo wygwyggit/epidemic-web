@@ -189,6 +189,13 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="page r" v-if="buy_history_list.length && !buyHLoading">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                        @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
+                        :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
+                    </el-pagination>
+                </div>
             </div>
         </el-dialog>
         <el-drawer :visible.sync="buyHistoryDrawer" direction="btt">
@@ -279,6 +286,10 @@
                     mins: "",
                     secs: "",
                 },
+                page: {
+                    curPage: 1,
+                    pageSize: 10
+                },
                 timerS: null,
                 openResultType: "",
                 nft_info: null,
@@ -314,6 +325,15 @@
         },
         beforeDestroy() {},
         methods: {
+            onSizeChange(size) {
+                this.page.curPage = 1
+                this.page.pageSize = size
+                this.openBuyHistoryDialog()
+            },
+            onPageChange(page) {
+                this.page.curPage = page
+                this.openBuyHistoryDialog()
+            },
             doReceived(order_id) {
                 myAjax({
                     url: 'nft/get_nft',
@@ -334,8 +354,8 @@
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: 1,
-                        per_page: 10000,
+                        page: page.curPage,
+                        per_page: page.pageSize,
                     },
                 }).then((res) => {
                     const {
@@ -343,7 +363,7 @@
                             history
                         }
                     } = res
-                    this.buy_history_list = history
+                    this.buy_history_list = history || []
                 });
             },
             openBuyHistoryDialog(flag) {
@@ -353,8 +373,8 @@
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: 1,
-                        per_page: 10000,
+                        page: page.curPage,
+                        per_page: page.pageSize,
                     },
                 }).then((res) => {
                     const {
@@ -362,7 +382,7 @@
                             history
                         }
                     } = res
-                    this.buy_history_list = history
+                    this.buy_history_list = history || []
                     this.buyHLoading = false
                 });
             },
