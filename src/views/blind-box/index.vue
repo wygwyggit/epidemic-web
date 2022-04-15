@@ -193,7 +193,7 @@
                     <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                         @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                         :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
-                        :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
+                        :page-sizes="[10, 20, 50, 100]" v-if="buy_history_list.length">
                     </el-pagination>
                 </div>
             </div>
@@ -271,6 +271,7 @@
         data() {
             return {
                 prefixCls: "views-blind-box",
+                total: 0,
                 contract: null,
                 isShowResultDialog: false,
                 openIsLoading: false,
@@ -334,6 +335,16 @@
                 this.page.curPage = page
                 this.openBuyHistoryDialog()
             },
+            getHistoryCount() {
+                myAjax({
+                    url: 'user/history_count',
+                    data: {
+                        addr: this.account,
+                    }
+                }).then(res => {
+                    this.total = res.data.count
+                })
+            },
             doReceived(order_id) {
                 myAjax({
                     url: 'nft/get_nft',
@@ -354,8 +365,8 @@
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: page.curPage,
-                        per_page: page.pageSize,
+                        page: this.page.curPage,
+                        per_page: this.page.pageSize,
                     },
                 }).then((res) => {
                     const {
@@ -368,13 +379,14 @@
             },
             openBuyHistoryDialog(flag) {
                 flag && (this.buyHLoading = true)
+                this.getHistoryCount()
                 this.isShowBuyHistoryDialog = true
                 myAjax({
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: page.curPage,
-                        per_page: page.pageSize,
+                        page: this.page.curPage,
+                        per_page: this.page.pageSize,
                     },
                 }).then((res) => {
                     const {
