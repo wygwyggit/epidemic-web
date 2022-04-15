@@ -853,8 +853,7 @@
             }
 
             .content {
-                height: 5rem;
-                overflow-y: scroll;
+
             }
 
             table {
