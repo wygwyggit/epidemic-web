@@ -80,7 +80,7 @@
                             </el-select> -->
                         </div>
                     </div>
-                    <div class="list clearfix">
+                    <!-- <div class="list clearfix">
                         <el-empty description="暂无数据" v-if="!netList.length && !isLoading"></el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
@@ -88,8 +88,8 @@
                             </item-card>
                         </template>
 
-                    </div>
-                    <!-- <div class="list">
+                    </div> -->
+                    <div class="list">
                         <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
                             <div>
@@ -97,14 +97,14 @@
                                 <p>Stay tuned!</p>
                             </div>
                         </div>
-                    </div> -->
-                    <div class="page r" v-if="netList.length && !isLoading">
+                    </div>
+                    <!-- <div class="page r" v-if="netList.length && !isLoading">
                         <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                             @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                             :page-size="Number(page.pageSize)" :total="Number(total)"
                             :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
                         </el-pagination>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -179,12 +179,12 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
-    import itemCard from '@/components/item-card'
+    //import itemCard from '@/components/item-card'
     import cookie from '@/utils/cookie.js'
     export default {
         name: '',
         components: {
-            itemCard
+            //itemCard
         },
         props: {},
         data() {
@@ -489,26 +489,26 @@
                 flex: 1;
 
                 .list {
-                    // .soon-box {
-                    //     position: relative;
-                    //     width: max-content;
-                    //     margin: 63px auto 0;
-                    //     text-align: center;
+                    .soon-box {
+                        position: relative;
+                        width: max-content;
+                        margin: 63px auto 0;
+                        text-align: center;
 
-                    //     img {
-                    //         width: 230px;
-                    //         height: 230px;
-                    //     }
+                        img {
+                            width: 230px;
+                            height: 230px;
+                        }
 
-                    //     div {
-                    //         position: absolute;
-                    //         right: -60px;
-                    //         top: 8px;
-                    //         color: #FFE2C3;
-                    //         font-size: 18px;
-                    //         text-align: left;
-                    //     }
-                    // }
+                        div {
+                            position: absolute;
+                            right: -60px;
+                            top: 8px;
+                            color: #FFE2C3;
+                            font-size: 18px;
+                            text-align: left;
+                        }
+                    }
                 }
 
                 .top-search {
@@ -572,9 +572,9 @@
                     width: 100%;
 
                     .list {
-                        // .soon-box {
-                        //     margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
-                        // }
+                        .soon-box {
+                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
+                        }
                     }
 
                     .top-search {
