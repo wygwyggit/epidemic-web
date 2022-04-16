@@ -189,6 +189,13 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="page r" v-if="buy_history_list.length && !buyHLoading">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                        @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
+                        :page-sizes="[10, 20, 50, 100]">
+                    </el-pagination>
+                </div>
             </div>
         </el-dialog>
         <el-drawer :visible.sync="buyHistoryDrawer" direction="btt">
@@ -223,7 +230,7 @@
                             </td>
                             <td>
                                 <template v-if="item.received == 0">
-                                    <el-button type="primary" @click="doReceived(item.order_id)">{{
+                                    <el-button type="primary" @click="doReceived(item.order_id, 'drawer')">{{
                     $t("blind-box.receive")
                   }}</el-button>
                                 </template>
@@ -240,6 +247,13 @@
                         </tr>
                     </tbody>
                 </table>
+                <div class="page r" v-if="buy_history_list.length && !buyHLoading">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange2"
+                        @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
+                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
+                        :page-sizes="[10, 20, 50, 100]">
+                    </el-pagination>
+                </div>
             </div>
         </el-drawer>
     </div>
@@ -268,6 +282,7 @@
         data() {
             return {
                 prefixCls: "views-blind-box",
+                total: 0,
                 contract: null,
                 isShowResultDialog: false,
                 openIsLoading: false,
@@ -282,6 +297,10 @@
                     hrs: "",
                     mins: "",
                     secs: "",
+                },
+                page: {
+                    curPage: 1,
+                    pageSize: 10
                 },
                 timerS: null,
                 openResultType: "",
@@ -318,7 +337,35 @@
         },
         beforeDestroy() {},
         methods: {
-            doReceived(order_id) {
+            onSizeChange(size) {
+                this.page.curPage = 1
+                this.page.pageSize = size
+                this.openBuyHistoryDialog()
+            },
+            onPageChange(page) {
+                this.page.curPage = page
+                this.openBuyHistoryDialog()
+            },
+            onSizeChange2(size) {
+                this.page.curPage = 1
+                this.page.pageSize = size
+                this.openBuyHistoryDrawer()
+            },
+            onPageChange2(page) {
+                this.page.curPage = page
+                this.openBuyHistoryDrawer()
+            },
+            getHistoryCount() {
+                myAjax({
+                    url: 'user/history_count',
+                    data: {
+                        addr: this.account,
+                    }
+                }).then(res => {
+                    this.total = res.data.count
+                })
+            },
+            doReceived(order_id, type) {
                 myAjax({
                     url: 'nft/get_nft',
                     data: {
@@ -328,18 +375,19 @@
                 }).then(res => {
                     if (res.ok) {
                         this.$showOk(this.$t("blind-box.received-suc"))
-                        this.openBuyHistoryDialog()
+                        type ? this.openBuyHistoryDrawer : this.openBuyHistoryDialog()
                     }
                 })
             },
             openBuyHistoryDrawer() {
+                this.getHistoryCount()
                 this.buyHistoryDrawer = true;
                 myAjax({
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: 1,
-                        per_page: 10000,
+                        page: this.page.curPage,
+                        per_page: this.page.pageSize,
                     },
                 }).then((res) => {
                     const {
@@ -347,18 +395,19 @@
                             history
                         }
                     } = res
-                    this.buy_history_list = history
+                    this.buy_history_list = history || []
                 });
             },
             openBuyHistoryDialog(flag) {
                 flag && (this.buyHLoading = true)
+                this.getHistoryCount()
                 this.isShowBuyHistoryDialog = true
                 myAjax({
                     url: "user/history",
                     data: {
                         addr: this.account,
-                        page: 1,
-                        per_page: 10000,
+                        page: this.page.curPage,
+                        per_page: this.page.pageSize,
                     },
                 }).then((res) => {
                     const {
@@ -366,7 +415,7 @@
                             history
                         }
                     } = res
-                    this.buy_history_list = history
+                    this.buy_history_list = history || []
                     this.buyHLoading = false
                 });
             },
@@ -756,12 +805,17 @@
                     flex: 1;
 
                     .small-tip {
+                        margin: 0 auto;
+                        width: 594px;
+                        margin: 0 auto;
                         padding-top: 16px;
                         color: #a6a6a6;
                         font-size: 14px;
                     }
 
                     .label {
+                        margin: 0 auto;
+                        width: 594px;
                         margin-bottom: 10px;
                         color: #fff;
                         font-size: 18px;
@@ -800,9 +854,9 @@
                     }
 
                     &:first-child {
-                        padding-right: 70px;
 
                         .val {
+                            margin: 0 auto;
                             width: 594px;
                         }
                     }
@@ -857,7 +911,7 @@
             }
 
             .content {
-                min-height: 4rem;
+                min-height: 5rem;
             }
 
             table {
