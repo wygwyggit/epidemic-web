@@ -63,27 +63,27 @@
                         </div>
                     </div>
                     <div class="list">
-                        <el-empty description="暂无数据" v-if="!list.length && !isLoading"></el-empty>
+                        <!-- <el-empty description="暂无数据" v-if="!list.length && !isLoading"></el-empty>
                         <template v-if="list.length && !isLoading">
                             <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail"
                                 @staking="doStaking" @cancel-staking="doCancelStaking" type="staking">
                             </item-card>
-                        </template>
-                        <!-- <div class="soon-box">
+                        </template> -->
+                        <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
                             <div>
                                 <p>Coming soon...</p>
                                 <p>Stay tuned!</p>
                             </div>
-                        </div> -->
+                        </div>
                     </div>
-                    <div class="page r" v-if="list.length && !isLoading">
+                    <!-- <div class="page r" v-if="list.length && !isLoading">
                         <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                             @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                             :page-size="Number(page.pageSize)" :total="Number(total)"
                             :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
                         </el-pagination>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 
@@ -92,11 +92,11 @@
 </template>
 
 <script>
-    import itemCard from '@/components/item-card'
+    //import itemCard from '@/components/item-card'
     export default {
         name: '',
         components: {
-            itemCard
+            //itemCard
         },
         props: {},
         data() {
