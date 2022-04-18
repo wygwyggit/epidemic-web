@@ -52,7 +52,7 @@
         "limit-int": "每日每个地址仅限20个。",
         "probability-int": "100%抽到NFT或Adoge代币。",
         "invitation-reward-int": "每次被邀请者打开一个盲盒，你将收到100万个Adoge代币。",
-        "invitation-reward-txt": "每打开一个盲盒，您将获得1,000,000 adogge奖励。",
+        "invitation-reward-txt": "每打开一个盲盒，您将获得1,000,000 adoge奖励。",
         "no-reward-yet": "暂无推广奖励",
         "received-suc": "领取成功",
         "history": "历史",

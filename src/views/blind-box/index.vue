@@ -171,10 +171,13 @@
                                 {{ item.prize }}
                             </td>
                             <td>
-                                <template v-if="item.received == 0">
+                                <template v-if="item.received == 0 && item.type == 1">
                                     <el-button type="primary" @click="doReceived(item.order_id)">{{
                     $t("blind-box.receive")
                   }}</el-button>
+                                </template>
+                                <template v-else-if="item.received == 0 && item.type == 2">
+                                    <span>{{$t("blind-box.receive")}}</span>
                                 </template>
                                 <template v-else-if="item.received == 1">
                                     <span>Received</span>
@@ -229,10 +232,13 @@
                                 {{ item.prize }}
                             </td>
                             <td>
-                                <template v-if="item.received == 0">
-                                    <el-button type="primary" @click="doReceived(item.order_id, 'drawer')">{{
+                                <template v-if="item.received == 0 && item.type == 1">
+                                    <el-button type="primary" @click="doReceived(item.order_id)">{{
                     $t("blind-box.receive")
                   }}</el-button>
+                                </template>
+                                <template v-else-if="item.received == 0 && item.type == 2">
+                                    <span>{{$t("blind-box.receive")}}</span>
                                 </template>
                                 <template v-else-if="item.received == 1">
                                     <span>Received</span>
@@ -647,7 +653,7 @@
         .banner {
             position: relative;
             padding-top: 0.65rem;
-            height: 440px;
+            padding-bottom: 4.5rem;
             background: url("../../assets/images/home-bg.png");
             background-size: cover;
             text-align: center;
@@ -749,7 +755,6 @@
         >.content-box {
             position: relative;
             padding-top: 135px;
-            height: 320px;
             background: #16161c;
             text-align: center;
 
