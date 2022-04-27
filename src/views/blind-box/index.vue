@@ -71,9 +71,8 @@
             </p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
-                <el-button type="primary" @click="openBlindBox">{{
-          $t("blind-box.open")
-        }}</el-button>
+                <el-button type="primary" :disabled="!isCanOpen" @click="openBlindBox">
+                <span>{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
             </div>
         </div>
         <div class="invitation-reward">
@@ -288,6 +287,7 @@
         data() {
             return {
                 prefixCls: "views-blind-box",
+                isCanOpen: false,
                 total: 0,
                 contract: null,
                 isShowResultDialog: false,
@@ -327,7 +327,8 @@
         watch: {},
         async created() {
             this.initData();
-            this.countTime();
+            this.getOpenStatus()
+            //this.countTime();
         },
         mounted() {
             eventBus.$on("connect", () => {
@@ -343,6 +344,14 @@
         },
         beforeDestroy() {},
         methods: {
+            getOpenStatus() {
+                myAjax({
+                    url: 'nft/blindbox_status',
+                    method: 'GET'
+                }).then(res => {
+                    this.isCanOpen = (res.data || {}).blindbox_status || false
+                })
+            },
             onSizeChange(size) {
                 this.page.curPage = 1
                 this.page.pageSize = size
@@ -540,7 +549,7 @@
                     this.$parent.doConnectAccount();
                     return false;
                 }
-                if (this.userInfo.left_chance <= 0) {
+                if ((this.userInfo || {}).left_chance <= 0) {
                     return false;
                 }
                 this.vote(act)

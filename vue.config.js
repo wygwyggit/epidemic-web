@@ -15,7 +15,7 @@ module.exports = {
         proxy: {
             '/api': {
                 // 目标 API 地址
-                target: 'https://adoge-api-test.ctstatus.com/',
+                target: 'https://adogenft.com/',
                 changeOrigin: true,
                 secure: false,
                 pathRewrite: {
