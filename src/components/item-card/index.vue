@@ -19,6 +19,7 @@
                         <div class="lv">LV-{{itemInfo.class}}</div>
                     </div>
                     <div class="btn-groups">
+                        <div class="deliver-btn btn">Deliver</div>
                         <div class="sale-btn btn" @click="sale(itemInfo.id)">{{$t("account.sale")}}</div>
                     </div>
                 </div>
@@ -184,6 +185,10 @@
                         &.sale-btn {
                             text-align: center;
                             background: #45B26B;
+                        }
+                        &.deliver-btn {
+                            margin-right: 5px;
+                            background: #F1AE00;
                         }
 
                         &.revise-btn {
