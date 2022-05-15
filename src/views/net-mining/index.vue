@@ -2,107 +2,327 @@
     <div :class="prefixCls">
         <div class="top">
             <div class="w">
-                <img src="../../assets/images/net-mining.png" alt="">
-                {{$t("common.net-mining")}}</div>
+                <div class="left">
+                    <img src="../../assets/images/net-mining.png" alt="">
+                    {{$t("common.net-mining")}}
+                </div>
+                <div class="right">
+                    <div class="net-n">
+                        <p>Pledged</p>
+                        <p style="margin-top:3px">12 NFTs</p>
+                    </div>
+                    <ul>
+                        <li>
+                            <p class="color blue">Blue</p>
+                            <p class="num">1</p>
+                        </li>
+                        <li>
+                            <p class="color red">Red</p>
+                            <p class="num">1</p>
+                        </li>
+                        <li>
+                            <p class="color orange">Orange</p>
+                            <p class="num">1</p>
+                        </li>
+                        <li>
+                            <p class="color yellow">Yellow</p>
+                            <p class="num">1</p>
+                        </li>
+                    </ul>
+                    <div class="received-box">
+                        <div class="my-reward">
+                            <img src="../../assets/images/net-header.png" alt="">
+                            <div>
+                                <p class="key">
+                                    Reward
+                                </p>
+                                <p class="value">100</p>
+                            </div>
+                        </div>
+                        <div class="opt">
+                            <el-button type="primary">Receive</el-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="main">
             <div class="w">
-                <div class="left">
-                    <ul>
-                        <li>
-                            <div>
-                                <p class="tit-txt">
-                                    {{$t("net-mining.participate")}}
-                                </p>
-                                <p class="val p-val">
-                                    <span>0</span>NFTs
-                                </p>
+                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
+                <div class="content-list">
+                    <template v-if="currentTab === 'Not Pledged' && list.length">
+                        <div class="select-wrap">
+                            <div class="select-info">
+                                <span class="txt">Please click on the NFT card to select</span>
+                                <span class="selected-num">
+                                    Selected: {{selectIds.length}}
+                                </span>
+                                <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
                             </div>
-
-                        </li>
-                        <li>
-                            <div>
-                                <p class="tit-txt">
-                                    {{$t("net-mining.total-reward")}}
-                                </p>
-                                <p class="val">
-                                    <span>0</span> Adoge
-                                </p>
-                            </div>
-
-                        </li>
-                        <li>
-                            <div>
-                                <p class="tit-txt">
-                                    {{$t("net-mining.reward")}}
-                                </p>
-                                <p class="val reward-val">
-                                    <span>0</span> Adoge
-                                </p>
-                            </div>
-                            <el-button type="primary"> {{$t("blind-box.receive")}}</el-button>
-                            <p class="tip">Update every day at <span class="timer">0:00 UTC</span> </p>
-
-                        </li>
-                    </ul>
-                </div>
-                <div class="right">
-                    <div class="top-search">
-                        <div class="total">
-                            <span class="txt">{{total}} NFTs</span>
+                            <div class="pledge" @click="doPledge">Pledge Now</div>
                         </div>
-                        <div class="search">
-                            <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
-                                <a href="javascript:;" slot="append" class="search-icon"></a>
-                            </el-input>
-                            <el-select v-model="query.latest" placeholder="">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <div class="select-wrap-h5">
+                            Please click on the NFT card to select
                         </div>
-                    </div>
-                    <div class="list">
-                        <!-- <el-empty description="暂无数据" v-if="!list.length && !isLoading"></el-empty>
-                        <template v-if="list.length && !isLoading">
-                            <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail"
-                                @staking="doStaking" @cancel-staking="doCancelStaking" type="staking">
-                            </item-card>
-                        </template> -->
-                        <div class="soon-box">
-                            <img src="../../assets/images/soon.png" alt="">
+                        <div class="select-info-h5">
                             <div>
-                                <p>Coming soon...</p>
-                                <p>Stay tuned!</p>
+                                <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+                                <span class="selected-num">
+                                    Selected: {{selectIds.length}}
+                                </span>
                             </div>
+                            <el-button type="primary" @click="doPledgeH5">Pledge Now</el-button>
                         </div>
-                    </div>
-                    <!-- <div class="page r" v-if="list.length && !isLoading">
-                        <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
-                            @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                            :page-size="Number(page.pageSize)" :total="Number(total)"
-                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
-                        </el-pagination>
-                    </div> -->
+                    </template>
+                    <template v-if="list.length && !isLoading">
+                        <ul>
+                            <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)"
+                                :class="{'select': item.select}">
+                                <div class="mark" v-if="item.select">
+
+                                </div>
+                                <div class="title">
+                                    <div class="left">
+                                        #{{item.idx}}
+                                    </div>
+                                    <div class="right">
+                                        {{item.classes}}
+                                    </div>
+                                </div>
+                                <div class="img-box">
+                                    <img :src="item.images" alt="">
+                                </div>
+                                <div class="name">
+                                    {{item.name}}
+                                </div>
+                            </li>
+                        </ul>
+                    </template>
+                    <template v-if="!list.length && !isLoading">
+                        <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
+                    </template>
                 </div>
             </div>
 
+
         </div>
+        <el-dialog title="Pledge Information" :visible.sync="dialogVisible" width="480px" custom-class="pledge-dialog">
+            <div class="info-item pledge-content">
+                <div class="tit">
+                    Please confirm the pledge content
+                </div>
+                <div class="con">
+                    <ul>
+                        <li>
+                            <div class="key blue">Blue</div>
+                            <div class="val">1</div>
+                        </li>
+                        <li>
+                            <div class="key red">Red</div>
+                            <div class="val">1</div>
+                        </li>
+                        <li>
+                            <div class="key orange">Orange</div>
+                            <div class="val">1</div>
+                        </li>
+                        <li>
+                            <div class="key yellow">Yellow</div>
+                            <div class="val">1</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="info-item time-content">
+                <div class="tit">
+                    Pledge time
+                </div>
+                <div class="con">
+                    <div v-for="(item, index) of pledgeTimes" :key="index"
+                        :class="{'select': item.id === pledgeParams.time}" @click="() => pledgeParams.time = item.id">
+                        {{item.title}}
+                    </div>
+                </div>
+            </div>
+            <div class="info-item balance-content">
+                <div class="tit">
+                    Pledge tickets
+                </div>
+                <div class="con">
+                    <div class="left">
+                        <p><span>0.8</span>AmazingTeam</p>
+                        <p class="balance">Balance: 100</p>
+                    </div>
+                    <div class="right">
+                        <div class="buy">
+                            Buy
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-wrap">
+                <el-button type="primary">Confirm</el-button>
+                <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
+            </div>
+        </el-dialog>
+        <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt">
+            <div class="content">
+                <div class="info-item pledge-content">
+                    <div class="tit">
+                        Please confirm the pledge content
+                    </div>
+                    <div class="con">
+                        <ul>
+                            <li>
+                                <div class="key blue">Blue</div>
+                                <div class="val">1</div>
+                            </li>
+                            <li>
+                                <div class="key red">Red</div>
+                                <div class="val">1</div>
+                            </li>
+                            <li>
+                                <div class="key orange">Orange</div>
+                                <div class="val">1</div>
+                            </li>
+                            <li>
+                                <div class="key yellow">Yellow</div>
+                                <div class="val">1</div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="info-item time-content">
+                    <div class="tit">
+                        Pledge time
+                    </div>
+                    <div class="con">
+                        <div v-for="(item, index) of pledgeTimes" :key="index"
+                            :class="{'select': item.id === pledgeParams.time}"
+                            @click="() => pledgeParams.time = item.id">
+                            {{item.title}}
+                        </div>
+                    </div>
+                </div>
+                <div class="info-item balance-content">
+                    <div class="tit">
+                        Pledge tickets
+                    </div>
+                    <div class="con">
+                        <div class="left">
+                            <p><span>0.8</span>AmazingTeam</p>
+                            <p class="balance">Balance: 100
+                                <a href="javascript:;" class="buy">buy</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-wrap">
+                    <!-- <el-button type="primary">Confirm</el-button> -->
+                    <el-button type="info" disabled>Insufficient Balance</el-button>
+                </div>
+            </div>
+
+        </el-drawer>
     </div>
 </template>
 
 <script>
     //import itemCard from '@/components/item-card'
+    import PageTabs from '@/components/page-tabs'
+    import emptyImage from '@/assets/images/empty.png'
     export default {
         name: '',
         components: {
+            PageTabs
             //itemCard
         },
         props: {},
         data() {
             return {
                 prefixCls: 'views-net-mining',
+                emptyImage,
+                tabs: [{
+                    title: 'Pledged',
+                    num: 8
+                }, {
+                    title: 'Not Pledged',
+                    num: 0
+                }],
+                currentTab: 'Pledged',
+                list: [{
+                    id: 0,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im4.png',
+                    classes: '',
+                    name: 'MANCITY CLUB',
+                    select: false,
+                }, {
+                    id: 2,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im1.png',
+                    classes: '',
+                    name: 'SU BINGTIAN',
+                    select: false,
+                }, {
+                    id: 3,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im2.png',
+                    classes: '',
+                    name: 'KOBE BEAN BRYANT',
+                    select: false,
+                }, {
+                    id: 4,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im6.png',
+                    classes: '',
+                    name: 'EILEEN GU',
+                    select: false,
+                }, {
+                    id: 5,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im5.png',
+                    classes: '',
+                    name: 'KOBE BEAN BRYANT',
+                    select: false,
+                }, {
+                    id: 6,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im1.png',
+                    classes: '',
+                    name: 'KOBE BEAN BRYANT',
+                    select: false,
+                }, {
+                    id: 7,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im2.png',
+                    classes: 'Red',
+                    name: 'KOBE BEAN BRYANT',
+                    select: false,
+                }, {
+                    id: 8,
+                    idx: '00001',
+                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im3.png',
+                    classes: '',
+                    name: 'EILEEN GU',
+                    select: false,
+                }],
+                isSelectAll: false,
                 isLoading: false,
+                dialogVisible: false,
+                drawer: false,
+                pledgeTimes: [{
+                    id: 1,
+                    title: '1 day'
+                }, {
+                    id: 2,
+                    title: '10 day'
+                }, {
+                    id: 3,
+                    title: '30 day'
+                }],
+                pledgeParams: {
+                    time: 1
+                },
                 page: {
                     pageSize: 20,
                     curPage: 1
@@ -117,43 +337,16 @@
                     key: 'latest',
                     label: 'latest'
                 }],
-                list: [{
-                    id: '010001',
-                    color: 'yellow',
-                    class: 2,
-                    name: '哈哈哈',
-                    on_staking: true
-                }, {
-                    id: '010001',
-                    color: 'yellow',
-                    class: 2,
-                    name: '哈哈哈',
-                    on_staking: false
-                }, {
-                    id: '010001',
-                    color: 'yellow',
-                    class: 2,
-                    name: '哈哈哈',
-                    on_staking: true
-                }, {
-                    id: '010001',
-                    color: 'yellow',
-                    class: 2,
-                    name: '哈哈哈',
-                    on_staking: true
-                }, {
-                    id: '010001',
-                    color: 'yellow',
-                    class: 2,
-                    name: '哈哈哈',
-                    on_staking: true
-                }]
             }
         },
         computed: {
             placeholderTxt() {
                 return this.$t("account.search-id-name")
-            }
+            },
+            selectIds() {
+                return this.list.filter(x => x.select)
+            },
+
         },
         watch: {},
         created() {
@@ -164,6 +357,30 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doPledge() {
+                this.dialogVisible = true
+            },
+            doPledgeH5() {
+                this.drawer = true
+            },
+            doSelectAll(flag) {
+                this.list = this.list.map(x => ({
+                    ...x,
+                    select: flag
+                }))
+            },
+            doSelect(id) {
+                const item = this.list.find(x => x.id === id)
+                item.select = !item.select
+                if (this.list.length === this.selectIds.length) {
+                    this.isSelectAll = true
+                } else {
+                    this.isSelectAll = false
+                }
+            },
+            onSelectTab(item) {
+                this.currentTab = item.title
+            },
             onPageChange() {
 
             },
@@ -198,6 +415,227 @@
     $prefixCls: "views-net-mining";
 
     .#{$prefixCls} {
+        .el-drawer {
+            height: 60% !important;
+            background: #000;
+            overflow-y: scroll;
+
+            #el-drawer__title {
+                padding: .4rem;
+                margin-bottom: .16rem;
+                color: #fff;
+                font-size: .533333333333333rem;
+            }
+
+            .content {
+                padding: 0 .8rem;
+            }
+
+            .info-item {
+                .tit {
+                    height: .853333333333333rem;
+                    line-height: .853333333333333rem;
+                    color: #777E90;
+                    font-size: .426666666666667rem;
+
+                }
+
+                .con {
+                    margin: 10px 0;
+                }
+            }
+
+            .pledge-content {
+                .con {
+                    border: 1px solid #29374B;
+                    border-radius: .266666666666667rem;
+
+                    ul {
+                        li {
+                            display: flex;
+                            height: 40px;
+                            line-height: 40px;
+                            text-align: center;
+                            border-bottom: 1px solid #29374B;
+                            font-size: .48rem;
+
+                            .val {
+                                flex: 1;
+                                color: #fff;
+                                border-left: 1px solid #29374B;
+                            }
+
+                            .key {
+                                width: 2.666666666666667rem;
+                            }
+
+                            &:last-child {
+                                border: 0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .time-content {
+                .con {
+                    display: flex;
+                    justify-content: space-between;
+
+                    div {
+                        width: 2.666666666666667rem;
+                        height: 1.066666666666667rem;
+                        line-height: 1.066666666666667rem;
+                        text-align: center;
+                        border-radius: .266666666666667rem;
+                        border: 1px solid #29374B;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: .48rem;
+
+                        &.select {
+                            background: #32A3FF;
+                        }
+                    }
+                }
+            }
+
+            .balance-content {
+
+                .left {
+                    color: #fff;
+                    font-size: .64rem;
+                    span {
+                        margin-right: .16rem;
+                    }
+                    .balance {
+                        margin-top: .16rem;
+                        font-size: .373333333333333rem;
+                        color: #777E90;
+                    }
+                }
+
+                .buy {
+                    margin-left: .266666666666667rem;
+                    color: #45B26B;
+                }
+            }
+
+            .btn-wrap {
+                padding-bottom: .72rem;
+                margin-top: .586666666666667rem;
+
+                .el-button {
+                    width: 100%;
+                }
+            }
+        }
+
+        .pledge-dialog {
+            .info-item {
+                .tit {
+                    height: 32px;
+                    line-height: 32px;
+                    color: #777E90;
+                    font-size: 20px;
+
+                }
+
+                .con {
+                    margin: 10px 0;
+                }
+            }
+
+            .pledge-content {
+                .con {
+                    border: 1px solid #29374B;
+                    border-radius: 5px;
+
+                    ul {
+                        li {
+                            display: flex;
+                            height: 40px;
+                            line-height: 40px;
+                            text-align: center;
+                            border-bottom: 1px solid #29374B;
+
+                            .val {
+                                flex: 1;
+                                color: #fff;
+                                border-left: 1px solid #29374B;
+                            }
+
+                            .key {
+                                width: 120px;
+                            }
+
+                            &:last-child {
+                                border: 0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .time-content {
+                .con {
+                    display: flex;
+                    justify-content: space-between;
+
+                    div {
+                        width: 130px;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: 5px;
+                        border: 1px solid #29374B;
+                        color: #fff;
+                        cursor: pointer;
+
+                        &.select {
+                            background: #32A3FF;
+                        }
+                    }
+                }
+            }
+
+            .balance-content {
+                .con {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .left {
+                    color: #fff;
+                    font-size: 24px;
+
+                    .balance {
+                        margin-top: 5px;
+                        font-size: 16px;
+                        color: #777E90;
+                    }
+                }
+
+                .buy {
+                    width: 130px;
+                    height: 40px;
+                    line-height: 40px;
+                    text-align: center;
+                    background: #45B26B;
+                    color: #fff;
+                    border-radius: 10px;
+                    cursor: pointer;
+                }
+            }
+
+            .btn-wrap {
+                margin-top: 43px;
+
+                .el-button {
+                    width: 100%;
+                }
+            }
+        }
 
         .el-input__inner,
         .el-select {
@@ -225,146 +663,241 @@
         .top {
             padding: 60px 0 57px;
             background: #0B0F15;
-            color: #fff;
-            font-size: .64rem;
-            font-weight: 600;
-
-            img {
-                display: none;
-            }
-        }
-
-        .main {
-            background: #14181f;
-            padding: 38px 0;
 
             .w {
                 display: flex;
-                justify-content: space-between;
-            }
 
-            .left {
-                margin-right: 20px;
-                width: 265px;
-                background: #000;
-                border: 1px solid #29374B;
-                border-radius: 10px;
+                .left {
+                    color: #fff;
+                    font-size: .64rem;
+                    font-weight: 600;
 
-                li {
-                    padding: 30px 0;
-                    text-align: center;
-
-                    &:nth-child(1),
-                    &:nth-child(2) {
-                        border-bottom: 1px solid #29374B;
-                    }
-
-                    .tit-txt {
-                        font-size: 16px;
-                        color: #777E90;
-                    }
-
-                    .val {
-                        margin-top: 10px;
-                        font-size: 20px;
-                        color: #fff;
-
-                        &.p-val {
-                            font-size: 32px;
-                            font-weight: 600;
-                        }
-
-                        &.reward-val {
-                            font-weight: 600;
-                            color: $--color-primary;
-                        }
-                    }
-
-                    .el-button {
-                        padding: 0;
-                        width: 90px;
-                        height: 30px;
-                        line-height: 30px;
-                        text-align: center;
-                        margin-top: 10px;
-
-                    }
-
-                    .tip {
-                        margin-top: 26px;
-                        color: #777E90;
-                        font-size: 12px;
-
-                        .timer {
-                            color: $--color-primary;
-                        }
-                    }
-                }
-            }
-
-            .right {
-                flex: 1;
-
-                .list {
-                    .components-item-card {
-                        float: left;
-                        margin-top: .32rem;
-                        margin-right: 20px;
-                        width: 265px;
-
-                        &:nth-child(3n) {
-                            margin-right: 0;
-                        }
-                    }
-
-                    .soon-box {
-                        position: relative;
-                        width: max-content;
-                        margin: 63px auto 0;
-                        text-align: center;
-
-                        img {
-                            width: 230px;
-                            height: 230px;
-                        }
-
-                        div {
-                            position: absolute;
-                            right: -60px;
-                            top: 8px;
-                            color: #FFE2C3;
-                            font-size: 18px;
-                            text-align: left;
-                        }
-                    }
-                }
-
-                .top-search {
-                    display: flex;
-                    justify-content: space-between;
-                }
-
-                .search {
-                    display: flex;
-                }
-
-                .total {
-                    font-size: 32px;
-
-                    .txt {
-                        color: $--color-success;
-                    }
-
-                    .filter {
+                    img {
                         display: none;
                     }
                 }
 
-                .input-keywords {
-                    width: 265px;
-                    margin-right: 20px;
-                    background: #14181f;
+                .right {
+                    display: flex;
+                    align-items: center;
+                    padding: 18px 20px;
+                    margin-left: 71px;
+                    border: 1px solid #29374B;
+                    border-radius: 12px 12px 12px 12px;
+
+                    .net-n {
+                        margin-right: 20px;
+
+                        p:first-child {
+                            color: #777E90;
+                            font-size: 14px;
+                        }
+
+                        p:last-child {
+                            color: #fff;
+                            font-size: 20px;
+                        }
+                    }
+
+                    ul {
+                        li {
+                            position: relative;
+                            float: left;
+                            padding: 0 20px;
+                            text-align: center;
+
+                            &::after {
+                                content: "";
+                                width: 1px;
+                                height: 18px;
+                                position: absolute;
+                                right: 0;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                background: #29374B;
+                            }
+
+                            &:last-child::after {
+                                display: none;
+                            }
+
+                            .color {
+                                font-size: 14px;
+                                margin-bottom: 5px;
+                            }
+
+                            .num {
+                                color: #fff;
+                                font-size: 20px;
+                            }
+                        }
+                    }
+
+                    .received-box {
+                        display: flex;
+                        align-items: center;
+                        padding-left: .266666666666667rem;
+                        border-left: 1px solid #29374B;
+
+                        .my-reward {
+                            display: flex;
+                            align-items: center;
+                            margin-right: .533333333333333rem;
+
+                            img {
+                                margin-right: .16rem;
+                                width: 50px;
+                                height: 50px;
+                            }
+
+                            .value {
+                                color: #BF8368;
+                                font-size: 20px;
+                                text-align: left;
+                            }
+
+                            .key {
+                                color: #777E90;
+                                font-size: 14px;
+                            }
+                        }
+
+                        .opt {
+                            .el-button {
+                                padding: .16rem .3rem;
+                                border: 0;
+                                background: #AC6F51;
+                            }
+                        }
+                    }
                 }
+            }
+
+
+        }
+
+        .main {
+            background: #14181f;
+            padding: .506666666666667rem 0 1.946666666666667rem;
+
+            .content-list {
+                overflow: hidden;
+
+                .select-wrap {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: .266666666666667rem;
+
+                    .select-info {
+                        padding: 0 24px;
+                        height: 60px;
+                        line-height: 60px;
+                        background: #29374B;
+                        border-radius: 10px;
+                        font-size: 20px;
+                        flex: 1;
+
+                        .txt {
+                            margin-right: 100px;
+                            color: #FD671D;
+
+                        }
+
+                        .selected-num {
+                            margin-right: 80px;
+                            color: #fff;
+                        }
+                    }
+
+                    .pledge {
+                        margin-left: 20px;
+                        width: 265px;
+                        height: 60px;
+                        line-height: 60px;
+                        text-align: center;
+                        background: #777E90;
+                        color: #fff;
+                        border-radius: 10px;
+                        cursor: pointer;
+                    }
+                }
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: auto;
+                    margin: 0 -0.133333333333333rem;
+                }
+
+                li {
+                    position: relative;
+                    width: 3.533333333333333rem;
+                    flex-shrink: 0;
+                    margin: .266666666666667rem .133333333333333rem 0;
+                    padding: .266666666666667rem .16rem;
+                    background: #1D2633;
+                    border-radius: .133333333333333rem;
+                    border: 1px solid #32A3FF;
+                    cursor: pointer;
+
+                    .mark {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, .8) url('../../assets/images/select.png');
+                        background-size: .8rem .8rem;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        border: 1px solid #32A3FF;
+                        border-radius: .133333333333333rem;
+                    }
+
+                    &.select {
+                        border: 0;
+                    }
+
+                    .title {
+                        display: flex;
+                        justify-content: space-between;
+                        font-size: .186666666666667rem;
+
+                        .left {
+
+                            color: #C4C4C4;
+                        }
+
+                        .right {
+                            color: #fff;
+                        }
+                    }
+
+                    .img-box {
+                        width: 100%;
+                        text-align: center;
+
+                        img {
+                            margin: .16rem 0;
+                            width: 100%;
+                            height: auto;
+                            border-radius: .16rem;
+                        }
+
+                    }
+
+                    .name {
+                        text-align: center;
+                        color: #fff;
+                        font-size: .213333333333333rem;
+                    }
+                }
+
+            }
+
+            .select-info-h5,
+            .select-wrap-h5 {
+                display: none;
             }
         }
     }
@@ -372,17 +905,69 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             .top {
-                padding: .533333333333333rem 0 .133333333333333rem;
+                padding: .533333333333333rem .5rem 0;
                 background: #14181f;
                 font-size: .64rem;
                 text-align: center;
 
-                img {
-                    display: inline-block;
-                    width: .8rem;
-                    height: .8rem;
-                    vertical-align: sub;
+                .w {
+                    flex-direction: column;
+
+                    .left {
+                        img {
+                            display: inline-block;
+                            width: .8rem;
+                            height: .8rem;
+                            vertical-align: sub;
+                        }
+                    }
+
+                    .right {
+                        position: relative;
+                        flex-direction: column;
+                        margin: .266666666666667rem 0 0 0;
+                        padding: .266666666666667rem 0;
+                        .net-n {
+                            position: absolute;
+                            top: .55rem;
+                            left: .5rem;
+
+                            p:first-child {
+                                font-size: .32rem;
+                            }
+
+                            p:last-child {
+                                font-size: .426666666666667rem;
+                            }
+                        }
+
+                        ul {
+                            display: flex;
+                            margin-top: 2rem;
+                            padding-top: .16rem;
+                            border-top: 1px solid #29374B;
+                        }
+
+                        .received-box {
+                            position: absolute;
+                            right: .5rem;
+                            top: .5rem;
+
+                            .my-reward {
+                                img {
+                                    width: 40px;
+                                    height: 40px;
+                                }
+                            }
+
+
+                            .opt {}
+                        }
+
+                    }
                 }
+
+
             }
 
             .main {
@@ -390,136 +975,56 @@
                 padding: .5rem;
 
                 .w {
-                    flex-direction: column;
-                }
+                    .content-list {
+                        li {
 
-                .left {
-                    width: 100%;
-                    margin-right: 0;
-                    margin-bottom: .8rem;
-                    background: transparent;
-
-                    li {
-                        padding: .666666666666667rem 0 .4rem .5rem;
-                        width: 50%;
-                        float: left;
-                        border: none !important;
-                        text-align: left;
-
-                        .tit-txt {
-                            font-size: .373333333333333rem;
-                        }
-
-                        .val {
-                            font-size: .426666666666667rem !important;
-                        }
-
-                        &:first-child>div {
-                            border-right: 1px solid #29374B !important;
-                        }
-
-                        &:last-child {
-                            display: flex;
-                            padding: .266666666666667rem .533333333333333rem;
-                            width: 100%;
-                            border-top: 1px solid #29374B !important;
-
-                            >div {
-                                flex: 1;
-                            }
-
-                            .el-button {
-                                width: 2.4rem;
-                                height: .8rem;
-                                line-height: .8rem;
-                            }
-
-                            .tip {
-                                display: none;
-                            }
+                            border: 1px solid #29374B;
+                            width: 4rem;
                         }
                     }
                 }
 
-                .right {
+                .select-wrap-h5 {
+                    display: block !important;
+                    margin-top: .26rem;
+                    height: .853333333333333rem;
+                    line-height: .853333333333333rem;
+                    text-align: center;
+                    color: #FD671D;
+                    font-size: .373333333333333rem;
+                }
+
+                .select-info-h5 {
+                    display: block;
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    padding: .693333333333333rem .533333333333333rem 0;
                     width: 100%;
+                    height: 3.733333333333333rem;
+                    z-index: 99;
+                    background: linear-gradient(360deg, #131922 0%, rgba(19, 25, 34, 0) 100%);
 
-                    .top-search {
-                        flex-direction: column;
-
-                        .total {
-                            display: flex;
-                            justify-content: space-between;
-                            font-size: .48rem;
-
-                            .filter {
-                                display: block;
-                                padding-left: .6rem;
-                                color: #777E90;
-                                background: url('../../assets/images/filter.png');
-                                background-repeat: no-repeat;
-                                background-position: left center;
-
-                                i {
-                                    color: $--color-success;
-                                }
-                            }
-                        }
-
-                        .search {
-                            margin-top: .4rem;
-
-                            .input-keywords {
-                                flex: 1;
-                                margin-right: .266666666666667rem;
-                            }
-
-                            .el-input {
-                                font-size: .2rem;
-                            }
-
-                            .el-input-group__append {
-                                padding: 0 .2rem;
-
-                                .search-icon {
-                                    width: .426666666666667rem;
-                                    height: .426666666666667rem;
-                                    background-size: contain;
-                                }
-                            }
-                        }
+                    >div {
+                        display: flex;
+                        justify-content: space-between;
+                        margin-bottom: .16rem;
+                        color: #fff;
+                        font-size: .426666666666667rem;
                     }
 
-                    .list {
-                        .components-item-card {
-                            margin-right: .266666666666667rem;
-                            width: 48.5%;
-
-                            >li {
-                                margin-bottom: 0;
-                            }
-
-
-
-                            &:nth-child(3n) {
-                                margin-right: .266666666666667rem;
-                            }
-
-                            &:nth-child(2n) {
-                                margin-right: 0 !important;
-                            }
-
-                        }
-
-                        .soon-box {
-                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
-                        }
-                    }
-
-                    .page {
-                        margin-top: .266666666666667rem;
+                    .el-button {
                         width: 100%;
+                        height: 1.493333333333333rem;
+                        line-height: 1.493333333333333rem;
+                        padding: 0;
+                        text-align: center;
+
                     }
+                }
+
+                .select-wrap {
+                    display: none !important;
                 }
             }
         }
