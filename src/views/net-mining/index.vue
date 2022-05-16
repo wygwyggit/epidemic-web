@@ -8,24 +8,24 @@
                 </div>
                 <div class="right">
                     <div class="net-n">
-                        <p>Pledged</p>
+                        <p>{{$t("common.pledged")}}</p>
                         <p style="margin-top:3px">12 NFTs</p>
                     </div>
                     <ul>
                         <li>
-                            <p class="color blue">Blue</p>
+                            <p class="color blue">{{$t("account.blue")}}</p>
                             <p class="num">1</p>
                         </li>
                         <li>
-                            <p class="color red">Red</p>
+                            <p class="color red">{{$t("account.red")}}</p>
                             <p class="num">1</p>
                         </li>
                         <li>
-                            <p class="color orange">Orange</p>
+                            <p class="color orange">{{$t("account.orange")}}</p>
                             <p class="num">1</p>
                         </li>
                         <li>
-                            <p class="color yellow">Yellow</p>
+                            <p class="color yellow">{{$t("account.yellow")}}</p>
                             <p class="num">1</p>
                         </li>
                     </ul>
@@ -34,13 +34,13 @@
                             <img src="../../assets/images/net-header.png" alt="">
                             <div>
                                 <p class="key">
-                                    Reward
+                                    {{$t("net-mining.reward")}}
                                 </p>
                                 <p class="value">100</p>
                             </div>
                         </div>
                         <div class="opt">
-                            <el-button type="primary">Receive</el-button>
+                            <el-button type="primary">{{$t("blind-box.receive")}}</el-button>
                         </div>
                     </div>
                 </div>
@@ -242,10 +242,10 @@
                 prefixCls: 'views-net-mining',
                 emptyImage,
                 tabs: [{
-                    title: 'Pledged',
+                    title: this.$t("common.ypledged"),
                     num: 8
                 }, {
-                    title: 'Not Pledged',
+                    title: this.$t("common.not-pledged"),
                     num: 0
                 }],
                 currentTab: 'Pledged',
