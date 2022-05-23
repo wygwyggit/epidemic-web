@@ -180,7 +180,6 @@
 <script>
     import myAjax from '@/utils/ajax.js'
     import itemCard from '@/components/item-card'
-    import cookie from '@/utils/cookie.js'
     export default {
         name: '',
         components: {
@@ -228,7 +227,6 @@
             },
         },
         created() {
-            this.account = cookie.getCookie('__account__')
             Promise.all([this.getTotalNets(), this.getLiist()]).then(res => {
                 this.isLoading = false
             })
@@ -253,9 +251,6 @@
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'nft/count',
-                        data: {
-                            addr: this.account,
-                        }
                     }).then(res => {
                         if (res.ok && res.data) {
                             this.total = res.data.count || 0
@@ -272,7 +267,6 @@
                     myAjax({
                         url: 'user/nft_list',
                         data: {
-                            addr: this.account,
                             page: this.page.curPage,
                             per_page: this.page.pageSize,
                             extra: {

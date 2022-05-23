@@ -1,4 +1,5 @@
 import axios from 'axios'
+import Cookie from "@/utils/cookie.js";
 import {
     apiBasePath,
     napiBasePath,
@@ -21,6 +22,8 @@ const myAjax = (options) => {
             data,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
+                'token': Cookie.getCookie('ad_token') || '',
+                'addr': Cookie.getCookie("__account__") || '',
                 ...(options.headers || {})
             },
         }).then(json => {

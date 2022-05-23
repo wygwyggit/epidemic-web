@@ -50,7 +50,7 @@
             <div class="w">
                 <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
                 <div class="content-list">
-                    <template v-if="currentTab === 'Not Pledged' && list.length">
+                    <template v-if="(currentTab === 'Not Pledged' || currentTab === '未质押') && list.length">
                         <div class="select-wrap">
                             <div class="select-info">
                                 <span class="txt">Please click on the NFT card to select</span>

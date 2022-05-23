@@ -311,18 +311,32 @@ export default {
         this.account = accounts[0];
         Cookie.setCookie("__account__", this.account);
         flag && eventBus.$emit("connect");
+        this.getToken()
         this.regUser();
       }
       //this.isShowConnectDialog = false
+    },
+    getToken() {
+      myAjax({
+        url: 'api/auth',
+        data: {
+          addr: this.account,
+          user_sign: this.account
+        }
+      }).then(res => {
+        if (res.ok) {
+          res.token && (Cookie.setCookie('ad_token', res.data.token))
+        }
+        regUser()
+      })
     },
     regUser() {
       myAjax({
         url: "user/sign",
         data: {
-          addr: this.account,
           inviter: Cookie.getCookie("__rewardRef__"),
         },
-      });
+      })
     },
     chainChanged(chainId) {
       this.chainId = parseInt(chainId, 16);
