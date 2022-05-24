@@ -24,7 +24,12 @@
         "cancel-sale-tip": "Cancel the sale",
         "yes": "Yes",
         "net-price-modified-tip": "Your NFT price will be modified",
-        "please-enter-price": "Please enter the price"
+        "please-enter-price": "Please enter the price",
+        "deliver": "Deliver",
+        "enter-address": "Enter address",
+        "enter-ad-tip": "Please enter recipient address",
+        "remain-times": "Remaining times today",
+        "transferred-tip": "Your NFT will be transferred"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -100,6 +105,8 @@
         "sale": "Sale"
     },
     "marketplace": {
+        "nfts": "NFTs",
+        "other": "Other",
         "all": "All",
         "last-24": "Last 24h",
         "7-days": "7 days",

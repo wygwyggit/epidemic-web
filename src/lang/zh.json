@@ -24,7 +24,12 @@
         "cancel-sale-tip": "取消出售",
         "yes": "确认",
         "net-price-modified-tip": "你的NFT价格将会被修改",
-        "please-enter-price": "请输入价格"
+        "please-enter-price": "请输入价格",
+        "deliver": "赠送",
+        "enter-address": "赠送地址",
+        "enter-ad-tip": "请输入接收地址",
+        "remain-times": "今日剩余赠送次数",
+        "transferred-tip": "您的NFT将被转移"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -99,6 +104,8 @@
         "sale": "出售"
     },
     "marketplace": {
+        "nfts": "NFTs",
+        "other": "其他",
         "all": "All",
         "last-24": "Last 24h",
         "7-days": "7 days",

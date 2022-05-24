@@ -84,7 +84,7 @@
                         <el-empty description="暂无数据" v-if="!netList.length && !isLoading"></el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
-                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" type="sale">
+                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver" type="sale">
                             </item-card>
                         </template>
 
@@ -174,16 +174,19 @@
                 <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
             </div>
         </el-dialog>
+        <deliver-dialog v-if="isShowDeliverDialog"></deliver-dialog>
     </div>
 </template>
 
 <script>
     import myAjax from '@/utils/ajax.js'
     import itemCard from '@/components/item-card'
+    import DeliverDialog from '@/components/deliver-dialog'
     export default {
         name: '',
         components: {
-            itemCard
+            itemCard,
+            DeliverDialog
         },
         props: {},
         data() {
@@ -202,6 +205,7 @@
                 checkListFilter: [],
                 checkListLvel: [],
                 checkListSale: [],
+                isShowDeliverDialog: false,
                 isShowFilter: false,
                 saleReviseDialog: false,
                 saleReviseDialogTitle: '',
@@ -238,6 +242,10 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doDeliver(row) {
+                this.currentItem = row
+                this.isShowDeliverDialog = true
+            },
             onSizeChange(size) {
                 this.page.curPage = 1
                 this.page.pageSize = size

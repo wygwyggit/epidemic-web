@@ -19,7 +19,7 @@
                         <div class="lv">LV-{{itemInfo.class}}</div>
                     </div>
                     <div class="btn-groups">
-                        <div class="deliver-btn btn">Deliver</div>
+                        <div class="deliver-btn btn" @click="doDeliver(itemInfo)">{{$t("common.deliver")}}</div>
                         <div class="sale-btn btn" @click="sale(itemInfo.id)">{{$t("account.sale")}}</div>
                     </div>
                 </div>
@@ -83,6 +83,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doDeliver(row) {
+                this.$emit('deliver', row)
+            },
             doRevise(row) {
                 this.$emit('revise', row)
             },

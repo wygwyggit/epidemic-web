@@ -54,7 +54,24 @@
         </div>
         <div class="main">
             <div class="w">
-                <div class="left">
+                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
+                <div class="top-search">
+                    <div class="filter-btn">
+                        <img src="../../assets/images/filter.png" alt="">
+                        {{$t("account.filter")}}
+                    </div>
+                    <div class="search">
+                        <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
+                            <a href="javascript:;" slot="append" class="search-icon"></a>
+                        </el-input>
+                        <el-select v-model="query.latest" placeholder="">
+                            <el-option v-for="item in options" :key="item.value" :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </div>
+                <!-- <div class="left">
                     <ul>
                         <li>
                             <div class="title">
@@ -134,7 +151,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -191,13 +208,24 @@
 </template>
 
 <script>
+    import PageTabs from '@/components/page-tabs'
     export default {
         name: '',
-        components: {},
+        components: {
+            PageTabs
+        },
         props: {},
         data() {
             return {
                 prefixCls: 'views-market-place',
+                tabs: [{
+                    title: this.$t("marketplace.nfts"),
+                    num: 8
+                }, {
+                    title: this.$t("marketplace.other"),
+                    num: 0
+                }],
+                currentTab: 'NFTs',
                 checkListFilter: [],
                 checkListSale: [],
                 checkListLvel: [],
@@ -243,6 +271,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            onSelectTab(item) {
+                this.currentTab = item.title
+            },
             doClearSearchQuery() {
 
             },
@@ -377,9 +408,15 @@
 
         .el-input__inner,
         .el-select {
-            border-color: #004D8C;
+            border-color: #29374B;
             background: #14181f;
             color: #777E90;
+            &::placeholder {
+                 color: #777E90;
+            }
+            &:hover {
+                border-color: #29374B;
+            }
         }
 
         .input-keywords .el-input__inner {
@@ -388,13 +425,14 @@
 
         .el-input-group__append {
             background: inherit;
-            border-color: #004D8C;
+            border-color: #29374B;
 
             .search-icon {
                 display: inline-block;
                 width: 24px;
                 height: 24px;
                 background: url('../../assets/images/icon-search.png');
+                background-size: contain;
             }
         }
 
@@ -402,9 +440,50 @@
             padding: 38px 0;
             background: #14181f;
 
-            .w {
+            .top-search {
                 display: flex;
                 justify-content: space-between;
+                margin: 20px 0;
+
+                .filter-btn {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    width: 1.56rem;
+                    height: .64rem;
+                    border: 1px solid #29374B;
+                    font-size: .24rem;
+                    color: #777E90;
+                    border-radius: .066666666666667rem;
+                    cursor: pointer;
+
+                    img {
+                        width: .266666666666667rem;
+                        height: .266666666666667rem;
+                        margin-right: .16rem;
+
+                    }
+                }
+                .search {
+                    display: flex;
+                    .input-keywords {
+                        width: 7.333333333333333rem;
+                        height: .64rem;
+                        .el-input__inner {
+                            height: 100%;
+                        }
+                    }
+                    .el-select {
+                        margin-left: .266666666666667rem;
+                        .el-input {
+                            width: 3.533333333333333rem;
+                            height: .64rem;
+                            .el-input__inner {
+                                height: 100%;
+                            }
+                        }
+                    }
+                }
             }
 
             .left {

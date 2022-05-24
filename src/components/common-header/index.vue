@@ -312,7 +312,6 @@ export default {
         Cookie.setCookie("__account__", this.account);
         flag && eventBus.$emit("connect");
         this.getToken()
-        this.regUser();
       }
       //this.isShowConnectDialog = false
     },
