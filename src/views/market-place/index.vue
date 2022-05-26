@@ -3,9 +3,18 @@
         <div class="top">
             <div class="w">
                 <div class="tit-tab">
-                    <p>
+                    <div class="left">
                         <img src="../../assets/images/nav-marketplace.png" alt="">
-                        Marketplace</p>
+                        Marketplace
+                    </div>
+                    <div class="right" @click="handleRecored">
+                        <img src="../../assets/images/clock.png" alt="">
+                        Order record
+                    </div>
+                    <div class="right min" @click="handleRecoredDrawer">
+                        <img src="../../assets/images/clock_w.png" alt="">
+                    </div>
+                    
                     <!-- <div class="tab-filter">
                         <li :class="{'active': query.tabFilterIndex === index}" v-for="(item, index) of tabFilterList"
                             :key="index" @click="selectTabFilter(index)">
@@ -56,8 +65,9 @@
             <div class="w">
                 <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
-                    <div class="filter-btn">
-                        <img src="../../assets/images/filter.png" alt="">
+                    <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
+                        <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
+                        <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                         {{$t("account.filter")}}
                     </div>
                     <div class="search">
@@ -70,7 +80,62 @@
                             </el-option>
                         </el-select>
                     </div>
+                    <div class="filter-wrap" v-show="isShowFilter">
+                        <div class="filter-content">
+                            <ul class="check-list">
+                                <li class="check-item" v-for="(item, index) in checkObj[currentTab]" :key="index">
+                                    <div class="label-name">{{ item.label }}：</div>
+                                    <el-checkbox-group v-model="checkedNames">
+                                        <el-checkbox v-for="row in item.list" :label="row" :key="row" :class="{'w-check': item.label === 'Pack' || item.label === 'Frag'}">{{ row }}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div :class="['filter-btn', 'filter-right', {'is-filter': isShowFilter}]" @click="openFilterDrawer2">
+                        <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
+                        <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
+                    </div>
                 </div>
+                <div class="content-list">
+                    <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                    <ul v-if="recordList.length">
+                        <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
+                            <div class="title">
+                                <div class="left">
+                                    {{ currentTab === 'NFTs' ? '# 010001' : 'Gold Pack' }}
+                                </div>
+                                <div class="right">
+                                    Blue
+                                </div>
+                            </div>
+                            <div class="img-box">
+                                <img src="../../assets/images/product_img.png" alt="" v-if="currentTab === 'NFTs'">
+                                <img src="../../assets/images/product_img2.png" alt="" v-else>
+                            </div>
+                            <div class="name">
+                                MANCITY CLUB
+                            </div>
+                            <div class="price">
+                                Price
+                            </div>
+                            <div class="money_w">
+                                <div class="money">
+                                    5,000,000,000
+                                </div>
+                                <img class="amount-icon" src="../../assets/images/group.png" alt="" />
+                            </div>
+                        </li>
+                    </ul>
+                    <!-- <template v-if="!list.length && !isLoading">
+                        <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
+                    </template> -->
+                </div>
+                <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                    @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                    :page-size="Number(page.pageSize)" :total="Number(total)"
+                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length">
+                </el-pagination>
                 <!-- <div class="left">
                     <ul>
                         <li>
@@ -153,55 +218,125 @@
                     </div>
                 </div> -->
             </div>
-
         </div>
-        <el-drawer :visible.sync="isShowFilter" direction="btt">
+        <el-dialog title="Order record" custom-class="recored-dialog" :visible.sync="isShowRecored"
+        :close-on-click-modal="false" width="70%">
+            <div slot="title" class="header-title">
+                <img src="../../assets/images/clock.png" alt="">
+                <span>Order record</span>
+            </div>
+            <div class="dialog-content" v-loading="openIsLoading">
+                <table>
+                    <thead>
+                        <th>Type</th>
+                        <th>Order ID</th>
+                        <th>Txn Hash</th>
+                        <th>NFT ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Date UTC</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in recordList" :key="index">
+                            <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
+                                SELL
+                            </td>
+                            <td>
+                                S0000000123
+                            </td>
+                            <td>
+                                0xee5808...839f
+                            </td>
+                            <td>
+                                000001
+                            </td>
+                            <td>
+                                MANCITY CLUB
+                            </td>
+                            <td>
+                                5,000,000,000
+                            </td>
+                            <td>
+                                2022-03-10 15:32:14
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                :page-size="Number(page.pageSize)" :total="Number(total)"
+                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length">
+            </el-pagination>
+        </el-dialog>
+        <el-drawer :visible.sync="buyRecoredDrawer" direction="btt">
+            <div slot="title">
+                <img src="../../assets/images/clock.png" alt="" />
+                <span>
+                    Order record
+                </span>
+            </div>
+            <div class="content">
+                <empty-data title="No items for sale" v-if="recordList.length"></empty-data>
+                <table v-if="!recordList.length">
+                    <thead>
+                        <th>Type</th>
+                        <th>Order ID</th>
+                        <th>Txn Hash</th>
+                        <th>NFT ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Date UTC</th>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in recordList" :key="index">
+                            <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
+                                SELL
+                            </td>
+                            <td>
+                                S0000000123
+                            </td>
+                            <td>
+                                0xee5808...839f
+                            </td>
+                            <td>
+                                000001
+                            </td>
+                            <td>
+                                MANCITY CLUB
+                            </td>
+                            <td class="price">
+                                5,000,000,000
+                            </td>
+                            <td>
+                                2022-03-10 15:32:14
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="page r" v-if="!recordList.length">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                        @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
+                        :page-sizes="[10, 20, 50, 100]">
+                    </el-pagination>
+                </div>
+            </div>
+        </el-drawer>
+        <el-drawer :visible.sync="isFilterDrawer" direction="btt" class="el-drawer2" :show-close="false">
             <div class="filter-content">
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">Clear</a>
-                    </div>
-                    <div class="filter-val filter">
-                        <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                            <el-checkbox label="Yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                            <el-checkbox label="Orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                            <el-checkbox label="Red" class="red">{{$t("account.red")}}</el-checkbox>
-                            <el-checkbox label="Blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                            <el-checkbox label="Purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                            <el-checkbox label="Diamond">{{$t("account.diamond")}}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
+                <div class="top-btn">
+                    <img src="../../assets/images/close.png" alt="">
+                    <div>Done</div>
                 </div>
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("marketplace.my-sale")}}</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
-                    </div>
-                    <div class="filter-val">
-                        <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                            <el-checkbox label="my sale">{{$t("marketplace.my-sale")}}</el-checkbox>
+                <ul class="check-list">
+                    <li class="check-item" v-for="(item, index) in checkObj[currentTab]" :key="index">
+                        <div class="label-name">{{ item.label }}：</div>
+                        <el-checkbox-group v-model="checkedNames">
+                            <el-checkbox v-for="row in item.list" :label="row" :key="row" :class="{'block-item': item.label === 'Frag'}">{{ row }}</el-checkbox>
                         </el-checkbox-group>
-                    </div>
-                </div>
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">Clear</a>
-                    </div>
-                    <div class="filter-val">
-                        <el-checkbox-group v-model="checkListLvel" @change="doSearch">
-                            <el-checkbox label="Lv-1">Lv-1</el-checkbox>
-                            <el-checkbox label="Lv-2">Lv-2</el-checkbox>
-                            <el-checkbox label="Lv-3">Lv-3</el-checkbox>
-                            <el-checkbox label="Lv-4">Lv-4</el-checkbox>
-                            <el-checkbox label="Lv-5">Lv-5</el-checkbox>
-                            <el-checkbox label="Lv-6">Lv-6</el-checkbox>
-                            <el-checkbox label="Lv-7">Lv-7</el-checkbox>
-                            <el-checkbox label="Lv-8">Lv-8</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-                </div>
+                    </li>
+                </ul>
             </div>
         </el-drawer>
     </div>
@@ -209,10 +344,12 @@
 
 <script>
     import PageTabs from '@/components/page-tabs'
+    import emptyData from '@/components/empty-data'
     export default {
         name: '',
         components: {
-            PageTabs
+            PageTabs,
+            emptyData
         },
         props: {},
         data() {
@@ -240,6 +377,36 @@
                     label: 'latest'
                 }],
                 isShowFilter: false,
+                isFilterDrawer: false,
+                checkedNames: [],
+                checkObj: {
+                    NFTs: [{
+                        label: 'Sale',
+                        list: ['All Sale', 'My Sale']
+                    }, {
+                        label: 'Color',
+                        list: ['Yellow', 'Orange', 'Red', 'Blue', 'Purple', 'Diamond']
+                    }, {
+                        label: 'Props',
+                        list: ['Shoes', 'Pants', 'Clothes', 'Hat', 'Gloves']
+                    }, {
+                        label: 'Level',
+                        list: ['Lv-1', 'Lv-2', 'Lv-3', 'Lv-4', 'Lv-5', 'Lv-6', 'Lv-7', 'Lv-8']
+                    }],
+                    Other: [{
+                        label: 'Sale',
+                        list: ['All Sale', 'My Sale']
+                    }, {
+                        label: 'Pack',
+                        list: ['Silver Pack', 'Gold Pack']
+                    }, {
+                        label: 'Frag',
+                        list: ['Panamera Fragments', 'Car Fragments', 'Phone Fragments']
+                    }]
+                },
+                isShowRecored: false,
+                openIsLoading: false,
+                buyRecoredDrawer: false,
                 tabFilterList: [{
                     id: 0,
                     name: 'all'
@@ -253,7 +420,28 @@
                     id: 3,
                     name: '30days'
                 }],
+                list: [{
 
+                }, {
+
+                }, {
+
+                }, {
+
+                }, {
+
+                }, {
+
+                }],
+                recordList: [{
+
+                }, {
+
+                }],
+                page: {
+                    pageSize: 20,
+                    curPage: 1
+                },
             }
         },
         computed: {},
@@ -271,6 +459,21 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            onSizeChange(size) {
+                this.page.curPage = 1
+                this.page.pageSize = size
+                this.getLiist()
+            },
+            onPageChange(page) {
+                this.page.curPage = page
+                this.getLiist()
+            },
+            handleRecoredDrawer() {
+                this.buyRecoredDrawer = true
+            },
+            handleRecored() {
+                this.isShowRecored = true
+            },
             onSelectTab(item) {
                 this.currentTab = item.title
             },
@@ -279,7 +482,10 @@
             },
             doSearch() {},
             openFilterDrawer() {
-                this.isShowFilter = true
+                this.isShowFilter = !this.isShowFilter
+            },
+            openFilterDrawer2() {
+                this.isFilterDrawer = true
             },
             selectTabFilter(idx) {
                 this.query.tabFilterIndex = idx
@@ -338,13 +544,28 @@
                 align-items: center;
                 margin-bottom: 44px;
 
-                p {
+                .left {
                     font-size: 48px;
                     font-weight: 600;
 
                     img {
                         display: none;
                         margin-right: .266666666666667rem;
+                    }
+                }
+
+                .right {
+                    font-size: .24rem;
+                    font-weight: 400;
+                    color: #777E90;
+                    cursor: pointer;
+
+                    img {
+                        vertical-align: middle;
+                    }
+
+                    &.min {
+                        display: none;
                     }
                 }
             }
@@ -439,11 +660,14 @@
         .main {
             padding: 38px 0;
             background: #14181f;
+            width: 100%;
 
             .top-search {
+                position: relative;
                 display: flex;
                 justify-content: space-between;
                 margin: 20px 0;
+                width: 100%;
 
                 .filter-btn {
                     display: flex;
@@ -456,6 +680,14 @@
                     color: #777E90;
                     border-radius: .066666666666667rem;
                     cursor: pointer;
+
+                    &.filter-right {
+                        display: none;
+                    }
+
+                    &.is-filter {
+                        color: #32A3FF;
+                    }
 
                     img {
                         width: .266666666666667rem;
@@ -484,93 +716,426 @@
                         }
                     }
                 }
+                
+                .filter-wrap {
+                    position: absolute;
+                    top: 0.7rem;
+                    left: 0;
+                    width: 100%;
+                    padding: .4rem .1333rem .1333rem;
+                    background: #131922;
+                    border-radius: .1333rem;
+                    opacity: 1;
+                    border: 1px solid #29374B;
+                    box-sizing: border-box;
+                    z-index: 9;
+                }
+
+                .check-item {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: .2667rem;
+
+                    .label-name {
+                        width: .9333rem;
+                        font-size: .24rem;
+                        font-weight: 400;
+                        color: #777E90;
+                    }
+
+                    .el-checkbox-group {
+                        margin-left: .2667rem;
+
+                        .el-checkbox {
+                            width: 1.3333rem;
+                            margin-right: .1333rem;
+
+                            &.w-check {
+                                width: 2.8rem;
+                            }
+                        }
+
+                        .el-checkbox__inner {
+                            border: 1px solid #000;
+                            background-color: #000;
+                        }
+
+                        .el-checkbox__input.is-checked .el-checkbox__inner,
+                        .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+                            background-color: #409EFF;
+                            border-color: #409EFF;
+                        }
+
+                        .el-checkbox__label {
+                            font-size: .2133rem;
+                            color: #fff;
+                            font-weight: normal;
+                        }
+                    }
+                }
             }
 
-            .left {
-                margin-right: 20px;
-                width: 265px;
-                max-height: 830px;
-                background: #0B0F15;
-                border-radius: 10px;
+            .content-list {
+
+                ul {
+                    display: flex;
+                    flex-wrap: wrap;
+                    width: auto;
+                    margin: 0 -0.133333333333333rem;
+                }
 
                 li {
-                    border-bottom: 1px solid #29374B;
+                    position: relative;
+                    width: 3.533333333333333rem;
+                    flex-shrink: 0;
+                    margin: .266666666666667rem .133333333333333rem 0;
+                    padding: .266666666666667rem .16rem;
+                    background: #1D2633;
+                    border-radius: .133333333333333rem;
+                    border: 1px solid #32A3FF;
+                    cursor: pointer;
+
+                    .mark {
+                        position: absolute;
+                        left: 0;
+                        top: 0;
+                        right: 0;
+                        bottom: 0;
+                        background: rgba(0, 0, 0, .8) url('../../assets/images/select.png');
+                        background-size: .8rem .8rem;
+                        background-position: center center;
+                        background-repeat: no-repeat;
+                        border: 1px solid #32A3FF;
+                        border-radius: .133333333333333rem;
+                    }
 
                     .title {
                         display: flex;
                         justify-content: space-between;
-                        padding: 0 10px;
-                        height: 80px;
-                        line-height: 80px;
-                        border-bottom: 1px solid #29374B;
-                        font-size: 20px;
-                        color: #fff;
-                    }
+                        font-size: .186666666666667rem;
+                        font-weight: 500;
 
-                    .filter-val {
-                        padding: 30px 20px;
+                        .left {
 
-                        &.filter .el-checkbox {
-                            display: block;
+                            color: #C4C4C4;
                         }
 
-                        .el-checkbox {
-                            margin-bottom: 10px;
+                        .right {
+                            color: #fff;
+                        }
+                    }
+
+                    .img-box {
+                        width: 100%;
+                        text-align: center;
+
+                        img {
+                            margin: .16rem 0;
+                            width: 100%;
+                            height: auto;
+                            border-radius: .16rem;
+                        }
+
+                    }
+
+                    .name {
+                        padding-bottom: 10px;
+                        text-align: center;
+                        color: #fff;
+                        font-size: .24rem;
+                        font-weight: 600;
+                        border-bottom: 1px solid #29374B;
+                    }
+
+                    .price {
+                        margin-top: 10px;
+                        font-size: .1867rem;
+                        font-weight: 500;
+                        color: #777E90;
+                    }
+
+                    .money_w {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        margin-top: 10px;
+
+                        .money {
+                            font-size: .2667rem;
+                            font-weight: 500;
+                            color: #32A3FF;
+                        }
+
+                        .amount-icon {
+                            width: .2667rem;
+                            height: .2667rem;
                         }
                     }
                 }
             }
 
-            .right {
-                flex: 1;
+            // .left {
+            //     margin-right: 20px;
+            //     width: 265px;
+            //     max-height: 830px;
+            //     background: #0B0F15;
+            //     border-radius: 10px;
+
+            //     li {
+            //         border-bottom: 1px solid #29374B;
+
+            //         .title {
+            //             display: flex;
+            //             justify-content: space-between;
+            //             padding: 0 10px;
+            //             height: 80px;
+            //             line-height: 80px;
+            //             border-bottom: 1px solid #29374B;
+            //             font-size: 20px;
+            //             color: #fff;
+            //         }
+
+            //         .filter-val {
+            //             padding: 30px 20px;
+
+            //             &.filter .el-checkbox {
+            //                 display: block;
+            //             }
+
+            //             .el-checkbox {
+            //                 margin-bottom: 10px;
+            //             }
+            //         }
+            //     }
+            // }
+
+            // .right {
+            //     flex: 1;
 
 
-                .top-search {
-                    display: flex;
-                    justify-content: space-between;
+            //     .top-search {
+            //         display: flex;
+            //         justify-content: space-between;
+            //     }
+
+            //     .search {
+            //         display: flex;
+            //     }
+
+            //     .total {
+            //         font-size: 32px;
+
+            //         .txt {
+            //             color: $--color-success;
+            //         }
+
+            //         .filter {
+            //             display: none;
+            //         }
+            //     }
+
+            //     .input-keywords {
+            //         width: 265px;
+            //         margin-right: 20px;
+            //         background: #14181f;
+            //     }
+
+            //     .list {
+            //         .soon-box {
+            //             position: relative;
+            //             width: max-content;
+            //             margin: 63px auto 0;
+            //             text-align: center;
+
+            //             img {
+            //                 width: 230px;
+            //                 height: 230px;
+            //             }
+
+            //             div {
+            //                 position: absolute;
+            //                 right: -60px;
+            //                 top: 8px;
+            //                 color: #FFE2C3;
+            //                 font-size: 18px;
+            //                 text-align: left;
+            //             }
+            //         }
+            //     }
+            // }
+        }
+
+        .recored-dialog {
+
+            .header-title {
+                display: flex;
+                align-items: center;
+                
+                img {
+                    width: .4rem;
+                    height: .4rem;
                 }
 
-                .search {
-                    display: flex;
+                span {
+                    margin-left: .2667rem;
+                    font-size: .32rem;
+                    font-weight: 500;
+                    color: #fff;
                 }
+            }
 
-                .total {
-                    font-size: 32px;
+            table {
+                width: 100%;
+                color: #777e90;
 
-                    .txt {
-                        color: $--color-success;
+                thead {
+                    th {
+                        height: 0.533333333333333rem;
+                        font-size: 0.266666666666667rem;
+                        line-height: 0.533333333333333rem;
+                        border-top: 1px solid #152132;
                     }
-
-                    .filter {
-                        display: none;
-                    }
                 }
 
-                .input-keywords {
-                    width: 265px;
-                    margin-right: 20px;
-                    background: #14181f;
-                }
+                tbody {
+                    td {
+                        height: 0.853333333333333rem;
+                        font-size: .24rem;
+                        line-height: 0.853333333333333rem;
+                        border-top: 1px solid #152132;
 
-                .list {
-                    .soon-box {
-                        position: relative;
-                        width: max-content;
-                        margin: 63px auto 0;
-                        text-align: center;
-
-                        img {
-                            width: 230px;
-                            height: 230px;
+                        &.orange {
+                            color: #FF5E19;
                         }
 
-                        div {
-                            position: absolute;
-                            right: -60px;
-                            top: 8px;
-                            color: #FFE2C3;
-                            font-size: 18px;
-                            text-align: left;
+                        &.green {
+                            color: #00CF08;
+                        }
+                    }
+                }
+            }
+        }
+
+        .el-pagination {
+            margin-top: 0.266666666666667rem;
+            text-align: right;
+        }
+
+        .el-drawer2 {
+            .el-drawer {
+                height: 80% !important;
+            }
+
+            .filter-content {
+                border-top: 1px solid #29374B;
+            }
+
+            .top-btn {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                font-size: .5333rem;
+                font-weight: 400;
+                color: #fff;
+                padding: .1333rem .5333rem;
+            }
+
+            .check-item {
+                padding: .4rem .8rem 0 .4rem;
+                margin-bottom: .2667rem;
+                border-top: 1px solid #29374B;
+
+                .label-name {
+                    margin-bottom: .2667rem;
+                    font-size: .5333rem;
+                    font-weight: 600;
+                    color: #fff;
+                }
+
+                .el-checkbox-group {
+                    margin-left: 0;
+
+                    .el-checkbox {
+                        width: 3.2rem;
+                        margin-right: 1.0667rem;
+                        margin-bottom: .48rem;
+                    }
+
+                    .block-item {
+                        display: block;
+                    }
+
+                    .el-checkbox__inner {
+                        background-color: #000;
+                        border: 2px solid #131922;
+                    }
+
+                    .el-checkbox__input.is-checked .el-checkbox__inner,
+                    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+                        background-color: #409EFF;
+                        border-color: #409EFF;
+                    }
+
+                    .el-checkbox__label {
+                        font-size: .4267rem;
+                        color: #fff;
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+
+        .el-drawer {
+            height: 55% !important;
+            background: #000;
+            overflow-y: scroll;
+
+            .el-drawer__header {
+                padding: 0.1rem 0.533333333333333rem;
+                margin-bottom: 0.1rem;
+
+                img {
+                    vertical-align: middle;
+                    width: 0.426666666666667rem;
+                    height: 0.426666666666667rem;
+                }
+
+                span {
+                    margin-left: 0.266666666666667rem;
+                    font-size: 0.32rem;
+                    color: #fff;
+                }
+            }
+
+            .content {
+                padding: 0 0.533333333333333rem;
+
+                table {
+                    color: #777e90;
+                    font-size: 0.266666666666667rem;
+
+                    thead {
+                        th {
+                            height: 0.533333333333333rem;
+                            line-height: 0.533333333333333rem;
+                            border-top: 1px solid #152132;
+                        }
+                    }
+
+                    tbody {
+                        td {
+                            height: 0.853333333333333rem;
+                            padding-right: .2133rem;
+                            line-height: 0.853333333333333rem;
+                            border-top: 1px solid #152132;
+
+                            &.orange {
+                                color: #FF5E19;
+                            }
+
+                            &.green {
+                                color: #00CF08;
+                            }
                         }
                     }
                 }
@@ -585,13 +1150,39 @@
 
                 .tit-tab {
                     margin-bottom: .533333333333333rem;
-                    flex-direction: column;
 
-                    p {
+                    .left {
+                        margin-left: 1.8933rem;
                         font-size: .64rem;
 
                         img {
                             display: inline-block;
+                        }
+                    }
+
+                    .right {
+                        display: none;
+
+                        &.min {
+                            position: relative;
+                            display: inline-block;
+
+                            img {
+                                width: .7467rem;
+                                height: .7467rem;
+                            }
+
+                            &::after {
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                content: "";
+                                display: table;
+                                width: .2667rem;
+                                height: .2667rem;
+                                background: #FF3D00;
+                                border-radius: 50%;
+                            }
                         }
                     }
 
@@ -669,62 +1260,67 @@
             .main {
                 padding: .5rem;
 
-                .left {
-                    display: none;
-                }
+                .top-search {
 
-                .right {
-                    width: 100%;
+                    .filter-btn {
+                        display: none;
 
-                    .top-search {
-                        flex-direction: column;
-
-                        .total {
+                        &.filter-right {
                             display: flex;
-                            justify-content: space-between;
-                            font-size: .48rem;
+                            width: .9067rem;
+                            height: .9067rem;
 
-                            .filter {
-                                display: block;
-                                padding-left: .6rem;
-                                color: #777E90;
-                                background: url('../../assets/images/filter.png');
-                                background-repeat: no-repeat;
-                                background-position: left center;
-
-                                i {
-                                    color: $--color-success;
-                                }
-                            }
-                        }
-
-                        .search {
-                            margin-top: .4rem;
-
-                            .input-keywords {
-                                flex: 1;
-                                margin-right: .266666666666667rem;
-                            }
-
-                            .el-input {
-                                font-size: .2rem;
-                            }
-
-                            .el-input-group__append {
-                                padding: 0 .2rem;
-
-                                .search-icon {
-                                    width: .426666666666667rem;
-                                    height: .426666666666667rem;
-                                    background-size: contain;
-                                }
+                            img {
+                                width: .3733rem;
+                                height: .3733rem;;
+                                margin: 0;
                             }
                         }
                     }
 
-                    .list {
-                        .soon-box {
-                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
+                    .search {
+                        display: flex;
+
+                        .input-keywords {
+                            width: 4.3733rem;
+                            height: .9067rem;
+                            .el-input__inner {
+                                height: 100%;
+                                font-size: .2667rem;
+                            }
+
+                            .el-input-group__append, .el-input-group__prepend {
+                                padding: 0 .2133rem 0 0;
+                            }
+
+                            .search-icon {
+                                width: .4267rem;
+                                height: .4267rem;
+                            }
+                        }
+                        .el-select {
+                            margin-left: .266666666666667rem;
+                            .el-input {
+                                width: 3.28rem;
+                                height: .9067rem;
+                                .el-input__inner {
+                                    height: 100%;
+                                    font-size: .2667rem;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                .content-list {
+                    ul {
+                        display: flex;
+                        flex-wrap: wrap;
+                        width: auto;
+                        margin: 0;
+
+                        li {
+                            width: 47%;
                         }
                     }
                 }
