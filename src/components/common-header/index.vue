@@ -191,6 +191,7 @@ import utils from "@/utils";
 import myAjax from "@/utils/ajax.js";
 import eventBus from "@/utils/eventBus";
 import { mapState } from "vuex";
+import { getWeb3 } from "../../utils/getWeb3";
 export default {
   name: "common-header",
   components: {},
@@ -347,30 +348,37 @@ export default {
       location.reload();
     },
     async connectWalletMetaMask(flag) {
-      if (!this.web3Provider) {
-        this.$showError("there is no web3 provider.");
-        return false;
+     if (window.ethereum) {
+        window.ethereum.enable().then((res) => {
+          alert("当前钱包地址:" + res[0]);
+        });
+      } else {
+        alert("请安装MetaMask钱包");
       }
-      try {
-        this.accountChanged(
-          await window.ethereum.request({
-            method: "eth_requestAccounts",
-          }),
-          flag
-        );
-        this.chainChanged(
-          await window.ethereum.request({
-            method: "eth_chainId",
-          })
-        );
-        window.ethereum.on("disconnect", this.disconnected);
-        window.ethereum.on("accountsChanged", this.accountChanged);
-        window.ethereum.on("chainChanged", this.chainChanged);
-      } catch (e) {
-        console.error("could not get a wallet connection.", e);
-        return false;
-      }
-      return true;
+      // if (!this.web3Provider) {
+      //   this.$showError("there is no web3 provider.");
+      //   return false;
+      // }
+      // try {
+      //   this.accountChanged(
+      //     await window.ethereum.request({
+      //       method: "eth_requestAccounts",
+      //     }),
+      //     flag
+      //   );
+      //   this.chainChanged(
+      //     await window.ethereum.request({
+      //       method: "eth_chainId",
+      //     })
+      //   );
+      //   window.ethereum.on("disconnect", this.disconnected);
+      //   window.ethereum.on("accountsChanged", this.accountChanged);
+      //   window.ethereum.on("chainChanged", this.chainChanged);
+      // } catch (e) {
+      //   console.error("could not get a wallet connection.", e);
+      //   return false;
+      // }
+      // return true;
     },
     selectLang() {
       this.isShowLangDialog = true;
