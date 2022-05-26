@@ -317,7 +317,7 @@ export default {
     },
     getToken() {
       myAjax({
-        url: 'api/auth',
+        url: 'auth',
         data: {
           addr: this.account,
           user_sign: this.account
