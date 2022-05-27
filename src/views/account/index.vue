@@ -15,9 +15,11 @@
                             <ul class="check-list">
                                 <li class="check-item">
                                     <div class="label-name">{{ checkObj.label }}：</div>
-                                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="all">All</el-checkbox>
+                                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
+                                        @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                        <el-checkbox v-for="row in checkObj.list" :label="row" :key="row" >{{ row }}</el-checkbox>
+                                        <el-checkbox v-for="row in checkObj.list" :label="row" :key="row">{{ row }}
+                                        </el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                             </ul>
@@ -97,10 +99,12 @@
                         </div>
                     </div>
                     <div class="list clearfix">
-                        <el-empty description="暂无数据" v-if="!netList.length && !isLoading"></el-empty>
+                        <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
+                        </el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
-                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver" type="sale">
+                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
+                                type="sale">
                             </item-card>
                         </template>
 
@@ -199,6 +203,7 @@
     import PageTabs from '@/components/page-tabs'
     import itemCard from '@/components/item-card'
     import DeliverDialog from '@/components/deliver-dialog'
+    import emptyImage from '@/assets/images/empty.png'
     export default {
         name: '',
         components: {
@@ -210,6 +215,7 @@
         data() {
             return {
                 prefixCls: 'views-account',
+                emptyImage,
                 page: {
                     pageSize: 20,
                     curPage: 1
@@ -502,59 +508,59 @@
             }
 
             .filter-wrap {
-                    width: 100%;
-                    margin-top: .2667rem;
-                    padding: .1867rem .2667rem;
-                    background: #131922;
-                    border-radius: .1333rem;
-                    opacity: 1;
-                    border: 1px solid #29374B;
-                    box-sizing: border-box;
+                width: 100%;
+                margin-top: .2667rem;
+                padding: .1867rem .2667rem;
+                background: #131922;
+                border-radius: .1333rem;
+                opacity: 1;
+                border: 1px solid #29374B;
+                box-sizing: border-box;
+            }
+
+            .check-item {
+                display: flex;
+                align-items: center;
+                // margin-bottom: .2667rem;
+
+                .el-checkbox__inner {
+                    border: 1px solid #000;
+                    background-color: #000;
                 }
 
-                .check-item {
-                    display: flex;
-                    align-items: center;
-                    // margin-bottom: .2667rem;
+                .el-checkbox__input.is-checked .el-checkbox__inner,
+                .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+                    background-color: #409EFF;
+                    border-color: #409EFF;
+                }
 
-                    .el-checkbox__inner {
-                        border: 1px solid #000;
-                        background-color: #000;
-                    }
+                .label-name {
+                    width: .9333rem;
+                    font-size: .24rem;
+                    font-weight: 400;
+                    color: #777E90;
+                }
 
-                    .el-checkbox__input.is-checked .el-checkbox__inner,
-                    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
-                        background-color: #409EFF;
-                        border-color: #409EFF;
-                    }
+                .all,
+                .el-checkbox-group {
+                    margin-left: .2667rem;
+                }
 
-                    .label-name {
-                        width: .9333rem;
-                        font-size: .24rem;
-                        font-weight: 400;
-                        color: #777E90;
-                    }
+                .el-checkbox {
+                    // width: 1.3333rem;
+                    margin-right: .6667rem;
 
-                    .all,
-                    .el-checkbox-group {
-                        margin-left: .2667rem;
-                    }
-
-                    .el-checkbox {
-                        // width: 1.3333rem;
-                        margin-right: .6667rem;
-
-                        &.w-check {
-                            width: 2.8rem;
-                        }
-                    }
-
-                    .el-checkbox__label {
-                        font-size: .2133rem;
-                        color: #fff;
-                        font-weight: normal;
+                    &.w-check {
+                        width: 2.8rem;
                     }
                 }
+
+                .el-checkbox__label {
+                    font-size: .2133rem;
+                    color: #fff;
+                    font-weight: normal;
+                }
+            }
 
             .left {
                 margin-right: 20px;
@@ -675,6 +681,7 @@
                 }
 
                 .check-item {
+
                     .all,
                     .label-name {
                         display: none;
