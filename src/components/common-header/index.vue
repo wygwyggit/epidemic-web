@@ -348,12 +348,12 @@ export default {
       location.reload();
     },
     async connectWalletMetaMask(flag) {
-     if (window.ethereum) {
+      if (window.ethereum) {
         window.ethereum.enable().then((res) => {
-          alert("当前钱包地址:" + res[0]);
+          this.accountChanged(res)
         });
       } else {
-        alert("请安装MetaMask钱包");
+        this.$showError("there is no web3 provider.");
       }
       // if (!this.web3Provider) {
       //   this.$showError("there is no web3 provider.");

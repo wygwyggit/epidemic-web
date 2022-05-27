@@ -72,7 +72,7 @@
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
                 <el-button type="primary" :disabled="!isCanOpen" @click="openBlindBox">
-                <span>{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
+                    <span>{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
             </div>
         </div>
         <div class="invitation-reward">
@@ -270,6 +270,7 @@
     import eventBus from "@/utils/eventBus";
     import myAjax from "@/utils/ajax.js";
     import cookie from "@/utils/cookie.js";
+    import Web3 from 'web3'
     import {
         netImgBaseUrl,
         payAddress,
@@ -447,25 +448,40 @@
                 });
             },
             vote(act) {
-                this.isShowLoadingDialog = true;
                 return new Promise((resolve, reject) => {
-                    this.contract = new ethers.Contract(
-                        contractAddress,
-                        VOTE_ABI,
-                        this.web3Provider.getSigner()
-                    );
-                    this.contract
-                        .transfer(payAddress, payAmount)
-                        .then((res) => {
-                            resolve(res);
-                        })
-                        .catch((err) => {
-                            reject(err);
-                        })
-                        .finally(() => {
-                            this.isShowLoadingDialog = false;
-                        });
-                });
+                    this.isShowLoadingDialog = true;
+                    let web3 = new Web3(window.web3.currentProvider)
+                    let abiContract = new web3.eth.Contract(VOTE_ABI, contractAddress)
+                    //授权数量
+                    var amount = payAmount
+                    abiContract.methods.approve(payAddress, amount).send({
+                        from: this.account
+                    }, function (err, res) {
+                        if (err) {
+                            reject(err)
+                        }
+                        resolve(res)
+                    })
+                })
+
+                // return new Promise((resolve, reject) => {
+                //     this.contract = new ethers.Contract(
+                //         contractAddress,
+                //         VOTE_ABI,
+                //         this.web3Provider.getSigner()
+                //     );
+                //     this.contract
+                //         .transfer(payAddress, payAmount)
+                //         .then((res) => {
+                //             resolve(res);
+                //         })
+                //         .catch((err) => {
+                //             reject(err);
+                //         })
+                //         .finally(() => {
+                //             this.isShowLoadingDialog = false;
+                //         });
+                // });
 
                 // let tx = await this.contract.transfer(payAddress, payAmount);
                 // await tx.wait(1);
