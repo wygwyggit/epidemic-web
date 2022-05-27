@@ -9,12 +9,6 @@
 <script>
     import CommonHeader from '@/components/common-header'
     import CommonFooter from '@/components/common-footer'
-    import {
-        mapMutations,
-    } from 'vuex'
-    import {
-        getWeb3Provider
-    } from '@/utils/adpp'
     export default {
         components: {
             CommonHeader,
@@ -58,14 +52,9 @@
 
         },
         async mounted() {
-            let web3Provider = await getWeb3Provider()
-            this.UPDATE_WEB3PROVIDER(web3Provider)
         },
         beforeDestroy() {},
         methods: {
-            ...mapMutations({
-                UPDATE_WEB3PROVIDER: 'UPDATE_WEB3PROVIDER'
-            }),
             doConnectAccount() {
                 this.$refs.commonHeader.connectWalletMetaMask(true)
             }

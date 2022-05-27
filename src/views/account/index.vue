@@ -334,8 +334,7 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = [{}, {}, {}, {}, {}, {}, {}, {}]
-                        // this.netList = data.nft_list || []
+                        this.netList = data.nft_list || []
                         resolve()
                     }).catch(err => {
                         reject(err)
