@@ -2,30 +2,9 @@
     <div :class="prefixCls">
         <div class="banner">
             <div class="before-txt">
-                <span v-if="!timerS">
+                <span>
                     {{ $t("blind-box.open-blind-box") }}
                 </span>
-                <div class="timer-countdown" v-else>
-                    <div class="days">
-                        <p class="val">{{ timer.days }}</p>
-                        <p class="txt">{{ $t("blind-box.days") }}</p>
-                    </div>
-                    <div class="dot">:</div>
-                    <div class="hrs">
-                        <p class="val">{{ timer.hrs }}</p>
-                        <p class="txt">{{ $t("blind-box.hrs") }}</p>
-                    </div>
-                    <div class="dot">:</div>
-                    <div class="mins">
-                        <p class="val">{{ timer.mins }}</p>
-                        <p class="txt">{{ $t("blind-box.mins") }}</p>
-                    </div>
-                    <div class="dot">:</div>
-                    <div class="secs">
-                        <p class="val">{{ timer.secs }}</p>
-                        <p class="txt">{{ $t("blind-box.secs") }}</p>
-                    </div>
-                </div>
                 <el-popover placement="bottom-start" width="340" trigger="click" :visible-arrow="false"
                     popper-class="el-popover-black">
                     <div class="pop-tip" slot="reference">{{ $t("common.rules") }}</div>
@@ -71,8 +50,8 @@
             </p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
-                <el-button type="primary" :disabled="!isCanOpen" @click="openBlindBox">
-                    <span>{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
+                <el-button type="primary" :disabled="!isCanOpen" @click="openBlindBox" :loading="isLoading">
+                    <span v-if="!isLoading">{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
             </div>
         </div>
         <div class="invitation-reward">
@@ -270,16 +249,13 @@
     import eventBus from "@/utils/eventBus";
     import myAjax from "@/utils/ajax.js";
     import cookie from "@/utils/cookie.js";
-    import Web3 from 'web3'
+    import web3Tool from '@/utils/web3'
     import {
         netImgBaseUrl,
         payAddress,
         payAmount,
         contractAddress,
     } from "@/config/config.js";
-    import {
-        mapState
-    } from "vuex";
     import VOTE_ABI from "@/contracts/vote.js";
     export default {
         name: "home",
@@ -288,6 +264,7 @@
         data() {
             return {
                 prefixCls: "views-blind-box",
+                isLoading: true,
                 isCanOpen: false,
                 total: 0,
                 contract: null,
@@ -299,17 +276,10 @@
                 netImgBaseUrl,
                 dialogWidth: "400px",
                 userInfo: null,
-                timer: {
-                    days: "",
-                    hrs: "",
-                    mins: "",
-                    secs: "",
-                },
                 page: {
                     curPage: 1,
                     pageSize: 10
                 },
-                timerS: null,
                 openResultType: "",
                 nft_info: null,
                 token_info: null,
@@ -321,15 +291,12 @@
             resultTxt() {
                 return this.$t("common.result");
             },
-            ...mapState({
-                web3Provider: (state) => state.web3Provider,
-            }),
         },
         watch: {},
         async created() {
-            this.initData();
-            this.getOpenStatus()
-            //this.countTime();
+            Promise.all([this.initData(), this.getOpenStatus()]).then(() => {
+                this.isLoading = false
+            })
         },
         mounted() {
             eventBus.$on("connect", () => {
@@ -346,12 +313,18 @@
         beforeDestroy() {},
         methods: {
             getOpenStatus() {
-                myAjax({
-                    url: 'nft/blindbox_status',
-                    method: 'GET'
-                }).then(res => {
-                    this.isCanOpen = (res.data || {}).blindbox_status || false
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'nft/blindbox_status',
+                        method: 'GET'
+                    }).then(res => {
+                        this.isCanOpen = (res.data || {}).blindbox_status || false
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
+
             },
             onSizeChange(size) {
                 this.page.curPage = 1
@@ -378,7 +351,7 @@
                         addr: this.account,
                     }
                 }).then(res => {
-                    this.total = res.data.count
+                    this.total = (res.data || {}).count
                 })
             },
             doReceived(order_id, type) {
@@ -457,6 +430,7 @@
                     abiContract.methods.approve(payAddress, amount).send({
                         from: this.account
                     }, function (err, res) {
+                        console.log(res, '333')
                         if (err) {
                             reject(err)
                         }
@@ -506,32 +480,6 @@
                         });
                 });
             },
-            countTime() {
-                let data = new Date(),
-                    dataTime = data.getTime(),
-                    str = "2022/04/06 08:00:00",
-                    endTime = new Date(str),
-                    end = endTime.getTime(),
-                    leftTime = end - dataTime;
-                if (leftTime > 0) {
-                    this.timer.days = Math.floor(leftTime / 1000 / 60 / 60 / 24)
-                        .toString()
-                        .padStart(2, "0");
-                    this.timer.hrs = Math.floor((leftTime / 1000 / 60 / 60) % 24)
-                        .toString()
-                        .padStart(2, "0");
-                    this.timer.mins = Math.floor((leftTime / 1000 / 60) % 60)
-                        .toString()
-                        .padStart(2, "0");
-                    this.timer.secs = Math.floor((leftTime / 1000) % 60)
-                        .toString()
-                        .padStart(2, "0");
-                    this.timerS = setTimeout(this.countTime, 1000);
-                } else {
-                    clearInterval(this.timerS);
-                    this.timerS = null;
-                }
-            },
             doAccept() {
                 this.isShowResultDialog = false;
             },
@@ -559,7 +507,7 @@
                 });
             },
             openBlindBox(act) {
-                if (!this.web3Provider)
+                if (!window.ethereum)
                     return this.$showError("there is no web3 provider");
                 if (!this.account) {
                     this.$parent.doConnectAccount();
@@ -568,13 +516,20 @@
                 if ((this.userInfo || {}).left_chance <= 0) {
                     return false;
                 }
-                this.vote(act)
-                    .then((res) => {
-                        this.doOpen(res.hash);
-                    })
-                    .catch((err) => {
-                        this.$showError(this.$t("common.pay-fail"));
-                    });
+                const {
+                    token
+                } = contractAddress
+                web3Tool.contract.call(this, {
+                    abi: VOTE_ABI,
+                    contractAddress: token.adoge,
+                    authAddr: payAddress,
+                    amount: payAmount,
+                    account: this.account
+                }).then(hash => {
+                    this.doOpen(hash);
+                }).catch((err) => {
+                    this.$showError(this.$t("common.pay-fail"));
+                })
             },
             doOpen(hash) {
                 this.openIsLoading = this.isShowResultDialog = true;
@@ -723,23 +678,6 @@
                     font-size: 0.64rem;
                     color: #fff;
                     font-weight: 600;
-                }
-
-                .timer-countdown {
-                    margin-bottom: 10px;
-                    display: flex;
-
-                    .val,
-                    .dot {
-                        font-size: 0.64rem;
-                        color: #fff;
-                        font-weight: 600;
-                    }
-
-                    .txt {
-                        color: #7b7b7b;
-                        font-size: 14px;
-                    }
                 }
             }
 
@@ -1117,21 +1055,6 @@
                         height: 0.266666666666667rem;
                         background: #ff3d00;
                         border-radius: 50%;
-                    }
-                }
-
-                .before-txt {
-                    .timer-countdown {
-
-                        .val,
-                        .dot {
-                            font-size: 0.96rem;
-                            font-weight: 500;
-                        }
-
-                        .txt {
-                            font-size: 0.213333333333333rem;
-                        }
                     }
                 }
 
