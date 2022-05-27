@@ -14,28 +14,19 @@
                         <div class="filter-content">
                             <ul class="check-list">
                                 <li class="check-item">
-                                    <<<<<<< HEAD <div class="label-name">{{ checkObj.label }}：
-                        </div>
-                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"
-                            class="all">All</el-checkbox>
-                        <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                            <el-checkbox v-for="row in checkObj.list" :label="row" :key="row">{{ row }}
-                            </el-checkbox>
-                            =======
-                            <div class="label-name">{{ checkObj[currentTab].label }}：</div>
-                            <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                                @change="handleCheckAllChange" class="all">All</el-checkbox>
-                            <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                <el-checkbox v-for="row in checkObj[currentTab].list" :label="row" :key="row">{{ row }}
-                                </el-checkbox>
-                                >>>>>>> 68016af00befa06290e70c8df0d5432b1b9862aa
-                            </el-checkbox-group>
-                            </li>
+                                    <div class="label-name">{{ checkObj[currentTab].label }}：</div>
+                                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
+                                        @change="handleCheckAllChange" class="all">All</el-checkbox>
+                                    <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
+                                        <el-checkbox v-for="row in checkObj[currentTab].list" :label="row" :key="row">
+                                            {{ row }}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
                             </ul>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <!-- <div class="left">
+                <!-- <div class="left">
                     <ul>
                         <li>
                             <div class="title">
@@ -88,16 +79,16 @@
                         </li>
                     </ul>
                 </div> -->
-            <div class="right">
-                <div class="top-search">
-                    <!-- <div class="total">
+                <div class="right">
+                    <div class="top-search">
+                        <!-- <div class="total">
                             <span class="txt">{{total}} NFTs</span>
                             <span class="filter" @click="openFilterDrawer">
                                 Filter(<i>{{ totalFilter }}</i>)
                             </span>
                         </div> -->
-                    <div class="search">
-                        <!-- <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
+                        <div class="search">
+                            <!-- <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                                 <a href="javascript:;" slot="append" class="search-icon"></a>
                             </el-input>
                             <el-select v-model="query.latest" placeholder="">
@@ -105,20 +96,20 @@
                                     :value="item.value">
                                 </el-option>
                             </el-select> -->
+                        </div>
                     </div>
-                </div>
-                <div class="list clearfix">
-                    <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
-                    </el-empty>
-                    <template v-if="netList.length && !isLoading">
-                        <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
-                            @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
-                            type="sale">
-                        </item-card>
-                    </template>
+                    <div class="list clearfix">
+                        <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
+                        </el-empty>
+                        <template v-if="netList.length && !isLoading">
+                            <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
+                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
+                                type="sale">
+                            </item-card>
+                        </template>
 
-                </div>
-                <!-- <div class="list">
+                    </div>
+                    <!-- <div class="list">
                         <div class="soon-box">
                             <img src="../../assets/images/soon.png" alt="">
                             <div>
@@ -127,83 +118,83 @@
                             </div>
                         </div>
                     </div> -->
-                <div class="page r" v-if="netList.length && !isLoading">
-                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
-                        @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
-                        :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
-                    </el-pagination>
+                    <div class="page r" v-if="netList.length && !isLoading">
+                        <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                            @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                            :page-size="Number(page.pageSize)" :total="Number(total)"
+                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
+                        </el-pagination>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </div>
-    <el-drawer :visible.sync="isShowFilter" direction="btt">
-        <div class="filter-content">
-            <div class="filter-item">
-                <div class="title">
-                    <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                    <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">Clear</a>
-                </div>
-                <div class="filter-val filter">
-                    <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                        <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                        <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                        <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
-                        <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                        <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                        <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
-                    </el-checkbox-group>
-                </div>
-            </div>
-            <div class="filter-item">
-                <div class="title">
-                    <span>{{$t("account.sale")}}</span>
-                    <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
-                </div>
-                <div class="filter-val">
-                    <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                        <el-checkbox :label="1">{{$t("account.for-sale")}}</el-checkbox>
-                        <el-checkbox :label="2">{{$t("account.not-sale")}}</el-checkbox>
-                    </el-checkbox-group>
-                </div>
-            </div>
-            <div class="filter-item">
-                <div class="title">
-                    <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                    <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">Clear</a>
-                </div>
-                <div class="filter-val">
-                    <el-checkbox-group v-model="checkListLvel" @change="doSearch">
-                        <el-checkbox :label="1">Lv-1</el-checkbox>
-                        <el-checkbox :label="2">Lv-2</el-checkbox>
-                        <el-checkbox :label="3">Lv-3</el-checkbox>
-                        <el-checkbox :label="4">Lv-4</el-checkbox>
-                        <el-checkbox :label="5">Lv-5</el-checkbox>
-                        <el-checkbox :label="6">Lv-6</el-checkbox>
-                        <el-checkbox :label="7">Lv-7</el-checkbox>
-                        <el-checkbox :label="8">Lv-8</el-checkbox>
-                    </el-checkbox-group>
-                </div>
-            </div>
         </div>
-    </el-drawer>
-    <el-dialog :title="saleReviseDialogTitle" :visible.sync="saleReviseDialog" width="6.4rem"
-        @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
-        <p class="tit">{{$t("account.price") }}</p>
-        <div class="input-box">
-            <div class="label">
-                <span>Adoge</span>
+        <el-drawer :visible.sync="isShowFilter" direction="btt">
+            <div class="filter-content">
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">Clear</a>
+                    </div>
+                    <div class="filter-val filter">
+                        <el-checkbox-group v-model="checkListFilter" @change="doSearch">
+                            <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
+                            <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
+                            <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
+                            <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
+                            <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
+                            <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.sale")}}</span>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
+                    </div>
+                    <div class="filter-val">
+                        <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                            <el-checkbox :label="1">{{$t("account.for-sale")}}</el-checkbox>
+                            <el-checkbox :label="2">{{$t("account.not-sale")}}</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
+                <div class="filter-item">
+                    <div class="title">
+                        <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
+                        <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">Clear</a>
+                    </div>
+                    <div class="filter-val">
+                        <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                            <el-checkbox :label="1">Lv-1</el-checkbox>
+                            <el-checkbox :label="2">Lv-2</el-checkbox>
+                            <el-checkbox :label="3">Lv-3</el-checkbox>
+                            <el-checkbox :label="4">Lv-4</el-checkbox>
+                            <el-checkbox :label="5">Lv-5</el-checkbox>
+                            <el-checkbox :label="6">Lv-6</el-checkbox>
+                            <el-checkbox :label="7">Lv-7</el-checkbox>
+                            <el-checkbox :label="8">Lv-8</el-checkbox>
+                        </el-checkbox-group>
+                    </div>
+                </div>
             </div>
-            <el-input v-model="nets.salePrice" :placeholder="$t('common.please-enter-price')"
-                onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
-        </div>
-        <p class="tip">{{$t("common.net-price-modified-tip")}}</p>
-        <div class="opt-btn">
-            <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
-        </div>
-    </el-dialog>
-    <deliver-dialog v-if="isShowDeliverDialog"></deliver-dialog>
+        </el-drawer>
+        <el-dialog :title="saleReviseDialogTitle" :visible.sync="saleReviseDialog" width="6.4rem"
+            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
+            <p class="tit">{{$t("account.price") }}</p>
+            <div class="input-box">
+                <div class="label">
+                    <span>Adoge</span>
+                </div>
+                <el-input v-model="nets.salePrice" :placeholder="$t('common.please-enter-price')"
+                    onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
+            </div>
+            <p class="tip">{{$t("common.net-price-modified-tip")}}</p>
+            <div class="opt-btn">
+                <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
+            </div>
+        </el-dialog>
+        <deliver-dialog v-if="isShowDeliverDialog"></deliver-dialog>
     </div>
 </template>
 
