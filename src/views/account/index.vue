@@ -674,6 +674,13 @@
                     display: none;
                 }
 
+                .check-item {
+                    .all,
+                    .label-name {
+                        display: none;
+                    }
+                }
+
                 .right {
                     width: 100%;
 
