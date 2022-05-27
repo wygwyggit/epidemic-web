@@ -8,7 +8,23 @@
         </div>
         <div class="main">
             <div class="w">
-                <div class="left">
+                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
+                <div class="top-search">
+                    <div class="filter-wrap">
+                        <div class="filter-content">
+                            <ul class="check-list">
+                                <li class="check-item">
+                                    <div class="label-name">{{ checkObj.label }}：</div>
+                                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="all">All</el-checkbox>
+                                    <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
+                                        <el-checkbox v-for="row in checkObj.list" :label="row" :key="row" >{{ row }}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="left">
                     <ul>
                         <li>
                             <div class="title">
@@ -60,15 +76,15 @@
                             </div>
                         </li>
                     </ul>
-                </div>
+                </div> -->
                 <div class="right">
                     <div class="top-search">
-                        <div class="total">
+                        <!-- <div class="total">
                             <span class="txt">{{total}} NFTs</span>
                             <span class="filter" @click="openFilterDrawer">
                                 Filter(<i>{{ totalFilter }}</i>)
                             </span>
-                        </div>
+                        </div> -->
                         <div class="search">
                             <!-- <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                                 <a href="javascript:;" slot="append" class="search-icon"></a>
@@ -180,11 +196,13 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
+    import PageTabs from '@/components/page-tabs'
     import itemCard from '@/components/item-card'
     import DeliverDialog from '@/components/deliver-dialog'
     export default {
         name: '',
         components: {
+            PageTabs,
             itemCard,
             DeliverDialog
         },
@@ -202,6 +220,20 @@
                 nets: {
                     salePrice: ''
                 },
+                tabs: [{
+                    title: this.$t("marketplace.nfts"),
+                    num: 8
+                }, {
+                    title: this.$t("marketplace.other"),
+                    num: 0
+                }],
+                currentTab: 'NFTs',
+                checkObj: {
+                    label: 'Status',
+                    list: ['Available', 'On sale', 'Sending']
+                },
+                checkAll: false,
+                isIndeterminate: true,
                 checkListFilter: [],
                 checkListLvel: [],
                 checkListSale: [],
@@ -242,6 +274,22 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            handleCheckAllChange(val) {
+                this.checkListFilter = val ? this.checkObj.list : [];
+                this.isIndeterminate = false;
+                this.page.curPage = 1
+                this.getLiist()
+            },
+            handleCheckedCitiesChange(value) {
+                let checkedCount = value.length;
+                this.checkAll = checkedCount === this.checkObj.list.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj.list.length;
+                this.page.curPage = 1
+                this.getLiist()
+            },
+            onSelectTab(item) {
+                this.currentTab = item.title
+            },
             doDeliver(row) {
                 this.currentItem = row
                 this.isShowDeliverDialog = true
@@ -261,7 +309,8 @@
                         url: 'nft/count',
                     }).then(res => {
                         if (res.ok && res.data) {
-                            this.total = res.data.count || 0
+                            this.tabs[0].num = res.data.count || 0
+                            // this.total = res.data.count || 0
                         }
                         resolve()
                     }).catch(err => {
@@ -285,7 +334,8 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = data.nft_list || []
+                        this.netList = [{}, {}, {}, {}, {}, {}, {}, {}]
+                        // this.netList = data.nft_list || []
                         resolve()
                     }).catch(err => {
                         reject(err)
@@ -448,9 +498,64 @@
             background: #14181f;
 
             .w {
-                display: flex;
-                justify-content: space-between;
+                // display: flex;
+                // justify-content: space-between;
             }
+
+            .filter-wrap {
+                    width: 100%;
+                    margin-top: .2667rem;
+                    padding: .1867rem .2667rem;
+                    background: #131922;
+                    border-radius: .1333rem;
+                    opacity: 1;
+                    border: 1px solid #29374B;
+                    box-sizing: border-box;
+                }
+
+                .check-item {
+                    display: flex;
+                    align-items: center;
+                    // margin-bottom: .2667rem;
+
+                    .el-checkbox__inner {
+                        border: 1px solid #000;
+                        background-color: #000;
+                    }
+
+                    .el-checkbox__input.is-checked .el-checkbox__inner,
+                    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+                        background-color: #409EFF;
+                        border-color: #409EFF;
+                    }
+
+                    .label-name {
+                        width: .9333rem;
+                        font-size: .24rem;
+                        font-weight: 400;
+                        color: #777E90;
+                    }
+
+                    .all,
+                    .el-checkbox-group {
+                        margin-left: .2667rem;
+                    }
+
+                    .el-checkbox {
+                        // width: 1.3333rem;
+                        margin-right: .6667rem;
+
+                        &.w-check {
+                            width: 2.8rem;
+                        }
+                    }
+
+                    .el-checkbox__label {
+                        font-size: .2133rem;
+                        color: #fff;
+                        font-weight: normal;
+                    }
+                }
 
             .left {
                 margin-right: 20px;
