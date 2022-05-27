@@ -14,10 +14,10 @@
                         <div class="filter-content">
                             <ul class="check-list">
                                 <li class="check-item">
-                                    <div class="label-name">{{ checkObj.label }}：</div>
+                                    <div class="label-name">{{ checkObj[currentTab].label }}：</div>
                                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                        <el-checkbox v-for="row in checkObj.list" :label="row" :key="row" >{{ row }}</el-checkbox>
+                                        <el-checkbox v-for="row in checkObj[currentTab].list" :label="row" :key="row" >{{ row }}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                             </ul>
@@ -229,8 +229,14 @@
                 }],
                 currentTab: 'NFTs',
                 checkObj: {
-                    label: 'Status',
-                    list: ['Available', 'On sale', 'Sending']
+                    NFTs: {
+                        label: 'Status',
+                        list: ['Available', 'On sale', 'Sending']
+                    },
+                    Other: {
+                        label: 'Status',
+                        list: ['Available', 'Sending']
+                    }
                 },
                 checkAll: false,
                 isIndeterminate: true,
@@ -275,15 +281,15 @@
         beforeDestroy() {},
         methods: {
             handleCheckAllChange(val) {
-                this.checkListFilter = val ? this.checkObj.list : [];
+                this.checkListFilter = val ? this.checkObj[this.currentTab].list : [];
                 this.isIndeterminate = false;
                 this.page.curPage = 1
                 this.getLiist()
             },
             handleCheckedCitiesChange(value) {
                 let checkedCount = value.length;
-                this.checkAll = checkedCount === this.checkObj.list.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj.list.length;
+                this.checkAll = checkedCount === this.checkObj[this.currentTab].list.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj[this.currentTab].list.length;
                 this.page.curPage = 1
                 this.getLiist()
             },
@@ -505,7 +511,7 @@
                     width: 100%;
                     margin-top: .2667rem;
                     padding: .1867rem .2667rem;
-                    background: #131922;
+                    background: #1D2633;
                     border-radius: .1333rem;
                     opacity: 1;
                     border: 1px solid #29374B;
@@ -518,7 +524,7 @@
                     // margin-bottom: .2667rem;
 
                     .el-checkbox__inner {
-                        border: 1px solid #000;
+                        border: 2px solid #131922;
                         background-color: #000;
                     }
 
