@@ -89,7 +89,7 @@
                                 type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
-                                        <div class="btn btn-deliver">{{$t("common.deliver")}}</div>
+                                        <div class="btn btn-deliver" @click="doDeliver">{{$t("common.deliver")}}</div>
                                         <div class="btn btn-sale">{{$t("account.sale")}}</div>
                                     </template>
                                     <template>
@@ -522,6 +522,7 @@
                             text-align: center;
                             border-radius: .066666666666667rem;
                             color: #fff;
+                            cursor: pointer;
 
                             &:last-child {
                                 margin-left: .133333333333333rem;
