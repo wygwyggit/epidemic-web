@@ -499,7 +499,9 @@
             doClearSearchQuery() {
 
             },
-            doSearch() {},
+            doSearch() {
+                this.getLiist()
+            },
             openFilterDrawer() {
                 this.isShowFilter = !this.isShowFilter
             },

@@ -225,12 +225,12 @@
                 currentTab: 'NFTs',
                 checkObj: {
                     NFTs: {
-                        label: 'Status',
-                        list: ['Available', 'On sale', 'Staking', 'Sending']
+                        label: this.$t("account.status"),
+                        list: [this.$t("account.available"), this.$t("account.on-sale"), this.$t("account.staking"), this.$t("account.sending")]
                     },
                     Other: {
-                        label: 'Status',
-                        list: ['Available', 'Sending']
+                        label: this.$t("account.status"),
+                        list: [this.$t("account.available"), this.$t("account.sending")]
                     }
                 },
                 checkAll: false,

@@ -85,7 +85,12 @@
         "price": "价格",
         "revise": "修改",
         "cancel-sale": "取消出售",
-        "open-soon": "待开放"
+        "open-soon": "待开放",
+        "status": "状态",
+        "available": "可购买的",
+        "on-sale": "出售中",
+        "staking": "立桩",
+        "sending": "正在发送"
     },
     "detail": {
         "attribute": "属性",
