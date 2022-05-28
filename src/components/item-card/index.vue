@@ -163,7 +163,7 @@
                 }
             }
             .opt-buttom {
-                margin-top: .133333333333333rem;
+                margin-top: .18rem;
             }
 
 

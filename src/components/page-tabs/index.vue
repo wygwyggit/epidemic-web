@@ -9,12 +9,6 @@
                 <span class="tab-num" v-if="isShowNum && !item.show">
                     ({{item.num || '0'}})
                 </span>
-                <!-- <el-tooltip effect=" dark" content="从邮箱同步但未与系统招聘职位匹配的简历数据" placement="bottom"
-                    v-show="item.title=='未分配职位'">
-                    <i class="iconfont-ats icon-tishi" :class="{'pagetabs': currentTab == '未分配职位'}"
-                        style="margin-left:10px;">
-                    </i>
-                </el-tooltip> -->
             </li>
         </ul>
     </div>

@@ -13,17 +13,30 @@
                 <div class="tip">
                      {{$t('common.transferred-tip')}}
                 </div>
-                 <el-button type="primary">{{$t('common.deliver')}}</el-button>
+                 <el-button type="primary" :disabled="!addressTxt" @click="doDeliver">{{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import Cookie from "@/utils/cookie.js";
+    import myAjax from '@/utils/ajax.js'
     export default {
         name: '',
-        components: {},
-        props: {},
+        components: {
+            
+        },
+        props: {
+            goods_id: {
+                type: Number,
+                require: true
+            },
+            goods_name: {
+                type: String,
+                require: true
+            }
+        },
         data() {
             return {
                 prefixCls: 'deliver-dialog',
@@ -37,7 +50,23 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doDeliver() {
+                myAjax({
+                    url: 'user/give/create',
+                    data: {
+                        body: {
+                            owner_addr: Cookie.getCookie("__account__") || null,
+                            belong_type: 1,
+                            goods_id: this.goods_id,
+                            give_num: 1,
+                            to_addr: this.addressTxt,
+                            goods_name: this.goods_name
+                        }
+                    }
+                }).then(res => {
 
+                })
+            }
         },
     }
 </script>
@@ -52,7 +81,7 @@
 
                 .addr {
                     .tit {
-                        font-size: .32rem;
+                        font-size: .3rem;
                     }
 
                     .el-input {
@@ -91,6 +120,9 @@
                     padding: 0;
                     font-size: .32rem;
                     border-radius: .133333333333333rem;
+                    &.is-disabled {
+                        background: #777E90;
+                    }
                 }
 
             }

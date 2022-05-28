@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <div class="top">
+        <div class="page-title">
             <div class="w">
                 <img src="../../assets/images/nav-my-account.png" alt="">
                 {{$t("account.my-account")}}
@@ -18,7 +18,8 @@
                                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
                                         @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id" :key="row.id">
+                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
+                                            :key="row.id">
                                             {{ row.val }}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
@@ -26,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="right" v-loading="isLoading">
+                <div class="list-content" v-loading="isLoading">
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
                         </el-empty>
@@ -36,7 +37,8 @@
                                 type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
-                                        <div class="btn btn-deliver" @click="doDeliver">{{$t("common.deliver")}}</div>
+                                        <div class="btn btn-deliver" @click="doDeliver(item)"
+                                            v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
                                         <div class="btn btn-sale">{{$t("account.sale")}}</div>
                                     </template>
                                     <template>
@@ -46,15 +48,6 @@
                         </template>
 
                     </div>
-                    <!-- <div class="list">
-                        <div class="soon-box">
-                            <img src="../../assets/images/soon.png" alt="">
-                            <div>
-                                <p>Coming soon...</p>
-                                <p>Stay tuned!</p>
-                            </div>
-                        </div>
-                    </div> -->
                     <div class="page r" v-if="netList.length && !isLoading">
                         <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                             @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
@@ -81,7 +74,8 @@
                 <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
             </div>
         </el-dialog>
-        <deliver-dialog v-if="isShowDeliverDialog"></deliver-dialog>
+        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id"
+            :goods_name="currentGoodRow.name"></deliver-dialog>
     </div>
 </template>
 
@@ -115,7 +109,7 @@
                 tabs: [{
                     id: 1,
                     title: this.$t("marketplace.nfts"),
-                    num: 8
+                    num: 0
                 }, {
                     id: 2,
                     title: this.$t("marketplace.other"),
@@ -179,6 +173,10 @@
             },
         },
         created() {
+            let width = window.innerWidth;
+            if (width < 768) {
+                this.page.pageSize = 100000
+            }
             Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                 this.isLoading = false
             })
@@ -208,11 +206,12 @@
                 this.currentTabId = item.id
                 this.page.curPage = 1
                 this.checkListFilter = []
+                this.getTotalInfo();
                 this.isLoading = true
                 this.getLiist()
             },
             doDeliver(row) {
-                this.currentItem = row
+                this.currentGoodRow = row
                 this.isShowDeliverDialog = true
             },
             onSizeChange(size) {
@@ -227,17 +226,18 @@
             getTotalInfo() {
                 return new Promise((resolve, reject) => {
                     myAjax({
-                        url: 'user/goods/list',
+                        url: 'user/goods/count',
                         data: {
-                            page: this.page.curPage,
-                            per_page: this.page.pageSize,
-                            status: 0,
-                            //type: checkListFilter.length ? checkListFilter : [0, 1, 2, -2]
+                            body: {
+                                status: this.checkListFilter.length ? this.checkListFilter : (this
+                                    .currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
+                            }
+
                         }
                     }).then(res => {
                         if (res.ok && res.data) {
-                            this.tabs[0].num = res.data.count || 0
-                            // this.total = res.data.count || 0
+                            this.tabs[0].num = res.data.nft || 0
+                            this.tabs[1].num = res.data.others || 0
                         }
                         resolve()
                     }).catch(err => {
@@ -255,13 +255,17 @@
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
-                                status: this.checkListFilter.length ? this.checkListFilter : (this.currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
+                                status: this.checkListFilter.length ? this.checkListFilter : (this
+                                    .currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
                                 type: this.currentTabId
                             }
                         }
                     }).then(res => {
                         const data = res.data || {}
                         this.netList = data.items || []
+                        if (this.checkListFilter.length) {
+                            this.tabs[this.currentTabId - 1].num = data.total
+                        }
                         this.isLoading = false
                         resolve()
                     }).catch(err => {
@@ -317,72 +321,7 @@
     $prefixCls: "views-account";
 
     .#{$prefixCls} {
-        .el-drawer {
-            height: 90% !important;
-            background: #000;
-            overflow-y: scroll;
-
-            .filter-content {
-                .filter-item {
-                    border-top: 1px solid #29374B;
-
-                    .title {
-                        padding: 0 .746666666666667rem;
-                        height: 1.52rem;
-                        line-height: 1.52rem;
-                        color: #fff;
-                        font-weight: 600;
-                        font-size: .533333333333333rem;
-                        border-bottom: 1px solid #29374B;
-
-                        a {
-                            float: right;
-                        }
-                    }
-                }
-
-                .filter-val {
-                    padding: .373333333333333rem .746666666666667rem;
-
-                    .el-checkbox {
-                        width: 3.2rem;
-                        height: .853333333333333rem
-                    }
-                }
-            }
-        }
-
-        .search {
-
-            .el-input__inner,
-            .el-select {
-                border-color: #004D8C;
-                background: #14181f;
-                color: #777E90;
-            }
-
-            .input-keywords .el-input__inner {
-                border-right: 0;
-            }
-
-            .el-input-group__append {
-                background: inherit;
-                border-color: #004D8C;
-
-                .search-icon {
-                    display: inline-block;
-                    width: 24px;
-                    height: 24px;
-                    background: url('../../assets/images/icon-search.png');
-                }
-            }
-        }
-
-
-
-
-
-        .top {
+        .page-title {
             height: 157px;
             line-height: 157px;
             background: #0B0F15;
@@ -402,40 +341,34 @@
             padding: 30px 0;
             background: #14181f;
 
-            .w {
+            .list-content {
+                .components-item-card {
+                    .btns-wrap {
+                        display: flex;
+                        justify-content: space-between;
+                    }
 
-                // display: flex;
-                // justify-content: space-between;
-                .right {
-                    .components-item-card {
-                        .btns-wrap {
-                            display: flex;
-                            justify-content: space-between;
+                    .btn {
+                        flex: 1;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: .066666666666667rem;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: .213333333333333rem;
+
+                        &:last-child {
+                            margin-left: .133333333333333rem;
                         }
 
-                        .btn {
-                            flex: 1;
-                            height: .533333333333333rem;
-                            line-height: .533333333333333rem;
-                            text-align: center;
-                            border-radius: .066666666666667rem;
-                            color: #fff;
-                            cursor: pointer;
-
-                            &:last-child {
-                                margin-left: .133333333333333rem;
-                            }
-
-                            &.btn-deliver {
-                                background: #F1AE00;
-                            }
-
-                            &.btn-sale {
-                                background: #00A73A;
-                            }
+                        &.btn-deliver {
+                            background: #F1AE00;
                         }
 
-
+                        &.btn-sale {
+                            background: #00A73A;
+                        }
                     }
                 }
             }
@@ -494,90 +427,12 @@
                 }
             }
 
-            .left {
-                margin-right: 20px;
-                width: 265px;
-                max-height: 830px;
-                background: #0B0F15;
-                border-radius: 10px;
-
-                li {
-                    border-bottom: 1px solid #29374B;
-
-                    .title {
-                        display: flex;
-                        justify-content: space-between;
-                        padding: 0 10px;
-                        height: 80px;
-                        line-height: 80px;
-                        border-bottom: 1px solid #29374B;
-                        font-size: 20px;
-                        color: #fff;
-                    }
-
-                    .filter-val {
-                        padding: 30px 20px;
-
-                        &.filter .el-checkbox {
-                            display: block;
-                        }
-
-                        .el-checkbox {
-                            margin-bottom: 10px;
-                        }
-                    }
-                }
-            }
-
-            .right {
+            .list-content {
                 flex: 1;
 
                 .list {
                     min-height: 5rem;
-
-                    .soon-box {
-                        position: relative;
-                        width: max-content;
-                        margin: 63px auto 0;
-                        text-align: center;
-
-                        img {
-                            width: 230px;
-                            height: 230px;
-                        }
-
-                        div {
-                            position: absolute;
-                            right: -60px;
-                            top: 8px;
-                            color: #FFE2C3;
-                            font-size: 18px;
-                            text-align: left;
-                        }
-                    }
-                }
-
-
-                .search {
-                    display: flex;
-                }
-
-                .total {
-                    font-size: 32px;
-
-                    .txt {
-                        color: $--color-success;
-                    }
-
-                    .filter {
-                        display: none;
-                    }
-                }
-
-                .input-keywords {
-                    width: 265px;
-                    margin-right: 20px;
-                    background: #14181f;
+                    padding-bottom: .3rem;
                 }
             }
 
@@ -596,7 +451,7 @@
 
     @media (max-width: 768px) {
         .#{$prefixCls} {
-            .top {
+            .page-title {
                 height: 1.866666666666667rem;
                 line-height: 1.866666666666667rem;
                 font-size: .64rem;
@@ -610,10 +465,6 @@
 
             .main {
                 padding: 0 .5rem;
-
-                .left {
-                    display: none;
-                }
 
                 .check-item {
 
@@ -631,88 +482,35 @@
                     }
                 }
 
-                .right {
+                .list-content {
                     width: 100%;
 
-                    .list {
-                        .soon-box {
-                            margin: 1.333333333333333rem 0 1.866666666666667rem .8rem;
-                        }
-                    }
-
-                    .top-search {
-                        flex-direction: column;
-
-                        .total {
-                            display: flex;
-                            justify-content: space-between;
-                            font-size: .48rem;
-
-                            .filter {
-                                display: block;
-                                padding-left: .6rem;
-                                color: #777E90;
-                                background: url('../../assets/images/filter.png');
-                                background-repeat: no-repeat;
-                                background-position: left center;
-
-                                i {
-                                    color: $--color-success;
-                                }
-                            }
-                        }
-
-                        .search {
-                            margin-top: .4rem;
-
-                            .input-keywords {
-                                flex: 1;
-                                margin-right: .266666666666667rem;
-                            }
-
-                            .el-input {
-                                font-size: .2rem;
-                            }
-
-                            .el-input-group__append {
-                                padding: 0 .2rem;
-
-                                .search-icon {
-                                    width: .426666666666667rem;
-                                    height: .426666666666667rem;
-                                    background-size: contain;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            .list {
-                .components-item-card {
-                    margin-right: .266666666666667rem;
-                    width: 48.5%;
-
-                    >li {
-                        margin-bottom: 0;
-                    }
-
-
-
-                    &:nth-child(3n) {
+                    .components-item-card {
                         margin-right: .266666666666667rem;
-                    }
+                        width: 48.5%;
 
-                    &:nth-child(2n) {
-                        margin-right: 0 !important;
-                    }
+                        >li {
+                            margin-bottom: 0;
+                        }
 
+                        &:nth-child(3n) {
+                            margin-right: .266666666666667rem;
+                        }
+
+                        &:nth-child(2n) {
+                            margin-right: 0 !important;
+                        }
+
+                        .btn {
+                            height: .693333333333333rem;
+                            line-height: .693333333333333rem;
+                        }
+                    }
                 }
             }
 
             .page {
-                margin-top: .266666666666667rem;
-                width: 100%;
+                display: none;
             }
         }
     }
