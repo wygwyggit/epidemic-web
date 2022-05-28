@@ -85,8 +85,12 @@
         "price": "Price",
         "revise": "Revise",
         "cancel-sale": "Cancel Sale",
-        "open-soon": "Open Soon"
-
+        "open-soon": "Open Soon",
+        "status": "Status",
+        "available": "Available",
+        "on-sale": "On sale",
+        "staking": "Staking",
+        "sending": "Sending"
     },
     "detail": {
         "attribute": "Attribute",

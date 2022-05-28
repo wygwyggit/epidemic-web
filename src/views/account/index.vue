@@ -124,12 +124,12 @@
                 currentTabId: 1,
                 checkObj: {
                     1: {
-                        label: 'Status',
-                        list: ['Available', 'On sale', 'Staking', 'Sending']
+                        label: this.$t("account.status"),
+                        list: [this.$t("account.available"), this.$t("account.on-sale"), this.$t("account.staking"), this.$t("account.sending")]
                     },
                     2: {
-                        label: 'Status',
-                        list: ['Available', 'Sending']
+                        label: this.$t("account.status"),
+                        list: [this.$t("account.available"), this.$t("account.sending")]
                     }
                 },
                 checkAll: false,
