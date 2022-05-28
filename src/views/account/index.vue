@@ -279,7 +279,7 @@
                         for(let k in obj) {
                             this.netList.forEach(x => {
                                 if(x.type_id == k) {
-                                    x.num = obj[k]
+                                    x.cardNum = obj[k]
                                 }
                             })
                         }
