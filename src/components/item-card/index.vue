@@ -5,7 +5,7 @@
                 <div class="l">
                     # {{itemInfo.goods_id}}
                 </div>
-                <div class="r">{{$t(`account.${itemInfo.rarity}`)}}</div>
+                <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
             </div>
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
                 <img :src="netImgBaseUrl + itemInfo.image">

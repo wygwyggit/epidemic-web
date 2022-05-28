@@ -1,24 +1,24 @@
 <template>
-    <div :class="prefixCls" v-loading="isLoading">
+    <div :class="prefixCls" >
         <div class="top">
             <div class="w">
                 <img src="../../assets/images/nav-my-account.png" alt="">
                 {{$t("account.my-account")}}
             </div>
         </div>
-        <div class="main">
+        <div class="main" v-loading="isLoading">
             <div class="w">
-                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
+                <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
                     <div class="filter-wrap">
                         <div class="filter-content">
                             <ul class="check-list">
                                 <li class="check-item">
-                                    <div class="label-name">{{ checkObj[currentTab].label }}：</div>
+                                    <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
                                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
                                         @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                        <el-checkbox v-for="row in checkObj[currentTab].list" :label="row" :key="row">
+                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row" :key="row">
                                             {{ row }}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
@@ -113,19 +113,21 @@
                     salePrice: ''
                 },
                 tabs: [{
+                    id: 1,
                     title: this.$t("marketplace.nfts"),
                     num: 8
                 }, {
+                    id: 2,
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
-                currentTab: 'NFTs',
+                currentTabId: 1,
                 checkObj: {
-                    NFTs: {
+                    1: {
                         label: 'Status',
                         list: ['Available', 'On sale', 'Staking', 'Sending']
                     },
-                    Other: {
+                    2: {
                         label: 'Status',
                         list: ['Available', 'Sending']
                     }
@@ -170,20 +172,25 @@
         beforeDestroy() {},
         methods: {
             handleCheckAllChange(val) {
-                this.checkListFilter = val ? this.checkObj[this.currentTab].list : [];
+                this.checkListFilter = val ? this.checkObj[this.currentTabId].list : [];
                 this.isIndeterminate = false;
                 this.page.curPage = 1
                 this.getLiist()
             },
             handleCheckedCitiesChange(value) {
                 let checkedCount = value.length;
-                this.checkAll = checkedCount === this.checkObj[this.currentTab].list.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj[this.currentTab].list.length;
+                this.checkAll = checkedCount === this.checkObj[this.currentTabId].list.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj[this.currentTabId].list.length;
                 this.page.curPage = 1
                 this.getLiist()
             },
             onSelectTab(item) {
-                this.currentTab = item.title
+                this.currentTabId = item.id
+                this.page.curPage = 1
+                this.isLoading = true
+                this.getLiist().then(() => {
+                    this.isLoading = false
+                })
             },
             doDeliver(row) {
                 this.currentItem = row
@@ -206,7 +213,7 @@
                             page: this.page.curPage,
                             per_page: this.page.pageSize,
                             status: 0,
-                            type: this.currentTab === 'NFTs' ? 1 : 2
+                            type: this.currentTabId
                         }
                     }).then(res => {
                         if (res.ok && res.data) {
@@ -229,7 +236,7 @@
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
                                 status: 0,
-                                type: this.currentTab === 'NFTs' ? 1 : 2
+                                type: this.currentTabId
                             }
 
                         }

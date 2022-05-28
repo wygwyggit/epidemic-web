@@ -2,7 +2,7 @@
     <div :class="[prefixCls , 'clearfix']">
         <ul class="page-tabs clearfix">
             <li v-for="(item, index) in tabs" v-show="!item.isHide" :key="index"
-                :class="{'active': currentTab === item.title, 'special': item.isSpecial,}"
+                :class="{'active': currentTabId === item.id, 'special': item.isSpecial,}"
                  @click="handlerSelect(item, index)">
                 <span class="tab-text"  :title="item.title">
                     {{item.title}}</span>
@@ -46,9 +46,9 @@
             },
 
             // 当前选中的tab
-            currentTab: {
-                type: String,
-                default: ""
+            currentTabId: {
+                type: Number,
+                default: 1
             },
 
             // 是否显示数量
