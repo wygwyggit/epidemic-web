@@ -15,15 +15,18 @@ const myAjax = (options) => {
     return new Promise((res, rej) => {
         if (isLogout) return res()
         let url = apiBasePath + options.url
-        const data = options.data || {}
+        const data = Object.assign({
+            header: {
+                'token': Cookie.getCookie('ad_token') || '1',
+                'addr': Cookie.getCookie("__account__") || '',
+            }
+        }, options.data || {}) 
         axios({
             url: url,
             method: options.method || 'post',
             data,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
-                'token': Cookie.getCookie('ad_token') || '',
-                'addr': Cookie.getCookie("__account__") || '',
                 ...(options.headers || {})
             },
         }).then(json => {
