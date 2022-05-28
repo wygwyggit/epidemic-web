@@ -57,7 +57,7 @@
                         <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                         {{$t("account.filter")}}
                     </div>
-                    <div class="search">
+                    <!-- <div class="search">
                         <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                             <a href="javascript:;" slot="append" class="search-icon"></a>
                         </el-input>
@@ -66,7 +66,7 @@
                                 :value="item.value">
                             </el-option>
                         </el-select>
-                    </div>
+                    </div> -->
                     <div class="filter-wrap" v-show="isShowFilter">
                         <div class="filter-content">
                             <ul class="check-list" v-if="currentTabId === 1">
