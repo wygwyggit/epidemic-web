@@ -3,17 +3,21 @@
         <li>
             <div class="index clearfix">
                 <div class="l">
-                    # {{itemInfo.id}}
+                    # {{itemInfo.goods_id}}
                 </div>
-                <div class="r">{{$t(`account.${itemInfo.color}`)}}</div>
+                <div class="r">{{$t(`account.${itemInfo.rarity}`)}}</div>
             </div>
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
-                <img :src="netImgBaseUrl + itemInfo.image_url">
+                <img :src="netImgBaseUrl + itemInfo.image">
             </div>
             <div class="name">
-                {{itemInfo.name}}
+                <span>{{itemInfo.name}}</span>
+                <span v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
             </div>
-            <template v-if="type === 'sale'">
+            <div class="opt-buttom">
+                <slot></slot>
+            </div>
+            <!-- <template v-if="type === 'sale'">
                 <div class="card-info" v-if="!itemInfo.on_sale">
                     <div class="sale">
                         <div class="lv">LV-{{itemInfo.class}}</div>
@@ -47,7 +51,7 @@
 
                     </div>
                 </div>
-            </template>
+            </template> -->
         </li>
     </div>
 </template>
@@ -116,9 +120,10 @@
             padding: .266666666666667rem .266666666666667rem .453333333333333rem .266666666666667rem;
             width: 100%;
             margin-bottom: 20px;
-            border: 1px solid #004D8C;
-            border-radius: 10px;
+            border: 1px solid #29374B;
+            border-radius: .133333333333333rem;
             text-align: center;
+            background: #1D2633;
 
             .index {
                 color: #D7D7D7;
@@ -139,72 +144,16 @@
             }
 
             .name {
+                display: flex;
+                justify-content: space-between;
                 padding-bottom: 10px;
                 font-size: .266666666666667rem;
                 color: #fff;
                 border-bottom: 1px solid #29374B;
+                text-align: center;
             }
-
-            .card-info {
-                margin-top: .1rem;
-
-                .sale,
-                .on-sale {
-                    height: 50px;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                .on-sale {
-                    .price {
-                        margin-top: 5px;
-                        color: $--color-success;
-                        font-size: .266666666666667rem;
-                    }
-                }
-
-                .lv,
-                .price-txt {
-                    color: #777E90;
-                    font-size: 14px;
-                }
-
-                .btn-groups {
-                    display: flex;
-
-                    .btn {
-                        display: inline-block;
-                        margin-top: 12px;
-                        width: 100%;
-                        height: 40px;
-                        line-height: 40px;
-                        color: #fff;
-                        font-size: 16px;
-                        border-radius: 5px;
-                        cursor: pointer;
-                        flex: 1;
-
-                        &.sale-btn {
-                            text-align: center;
-                            background: #45B26B;
-                        }
-                        &.deliver-btn {
-                            margin-right: 5px;
-                            background: #F1AE00;
-                        }
-
-                        &.revise-btn {
-                            background: #777E90;
-                        }
-
-                        &.cancel-btn {
-                            margin-left: 3px;
-                            background: #FF5E19;
-                        }
-                    }
-
-                }
+            .opt-buttom {
+                margin-top: .133333333333333rem;
             }
 
 

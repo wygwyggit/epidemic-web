@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls">
+    <div :class="prefixCls" v-loading="isLoading">
         <div class="top">
             <div class="w">
                 <img src="../../assets/images/nav-my-account.png" alt="">
@@ -105,6 +105,14 @@
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
                                 @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
                                 type="sale">
+                                <div class="btns-wrap">
+                                    <template v-if="item.status == 0">
+                                        <div class="btn btn-deliver">{{$t("common.deliver")}}</div>
+                                        <div class="btn btn-sale">{{$t("account.sale")}}</div>
+                                    </template>
+                                    <template>
+                                    </template>
+                                </div>
                             </item-card>
                         </template>
 
@@ -222,7 +230,6 @@
                 },
                 total: 0,
                 isLoading: true,
-                account: null,
                 nets: {
                     salePrice: ''
                 },
@@ -318,7 +325,13 @@
             getTotalNets() {
                 return new Promise((resolve, reject) => {
                     myAjax({
-                        url: 'nft/count',
+                        url: 'user/goods/list',
+                        data: {
+                            page: this.page.curPage,
+                            per_page: this.page.pageSize,
+                            status: 0,
+                            type: this.currentTab === 'NFTs' ? 1 : 2
+                        }
                     }).then(res => {
                         if (res.ok && res.data) {
                             this.tabs[0].num = res.data.count || 0
@@ -334,19 +347,19 @@
             getLiist() {
                 return new Promise((resolve, reject) => {
                     myAjax({
-                        url: 'user/nft_list',
+                        url: 'user/goods/list',
                         data: {
-                            page: this.page.curPage,
-                            per_page: this.page.pageSize,
-                            extra: {
-                                color: this.checkListFilter,
-                                on_sale: this.checkListSale,
-                                level: this.checkListLvel,
+                            body: {
+                                page: this.page.curPage,
+                                per_page: this.page.pageSize,
+                                status: 0,
+                                type: this.currentTab === 'NFTs' ? 1 : 2
                             }
+
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = data.nft_list || []
+                        this.netList = data.items || []
                         resolve()
                     }).catch(err => {
                         reject(err)
@@ -498,8 +511,9 @@
             font-weight: 600;
 
             img {
-                width: .8rem;
-                height: .8rem;
+                display: none;
+                width: .85rem;
+                height: .85rem;
                 vertical-align: text-bottom;
             }
         }
@@ -509,8 +523,35 @@
             background: #14181f;
 
             .w {
+
                 // display: flex;
                 // justify-content: space-between;
+                .right {
+                    .components-item-card {
+                        .btns-wrap {
+                            display: flex;
+                            justify-content: space-between;
+                        }
+                        .btn {
+                            flex: 1;
+                            height: .533333333333333rem;
+                            line-height: .533333333333333rem;
+                            text-align: center;
+                            border-radius: .066666666666667rem;
+                            color: #fff;
+                            &:last-child {
+                                margin-left: .133333333333333rem;
+                            }
+                        }
+
+                        &.btn-deliver {
+                            background: #F1AE00;
+                        }
+                        &.btn-sale {
+                            background: #00A73A;
+                        }
+                    }
+                }
             }
 
             .filter-wrap {
@@ -607,6 +648,8 @@
                 flex: 1;
 
                 .list {
+                    min-height: 5rem;
+
                     .soon-box {
                         position: relative;
                         width: max-content;
@@ -677,6 +720,10 @@
                 line-height: 3.093333333333333rem;
                 font-size: .64rem;
                 text-align: center;
+
+                img {
+                    display: inline-block;
+                }
             }
 
             .main {
