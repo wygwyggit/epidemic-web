@@ -15,7 +15,7 @@
                         <img src="../../assets/images/clock_w.png" alt="">
                     </div>
                 </div>
-                <div class="bnb-box clearfix">
+                <!-- <div class="bnb-box clearfix">
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
@@ -44,7 +44,7 @@
                         </div>
                         <div class="sub-info">Total value</div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -52,11 +52,11 @@
             <div class="w">
                 <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
-                    <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
+                    <!-- <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
                         <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
                         <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                         {{$t("account.filter")}}
-                    </div>
+                    </div> -->
                     <!-- <div class="search">
                         <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
                             <a href="javascript:;" slot="append" class="search-icon"></a>

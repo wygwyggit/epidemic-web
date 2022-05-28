@@ -79,8 +79,6 @@
         "gold": "Gold",
         "copper": "Copper",
         "sale": "Sale",
-        "for-sale": "For sale",
-        "not-sale": "Not sale",
         "level": "Level",
         "search-id-name": "Search ID or Name",
         "latest": "Latest",
@@ -90,10 +88,12 @@
         "open-soon": "Open Soon",
         "status": "Status",
         "available": "Available",
-        "on-sale": "On sale",
+        "on-sale": "On Sale",
         "staking": "Staking",
         "sending": "Sending",
-        "open": "open"
+        "open": "open",
+        "synthetic": "synthetic",
+        "congratulation": "Congratulations on getting a"
     },
     "detail": {
         "attribute": "Attribute",

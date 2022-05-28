@@ -37,14 +37,24 @@
                                 type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
-                                        <div class="btn btn-open" v-if="item.belong_type == -1">
+                                        <div class="btn btn-open" v-if="item.belong_type == -1"
+                                            @click="openGiftBag(item.type_id)">
                                             {{$t("account.open")}}
                                         </div>
+                                        <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic">
+                                            {{$t("account.synthetic")}}</div>
                                         <div class="btn btn-deliver" @click="doDeliver(item)"
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
                                         <div class="btn btn-sale">{{$t("account.sale")}}</div>
                                     </template>
-                                    <template>
+                                    <template v-if="item.status == 2">
+                                        <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
+                                    </template>
+                                    <template v-if="item.status == 1">
+                                        <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
+                                    </template>
+                                    <template v-if="item.status == -2">
+                                        <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
                                     </template>
                                 </div>
                             </item-card>
@@ -79,6 +89,7 @@
         </el-dialog>
         <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id"
             :goods_name="currentGoodRow.name"></deliver-dialog>
+        <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
     </div>
 </template>
 
@@ -88,12 +99,14 @@
     import itemCard from '@/components/item-card'
     import DeliverDialog from '@/components/deliver-dialog'
     import emptyImage from '@/assets/images/empty.png'
+    import giftBag from './components/gift-bag'
     export default {
         name: '',
         components: {
             PageTabs,
             itemCard,
-            DeliverDialog
+            DeliverDialog,
+            giftBag
         },
         props: {},
         data() {
@@ -105,6 +118,8 @@
                     curPage: 1
                 },
                 total: 0,
+                isShowGiftBag: false,
+                giftBagList: [],
                 isLoading: true,
                 nets: {
                     salePrice: ''
@@ -191,6 +206,33 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doGiftClose() {
+                this.isShowGiftBag = false
+                if (!this.checkListFilter.length) {
+                    this.getTotalInfo()
+                }
+                this.getLiist()
+            },
+            doSynthetic() {
+
+            },
+            openGiftBag(type_id) {
+                myAjax({
+                    url: 'user/prize/lottery/open',
+                    data: {
+                        body: {
+                            type_id,
+                            open_num: 1
+                        }
+                    }
+                }).then(res => {
+                    if ((res.data || {}).rewards) {
+                        this.isShowGiftBag = true
+                        this.giftBagList = res.data.rewards
+                    }
+
+                })
+            },
             handleCheckAllChange(val) {
                 let arr = this.checkObj[this.currentTabId].list.map(x => x.id)
                 this.checkListFilter = val ? arr : [];
@@ -269,16 +311,16 @@
                         this.netList = []
                         let obj = {};
                         (data.items || []).forEach(x => {
-                            if(!obj[x.type_id]) {
+                            if (!obj[x.type_id]) {
                                 this.netList.push(x)
                                 obj[x.type_id] = 1
                             } else {
                                 obj[x.type_id]++
                             }
                         })
-                        for(let k in obj) {
+                        for (let k in obj) {
                             this.netList.forEach(x => {
-                                if(x.type_id == k) {
+                                if (x.type_id == k) {
                                     x.cardNum = obj[k]
                                 }
                             })
@@ -374,21 +416,28 @@
                         height: 40px;
                         line-height: 40px;
                         text-align: center;
-                        border-radius: .066666666666667rem;
+                        border-radius: .133333333333333rem;
                         color: #fff;
                         cursor: pointer;
                         font-size: .213333333333333rem;
 
-                        &:last-child {
-                            margin-left: .133333333333333rem;
-                        }
-
-                        &.btn-deliver,  &.btn-open {
+                        &.btn-deliver,
+                        &.btn-open {
                             background: #F1AE00;
                         }
 
                         &.btn-sale {
                             background: #00A73A;
+                        }
+
+                        &.btn-synthetic {
+                            background: #9E00FF;
+                        }
+
+                        &.btn-on-sale,
+                        .btn-on-staking,
+                        .btn-on-sending {
+                            background: #777E90;
                         }
                     }
                 }

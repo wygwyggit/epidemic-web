@@ -93,7 +93,9 @@
         "on-sale": "出售中",
         "staking": "质押中",
         "sending": "转增中",
-        "open": "开礼包"
+        "open": "开礼包",
+        "synthetic": "融合",
+        "congratulation": "恭喜你获得"
     },
     "detail": {
         "attribute": "属性",
