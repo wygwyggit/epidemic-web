@@ -14,19 +14,6 @@
                     <div class="right min" @click="handleRecoredDrawer">
                         <img src="../../assets/images/clock_w.png" alt="">
                     </div>
-                    
-                    <!-- <div class="tab-filter">
-                        <li :class="{'active': query.tabFilterIndex === index}" v-for="(item, index) of tabFilterList"
-                            :key="index" @click="selectTabFilter(index)">
-                            {{$t(`marketplace.${item.name}`)}}
-                        </li>
-                    </div>
-                    <div class="tab-filter-h5">
-                        <div>
-                            {{$t(`marketplace.${(tabFilterList[query.tabFilterIndex]).name}`)}}
-                            <img src="../../assets/images/down.png" alt="">
-                        </div>
-                    </div> -->
                 </div>
                 <div class="bnb-box clearfix">
                     <div class="bnb-item">
@@ -204,7 +191,8 @@
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <table>
+                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
                         <th>Order ID</th>
@@ -255,8 +243,8 @@
                 </span>
             </div>
             <div class="content">
-                <empty-data title="No items for sale" v-if="recordList.length"></empty-data>
-                <table v-if="!recordList.length">
+                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
                         <th>Order ID</th>
@@ -424,60 +412,11 @@
                 }],
                 isShowFilter: false,
                 isFilterDrawer: false,
-                checkObj: {
-                    NFTs: [{
-                        label: 'Sale',
-                        value: 'sale',
-                        list: ['All Sale', 'My Sale']
-                    }, {
-                        label: 'Color',
-                        value: 'color',
-                        list: ['Yellow', 'Orange', 'Red', 'Blue', 'Purple', 'Diamond']
-                    }, {
-                        label: 'Props',
-                        value: 'props',
-                        list: ['Shoes', 'Pants', 'Clothes', 'Hat', 'Gloves']
-                    }, {
-                        label: 'Level',
-                        value: 'level',
-                        list: ['Lv-1', 'Lv-2', 'Lv-3', 'Lv-4', 'Lv-5', 'Lv-6', 'Lv-7', 'Lv-8']
-                    }],
-                    Other: [{
-                        label: 'Sale',
-                        value: 'sale',
-                        list: ['All Sale', 'My Sale']
-                    }, {
-                        label: 'Pack',
-                        value: 'pack',
-                        list: ['Silver Pack', 'Gold Pack']
-                    }, {
-                        label: 'Frag',
-                        value: 'frag',
-                        list: ['Panamera Fragments', 'Car Fragments', 'Phone Fragments']
-                    }]
-                },
                 isShowRecored: false,
                 openIsLoading: false,
                 buyRecoredDrawer: false,
-                tabFilterList: [{
-                    id: 0,
-                    name: 'all'
-                }, {
-                    id: 1,
-                    name: 'last-24'
-                }, {
-                    id: 2,
-                    name: '7-days'
-                }, {
-                    id: 3,
-                    name: '30days'
-                }],
                 list: [],
-                recordList: [{
-
-                }, {
-
-                }],
+                recordList: [],
                 page: {
                     pageSize: 20,
                     curPage: 1
