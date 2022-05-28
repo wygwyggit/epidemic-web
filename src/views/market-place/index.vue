@@ -14,19 +14,6 @@
                     <div class="right min" @click="handleRecoredDrawer">
                         <img src="../../assets/images/clock_w.png" alt="">
                     </div>
-                    
-                    <!-- <div class="tab-filter">
-                        <li :class="{'active': query.tabFilterIndex === index}" v-for="(item, index) of tabFilterList"
-                            :key="index" @click="selectTabFilter(index)">
-                            {{$t(`marketplace.${item.name}`)}}
-                        </li>
-                    </div>
-                    <div class="tab-filter-h5">
-                        <div>
-                            {{$t(`marketplace.${(tabFilterList[query.tabFilterIndex]).name}`)}}
-                            <img src="../../assets/images/down.png" alt="">
-                        </div>
-                    </div> -->
                 </div>
                 <div class="bnb-box clearfix">
                     <div class="bnb-item">
@@ -82,11 +69,70 @@
                     </div>
                     <div class="filter-wrap" v-show="isShowFilter">
                         <div class="filter-content">
-                            <ul class="check-list">
-                                <li class="check-item" v-for="(item, index) in checkObj[currentTab]" :key="index">
-                                    <div class="label-name">{{ item.label }}：</div>
-                                    <el-checkbox-group v-model="checkedNames">
-                                        <el-checkbox v-for="row in item.list" :label="row" :key="row" :class="{'w-check': item.label === 'Pack' || item.label === 'Frag'}">{{ row }}</el-checkbox>
+                            <ul class="check-list" v-if="currentTab === 'NFTs'">
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                                    <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                                        <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
+                                        <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.color")}}：</div>
+                                    <el-checkbox-group v-model="checkListColor" @change="doSearch">
+                                        <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}</el-checkbox>
+                                        <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}</el-checkbox>
+                                        <el-checkbox label="red" class="red">{{$t("marketplace.red")}}</el-checkbox>
+                                        <el-checkbox label="blue" class="blue">{{$t("marketplace.blue")}}</el-checkbox>
+                                        <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}</el-checkbox>
+                                        <el-checkbox label="diamond">{{$t("marketplace.diamond")}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.props")}}：</div>
+                                    <el-checkbox-group v-model="checkListProps" @change="doSearch">
+                                        <el-checkbox label="shoes" >{{$t("marketplace.shoes")}}</el-checkbox>
+                                        <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
+                                        <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
+                                        <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
+                                        <el-checkbox label="gloves">{{$t("marketplace.gloves")}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.level")}}：</div>
+                                    <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                                        <el-checkbox :label="1">Lv-1</el-checkbox>
+                                        <el-checkbox :label="2">Lv-2</el-checkbox>
+                                        <el-checkbox :label="3">Lv-3</el-checkbox>
+                                        <el-checkbox :label="4">Lv-4</el-checkbox>
+                                        <el-checkbox :label="5">Lv-5</el-checkbox>
+                                        <el-checkbox :label="6">Lv-6</el-checkbox>
+                                        <el-checkbox :label="7">Lv-7</el-checkbox>
+                                        <el-checkbox :label="8">Lv-8</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                            </ul>
+                            <ul class="check-list" v-else>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                                    <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                                        <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
+                                        <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.pack")}}：</div>
+                                    <el-checkbox-group v-model="checkListPack" @change="doSearch">
+                                        <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}</el-checkbox>
+                                        <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                                <li class="check-item">
+                                    <div class="label-name">{{$t("marketplace.frag")}}：</div>
+                                    <el-checkbox-group v-model="checkListFrag" @change="doSearch">
+                                        <el-checkbox label="panameraFragments" class="w-check">{{$t("marketplace.panamera-fragments")}}</el-checkbox>
+                                        <el-checkbox label="carFragments" class="w-check">{{$t("marketplace.car-fragments")}}</el-checkbox>
+                                        <el-checkbox label="phoneFragments" class="w-check">{{$t("marketplace.phone-fragments")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                             </ul>
@@ -98,8 +144,8 @@
                     </div>
                 </div>
                 <div class="content-list">
-                    <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
-                    <ul v-if="recordList.length">
+                    <empty-data title="No items for sale" v-if="!list.length"></empty-data>
+                    <ul v-if="list.length">
                         <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
                             <div class="title">
                                 <div class="left">
@@ -134,89 +180,8 @@
                 <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                     @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                     :page-size="Number(page.pageSize)" :total="Number(total)"
-                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length">
+                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
                 </el-pagination>
-                <!-- <div class="left">
-                    <ul>
-                        <li>
-                            <div class="title">
-                                <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListFilter')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val filter">
-                                <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                                    <el-checkbox label="Yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                                    <el-checkbox label="Orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                                    <el-checkbox label="Red" class="red">{{$t("account.red")}}</el-checkbox>
-                                    <el-checkbox label="Blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                                    <el-checkbox label="Purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                                    <el-checkbox label="Diamond">{{$t("account.diamond")}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="title" style="border-bottom: 0;">
-                                <span>{{$t("marketplace.my-sale")}}</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListSale')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val" style="padding-top: 0">
-                                <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                    <el-checkbox label="my sale">{{$t("marketplace.my-sale")}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="title">
-                                <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListLvel')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val">
-                                <el-checkbox-group v-model="checkListLvel" @change="doSearch">
-                                    <el-checkbox label="Lv-1">Lv-1</el-checkbox>
-                                    <el-checkbox label="Lv-2">Lv-2</el-checkbox>
-                                    <el-checkbox label="Lv-3">Lv-3</el-checkbox>
-                                    <el-checkbox label="Lv-4">Lv-4</el-checkbox>
-                                    <el-checkbox label="Lv-5">Lv-5</el-checkbox>
-                                    <el-checkbox label="Lv-6">Lv-6</el-checkbox>
-                                    <el-checkbox label="Lv-7">Lv-7</el-checkbox>
-                                    <el-checkbox label="Lv-8">Lv-8</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="right">
-                    <div class="top-search">
-                        <div class="total">
-                            <span class="txt">0 NFTs</span>
-                            <span class="filter" @click="openFilterDrawer">
-                                Filter(<i>4</i>)
-                            </span>
-                        </div>
-                        <div class="search">
-                            <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
-                                <a href="javascript:;" slot="append" class="search-icon"></a>
-                            </el-input>
-                            <el-select v-model="query.latest" placeholder="">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </div>
-                    </div>
-                    <div class="list">
-                        <div class="soon-box">
-                            <img src="../../assets/images/soon.png" alt="">
-                            <div>
-                                <p>Coming soon...</p>
-                                <p>Stay tuned!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
             </div>
         </div>
         <el-dialog title="Order record" custom-class="recored-dialog" :visible.sync="isShowRecored"
@@ -226,7 +191,8 @@
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <table>
+                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
                         <th>Order ID</th>
@@ -277,8 +243,8 @@
                 </span>
             </div>
             <div class="content">
-                <empty-data title="No items for sale" v-if="recordList.length"></empty-data>
-                <table v-if="!recordList.length">
+                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
                         <th>Order ID</th>
@@ -326,16 +292,77 @@
         <el-drawer :visible.sync="isFilterDrawer" direction="btt" class="el-drawer2" :show-close="false">
             <div class="filter-content">
                 <div class="top-btn">
-                    <img src="../../assets/images/close.png" alt="">
-                    <div>Done</div>
+                    <img src="../../assets/images/close.png" alt="" @click="handleClose">
+                    <div @click="handleClose(1)">Done</div>
                 </div>
                 <ul class="check-list">
-                    <li class="check-item" v-for="(item, index) in checkObj[currentTab]" :key="index">
-                        <div class="label-name">{{ item.label }}：</div>
-                        <el-checkbox-group v-model="checkedNames">
-                            <el-checkbox v-for="row in item.list" :label="row" :key="row" :class="{'block-item': item.label === 'Frag'}">{{ row }}</el-checkbox>
-                        </el-checkbox-group>
-                    </li>
+                    <ul class="check-list" v-if="currentTab === 'NFTs'">
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                            <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                                <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
+                                <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.color")}}：</div>
+                            <el-checkbox-group v-model="checkListColor" @change="doSearch">
+                                <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}</el-checkbox>
+                                <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}</el-checkbox>
+                                <el-checkbox label="red" class="red">{{$t("marketplace.red")}}</el-checkbox>
+                                <el-checkbox label="blue" class="blue">{{$t("marketplace.blue")}}</el-checkbox>
+                                <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}</el-checkbox>
+                                <el-checkbox label="diamond">{{$t("marketplace.diamond")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.props")}}：</div>
+                            <el-checkbox-group v-model="checkListProps" @change="doSearch">
+                                <el-checkbox label="shoes" >{{$t("marketplace.shoes")}}</el-checkbox>
+                                <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
+                                <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
+                                <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
+                                <el-checkbox label="gloves">{{$t("marketplace.gloves")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.level")}}：</div>
+                            <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                                <el-checkbox :label="1">Lv-1</el-checkbox>
+                                <el-checkbox :label="2">Lv-2</el-checkbox>
+                                <el-checkbox :label="3">Lv-3</el-checkbox>
+                                <el-checkbox :label="4">Lv-4</el-checkbox>
+                                <el-checkbox :label="5">Lv-5</el-checkbox>
+                                <el-checkbox :label="6">Lv-6</el-checkbox>
+                                <el-checkbox :label="7">Lv-7</el-checkbox>
+                                <el-checkbox :label="8">Lv-8</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                    </ul>
+                    <ul class="check-list" v-else>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                            <el-checkbox-group v-model="checkListSale" @change="doSearch">
+                                <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
+                                <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.pack")}}：</div>
+                            <el-checkbox-group v-model="checkListPack" @change="doSearch">
+                                <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}</el-checkbox>
+                                <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                        <li class="check-item">
+                            <div class="label-name">{{$t("marketplace.frag")}}：</div>
+                            <el-checkbox-group v-model="checkListFrag" @change="doSearch">
+                                <el-checkbox label="panameraFragments" class="block-item">{{$t("marketplace.panamera-fragments")}}</el-checkbox>
+                                <el-checkbox label="carFragments" class="block-item">{{$t("marketplace.car-fragments")}}</el-checkbox>
+                                <el-checkbox label="phoneFragments" class="block-item">{{$t("marketplace.phone-fragments")}}</el-checkbox>
+                            </el-checkbox-group>
+                        </li>
+                    </ul>
                 </ul>
             </div>
         </el-drawer>
@@ -343,8 +370,10 @@
 </template>
 
 <script>
+    import myAjax from '@/utils/ajax.js'
     import PageTabs from '@/components/page-tabs'
     import emptyData from '@/components/empty-data'
+
     export default {
         name: '',
         components: {
@@ -362,10 +391,15 @@
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
+                total: 0,
+                isLoading: true,
                 currentTab: 'NFTs',
-                checkListFilter: [],
+                checkListColor: [],
                 checkListSale: [],
                 checkListLvel: [],
+                checkListProps: [],
+                checkListFrag: [],
+                checkListPack: [],
                 query: {
                     keywords: '',
                     latest: 0,
@@ -378,66 +412,11 @@
                 }],
                 isShowFilter: false,
                 isFilterDrawer: false,
-                checkedNames: [],
-                checkObj: {
-                    NFTs: [{
-                        label: 'Sale',
-                        list: ['All Sale', 'My Sale']
-                    }, {
-                        label: 'Color',
-                        list: ['Yellow', 'Orange', 'Red', 'Blue', 'Purple', 'Diamond']
-                    }, {
-                        label: 'Props',
-                        list: ['Shoes', 'Pants', 'Clothes', 'Hat', 'Gloves']
-                    }, {
-                        label: 'Level',
-                        list: ['Lv-1', 'Lv-2', 'Lv-3', 'Lv-4', 'Lv-5', 'Lv-6', 'Lv-7', 'Lv-8']
-                    }],
-                    Other: [{
-                        label: 'Sale',
-                        list: ['All Sale', 'My Sale']
-                    }, {
-                        label: 'Pack',
-                        list: ['Silver Pack', 'Gold Pack']
-                    }, {
-                        label: 'Frag',
-                        list: ['Panamera Fragments', 'Car Fragments', 'Phone Fragments']
-                    }]
-                },
                 isShowRecored: false,
                 openIsLoading: false,
                 buyRecoredDrawer: false,
-                tabFilterList: [{
-                    id: 0,
-                    name: 'all'
-                }, {
-                    id: 1,
-                    name: 'last-24'
-                }, {
-                    id: 2,
-                    name: '7-days'
-                }, {
-                    id: 3,
-                    name: '30days'
-                }],
-                list: [{
-
-                }, {
-
-                }, {
-
-                }, {
-
-                }, {
-
-                }, {
-
-                }],
-                recordList: [{
-
-                }, {
-
-                }],
+                list: [],
+                recordList: [],
                 page: {
                     pageSize: 20,
                     curPage: 1
@@ -450,6 +429,7 @@
             this.options.forEach(x => {
                 x.label = this.$t(`account.${x.key}`)
             });
+            this.getLiist()
         },
         computed: {
             placeholderTxt() {
@@ -459,6 +439,45 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getLiist() {
+                this.isLoading = true
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/goods/list',
+                        data: {
+                            body: {
+                                page: this.page.curPage,
+                                per_page: this.page.pageSize,
+                                extra: {
+                                    props: this.checkListProps,
+                                    color: this.checkListColor,
+                                    on_sale: this.checkListSale,
+                                    level: this.checkListLvel,
+                                    frag: this.checkListFrag,
+                                    pack: this.checkListPack
+                                }
+                            }
+                        }
+                    }).then(res => {
+                        const data = res.data || {}
+                        this.list = data.nft_list || []
+                        this.isLoading = false
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
+            handleClose(type) {
+                // 完成
+                if(type) {
+
+                }
+                this.isFilterDrawer = false
+            },
+            handleCheckedCitiesChange(value) {
+                console.log(value, this.formData, '11')
+            },
             onSizeChange(size) {
                 this.page.curPage = 1
                 this.page.pageSize = size
@@ -561,6 +580,8 @@
                     cursor: pointer;
 
                     img {
+                        width: .3733rem;
+                        height: .3733rem;
                         vertical-align: middle;
                     }
 
@@ -723,7 +744,7 @@
                     left: 0;
                     width: 100%;
                     padding: .4rem .1333rem .1333rem;
-                    background: #131922;
+                    background: #1D2633;
                     border-radius: .1333rem;
                     opacity: 1;
                     border: 1px solid #29374B;
@@ -756,7 +777,7 @@
                         }
 
                         .el-checkbox__inner {
-                            border: 1px solid #000;
+                            border: 2px solid #131922;
                             background-color: #000;
                         }
 
@@ -1040,6 +1061,14 @@
                 padding: .1333rem .5333rem;
             }
 
+            .other-list {
+                .el-checkbox {
+                    width: 3.2rem;
+                    margin-right: 1.0667rem;
+                    margin-bottom: .48rem;
+                }
+            }
+
             .check-item {
                 padding: .4rem .8rem 0 .4rem;
                 margin-bottom: .2667rem;
@@ -1066,8 +1095,8 @@
                     }
 
                     .el-checkbox__inner {
-                        background-color: #000;
                         border: 2px solid #131922;
+                        background-color: #000;
                     }
 
                     .el-checkbox__input.is-checked .el-checkbox__inner,

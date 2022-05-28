@@ -198,23 +198,23 @@ body {
 }
 
 .yellow .el-checkbox__label {
-    color: #f3ba2f;
+    color: #f3ba2f !important;
 }
 
 .orange .el-checkbox__label {
-    color: #ff7a00;
+    color: #ff7a00 !important;
 }
 
 .red .el-checkbox__label {
-    color: #ff3d00;
+    color: #ff3d00 !important;
 }
 
 .blue .el-checkbox__label {
-    color: $--color-success;
+    color: $--color-success !important;
 }
 
 .purple .el-checkbox__label {
-    color: #9e00ff;
+    color: #9e00ff !important;
 }
 
 .sale-revise-dialog {

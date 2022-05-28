@@ -37,7 +37,7 @@
 
     .#{$prefixCls} {
         // z-index: 9;
-        margin-top: 1.8667rem;
+        // margin-top: 1.8667rem;
         text-align: center;
         // width: 473px;
         // overflow: hidden;
