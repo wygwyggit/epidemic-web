@@ -26,59 +26,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="left">
-                    <ul>
-                        <li>
-                            <div class="title">
-                                <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListFilter')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val filter">
-                                <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                                    <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                                    <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                                    <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
-                                    <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                                    <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                                    <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="title" style="border-bottom: 0;">
-                                <span>{{$t("account.sale")}}</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListSale')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val" style="padding-top: 0">
-                                <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                    <el-checkbox :label="1">{{$t("account.for-sale")}}</el-checkbox>
-                                    <el-checkbox :label="2">{{$t("account.not-sale")}}</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="title">
-                                <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                                <a href="javascript:;"
-                                    @click="doClearSearchQuery('checkListLvel')">{{$t("account.clear")}}</a>
-                            </div>
-                            <div class="filter-val">
-                                <el-checkbox-group v-model="checkListLvel" @change="doSearch">
-                                    <el-checkbox label="1">Lv-1</el-checkbox>
-                                    <el-checkbox label="2">Lv-2</el-checkbox>
-                                    <el-checkbox label="3">Lv-3</el-checkbox>
-                                    <el-checkbox label="4">Lv-4</el-checkbox>
-                                    <el-checkbox label="5">Lv-5</el-checkbox>
-                                    <el-checkbox label="6">Lv-6</el-checkbox>
-                                    <el-checkbox label="7">Lv-7</el-checkbox>
-                                    <el-checkbox label="8">Lv-8</el-checkbox>
-                                </el-checkbox-group>
-                            </div>
-                        </li>
-                    </ul>
-                </div> -->
                 <div class="right">
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
@@ -119,56 +66,6 @@
             </div>
 
         </div>
-        <el-drawer :visible.sync="isShowFilter" direction="btt">
-            <div class="filter-content">
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("account.filter")}} ({{checkListFilter.length}})</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListFilter')">Clear</a>
-                    </div>
-                    <div class="filter-val filter">
-                        <el-checkbox-group v-model="checkListFilter" @change="doSearch">
-                            <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                            <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                            <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
-                            <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                            <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                            <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-                </div>
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("account.sale")}}</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListSale')">Clear</a>
-                    </div>
-                    <div class="filter-val">
-                        <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                            <el-checkbox :label="1">{{$t("account.for-sale")}}</el-checkbox>
-                            <el-checkbox :label="2">{{$t("account.not-sale")}}</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-                </div>
-                <div class="filter-item">
-                    <div class="title">
-                        <span>{{$t("account.level")}} ({{checkListLvel.length}})</span>
-                        <a href="javascript:;" @click="doClearSearchQuery('checkListLvel')">Clear</a>
-                    </div>
-                    <div class="filter-val">
-                        <el-checkbox-group v-model="checkListLvel" @change="doSearch">
-                            <el-checkbox :label="1">Lv-1</el-checkbox>
-                            <el-checkbox :label="2">Lv-2</el-checkbox>
-                            <el-checkbox :label="3">Lv-3</el-checkbox>
-                            <el-checkbox :label="4">Lv-4</el-checkbox>
-                            <el-checkbox :label="5">Lv-5</el-checkbox>
-                            <el-checkbox :label="6">Lv-6</el-checkbox>
-                            <el-checkbox :label="7">Lv-7</el-checkbox>
-                            <el-checkbox :label="8">Lv-8</el-checkbox>
-                        </el-checkbox-group>
-                    </div>
-                </div>
-            </div>
-        </el-drawer>
         <el-dialog :title="saleReviseDialogTitle" :visible.sync="saleReviseDialog" width="6.4rem"
             @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
             <p class="tit">{{$t("account.price") }}</p>
@@ -236,10 +133,7 @@
                 checkAll: false,
                 isIndeterminate: true,
                 checkListFilter: [],
-                checkListLvel: [],
-                checkListSale: [],
                 isShowDeliverDialog: false,
-                isShowFilter: false,
                 saleReviseDialog: false,
                 saleReviseDialogTitle: '',
                 query: {
@@ -375,9 +269,6 @@
                 this[val] = []
                 this.doSearch()
             },
-            openFilterDrawer() {
-                this.isShowFilter = true
-            },
             goDetail(id) {
                 this.$router.push({
                     path: '/details',
@@ -389,26 +280,6 @@
             doSearch() {
                 this.page.curPage = 1
                 this.getLiist()
-                // console.log(this.checkListFilter)
-                // console.log(this.checkListSale)
-                // console.log(this.checkListLvel)
-                // if (this.checkListSale.length == 1) {
-                //     let saleStatus = this.checkListSale[0]
-                //     if (saleStatus === 'For sale') {
-                //         this.netList = this.netListCopy.filter(x => x.isSaled)
-                //     } else {
-                //         this.netList = this.netListCopy.filter(x => !x.isSaled)
-                //     }
-                // }
-                // if (this.checkListSale.length !== 1) {
-                //     this.netList = this.netListCopy
-                // }
-                // if (this.checkListFilter.length) {
-                //     let colorType = this.checkListFilter.map(item =>
-                //         item = item.toLowerCase()
-                //     )
-                //     this.netList = this.netListCopy.filter(x => colorType.includes(x.type))
-                // }
 
             }
         },
@@ -576,8 +447,7 @@
                     color: #777E90;
                 }
 
-                .all,
-                .el-checkbox-group {
+                .all {
                     margin-left: .2667rem;
                 }
 
@@ -723,10 +593,10 @@
                     .label-name {
                         display: none;
                     }
-                    
+
                     .el-checkbox {
                         margin-right: 10px;
-                        
+
                         .el-checkbox__label {
                             padding-left: 5px;
                         }
