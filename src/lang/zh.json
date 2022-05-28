@@ -91,7 +91,8 @@
         "available": "可使用",
         "on-sale": "出售中",
         "staking": "质押中",
-        "sending": "转增中"
+        "sending": "转增中",
+        "open": "开礼包"
     },
     "detail": {
         "attribute": "属性",

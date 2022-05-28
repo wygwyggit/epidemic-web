@@ -91,7 +91,8 @@
         "available": "Available",
         "on-sale": "On sale",
         "staking": "Staking",
-        "sending": "Sending"
+        "sending": "Sending",
+        "open": "open"
     },
     "detail": {
         "attribute": "Attribute",

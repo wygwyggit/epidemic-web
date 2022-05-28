@@ -37,6 +37,9 @@
                                 type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
+                                        <div class="btn btn-open" v-if="item.belong_type == -1">
+                                            {{$t("account.open")}}
+                                        </div>
                                         <div class="btn btn-deliver" @click="doDeliver(item)"
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
                                         <div class="btn btn-sale">{{$t("account.sale")}}</div>
@@ -343,6 +346,7 @@
 
             .list-content {
                 .components-item-card {
+
                     .btns-wrap {
                         display: flex;
                         justify-content: space-between;
@@ -362,7 +366,7 @@
                             margin-left: .133333333333333rem;
                         }
 
-                        &.btn-deliver {
+                        &.btn-deliver,  &.btn-open {
                             background: #F1AE00;
                         }
 

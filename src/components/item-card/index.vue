@@ -1,19 +1,33 @@
 <template>
     <div :class="prefixCls">
         <li>
-            <div class="index clearfix">
-                <div class="l">
-                    # {{itemInfo.goods_id}}
+            <template v-if="itemInfo.belong_type == -1 || itemInfo.belong_type == -2">
+                <div class="debris-header-info">
+                    {{itemInfo.name}}
                 </div>
-                <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
-            </div>
+            </template>
+            <template v-else>
+                <div class="index clearfix">
+                    <div class="l">
+                        # {{itemInfo.goods_id}}
+                    </div>
+                    <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
+                </div>
+            </template>
+
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
-            <div class="mid-content">
-                <span class="name">{{itemInfo.name}}</span>
-                <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
-            </div>
+            <template v-if="!itemInfo.cardNum">
+                <div class="card-num"><i>x</i>{{ itemInfo.cardNum || 1 }}</div>
+            </template>
+            <template v-else>
+                <div class="mid-content">
+                    <span class="name">{{itemInfo.name}}</span>
+                    <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
+                </div>
+            </template>
+
             <div class="opt-buttom">
                 <slot></slot>
             </div>
@@ -125,6 +139,12 @@
             text-align: center;
             background: #1D2633;
 
+            .debris-header-info {
+                color: #C4C4C4;
+                font-size: .213333333333333rem;
+                text-align: left;
+            }
+
             .index {
                 color: #D7D7D7;
                 font-size: .213333333333333rem;
@@ -143,6 +163,15 @@
                 }
             }
 
+            .card-num {
+                text-align: center;
+                font-size: .16rem;
+                color: #fff;
+                padding-bottom: 10px;
+                color: #fff;
+                border-bottom: 1px solid #29374B;
+            }
+
             .mid-content {
                 display: flex;
                 justify-content: space-between;
@@ -150,7 +179,7 @@
                 padding-bottom: 10px;
                 color: #fff;
                 border-bottom: 1px solid #29374B;
-                text-align: center;
+
                 .name {
                     font-size: .24rem;
                     font-weight: bold;
@@ -158,10 +187,12 @@
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
+
                 .level {
                     font-size: .186666666666667rem;
                 }
             }
+
             .opt-buttom {
                 margin-top: .18rem;
             }
