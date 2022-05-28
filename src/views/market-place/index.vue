@@ -149,10 +149,10 @@
                         <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
                             <div class="title">
                                 <div class="left">
-                                    {{ item.rarity }}
+                                    {{ currentTabId === 1 ? `# ${item.goods_id}` : item.rarity }}
                                 </div>
                                 <div class="right" v-if="currentTabId === 1">
-                                    Blue
+                                    {{ item.rarity }}
                                 </div>
                             </div>
                             <div class="img-box">
@@ -445,20 +445,12 @@
                 this.isLoading = true
                 return new Promise((resolve, reject) => {
                     myAjax({
-                        url: 'user/goods/list',
+                        url: 'market/goods/list',
                         data: {
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
-                                status: this.currentTabId,
-                                extra: {
-                                    props: this.checkListProps,
-                                    color: this.checkListColor,
-                                    on_sale: this.checkListSale,
-                                    level: this.checkListLvel,
-                                    frag: this.checkListFrag,
-                                    pack: this.checkListPack
-                                }
+                                type: this.currentTabId
                             }
                         }
                     }).then(res => {
