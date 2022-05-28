@@ -48,9 +48,9 @@
             </div>
 
         </div>
-        <div class="main">
+        <div class="main" v-loading="isLoading">
             <div class="w">
-                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
+                <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
                     <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
                         <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
@@ -69,7 +69,7 @@
                     </div>
                     <div class="filter-wrap" v-show="isShowFilter">
                         <div class="filter-content">
-                            <ul class="check-list" v-if="currentTab === 'NFTs'">
+                            <ul class="check-list" v-if="currentTabId === 1">
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.sale")}}：</div>
                                     <el-checkbox-group v-model="checkListSale" @change="doSearch">
@@ -144,43 +144,39 @@
                     </div>
                 </div>
                 <div class="content-list">
-                    <empty-data title="No items for sale" v-if="!list.length"></empty-data>
+                    <empty-data title="No items for sale" v-if="!list.length && !isLoading"></empty-data>
                     <ul v-if="list.length">
                         <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
                             <div class="title">
                                 <div class="left">
-                                    {{ currentTab === 'NFTs' ? '# 010001' : 'Gold Pack' }}
+                                    {{ item.rarity }}
                                 </div>
-                                <div class="right">
+                                <div class="right" v-if="currentTabId === 1">
                                     Blue
                                 </div>
                             </div>
                             <div class="img-box">
-                                <img src="../../assets/images/product_img.png" alt="" v-if="currentTab === 'NFTs'">
-                                <img src="../../assets/images/product_img2.png" alt="" v-else>
+                                <img :src="netImgBaseUrl + item.image" alt="">
                             </div>
                             <div class="name">
-                                MANCITY CLUB
+                                {{ item.name }}
                             </div>
                             <div class="price">
                                 Price
                             </div>
                             <div class="money_w">
                                 <div class="money">
-                                    5,000,000,000
+                                    {{ item.amount }}
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
                         </li>
                     </ul>
-                    <!-- <template v-if="!list.length && !isLoading">
-                        <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
-                    </template> -->
                 </div>
                 <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                     @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                     :page-size="Number(page.pageSize)" :total="Number(total)"
-                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
+                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length && !isLoading">
                 </el-pagination>
             </div>
         </div>
@@ -296,7 +292,7 @@
                     <div @click="handleClose(1)">Done</div>
                 </div>
                 <ul class="check-list">
-                    <ul class="check-list" v-if="currentTab === 'NFTs'">
+                    <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.sale")}}：</div>
                             <el-checkbox-group v-model="checkListSale" @change="doSearch">
@@ -373,6 +369,9 @@
     import myAjax from '@/utils/ajax.js'
     import PageTabs from '@/components/page-tabs'
     import emptyData from '@/components/empty-data'
+    import {
+        netImgBaseUrl
+    } from '@/config/config.js'
 
     export default {
         name: '',
@@ -385,15 +384,17 @@
             return {
                 prefixCls: 'views-market-place',
                 tabs: [{
+                    id: 1,
                     title: this.$t("marketplace.nfts"),
-                    num: 8
+                    num: 0
                 }, {
+                    id: 2,
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
                 total: 0,
                 isLoading: true,
-                currentTab: 'NFTs',
+                currentTabId: 1,
                 checkListColor: [],
                 checkListSale: [],
                 checkListLvel: [],
@@ -421,6 +422,7 @@
                     pageSize: 20,
                     curPage: 1
                 },
+                netImgBaseUrl
             }
         },
         computed: {},
@@ -448,6 +450,7 @@
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
+                                status: this.currentTabId,
                                 extra: {
                                     props: this.checkListProps,
                                     color: this.checkListColor,
@@ -460,7 +463,13 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.list = data.nft_list || []
+                        this.list = data.items || []
+                        this.tabs.forEach(x => {
+                            if(x.id === this.currentTabId) {
+                                x.num = data.total
+                            }
+                        })
+                        this.total = data.total
                         this.isLoading = false
                         resolve()
                     }).catch(err => {
@@ -494,7 +503,12 @@
                 this.isShowRecored = true
             },
             onSelectTab(item) {
-                this.currentTab = item.title
+                this.currentTabId = item.id
+                this.page.curPage = 1
+                this.isLoading = true
+                this.getLiist().then(() => {
+                    this.isLoading = false
+                })
             },
             doClearSearchQuery() {
 
@@ -799,6 +813,7 @@
             }
 
             .content-list {
+                min-height: 5rem;
 
                 ul {
                     display: flex;
