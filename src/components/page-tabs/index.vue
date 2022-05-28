@@ -80,7 +80,6 @@
 
         .page-tabs {
             display: inline-block;
-            padding-right: 20px;
             display: flex;
 
             li {

@@ -10,9 +10,9 @@
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
-            <div class="name">
-                <span>{{itemInfo.name}}</span>
-                <span v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
+            <div class="mid-content">
+                <span class="name">{{itemInfo.name}}</span>
+                <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
             </div>
             <div class="opt-buttom">
                 <slot></slot>
@@ -143,14 +143,20 @@
                 }
             }
 
-            .name {
+            .mid-content {
                 display: flex;
                 justify-content: space-between;
                 padding-bottom: 10px;
-                font-size: .266666666666667rem;
                 color: #fff;
                 border-bottom: 1px solid #29374B;
                 text-align: center;
+                .name {
+                    font-size: .24rem;
+                    font-weight: bold;
+                }
+                .level {
+                    font-size: .186666666666667rem;
+                }
             }
             .opt-buttom {
                 margin-top: .133333333333333rem;

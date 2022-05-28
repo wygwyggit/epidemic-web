@@ -80,24 +80,6 @@
                     </ul>
                 </div> -->
                 <div class="right">
-                    <div class="top-search">
-                        <!-- <div class="total">
-                            <span class="txt">{{total}} NFTs</span>
-                            <span class="filter" @click="openFilterDrawer">
-                                Filter(<i>{{ totalFilter }}</i>)
-                            </span>
-                        </div> -->
-                        <div class="search">
-                            <!-- <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
-                                <a href="javascript:;" slot="append" class="search-icon"></a>
-                            </el-input>
-                            <el-select v-model="query.latest" placeholder="">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label"
-                                    :value="item.value">
-                                </el-option>
-                            </el-select> -->
-                        </div>
-                    </div>
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
                         </el-empty>
@@ -532,6 +514,7 @@
                             display: flex;
                             justify-content: space-between;
                         }
+
                         .btn {
                             flex: 1;
                             height: .533333333333333rem;
@@ -539,17 +522,21 @@
                             text-align: center;
                             border-radius: .066666666666667rem;
                             color: #fff;
+
                             &:last-child {
                                 margin-left: .133333333333333rem;
                             }
+
+                            &.btn-deliver {
+                                background: #F1AE00;
+                            }
+
+                            &.btn-sale {
+                                background: #00A73A;
+                            }
                         }
 
-                        &.btn-deliver {
-                            background: #F1AE00;
-                        }
-                        &.btn-sale {
-                            background: #00A73A;
-                        }
+
                     }
                 }
             }
@@ -672,10 +659,6 @@
                     }
                 }
 
-                .top-search {
-                    display: flex;
-                    justify-content: space-between;
-                }
 
                 .search {
                     display: flex;
