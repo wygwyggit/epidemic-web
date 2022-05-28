@@ -157,8 +157,8 @@
                     </div>
                 </div>
                 <div class="content-list">
-                    <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
-                    <ul v-if="recordList.length">
+                    <empty-data title="No items for sale" v-if="!list.length"></empty-data>
+                    <ul v-if="list.length">
                         <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
                             <div class="title">
                                 <div class="left">
@@ -193,7 +193,7 @@
                 <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                     @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                     :page-size="Number(page.pageSize)" :total="Number(total)"
-                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length">
+                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length">
                 </el-pagination>
             </div>
         </div>
@@ -506,15 +506,17 @@
                     myAjax({
                         url: 'user/goods/list',
                         data: {
-                            page: this.page.curPage,
-                            per_page: this.page.pageSize,
-                            extra: {
-                                props: this.checkListProps,
-                                color: this.checkListColor,
-                                on_sale: this.checkListSale,
-                                level: this.checkListLvel,
-                                frag: this.checkListFrag,
-                                pack: this.checkListPack
+                            body: {
+                                page: this.page.curPage,
+                                per_page: this.page.pageSize,
+                                extra: {
+                                    props: this.checkListProps,
+                                    color: this.checkListColor,
+                                    on_sale: this.checkListSale,
+                                    level: this.checkListLvel,
+                                    frag: this.checkListFrag,
+                                    pack: this.checkListPack
+                                }
                             }
                         }
                     }).then(res => {
