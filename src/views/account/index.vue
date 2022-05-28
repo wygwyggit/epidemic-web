@@ -226,7 +226,7 @@
                 checkObj: {
                     NFTs: {
                         label: 'Status',
-                        list: ['Available', 'On sale', 'Sending']
+                        list: ['Available', 'On sale', 'Staking', 'Sending']
                     },
                     Other: {
                         label: 'Status',
@@ -722,6 +722,14 @@
                     .all,
                     .label-name {
                         display: none;
+                    }
+                    
+                    .el-checkbox {
+                        margin-right: 10px;
+                        
+                        .el-checkbox__label {
+                            padding-left: 5px;
+                        }
                     }
                 }
 
