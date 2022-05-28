@@ -1,12 +1,12 @@
 <template>
-    <div :class="prefixCls" >
+    <div :class="prefixCls">
         <div class="top">
             <div class="w">
                 <img src="../../assets/images/nav-my-account.png" alt="">
                 {{$t("account.my-account")}}
             </div>
         </div>
-        <div class="main" v-loading="isLoading">
+        <div class="main">
             <div class="w">
                 <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
@@ -18,15 +18,15 @@
                                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
                                         @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
-                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row" :key="row">
-                                            {{ row }}</el-checkbox>
+                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id" :key="row.id">
+                                            {{ row.val }}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="right">
+                <div class="right" v-loading="isLoading">
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
                         </el-empty>
@@ -121,15 +121,34 @@
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
+                selectedStatus: 0,
                 currentTabId: 1,
                 checkObj: {
                     1: {
                         label: this.$t("account.status"),
-                        list: [this.$t("account.available"), this.$t("account.on-sale"), this.$t("account.staking"), this.$t("account.sending")]
+                        list: [{
+                            id: 0,
+                            val: this.$t("account.available")
+                        }, {
+                            id: 1,
+                            val: this.$t("account.on-sale")
+                        }, {
+                            id: 2,
+                            val: this.$t("account.staking")
+                        }, {
+                            id: -2,
+                            val: this.$t("account.sending")
+                        }, ]
                     },
                     2: {
                         label: this.$t("account.status"),
-                        list: [this.$t("account.available"), this.$t("account.sending")]
+                        list: [{
+                            id: 0,
+                            val: this.$t("account.available")
+                        }, {
+                            id: -2,
+                            val: this.$t("account.sending")
+                        }, ]
                     }
                 },
                 checkAll: false,
@@ -160,7 +179,7 @@
             },
         },
         created() {
-            Promise.all([this.getTotalNets(), this.getLiist()]).then(res => {
+            Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                 this.isLoading = false
             })
             this.netListCopy = JSON.parse(JSON.stringify(this.netList))
@@ -180,17 +199,17 @@
             handleCheckedCitiesChange(value) {
                 let checkedCount = value.length;
                 this.checkAll = checkedCount === this.checkObj[this.currentTabId].list.length;
-                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj[this.currentTabId].list.length;
+                this.isIndeterminate = checkedCount > 0 && checkedCount < this.checkObj[this.currentTabId].list
+                    .length;
                 this.page.curPage = 1
                 this.getLiist()
             },
             onSelectTab(item) {
                 this.currentTabId = item.id
                 this.page.curPage = 1
+                this.checkListFilter = []
                 this.isLoading = true
-                this.getLiist().then(() => {
-                    this.isLoading = false
-                })
+                this.getLiist()
             },
             doDeliver(row) {
                 this.currentItem = row
@@ -205,7 +224,7 @@
                 this.page.curPage = page
                 this.getLiist()
             },
-            getTotalNets() {
+            getTotalInfo() {
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'user/goods/list',
@@ -213,7 +232,7 @@
                             page: this.page.curPage,
                             per_page: this.page.pageSize,
                             status: 0,
-                            type: this.currentTabId
+                            //type: checkListFilter.length ? checkListFilter : [0, 1, 2, -2]
                         }
                     }).then(res => {
                         if (res.ok && res.data) {
@@ -229,20 +248,21 @@
             },
             getLiist() {
                 return new Promise((resolve, reject) => {
+                    this.isLoading = true
                     myAjax({
                         url: 'user/goods/list',
                         data: {
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
-                                status: 0,
+                                status: this.checkListFilter.length ? this.checkListFilter : (this.currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
                                 type: this.currentTabId
                             }
-
                         }
                     }).then(res => {
                         const data = res.data || {}
                         this.netList = data.items || []
+                        this.isLoading = false
                         resolve()
                     }).catch(err => {
                         reject(err)
@@ -379,7 +399,7 @@
         }
 
         .main {
-            padding: 38px 0;
+            padding: 30px 0;
             background: #14181f;
 
             .w {
@@ -577,10 +597,11 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             .top {
-                height: 3.093333333333333rem;
-                line-height: 3.093333333333333rem;
+                height: 1.866666666666667rem;
+                line-height: 1.866666666666667rem;
                 font-size: .64rem;
                 text-align: center;
+                background: #14181f;
 
                 img {
                     display: inline-block;
@@ -588,7 +609,7 @@
             }
 
             .main {
-                padding: .5rem;
+                padding: 0 .5rem;
 
                 .left {
                     display: none;

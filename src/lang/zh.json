@@ -76,6 +76,7 @@
         "blue": "蓝色",
         "purple": "紫色",
         "diamond": "钻石色",
+        "gold": "金色",
         "sale": "售卖",
         "for-sale": "出售中",
         "not-sale": "未出售",
@@ -109,7 +110,7 @@
         "sale": "出售"
     },
     "marketplace": {
-        "nfts": "NFTs",
+        "nfts": "NFT",
         "other": "其他",
         "all": "All",
         "last-24": "Last 24h",

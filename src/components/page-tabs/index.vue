@@ -94,7 +94,7 @@
                 align-items: center;
                 justify-content: center;
                 float: left;
-                margin-top: 15px;
+                margin-top: .16rem;
                 font-size: 24px;
 
                 .tab-text {

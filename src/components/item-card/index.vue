@@ -146,6 +146,7 @@
             .mid-content {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 padding-bottom: 10px;
                 color: #fff;
                 border-bottom: 1px solid #29374B;
@@ -153,6 +154,9 @@
                 .name {
                     font-size: .24rem;
                     font-weight: bold;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                 }
                 .level {
                     font-size: .186666666666667rem;

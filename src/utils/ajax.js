@@ -32,13 +32,13 @@ const myAjax = (options) => {
         }).then(json => {
             const data = json.data || {};
             // 如果后端返回错误消息
-            // if (!data.ok && !options.isPassFalse) {
-            //     Message.closeAll();
-            //     Message({
-            //         type: 'error',
-            //         message: data.message || '网络不稳定，请您稍后再试~'
-            //     })
-            // }
+            if (!data.ok && !options.isPassFalse) {
+                Message.closeAll();
+                Message({
+                    type: 'error',
+                    message: data.data || '网络不稳定，请您稍后再试~'
+                })
+            }
             res(data)
         }).catch(err => {
             Message.closeAll();
