@@ -19,7 +19,7 @@
                                         @change="handleCheckAllChange" class="all">All</el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
                                         <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
-                                            :key="row.id">
+                                            :key="row.id" :checked="row.isActive">
                                             {{ row.val }}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
@@ -189,7 +189,8 @@
         beforeDestroy() {},
         methods: {
             handleCheckAllChange(val) {
-                this.checkListFilter = val ? this.checkObj[this.currentTabId].list : [];
+                let arr = this.checkObj[this.currentTabId].list.map(x => x.id)
+                this.checkListFilter = val ? arr : [];
                 this.isIndeterminate = false;
                 this.page.curPage = 1
                 this.getLiist()
@@ -262,7 +263,23 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = data.items || []
+                        this.netList = []
+                        let obj = {};
+                        (data.items || []).forEach(x => {
+                            if(!obj[x.type_id]) {
+                                this.netList.push(x)
+                                obj[x.type_id] = 1
+                            } else {
+                                obj[x.type_id]++
+                            }
+                        })
+                        for(let k in obj) {
+                            this.netList.forEach(x => {
+                                if(x.type_id == k) {
+                                    x.num = obj[k]
+                                }
+                            })
+                        }
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
                         }
