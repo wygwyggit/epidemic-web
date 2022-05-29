@@ -157,6 +157,14 @@
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
+                            <div class="btns-wrap">
+                                <template v-if="item.status == -1">
+                                    <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
+                                </template>
+                                <template v-if="item.status == 2">
+                                    <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
+                                </template>
+                            </div>
                         </item-card>
                     </div>
                 </div>
@@ -351,6 +359,7 @@
                 </ul>
             </div>
         </el-drawer>
+        <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
     </div>
 </template>
 
@@ -361,16 +370,17 @@
     import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
     import emptyImage from '@/assets/images/empty.png'
-
     import {
         netImgBaseUrl
     } from '@/config/config.js'
+    import Sale from '../account/components/sale'
 
     export default {
         name: '',
         components: {
             PageTabs,
-            itemCard
+            itemCard,
+            Sale
         },
         props: {},
         data() {
@@ -408,6 +418,7 @@
                 isShowRecored: false,
                 openIsLoading: true,
                 buyRecoredDrawer: false,
+                saleReviseDialog: false,
                 list: [],
                 recordList: [],
                 page: {
@@ -420,6 +431,7 @@
                     curPage: 1
                 },
                 total2: 0,
+                currentGoodRow: {},
                 netImgBaseUrl,
                 moment,
                 emptyImage
@@ -445,6 +457,15 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            sendSaleOk() {
+                this.page.curPage = 1
+                this.saleReviseDialog = false
+                this.getLiist()
+            },
+            doSale(row) {
+                this.currentGoodRow = row
+                this.saleReviseDialog = true
+            },
             goDetail(id) {
                 this.$router.push({
                     path: '/details',
@@ -881,6 +902,27 @@
                     &:nth-child(4n) {
                         margin-right: 0;
                     }
+
+                    .btns-wrap {
+                        margin-top: 10px;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+
+                    .btn {
+                        flex: 1;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: .133333333333333rem;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: .213333333333333rem;
+
+                        &.btn-sale {
+                            background: #00A73A;
+                        }
+                    }
                 }
 
                 // ul {
@@ -928,6 +970,8 @@
                         align-items: center;
                         justify-content: space-between;
                         margin-top: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #29374B;
 
                         .money {
                             font-size: .2667rem;
