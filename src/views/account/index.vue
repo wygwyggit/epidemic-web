@@ -63,11 +63,11 @@
                         </template>
 
                     </div>
-                    <div class="page r" v-if="netList.length && !isLoading">
+                    <div class="page r" v-if="!netList.length && !isLoading">
                         <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                             @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                             :page-size="Number(page.pageSize)" :total="Number(total)"
-                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
+                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="!netList.length">
                         </el-pagination>
                     </div>
                 </div>
@@ -337,6 +337,7 @@
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
                         }
+                        this.total = data.total
                         this.isLoading = false
                         resolve()
                     }).catch(err => {
