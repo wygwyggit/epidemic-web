@@ -44,8 +44,8 @@
                 type: String,
                 require: true
             },
-            goods_approve_addr: {
-                type: String,
+            belong_type: {
+                type: Number,
                 require: true
             }
         },
@@ -54,15 +54,27 @@
                 prefixCls: 'deliver-dialog',
                 isShowDialog: true,
                 isLoading: false,
-                addressTxt: ''
+                addressTxt: '',
             }
         },
         computed: {},
         watch: {},
-        created() {},
+        created() {
+            this.getChainInfo()
+        },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getChainInfo() {
+                myAjax({
+                    url: `chain/chain_info?belong_type=${this.belong_type}`,
+                    method: 'GET',
+                 
+                }).then(res => {
+                    this.contract_addr = res.data.contract_addr
+                    this.abi = res.data.abi
+                })
+            },
             doClose() {
                 this.$emit('close')
             },
@@ -90,11 +102,11 @@
             },
             doNftApprove() {
                 web3Tool.contract.call(this, {
-                    
-                    contractAddress: this.goods_approve_addr || '',
+                    contractAddress: this.contract_addr || '',
+                    abi: this.abi,
                     authAddr: payAddress,
                     amount: this.goods_id,
-                    account: this.addressTxt
+                    account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.doDeliver(hash)
                 })

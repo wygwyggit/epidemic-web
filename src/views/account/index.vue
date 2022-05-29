@@ -78,7 +78,7 @@
         </div>
         <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
         <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
-            :goods_approve_addr="currentGoodRow.goods_approve_addr" @sendOk="deliverSuccess"
+            :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
             @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"

@@ -502,7 +502,8 @@
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
-                                type: this.currentTabId
+                                type: this.currentTabId,
+                                status: 8
                             }
                         }
                     }).then(res => {
