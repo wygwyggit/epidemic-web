@@ -160,6 +160,9 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
+                            id: 1,
+                            val: this.$t("account.on-sale")
+                        }, {
                             id: -2,
                             val: this.$t("account.sending")
                         }, ]
