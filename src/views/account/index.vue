@@ -301,7 +301,7 @@
                         data: {
                             body: {
                                 status: this.checkListFilter.length ? this.checkListFilter : (this
-                                    .currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
+                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4]),
                             }
 
                         }
