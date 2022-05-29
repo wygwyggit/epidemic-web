@@ -63,11 +63,11 @@
                         </template>
 
                     </div>
-                    <div class="page r" v-if="netList.length && !isLoading">
+                    <div class="page r" v-if="!netList.length && !isLoading">
                         <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                             @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
                             :page-size="Number(page.pageSize)" :total="Number(total)"
-                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="netList.length">
+                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="!netList.length">
                         </el-pagination>
                     </div>
                 </div>
@@ -148,15 +148,18 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: 1,
+                            id: 8,
                             val: this.$t("account.on-sale")
                         }, {
-                            id: 2,
+                            id: 1,
                             val: this.$t("account.staking")
                         }, {
-                            id: -2,
+                            id: 4,
                             val: this.$t("account.sending")
-                        }, ]
+                        }, {
+                            id: 2,
+                            val: this.$t("account.processing")
+                        }]
                     },
                     2: {
                         label: this.$t("account.status"),
@@ -164,9 +167,12 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: -2,
+                            id: 8,
+                            val: this.$t("account.on-sale")
+                        }, {
+                            id: 4,
                             val: this.$t("account.sending")
-                        }, ]
+                        }]
                     }
                 },
                 checkAll: false,
@@ -337,16 +343,19 @@
                                 obj[x.type_id]++
                             }
                         })
-                        for (let k in obj) {
-                            this.netList.forEach(x => {
-                                if (x.type_id == k) {
-                                    x.cardNum = obj[k]
-                                }
-                            })
+                        if(this.currentTabId === 1) {
+                            for (let k in obj) {
+                                this.netList.forEach(x => {
+                                    if (x.type_id == k) {
+                                        x.cardNum = obj[k]
+                                    }
+                                })
+                            }
                         }
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
                         }
+                        this.total = data.total
                         this.isLoading = false
                         resolve()
                     }).catch(err => {
@@ -558,6 +567,12 @@
                 padding: 0 .5rem;
 
                 .check-item {
+
+                    .el-checkbox-group {
+                        display: flex;
+                        width: 100%;
+                        overflow-x: scroll;
+                    }
 
                     .all,
                     .label-name {

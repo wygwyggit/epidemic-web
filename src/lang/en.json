@@ -97,7 +97,8 @@
         "compound-tip1": "You will Burn 10 bronze medal to get a",
         "compound-tip2": "Enter the number of Gold packs",
         "gold-pack": "Gold Pack",
-        "sliver-pack": "Silver Pack"
+        "sliver-pack": "Silver Pack",
+        "processing": "Processing"
     },
     "detail": {
         "attribute": "Attribute",

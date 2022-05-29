@@ -99,7 +99,8 @@
         "compound-tip1": "消耗10个银礼包可合成1个",
         "compound-tip2": "请输入你想要合成的金礼包数量",
         "gold-pack": "金礼包",
-        "sliver-pack": "银礼包"
+        "sliver-pack": "银礼包",
+        "processing": "上架中"
     },
     "detail": {
         "attribute": "属性",

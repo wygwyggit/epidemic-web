@@ -6,6 +6,8 @@
                     {{ giftInfo.title }}
                 </div>
                 <img :src="giftInfo.image">
+                <div class="left" @click="handleRow('-')" v-if="rowList.length > 1">&lt;</div>
+                <div class="right" @click="handleRow('+')" v-if="rowList.length > 1">&gt;</div>
             </div>
             <div class="tip">
                 <span>{{ $t("account.congratulation")}}</span>
@@ -31,6 +33,7 @@
         data() {
             return {
                 prefixCls: 'views-account-gift-bag',
+                curIdx: 0,
                 giftInfo: {}
             }
         },
@@ -48,6 +51,15 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            handleRow(type) {
+                if(type === '-' && this.curIdx > 0) {
+                    this.curIdx--
+                } else if(type === '+' && this.curIdx < this.rowList.length - 1 ) {
+                    this.curIdx++
+                }
+                this.giftInfo = this.rowList[this.curIdx]
+                this.giftInfo.title = this.giftInfo.name.split('-')[3]
+            },
             doClose() {
                 this.$emit('close')
             }
@@ -114,11 +126,30 @@
             }
 
             .img-warp {
+                position: relative;
                 width: 6.4rem;
                 height: 5.066666666666666rem;
                 border: 2px solid #31CA70;
                 border-radius: .266666666666667rem;
                 overflow: hidden;
+
+                .left,
+                .right {
+                    position: absolute;
+                    top: 50%;
+                    z-index: 9999;
+                    color: #fff;
+                    cursor: pointer;
+                }
+
+                .left {
+                    left: 20px;
+                }
+
+                .right {
+                    right: 20px;
+                }
+                
 
                 img {
                     width: 100%;
