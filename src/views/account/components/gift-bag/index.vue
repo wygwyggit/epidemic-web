@@ -6,8 +6,8 @@
                     {{ giftInfo.title }}
                 </div>
                 <img :src="giftInfo.image">
-                <div class="left" @click="handleRow('-')">&lt;</div>
-                <div class="right" @click="handleRow('+')">&gt;</div>
+                <div class="left" @click="handleRow('-')" v-if="rowList.length > 1">&lt;</div>
+                <div class="right" @click="handleRow('+')" v-if="rowList.length > 1">&gt;</div>
             </div>
             <div class="tip">
                 <span>{{ $t("account.congratulation")}}</span>
