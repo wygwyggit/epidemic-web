@@ -18,8 +18,8 @@
             <div class="img-content" @click="onClickHandle(itemInfo.id)">
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
-            <template v-if="itemInfo.cardNum">
-                <div class="card-num"><i>x</i>{{ itemInfo.cardNum || 1 }}</div>
+            <template v-if="itemInfo.num">
+                <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
             </template>
             <template v-else>
                 <div class="mid-content">
