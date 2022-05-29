@@ -145,7 +145,8 @@
                 </div>
                 <div class="list-content">
                     <div class="list clearfix">
-                        <empty-data title="No items for sale" v-if="!list.length && !isLoading"></empty-data>
+                        <el-empty :image="emptyImage" description="No items for sale" v-if="!list.length && !isLoading">
+                        </el-empty>
                         <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail">
                             <div class="price">
                                 Price
@@ -155,6 +156,14 @@
                                     {{ item.amount }}
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
+                            </div>
+                            <div class="btns-wrap">
+                                <template v-if="item.status == -1">
+                                    <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
+                                </template>
+                                <template v-if="item.status == 2">
+                                    <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
+                                </template>
                             </div>
                         </item-card>
                     </div>
@@ -173,7 +182,8 @@
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
+                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                </el-empty>
                 <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
@@ -225,7 +235,8 @@
                 </span>
             </div>
             <div class="content" v-loading="openIsLoading">
-                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
+                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                </el-empty>
                 <table v-if="recordList.length && !openIsLoading">
                     <thead>
                         <th>Type</th>
@@ -348,6 +359,7 @@
                 </ul>
             </div>
         </el-drawer>
+        <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
     </div>
 </template>
 
@@ -357,17 +369,18 @@
     import Cookie from "@/utils/cookie.js";
     import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
-    import emptyData from '@/components/empty-data'
+    import emptyImage from '@/assets/images/empty.png'
     import {
         netImgBaseUrl
     } from '@/config/config.js'
+    import Sale from '../account/components/sale'
 
     export default {
         name: '',
         components: {
             PageTabs,
-            emptyData,
-            itemCard
+            itemCard,
+            Sale
         },
         props: {},
         data() {
@@ -405,6 +418,7 @@
                 isShowRecored: false,
                 openIsLoading: true,
                 buyRecoredDrawer: false,
+                saleReviseDialog: false,
                 list: [],
                 recordList: [],
                 page: {
@@ -417,8 +431,10 @@
                     curPage: 1
                 },
                 total2: 0,
+                currentGoodRow: {},
                 netImgBaseUrl,
-                moment
+                moment,
+                emptyImage
             }
         },
         computed: {},
@@ -441,6 +457,15 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            sendSaleOk() {
+                this.page.curPage = 1
+                this.saleReviseDialog = false
+                this.getLiist()
+            },
+            doSale(row) {
+                this.currentGoodRow = row
+                this.saleReviseDialog = true
+            },
             goDetail(id) {
                 this.$router.push({
                     path: '/details',
@@ -867,6 +892,7 @@
             .list-content {
                 min-height: 5rem;
                 flex: 1;
+                padding-bottom: .3rem;
 
                 .components-item-card {
                     float: left;
@@ -876,6 +902,27 @@
 
                     &:nth-child(4n) {
                         margin-right: 0;
+                    }
+
+                    .btns-wrap {
+                        margin-top: 10px;
+                        display: flex;
+                        justify-content: space-between;
+                    }
+
+                    .btn {
+                        flex: 1;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: .133333333333333rem;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: .213333333333333rem;
+
+                        &.btn-sale {
+                            background: #00A73A;
+                        }
                     }
                 }
 
@@ -924,6 +971,8 @@
                         align-items: center;
                         justify-content: space-between;
                         margin-top: 10px;
+                        padding-bottom: 10px;
+                        border-bottom: 1px solid #29374B;
 
                         .money {
                             font-size: .2667rem;
