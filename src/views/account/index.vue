@@ -41,7 +41,9 @@
                                             @click="openGiftBag(item.type_id)">
                                             {{$t("account.open")}}
                                         </div>
-                                        <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic">
+                                        <!-- <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic">
+                                            {{$t("account.synthetic")}}</div> -->
+                                        <div class="btn btn-synthetic" v-if="item.belong_type == -2" @click="doSynthetic">
                                             {{$t("account.synthetic")}}</div>
                                         <div class="btn btn-deliver" @click="doDeliver(item)"
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
@@ -87,8 +89,8 @@
                 <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
             </div>
         </el-dialog>
-        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id"
-            :goods_name="currentGoodRow.name"></deliver-dialog>
+        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
+            @sendOk="deliverSuccess"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
     </div>
 </template>
@@ -206,6 +208,13 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            deliverSuccess() {
+                this.isShowDeliverDialog = false
+                if (!this.checkListFilter.length) {
+                    this.getTotalInfo()
+                }
+                this.getLiist()
+            },
             doGiftClose() {
                 this.isShowGiftBag = false
                 if (!this.checkListFilter.length) {
@@ -420,7 +429,9 @@
                         color: #fff;
                         cursor: pointer;
                         font-size: .213333333333333rem;
-
+                        &:last-child {
+                            margin-left: .16rem;
+                        }
                         &.btn-deliver,
                         &.btn-open {
                             background: #F1AE00;
@@ -435,8 +446,8 @@
                         }
 
                         &.btn-on-sale,
-                        .btn-on-staking,
-                        .btn-on-sending {
+                        &.btn-on-staking,
+                        &.btn-on-sending {
                             background: #777E90;
                         }
                     }
@@ -512,7 +523,7 @@
                 margin-right: 20px;
                 width: 265px;
 
-                &:nth-child(3n) {
+                &:nth-child(4n) {
                     margin-right: 0;
                 }
             }

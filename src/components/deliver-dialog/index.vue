@@ -13,7 +13,7 @@
                 <div class="tip">
                      {{$t('common.transferred-tip')}}
                 </div>
-                 <el-button type="primary" :disabled="!addressTxt" @click="doDeliver">{{$t('common.deliver')}}</el-button>
+                 <el-button type="primary" :disabled="!addressTxt" :loading="isLoading" @click="doDeliver">{{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -41,6 +41,7 @@
             return {
                 prefixCls: 'deliver-dialog',
                 isShowDialog: true,
+                isLoading: false,
                 addressTxt: ''
             }
         },
@@ -51,6 +52,7 @@
         beforeDestroy() {},
         methods: {
             doDeliver() {
+                this.isLoading = true
                 myAjax({
                     url: 'user/give/create',
                     data: {
@@ -64,7 +66,10 @@
                         }
                     }
                 }).then(res => {
-
+                    if (res.ok) {
+                        this.isLoading = false
+                        this.$emit('sendOk')
+                    }
                 })
             }
         },
