@@ -144,13 +144,13 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: 1,
+                            id: 2,
                             val: this.$t("account.on-sale")
                         }, {
-                            id: 2,
+                            id: 1,
                             val: this.$t("account.staking")
                         }, {
-                            id: -2,
+                            id: 4,
                             val: this.$t("account.sending")
                         }, ]
                     },
@@ -160,10 +160,10 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: 1,
+                            id: 2,
                             val: this.$t("account.on-sale")
                         }, {
-                            id: -2,
+                            id: 4,
                             val: this.$t("account.sending")
                         }, ]
                     }
