@@ -333,12 +333,14 @@
                                 obj[x.type_id]++
                             }
                         })
-                        for (let k in obj) {
-                            this.netList.forEach(x => {
-                                if (x.type_id == k) {
-                                    x.cardNum = obj[k]
-                                }
-                            })
+                        if(this.currentTabId === 1) {
+                            for (let k in obj) {
+                                this.netList.forEach(x => {
+                                    if (x.type_id == k) {
+                                        x.cardNum = obj[k]
+                                    }
+                                })
+                            }
                         }
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
