@@ -187,7 +187,7 @@
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
+                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
                 <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
@@ -201,34 +201,34 @@
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
                             <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
-                                SELL
+                                {{ item.type }}
                             </td>
                             <td>
-                                S0000000123
+                                {{ item.order_id }}
                             </td>
                             <td>
-                                0xee5808...839f
+                                {{ item.txt_hash }}
                             </td>
                             <td>
-                                000001
+                                {{ item.nft_id }}
                             </td>
                             <td>
-                                MANCITY CLUB
+                                {{ item.name }}
                             </td>
                             <td>
-                                5,000,000,000
+                                {{ item.price }}
                             </td>
                             <td>
-                                2022-03-10 15:32:14
+                                {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
-                @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                :page-size="Number(page.pageSize)" :total="Number(total)"
-                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length">
+            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange2"
+                @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
+                :page-size="Number(page2.pageSize)" :total="Number(total2)"
+                :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length && !openIsLoading">
             </el-pagination>
         </el-dialog>
         <el-drawer :visible.sync="buyRecoredDrawer" direction="btt">
@@ -238,9 +238,9 @@
                     Order record
                 </span>
             </div>
-            <div class="content">
-                <empty-data title="No items for sale" v-if="!recordList.length"></empty-data>
-                <table v-if="recordList.length">
+            <div class="content" v-loading="openIsLoading">
+                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
+                <table v-if="recordList.length && !openIsLoading">
                     <thead>
                         <th>Type</th>
                         <th>Order ID</th>
@@ -253,33 +253,33 @@
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
                             <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
-                                SELL
+                                {{ item.type }}
                             </td>
                             <td>
-                                S0000000123
+                                {{ item.order_id }}
                             </td>
                             <td>
-                                0xee5808...839f
+                                {{ item.txt_hash }}
                             </td>
                             <td>
-                                000001
+                                {{ item.nft_id }}
                             </td>
                             <td>
-                                MANCITY CLUB
-                            </td>
-                            <td class="price">
-                                5,000,000,000
+                                {{ item.name }}
                             </td>
                             <td>
-                                2022-03-10 15:32:14
+                                {{ item.price }}
+                            </td>
+                            <td>
+                                {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="page r" v-if="!recordList.length">
-                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
-                        @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                        :page-size="Number(page.pageSize)" :total="Number(total)" :current-page="Number(page.curPage)"
+                <div class="page r" v-if="recordList.length && !openIsLoading">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange2"
+                        @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
+                        :page-size="Number(page2.pageSize)" :total="Number(total2)" :current-page="Number(page2.curPage)"
                         :page-sizes="[10, 20, 50, 100]">
                     </el-pagination>
                 </div>
@@ -366,7 +366,9 @@
 </template>
 
 <script>
+    import moment from 'moment'
     import myAjax from '@/utils/ajax.js'
+    import Cookie from "@/utils/cookie.js";
     import PageTabs from '@/components/page-tabs'
     import emptyData from '@/components/empty-data'
     import {
@@ -392,7 +394,6 @@
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
-                total: 0,
                 isLoading: true,
                 currentTabId: 1,
                 checkListColor: [],
@@ -414,7 +415,7 @@
                 isShowFilter: false,
                 isFilterDrawer: false,
                 isShowRecored: false,
-                openIsLoading: false,
+                openIsLoading: true,
                 buyRecoredDrawer: false,
                 list: [],
                 recordList: [],
@@ -422,7 +423,14 @@
                     pageSize: 20,
                     curPage: 1
                 },
-                netImgBaseUrl
+                total: 0,
+                page2: {
+                    pageSize: 20,
+                    curPage: 1
+                },
+                total2: 0,
+                netImgBaseUrl,
+                moment
             }
         },
         computed: {},
@@ -431,7 +439,11 @@
             this.options.forEach(x => {
                 x.label = this.$t(`account.${x.key}`)
             });
-            this.getLiist()
+            this.isLoading = true
+            Promise.all([this.getLiist(), this.getTotalInfo()])
+            .then(res => {
+                this.isLoading = false
+            })
         },
         computed: {
             placeholderTxt() {
@@ -441,8 +453,52 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getRecords() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/records/list',
+                        data: {
+                            body: {
+                                page: this.page2.curPage,
+                                per_page: this.page2.pageSize,
+                                addr: Cookie.getCookie("__account__") || ''
+                            }
+                        }
+                    }).then(res => {
+                        if(res.ok && res.data) {
+                            this.openIsLoading = false
+                            const data = res.data.data
+                            this.recordList = data.items || []
+                            this.total2 = data.total
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
+            },
+            getTotalInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'market/goods/count',
+                        data: {
+                            body: {
+                            }
+                        }
+                    }).then(res => {
+                        if (res.ok && res.data) {
+                            this.tabs[0].num = res.data.nft || 0
+                            this.tabs[1].num = res.data.others || 0
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
+            },
             getLiist() {
-                this.isLoading = true
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'market/goods/list',
@@ -456,13 +512,7 @@
                     }).then(res => {
                         const data = res.data || {}
                         this.list = data.items || []
-                        this.tabs.forEach(x => {
-                            if(x.id === this.currentTabId) {
-                                x.num = data.total
-                            }
-                        })
                         this.total = data.total
-                        this.isLoading = false
                         resolve()
                     }).catch(err => {
                         reject(err)
@@ -476,9 +526,6 @@
                 }
                 this.isFilterDrawer = false
             },
-            handleCheckedCitiesChange(value) {
-                console.log(value, this.formData, '11')
-            },
             onSizeChange(size) {
                 this.page.curPage = 1
                 this.page.pageSize = size
@@ -488,11 +535,24 @@
                 this.page.curPage = page
                 this.getLiist()
             },
+            onSizeChange2(size) {
+                this.page2.curPage = 1
+                this.page2.pageSize = size
+                this.getRecords()
+            },
+            onPageChange2(page) {
+                this.page2.curPage = page
+                this.getRecords()
+            },
             handleRecoredDrawer() {
                 this.buyRecoredDrawer = true
+                this.openIsLoading = true
+                this.getRecords()
             },
             handleRecored() {
                 this.isShowRecored = true
+                this.openIsLoading = true
+                this.getRecords()
             },
             onSelectTab(item) {
                 this.currentTabId = item.id
@@ -1146,6 +1206,7 @@
             }
 
             .content {
+                min-height: 5rem;
                 padding: 0 0.533333333333333rem;
 
                 table {
@@ -1154,6 +1215,7 @@
 
                     thead {
                         th {
+                            min-width: 55px;
                             height: 0.533333333333333rem;
                             line-height: 0.533333333333333rem;
                             border-top: 1px solid #152132;
@@ -1166,6 +1228,7 @@
                             padding-right: .2133rem;
                             line-height: 0.853333333333333rem;
                             border-top: 1px solid #152132;
+                            white-space: nowrap;
 
                             &.orange {
                                 color: #FF5E19;
