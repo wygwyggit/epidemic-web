@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog  custom-class="compound-dialog" :show-close="false" :visible.sync="isShowDialog"
+        <el-dialog  custom-class="compound-dialog" :close-on-click-modal="false" :show-close="false" :visible.sync="isShowDialog"
             width="7rem" v-if="isShowDialog">
             <div class="content">
                 <div class="main-cot">
@@ -21,7 +21,7 @@
                         <img src="./images/car-fragments/small.png" alt="" v-if="row.type_id == 23">
                         <img src="./images/parramera-fragment/small.png" alt="" v-if="row.type_id == 24">
                         <div class="count-info">
-                            <span class="has-count">{{ row.cardNum || 0}} </span>
+                            <span class="has-count">{{ row.num || 0}} </span>
                             /
                             <span class="consume-count">{{ needNum }}</span>
                         </div>
@@ -82,7 +82,7 @@ type_id: 24  帕拉梅拉碎片
         },
         computed: {
             maxContent() {
-                return parseInt(this.row.cardNum / this.needNum)
+                return parseInt(this.row.num / this.needNum)
             }
         },
         watch: {},

@@ -33,7 +33,7 @@
                         </el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
-                                @sale="doSale" @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
+                                 @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
                                 type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
@@ -41,13 +41,15 @@
                                             @click="openGiftBag(item.type_id)">
                                             {{$t("account.open")}}
                                         </div>
-                                        <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic(item)">
+                                        <div class="btn btn-synthetic" v-if="item.type_id == 2"
+                                            @click="doSynthetic(item)">
                                             {{$t("account.synthetic")}}</div>
-                                        <div class="btn btn-synthetic" v-if="item.belong_type == -2" @click="doSynthetic(item)">
+                                        <div class="btn btn-synthetic" v-if="item.belong_type == -2"
+                                            @click="doSynthetic(item)">
                                             {{$t("account.synthetic")}}</div>
                                         <div class="btn btn-deliver" @click="doDeliver(item)"
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
-                                        <div class="btn btn-sale">{{$t("account.sale")}}</div>
+                                        <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
                                     </template>
                                     <template v-if="item.status == 2">
                                         <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
@@ -74,25 +76,13 @@
             </div>
 
         </div>
-        <el-dialog :title="saleReviseDialogTitle" :visible.sync="saleReviseDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
-            <p class="tit">{{$t("account.price") }}</p>
-            <div class="input-box">
-                <div class="label">
-                    <span>Adoge</span>
-                </div>
-                <el-input v-model="nets.salePrice" :placeholder="$t('common.please-enter-price')"
-                    onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
-            </div>
-            <p class="tip">{{$t("common.net-price-modified-tip")}}</p>
-            <div class="opt-btn">
-                <button class="btn" :class="{'confirmed': nets.salePrice.length}">{{$t("common.confirmed") }} </button>
-            </div>
-        </el-dialog>
+        <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
         <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
-            @sendOk="deliverSuccess"></deliver-dialog>
+            :goods_approve_addr="currentGoodRow.goods_approve_addr" @sendOk="deliverSuccess"
+            @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
-        <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false" @compoundSuc="compoundSuc"></compound>
+        <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"
+            @compoundSuc="compoundSuc"></compound>
     </div>
 </template>
 
@@ -104,6 +94,7 @@
     import emptyImage from '@/assets/images/empty.png'
     import giftBag from './components/gift-bag'
     import compound from './components/compound'
+    import Sale from './components/sale'
     export default {
         name: '',
         components: {
@@ -111,7 +102,8 @@
             itemCard,
             DeliverDialog,
             giftBag,
-            compound
+            compound,
+            Sale
         },
         props: {},
         data() {
@@ -127,9 +119,6 @@
                 isShowCompound: false,
                 giftBagList: [],
                 isLoading: true,
-                nets: {
-                    salePrice: ''
-                },
                 tabs: [{
                     id: 1,
                     title: this.$t("marketplace.nfts"),
@@ -218,6 +207,11 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            sendSaleOk() {
+                this.page.curPage = 1
+                this.saleReviseDialog = false
+                this.getLiist()
+            },
             compoundSuc(data) {
                 this.isShowCompound = false
                 this.isShowGiftBag = true
@@ -254,6 +248,13 @@
                     if ((res.data || {}).rewards) {
                         this.isShowGiftBag = true
                         this.giftBagList = res.data.rewards
+                        this.giftBagList.forEach(x => {
+                            if (x.name.includes('-')) {
+                                x.title = x.name.split('-')[3]
+                            } else {
+                                x.title = x.name
+                            }
+                        });
                     }
 
                 })
@@ -333,25 +334,8 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = []
-                        let obj = {};
-                        (data.items || []).forEach(x => {
-                            if (!obj[x.type_id]) {
-                                this.netList.push(x)
-                                obj[x.type_id] = 1
-                            } else {
-                                obj[x.type_id]++
-                            }
-                        })
-                        if(this.currentTabId === 1) {
-                            for (let k in obj) {
-                                this.netList.forEach(x => {
-                                    if (x.type_id == k) {
-                                        x.cardNum = obj[k]
-                                    }
-                                })
-                            }
-                        }
+                        this.netList = data.items
+
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
                         }
@@ -367,9 +351,9 @@
             saleReviseDialogClosed() {
                 this.nets.salePrice = ''
             },
-            doSale(id) {
+            doSale(row) {
+                this.currentGoodRow = row
                 this.saleReviseDialog = true
-                this.saleReviseDialogTitle = this.$t("account.sale")
             },
             doCancelSale(id) {
                 this.$confirm(`${this.$t("common.cancel-sale-tip")}?`, this.$t("common.remind"), {
@@ -448,8 +432,12 @@
                         color: #fff;
                         cursor: pointer;
                         font-size: .213333333333333rem;
+
+                        &:nth-child(2n) {
+                            margin: 0 .1rem;
+                        }
                         &:last-child {
-                            margin-left: .16rem;
+                            margin-right: 0;
                         }
                         &.btn-deliver,
                         &.btn-open {

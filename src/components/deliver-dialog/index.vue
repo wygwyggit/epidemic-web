@@ -1,19 +1,20 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :visible.sync="isShowDialog" width="6.4rem"
-            v-if="isShowDialog">
+        <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false" :visible.sync="isShowDialog" @close="doClose"
+            width="6.4rem" v-if="isShowDialog">
             <div class="content">
                 <div class="addr">
                     <div class="tit">{{$t('common.enter-address')}}</div>
                     <el-input v-model="addressTxt" :placeholder="$t('common.enter-ad-tip')"></el-input>
                 </div>
-                <div class="remaining-times"> 
-                    {{$t('common.remain-times')}}: <span>3</span> 
+                <div class="remaining-times">
+                    {{$t('common.remain-times')}}: <span>3</span>
                 </div>
                 <div class="tip">
-                     {{$t('common.transferred-tip')}}
+                    {{$t('common.transferred-tip')}}
                 </div>
-                 <el-button type="primary" :disabled="!addressTxt" :loading="isLoading" @click="doDeliver">{{$t('common.deliver')}}</el-button>
+                <el-button type="primary" :disabled="!addressTxt" :loading="isLoading" @click="doNftApprove">
+                    {{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -22,10 +23,17 @@
 <script>
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
+    import {
+        payAddress,
+        payAmount,
+        contractAddress,
+    } from "@/config/config.js";
+    import web3Tool from '@/utils/web3'
+    import VOTE_ABI from "@/contracts/vote.js";
     export default {
         name: '',
         components: {
-            
+
         },
         props: {
             goods_id: {
@@ -33,6 +41,10 @@
                 require: true
             },
             goods_name: {
+                type: String,
+                require: true
+            },
+            goods_approve_addr: {
                 type: String,
                 require: true
             }
@@ -51,7 +63,10 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
-            doDeliver() {
+            doClose() {
+                this.$emit('close')
+            },
+            doDeliver(hash) {
                 this.isLoading = true
                 myAjax({
                     url: 'user/give/create',
@@ -62,7 +77,8 @@
                             goods_id: this.goods_id,
                             give_num: 1,
                             to_addr: this.addressTxt,
-                            goods_name: this.goods_name
+                            goods_name: this.goods_name,
+                            tx: hash
                         }
                     }
                 }).then(res => {
@@ -70,6 +86,17 @@
                         this.isLoading = false
                         this.$emit('sendOk')
                     }
+                })
+            },
+            doNftApprove() {
+                web3Tool.contract.call(this, {
+                    
+                    contractAddress: this.goods_approve_addr || '',
+                    authAddr: payAddress,
+                    amount: this.goods_id,
+                    account: this.addressTxt
+                }).then(hash => {
+                    this.doDeliver(hash)
                 })
             }
         },
@@ -107,14 +134,17 @@
                         }
                     }
                 }
+
                 .remaining-times {
                     font-size: .24rem;
                 }
+
                 .tip {
                     margin: .426666666666667rem auto .15rem;
                     color: #FD671D;
                     text-align: center;
                 }
+
                 .el-button {
                     background-color: #F1AE00;
                     width: 100%;
@@ -125,6 +155,7 @@
                     padding: 0;
                     font-size: .32rem;
                     border-radius: .133333333333333rem;
+
                     &.is-disabled {
                         background: #777E90;
                     }

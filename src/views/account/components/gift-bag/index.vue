@@ -1,22 +1,29 @@
 <template>
     <div :class="prefixCls">
-        <div class="content">
-            <div class="img-warp">
-                <div class="gift-title">
-                    {{ giftInfo.title }}
+        <el-dialog custom-class="gift-bag-dialog" :close-on-click-modal="false" :show-close="false"
+            :visible.sync="isShowDialog" width="6.4rem" v-if="isShowDialog">
+            <div class="content">
+                <div class="main-cot">
+                    <div class="img-warp">
+                        <div class="gift-title">
+                            {{ giftInfo.title }}
+                        </div>
+                        <img :src="giftInfo.image">
+                        <div class="left" @click="handleRow('-')" v-if="rowList.length > 1">&lt;</div>
+                        <div class="right" @click="handleRow('+')" v-if="rowList.length > 1">&gt;</div>
+                    </div>
+                    <div class="tip">
+                        <span>{{ $t("account.congratulation")}}</span>
+                        <span class="tip-name">{{ giftInfo.name }}</span>
+                    </div>
                 </div>
-                <img :src="giftInfo.image">
-                <div class="left" @click="handleRow('-')" v-if="rowList.length > 1">&lt;</div>
-                <div class="right" @click="handleRow('+')" v-if="rowList.length > 1">&gt;</div>
+
+                <div class="close">
+                    <img src="../../../../assets/images/g-close.png" alt="" @click="doClose">
+                </div>
             </div>
-            <div class="tip">
-                <span>{{ $t("account.congratulation")}}</span>
-                <span class="tip-name">{{ giftInfo.name }}</span>
-            </div>
-            <div class="close">
-                <img src="../../../../assets/images/g-close.png" alt="" @click="doClose">
-            </div>
-        </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -33,6 +40,7 @@
         data() {
             return {
                 prefixCls: 'views-account-gift-bag',
+                isShowDialog: true,
                 curIdx: 0,
                 giftInfo: {}
             }
@@ -46,19 +54,19 @@
             } else {
                 this.giftInfo.title = this.giftInfo.name
             }
-            
+
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
             handleRow(type) {
-                if(type === '-' && this.curIdx > 0) {
+                if (type === '-' && this.curIdx > 0) {
                     this.curIdx--
-                } else if(type === '+' && this.curIdx < this.rowList.length - 1 ) {
+                } else if (type === '+' && this.curIdx < this.rowList.length - 1) {
                     this.curIdx++
                 }
                 this.giftInfo = this.rowList[this.curIdx]
-                this.giftInfo.title = this.giftInfo.name.split('-')[3]
+                //this.giftInfo.title = this.giftInfo.name.split('-')[3]
             },
             doClose() {
                 this.$emit('close')
@@ -67,8 +75,9 @@
     }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
     $prefixCls: "views-account-gift-bag";
+
     .#{$prefixCls} {
         position: fixed;
         display: flex;
@@ -80,6 +89,17 @@
         top: 0;
         background: rgba(0, 0, 0, 0.8);
         z-index: 9999;
+
+        .gift-bag-dialog {
+            background: transparent;
+            .el-dialog__header {
+                display: none;
+            }
+
+            .el-dialog__body {
+                padding: 0;
+            }
+        }
 
         .content {
             position: relative;
@@ -131,7 +151,6 @@
                 height: 5.066666666666666rem;
                 border: 2px solid #31CA70;
                 border-radius: .266666666666667rem;
-                overflow: hidden;
 
                 .left,
                 .right {
@@ -149,7 +168,7 @@
                 .right {
                     right: 20px;
                 }
-                
+
 
                 img {
                     width: 100%;
