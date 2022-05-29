@@ -95,7 +95,11 @@
         "sending": "转增中",
         "open": "开礼包",
         "synthetic": "融合",
-        "congratulation": "恭喜你获得"
+        "congratulation": "恭喜你获得",
+        "compound-tip1": "消耗10个银礼包可合成1个",
+        "compound-tip2": "请输入你想要合成的金礼包数量",
+        "gold-pack": "金礼包",
+        "sliver-pack": "银礼包"
     },
     "detail": {
         "attribute": "属性",

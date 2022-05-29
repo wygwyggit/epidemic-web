@@ -17,7 +17,7 @@ const myAjax = (options) => {
         let url = apiBasePath + options.url
         const data = Object.assign({
             header: {
-                'token': Cookie.getCookie('ad_token') || '1',
+                'token': Cookie.getCookie('ad_token') || '',
                 'addr': Cookie.getCookie("__account__") || '',
             }
         }, options.data || {}) 

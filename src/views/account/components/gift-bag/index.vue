@@ -38,7 +38,12 @@
         watch: {},
         created() {
             this.giftInfo = this.rowList[0]
-            this.giftInfo.title = this.giftInfo.name.split('-')[3]
+            if (this.giftInfo.name.includes('-')) {
+                this.giftInfo.title = this.giftInfo.name.split('-')[3]
+            } else {
+                this.giftInfo.title = this.giftInfo.name
+            }
+            
         },
         mounted() {},
         beforeDestroy() {},

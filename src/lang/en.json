@@ -93,7 +93,11 @@
         "sending": "Sending",
         "open": "open",
         "synthetic": "synthetic",
-        "congratulation": "Congratulations on getting a"
+        "congratulation": "Congratulations on getting a",
+        "compound-tip1": "You will Burn 10 bronze medal to get a",
+        "compound-tip2": "Enter the number of Gold packs",
+        "gold-pack": "Gold Pack",
+        "sliver-pack": "Silver Pack"
     },
     "detail": {
         "attribute": "Attribute",

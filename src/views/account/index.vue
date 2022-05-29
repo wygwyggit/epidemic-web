@@ -41,9 +41,9 @@
                                             @click="openGiftBag(item.type_id)">
                                             {{$t("account.open")}}
                                         </div>
-                                        <!-- <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic">
-                                            {{$t("account.synthetic")}}</div> -->
-                                        <div class="btn btn-synthetic" v-if="item.belong_type == -2" @click="doSynthetic">
+                                        <div class="btn btn-synthetic" v-if="item.type_id == 2" @click="doSynthetic(item)">
+                                            {{$t("account.synthetic")}}</div>
+                                        <div class="btn btn-synthetic" v-if="item.belong_type == -2" @click="doSynthetic(item)">
                                             {{$t("account.synthetic")}}</div>
                                         <div class="btn btn-deliver" @click="doDeliver(item)"
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
@@ -92,6 +92,7 @@
         <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
             @sendOk="deliverSuccess"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
+        <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false" @compoundSuc="compoundSuc"></compound>
     </div>
 </template>
 
@@ -102,13 +103,15 @@
     import DeliverDialog from '@/components/deliver-dialog'
     import emptyImage from '@/assets/images/empty.png'
     import giftBag from './components/gift-bag'
+    import compound from './components/compound'
     export default {
         name: '',
         components: {
             PageTabs,
             itemCard,
             DeliverDialog,
-            giftBag
+            giftBag,
+            compound
         },
         props: {},
         data() {
@@ -116,11 +119,12 @@
                 prefixCls: 'views-account',
                 emptyImage,
                 page: {
-                    pageSize: 20,
+                    pageSize: 200000,
                     curPage: 1
                 },
                 total: 0,
                 isShowGiftBag: false,
+                isShowCompound: false,
                 giftBagList: [],
                 isLoading: true,
                 nets: {
@@ -208,6 +212,11 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            compoundSuc(data) {
+                this.isShowCompound = false
+                this.isShowGiftBag = true
+                this.giftBagList = data
+            },
             deliverSuccess() {
                 this.isShowDeliverDialog = false
                 if (!this.checkListFilter.length) {
@@ -222,8 +231,9 @@
                 }
                 this.getLiist()
             },
-            doSynthetic() {
-
+            doSynthetic(row) {
+                this.currentGoodRow = row
+                this.isShowCompound = true
             },
             openGiftBag(type_id) {
                 myAjax({

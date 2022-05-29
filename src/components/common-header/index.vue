@@ -273,10 +273,13 @@
             },
             getToken() {
                 myAjax({
-                    url: 'auth',
+                    url: 'auth/auth',
                     data: {
-                        addr: this.account,
-                        user_sign: this.account
+                        body: {
+                            addr: this.account,
+                            user_sign: this.account
+                        }
+
                     }
                 }).then(res => {
                     if (res.ok) {

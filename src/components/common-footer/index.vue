@@ -101,6 +101,7 @@
             display: flex;
             justify-content: space-between;
             padding: 60px 0 18px 0;
+            width: 100%;
 
             .left {
                 margin-top: -18px;
