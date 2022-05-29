@@ -145,7 +145,8 @@
                 </div>
                 <div class="list-content">
                     <div class="list clearfix">
-                        <empty-data title="No items for sale" v-if="!list.length && !isLoading"></empty-data>
+                        <el-empty :image="emptyImage" description="No items for sale" v-if="!list.length && !isLoading">
+                        </el-empty>
                         <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail">
                             <div class="price">
                                 Price
@@ -173,7 +174,8 @@
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
+                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                </el-empty>
                 <table v-if="recordList.length">
                     <thead>
                         <th>Type</th>
@@ -225,7 +227,8 @@
                 </span>
             </div>
             <div class="content" v-loading="openIsLoading">
-                <empty-data title="No items for sale" v-if="!recordList.length && !openIsLoading"></empty-data>
+                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                </el-empty>
                 <table v-if="recordList.length && !openIsLoading">
                     <thead>
                         <th>Type</th>
@@ -357,7 +360,8 @@
     import Cookie from "@/utils/cookie.js";
     import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
-    import emptyData from '@/components/empty-data'
+    import emptyImage from '@/assets/images/empty.png'
+
     import {
         netImgBaseUrl
     } from '@/config/config.js'
@@ -366,7 +370,6 @@
         name: '',
         components: {
             PageTabs,
-            emptyData,
             itemCard
         },
         props: {},
@@ -418,7 +421,8 @@
                 },
                 total2: 0,
                 netImgBaseUrl,
-                moment
+                moment,
+                emptyImage
             }
         },
         computed: {},
@@ -866,6 +870,7 @@
             .list-content {
                 min-height: 5rem;
                 flex: 1;
+                padding-bottom: .3rem;
 
                 .components-item-card {
                     float: left;
