@@ -143,24 +143,10 @@
                         <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                     </div>
                 </div>
-                <div class="content-list">
-                    <empty-data title="No items for sale" v-if="!list.length && !isLoading"></empty-data>
-                    <ul v-if="list.length">
-                        <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)">
-                            <div class="title">
-                                <div class="left">
-                                    {{ currentTabId === 1 ? `# ${item.goods_id}` : item.rarity }}
-                                </div>
-                                <div class="right" v-if="currentTabId === 1">
-                                    {{ item.rarity }}
-                                </div>
-                            </div>
-                            <div class="img-box">
-                                <img :src="netImgBaseUrl + item.image" alt="">
-                            </div>
-                            <div class="name">
-                                {{ item.name }}
-                            </div>
+                <div class="list-content">
+                    <div class="list clearfix">
+                        <empty-data title="No items for sale" v-if="!list.length && !isLoading"></empty-data>
+                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail">
                             <div class="price">
                                 Price
                             </div>
@@ -170,8 +156,8 @@
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
-                        </li>
-                    </ul>
+                        </item-card>
+                    </div>
                 </div>
                 <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
                     @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
@@ -369,6 +355,7 @@
     import moment from 'moment'
     import myAjax from '@/utils/ajax.js'
     import Cookie from "@/utils/cookie.js";
+    import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
     import emptyData from '@/components/empty-data'
     import {
@@ -379,7 +366,8 @@
         name: '',
         components: {
             PageTabs,
-            emptyData
+            emptyData,
+            itemCard
         },
         props: {},
         data() {
@@ -453,6 +441,14 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            goDetail(id) {
+                this.$router.push({
+                    path: '/details',
+                    query: {
+                        id
+                    }
+                })
+            },
             getRecords() {
                 return new Promise((resolve, reject) => {
                     myAjax({
@@ -511,7 +507,10 @@
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.list = data.items || []
+                        this.list = (data.items || []).map(x => {
+                            delete x.goods_level
+                            return x
+                        })
                         this.total = data.total
                         resolve()
                     }).catch(err => {
@@ -864,26 +863,38 @@
                 }
             }
 
-            .content-list {
+            .list-content {
                 min-height: 5rem;
+                flex: 1;
 
-                ul {
-                    display: flex;
-                    flex-wrap: wrap;
-                    width: auto;
-                    margin: 0 -0.133333333333333rem;
+                .components-item-card {
+                    float: left;
+                    margin-top: .32rem;
+                    margin-right: 20px;
+                    width: 265px;
+
+                    &:nth-child(4n) {
+                        margin-right: 0;
+                    }
                 }
 
+                // ul {
+                //     display: flex;
+                //     flex-wrap: wrap;
+                //     width: auto;
+                //     margin: 0 -0.133333333333333rem;
+                // }
+
                 li {
-                    position: relative;
-                    width: 3.533333333333333rem;
-                    flex-shrink: 0;
-                    margin: .266666666666667rem .133333333333333rem 0;
-                    padding: .266666666666667rem .16rem;
-                    background: #1D2633;
-                    border-radius: .133333333333333rem;
-                    border: 1px solid #32A3FF;
-                    cursor: pointer;
+                    // position: relative;
+                    // width: 3.533333333333333rem;
+                    // flex-shrink: 0;
+                    // margin: .266666666666667rem .133333333333333rem 0;
+                    // padding: .266666666666667rem .16rem;
+                    // background: #1D2633;
+                    // border-radius: .133333333333333rem;
+                    // border: 1px solid #32A3FF;
+                    // cursor: pointer;
 
                     .mark {
                         position: absolute;
@@ -899,49 +910,12 @@
                         border-radius: .133333333333333rem;
                     }
 
-                    .title {
-                        display: flex;
-                        justify-content: space-between;
-                        font-size: .186666666666667rem;
-                        font-weight: 500;
-
-                        .left {
-
-                            color: #C4C4C4;
-                        }
-
-                        .right {
-                            color: #fff;
-                        }
-                    }
-
-                    .img-box {
-                        width: 100%;
-                        text-align: center;
-
-                        img {
-                            margin: .16rem 0;
-                            width: 100%;
-                            height: auto;
-                            border-radius: .16rem;
-                        }
-
-                    }
-
-                    .name {
-                        padding-bottom: 10px;
-                        text-align: center;
-                        color: #fff;
-                        font-size: .24rem;
-                        font-weight: 600;
-                        border-bottom: 1px solid #29374B;
-                    }
-
                     .price {
                         margin-top: 10px;
                         font-size: .1867rem;
                         font-weight: 500;
                         color: #777E90;
+                        text-align: left;
                     }
 
                     .money_w {
@@ -1413,15 +1387,28 @@
                     }
                 }
                 
-                .content-list {
-                    ul {
-                        display: flex;
-                        flex-wrap: wrap;
-                        width: auto;
-                        margin: 0;
+                .list-content {
+                    width: 100%;
 
-                        li {
-                            width: 47%;
+                    .components-item-card {
+                        margin-right: .266666666666667rem;
+                        width: 48.5%;
+
+                        >li {
+                            margin-bottom: 0;
+                        }
+
+                        &:nth-child(3n) {
+                            margin-right: .266666666666667rem;
+                        }
+
+                        &:nth-child(2n) {
+                            margin-right: 0 !important;
+                        }
+
+                        .btn {
+                            height: .693333333333333rem;
+                            line-height: .693333333333333rem;
                         }
                     }
                 }
