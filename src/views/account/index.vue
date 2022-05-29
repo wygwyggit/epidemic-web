@@ -571,7 +571,7 @@
                     .el-checkbox-group {
                         display: flex;
                         width: 100%;
-                        overflow-x: scroll;
+                        overflow-x: auto;
                     }
 
                     .all,
