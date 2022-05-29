@@ -144,7 +144,7 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: 2,
+                            id: 8,
                             val: this.$t("account.on-sale")
                         }, {
                             id: 1,
@@ -152,7 +152,10 @@
                         }, {
                             id: 4,
                             val: this.$t("account.sending")
-                        }, ]
+                        }, {
+                            id: 2,
+                            val: this.$t("account.processing")
+                        }]
                     },
                     2: {
                         label: this.$t("account.status"),
@@ -160,12 +163,12 @@
                             id: 0,
                             val: this.$t("account.available")
                         }, {
-                            id: 2,
+                            id: 8,
                             val: this.$t("account.on-sale")
                         }, {
                             id: 4,
                             val: this.$t("account.sending")
-                        }, ]
+                        }]
                     }
                 },
                 checkAll: false,
@@ -552,6 +555,12 @@
                 padding: 0 .5rem;
 
                 .check-item {
+
+                    .el-checkbox-group {
+                        display: flex;
+                        width: 100%;
+                        overflow-x: scroll;
+                    }
 
                     .all,
                     .label-name {

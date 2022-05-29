@@ -95,7 +95,8 @@
         "sending": "转增中",
         "open": "开礼包",
         "synthetic": "融合",
-        "congratulation": "恭喜你获得"
+        "congratulation": "恭喜你获得",
+        "processing": "上架中"
     },
     "detail": {
         "attribute": "属性",
