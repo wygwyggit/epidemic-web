@@ -751,8 +751,8 @@
             width: 100%;
 
             .top-search {
+                display: none;
                 position: relative;
-                display: flex;
                 justify-content: space-between;
                 margin: 20px 0;
                 width: 100%;
@@ -1341,7 +1341,7 @@
                         display: none;
 
                         &.filter-right {
-                            display: flex;
+                            display: none;
                             width: .9067rem;
                             height: .9067rem;
 
