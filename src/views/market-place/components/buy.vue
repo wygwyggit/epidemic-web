@@ -77,7 +77,7 @@
         methods: {
             sendBuy() {
                 if (this.currentTabId === 2 && !this.row.num) return
-                let url = 'market/buy/goods',
+                let url = 'goods/market/buy/goods',
                     params = {
                         record_id: this.row.goods_id,
                         pay_amount: this.row.amount,
