@@ -22,7 +22,8 @@
                 <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
             </template>
             <template v-else>
-                <div class="mid-content" :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
+                <div class="mid-content"
+                    :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
                     <span class="name">{{itemInfo.name}}</span>
                     <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
                 </div>
@@ -194,6 +195,7 @@
             }
 
             .opt-buttom {
+                min-height: 40px;
                 margin-top: .18rem;
             }
 
@@ -240,6 +242,11 @@
         .#{$prefixCls} {
             .btn {
                 font-size: .266666666666667rem !important;
+            }
+
+            .opt-buttom {
+                min-height: .693333333333333rem;
+                margin-top: .18rem;
             }
         }
     }

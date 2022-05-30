@@ -1,19 +1,19 @@
 <template>
-    <div :class="prefixCls">
-        <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false" :visible.sync="isShowDialog" @close="doClose"
-            width="6.4rem" v-if="isShowDialog">
+    <div :class="prefixCls" >
+        <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
+            :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" v-loading="isLoading">
             <div class="content">
                 <div class="addr">
                     <div class="tit">{{$t('common.enter-address')}}</div>
                     <el-input v-model="addressTxt" :placeholder="$t('common.enter-ad-tip')"></el-input>
                 </div>
                 <div class="remaining-times">
-                    {{$t('common.remain-times')}}: <span>3</span>
+                    {{$t('common.remain-times')}}: <span>{{ user_give_left_count }}</span>
                 </div>
                 <div class="tip">
                     {{$t('common.transferred-tip')}}
                 </div>
-                <el-button type="primary" :disabled="!addressTxt" :loading="isLoading" @click="doNftApprove">
+                <el-button type="primary" :disabled="!addressTxt && user_give_left_count > 0" @click="doNftApprove">
                     {{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
@@ -25,11 +25,8 @@
     import myAjax from '@/utils/ajax.js'
     import {
         payAddress,
-        payAmount,
-        contractAddress,
     } from "@/config/config.js";
     import web3Tool from '@/utils/web3'
-    import VOTE_ABI from "@/contracts/vote.js";
     export default {
         name: '',
         components: {
@@ -47,39 +44,69 @@
             belong_type: {
                 type: Number,
                 require: true
+            },
+            addr: {
+                type: String,
+                require: true
             }
         },
         data() {
             return {
                 prefixCls: 'deliver-dialog',
                 isShowDialog: true,
-                isLoading: false,
+                isLoading: true,
                 addressTxt: '',
+                user_give_left_count: '',
             }
         },
         computed: {},
         watch: {},
         created() {
+            Promise.all([this.getChainInfo(), this.getUserInfo()]).then(res => {
+                this.isLoading = false
+            })
             this.getChainInfo()
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getUserInfo() {
+                 return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: `user/user_info`,
+                        data: {
+                            body: {
+                                addr: this.addr
+                            }
+                        }
+
+                    }).then(res => {
+                        this.user_give_left_count = res.data.user_give_left_count
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
             getChainInfo() {
-                myAjax({
-                    url: `chain/chain_info?belong_type=${this.belong_type}`,
-                    method: 'GET',
-                 
-                }).then(res => {
-                    this.contract_addr = res.data.contract_addr
-                    this.abi = res.data.abi
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: `chain/chain_info?belong_type=${this.belong_type}`,
+                        method: 'GET',
+
+                    }).then(res => {
+                        this.contract_addr = res.data.contract_addr
+                        this.abi = res.data.abi
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
             },
             doClose() {
                 this.$emit('close')
             },
             doDeliver(hash) {
-                this.isLoading = true
                 myAjax({
                     url: 'user/give/create',
                     data: {
@@ -95,7 +122,6 @@
                     }
                 }).then(res => {
                     if (res.ok) {
-                        this.isLoading = false
                         this.$emit('sendOk')
                     }
                 })
