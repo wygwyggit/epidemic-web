@@ -155,7 +155,10 @@
         "frag": "碎片",
         "panamera-fragments": "帕梅拉碎片",
         "car-fragments": "汽车碎片",
-        "phone-fragments": "手机碎片"
+        "phone-fragments": "手机碎片",
+        "buy": "购买",
+        "title": "确认信息",
+        "confirmed": "确认"
     },
     "net-mining": {
         "participate": "参与质押挖矿",
