@@ -15,12 +15,12 @@ const myAjax = (options) => {
     return new Promise((res, rej) => {
         if (isLogout) return res()
         let url = apiBasePath + options.url
-        const data = Object.assign({
+        const data = Object.assign((!options.notHeaderParams ? {
             header: {
                 'token': Cookie.getCookie('ad_token') || '',
                 'addr': Cookie.getCookie("__account__") || '',
             }
-        }, options.data || {}) 
+        }: {}), options.data || {})
         axios({
             url: url,
             method: options.method || 'post',
@@ -36,7 +36,7 @@ const myAjax = (options) => {
                 Message.closeAll();
                 Message({
                     type: 'error',
-                    message: data.data || '网络不稳定，请您稍后再试~'
+                    message: data.reason || '网络不稳定，请您稍后再试~'
                 })
             }
             res(data)

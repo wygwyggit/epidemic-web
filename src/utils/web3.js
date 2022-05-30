@@ -1,5 +1,8 @@
-
+import Web3 from 'web3'
 class Web3Tool {
+    constructor() {
+        this.web3 = new Web3(window.web3.currentProvider)
+    }
     init(callback) {
         if (typeof window.ethereum === "undefined") {
             this.$showError("there is no web3 provider.");
@@ -27,6 +30,15 @@ class Web3Tool {
                     reject(err)
                 }
                 resolve(res)
+            })
+        })
+    }
+    sign(options, callback) {
+        return new Promise((resolve, reject) => {
+            this.web3.eth.personal.sign(options.dataToSign, options.addr, options.pwd, callback).then(res => {
+                resolve(res)
+            }).catch(err => {
+                reject(err)
             })
         })
     }

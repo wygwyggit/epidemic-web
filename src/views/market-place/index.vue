@@ -168,10 +168,10 @@
                         </item-card>
                     </div>
                 </div>
-                <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
+                <el-pagination background layout="total, prev, pager, next"
                     @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                    :page-size="Number(page.pageSize)" :total="Number(total)"
-                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="list.length && !isLoading">
+                    :total="Number(total)"
+                    :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
                 </el-pagination>
             </div>
         </div>
@@ -221,10 +221,10 @@
                     </tbody>
                 </table>
             </div>
-            <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange2"
+            <el-pagination background :hide-on-single-page="true" layout="total, prev, next"
                 @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
-                :page-size="Number(page2.pageSize)" :total="Number(total2)"
-                :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="recordList.length && !openIsLoading">
+                :total="Number(total2)"
+                :current-page="Number(page2.curPage)" v-if="recordList.length && !openIsLoading">
             </el-pagination>
         </el-dialog>
         <el-drawer :visible.sync="buyRecoredDrawer" direction="btt">
@@ -274,7 +274,7 @@
                     </tbody>
                 </table>
                 <div class="page r" v-if="recordList.length && !openIsLoading">
-                    <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange2"
+                    <el-pagination background layout="total, sizes, prev, pager, next"
                         @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
                         :page-size="Number(page2.pageSize)" :total="Number(total2)" :current-page="Number(page2.curPage)"
                         :page-sizes="[10, 20, 50, 100]">
@@ -505,6 +505,7 @@
                         url: 'market/goods/count',
                         data: {
                             body: {
+                                status: [8]
                             }
                         }
                     }).then(res => {
@@ -528,7 +529,7 @@
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
                                 type: this.currentTabId,
-                                status: 8
+                                status: [8]
                             }
                         }
                     }).then(res => {
@@ -551,19 +552,9 @@
                 }
                 this.isFilterDrawer = false
             },
-            onSizeChange(size) {
-                this.page.curPage = 1
-                this.page.pageSize = size
-                this.getLiist()
-            },
             onPageChange(page) {
                 this.page.curPage = page
                 this.getLiist()
-            },
-            onSizeChange2(size) {
-                this.page2.curPage = 1
-                this.page2.pageSize = size
-                this.getRecords()
             },
             onPageChange2(page) {
                 this.page2.curPage = page
@@ -830,7 +821,7 @@
                         }
                     }
                 }
-                
+
                 .filter-wrap {
                     position: absolute;
                     top: 0.7rem;
@@ -1084,7 +1075,7 @@
             .header-title {
                 display: flex;
                 align-items: center;
-                
+
                 img {
                     width: .4rem;
                     height: .4rem;
@@ -1436,7 +1427,7 @@
                         }
                     }
                 }
-                
+
                 .list-content {
                     width: 100%;
 

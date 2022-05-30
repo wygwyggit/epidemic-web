@@ -141,6 +141,12 @@
     import myAjax from "@/utils/ajax.js";
     import eventBus from "@/utils/eventBus";
     import web3Tool from '@/utils/web3'
+    import {
+        resolve
+    } from "path";
+    import {
+        rejects
+    } from 'assert';
     export default {
         name: "common-header",
         components: {},
@@ -243,13 +249,21 @@
         beforeDestroy() {},
         methods: {
             listenerAccountChange() {
-                ethereum.on('accountsChanged', accounts => {
+                ethereum.on('accountsChanged', async accounts => {
                     if (accounts.length === 0) {
                         this.disconnected();
                     } else {
                         this.account = accounts[0];
                         Cookie.setCookie("__account__", this.account);
-                        this.getToken()
+                        await this.regUser()
+                        const data = await this.getNonce()
+                        web3Tool.sign({
+                            dataToSign: `You are signing a onetime nonce: ${data.nonce}`,
+                            addr: this.account || '',
+                            pwd: ''
+                        }).then(signature => {
+                            this.getToken(signature)
+                        })
                     }
                 })
             },
@@ -267,49 +281,85 @@
                     this.account = accounts[0];
                     Cookie.setCookie("__account__", this.account);
                     flag && eventBus.$emit("connect");
-                    this.getToken()
+                    const data = await this.getNonce()
                 }
                 //this.isShowConnectDialog = false
             },
-            getToken() {
+            // 获取随机数
+            getNonce() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: `auth/nonce?addr=${this.account}`,
+                        method: 'GET'
+                    }).then(res => {
+                        if (res.ok && res.data) {
+                            resolve(res.data)
+                        } else {
+                            reject('error')
+                        }
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
+            },
+            getToken(signature) {
                 myAjax({
                     url: 'auth/auth',
+                    notHeaderParams: true,
                     data: {
                         body: {
                             addr: this.account,
-                            user_sign: this.account
+                            signature
                         }
-
                     }
                 }).then(res => {
                     if (res.ok) {
-                        res.token && (Cookie.setCookie('ad_token', res.data.token))
+                        const token = (res.data || {}).token
+                        token && (Cookie.setCookie('ad_token', token))
                     }
-                    regUser()
                 })
             },
             regUser() {
-                myAjax({
-                    url: "user/sign",
-                    data: {
-                        inviter: Cookie.getCookie("__rewardRef__"),
-                    },
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: "user/sign",
+                        data: {
+                            body: {
+                                addr: this.account,
+                                inviter: Cookie.getCookie("__rewardRef__"),
+                            }
+                        },
+                    }).then(res => {
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
             },
             chainChanged(chainId) {
                 this.chainId = parseInt(chainId, 16);
                 //this.isShowConnectDialog = false
             },
-            async disconnected() {
+            disconnected() {
                 Cookie.delCookie("__account__");
+                Cookie.delCookie("ad_token")
                 this.account = null;
                 location.reload();
             },
-            async connectWalletMetaMask(flag) {
-                web3Tool.init.call(this, account => {
+            connectWalletMetaMask(flag) {
+                web3Tool.init.call(this, async account => {
                     this.account = account
                     Cookie.setCookie("__account__", this.account);
-                    this.getToken()
+                    await this.regUser()
+                    const data = await this.getNonce()
+                    web3Tool.sign({
+                        dataToSign: `You are signing a onetime nonce: ${data.nonce}`,
+                        addr: this.account || '',
+                        pwd: ''
+                    }).then(signature => {
+                        this.getToken(signature)
+                    })
                 })
                 //   if (window.ethereum) {
                 //     window.ethereum.enable().then((res) => {

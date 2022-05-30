@@ -2,6 +2,15 @@
  * @description rewrite element-ui-style
  * @author wyg
  */
+ .el-empty {
+     padding-top: 1.426666666666667rem;
+ }
+ .el-pagination {
+     .btn-prev, .btn-next {
+         background-color: transparent !important;
+         color: #32A3FF !important;
+     }
+ }
 .el-button--primary {
     background: $--color-success;
     border-color: $--color-success;

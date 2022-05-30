@@ -29,12 +29,11 @@
                 </div>
                 <div class="list-content" v-loading="isLoading">
                     <div class="list clearfix">
-                        <el-empty :image="emptyImage" description="暂无数据" v-if="!netList.length && !isLoading">
+                        <el-empty :image="emptyImage" :description="$t('common.no-data')" v-if="!netList.length && !isLoading">
                         </el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
-                                 @cancel="doCancelSale" @revise="doReviseSale" @deliver="doDeliver"
-                                type="sale">
+                                @revise="doReviseSale" @deliver="doDeliver" type="sale">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
                                         <div class="btn btn-open" v-if="item.belong_type == -1"
@@ -52,7 +51,8 @@
                                         <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
                                     </template>
                                     <template v-if="item.status == 2">
-                                        <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
+                                        <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
+                                         <div class="btn btn-cancel-sale" @click="doCancelSale(item)">{{ $t("account.cancel-sale")}}</div>
                                     </template>
                                     <template v-if="item.status == 1">
                                         <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
@@ -65,18 +65,22 @@
                         </template>
 
                     </div>
-                    <div class="page r" v-if="!netList.length && !isLoading">
-                        <el-pagination background layout="total, sizes, prev, pager, next" @size-change="onSizeChange"
-                            @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                            :page-size="Number(page.pageSize)" :total="Number(total)"
-                            :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]" v-if="!netList.length">
-                        </el-pagination>
+                    <div class="page-warp" v-if="!netList.length && !isLoading">
+                        <div class="r">
+                            <el-pagination background :hide-on-single-page="true" layout="total, prev, pager, next"
+                                @current-change="onPageChange" @prev-click="onPageChange"
+                                @next-click="onPageChange" :page-size="Number(page.pageSize)" :total="Number(total)"
+                                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]"
+                                v-if="!netList.length">
+                            </el-pagination>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-        <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
+        <sale :row="currentGoodRow" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
+            @sendSaleOk="sendSaleOk"></sale>
         <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
             :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
             @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
@@ -170,25 +174,12 @@
                 isShowDeliverDialog: false,
                 saleReviseDialog: false,
                 saleReviseDialogTitle: '',
-                query: {
-                    keywords: '',
-                    latest: 0
-                },
-                options: [{
-                    value: 0,
-                    key: 'latest',
-                    label: 'latest'
-                }],
-                netListCopy: [],
                 netList: []
             }
         },
         computed: {
             placeholderTxt() {
                 return this.$t("account.search-id-name")
-            },
-            totalFilter() {
-                return this.checkListFilter.length + this.checkListLvel.length + this.checkListSale.length
             },
         },
         created() {
@@ -199,10 +190,6 @@
             Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                 this.isLoading = false
             })
-            this.netListCopy = JSON.parse(JSON.stringify(this.netList))
-            this.options.forEach(x => {
-                x.label = this.$t(`account.${x.key}`)
-            });
         },
         mounted() {},
         beforeDestroy() {},
@@ -219,16 +206,10 @@
             },
             deliverSuccess() {
                 this.isShowDeliverDialog = false
-                if (!this.checkListFilter.length) {
-                    this.getTotalInfo()
-                }
                 this.getLiist()
             },
             doGiftClose() {
                 this.isShowGiftBag = false
-                if (!this.checkListFilter.length) {
-                    this.getTotalInfo()
-                }
                 this.getLiist()
             },
             doSynthetic(row) {
@@ -275,21 +256,16 @@
                 this.getLiist()
             },
             onSelectTab(item) {
+                if (this.isLoading) return
                 this.currentTabId = item.id
                 this.page.curPage = 1
                 this.checkListFilter = []
-                this.getTotalInfo();
                 this.isLoading = true
                 this.getLiist()
             },
             doDeliver(row) {
                 this.currentGoodRow = row
                 this.isShowDeliverDialog = true
-            },
-            onSizeChange(size) {
-                this.page.curPage = 1
-                this.page.pageSize = size
-                this.getLiist()
             },
             onPageChange(page) {
                 this.page.curPage = page
@@ -328,16 +304,18 @@
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
                                 status: this.checkListFilter.length ? this.checkListFilter : (this
-                                    .currentTabId == 1 ? [0, 1, 2, -2] : [0, -2]),
+                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4]),
                                 type: this.currentTabId
                             }
                         }
                     }).then(res => {
                         const data = res.data || {}
-                        this.netList = data.items
+                        this.netList = data.items || []
 
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
+                        } else {
+                            this.getTotalInfo()
                         }
                         this.total = data.total
                         this.isLoading = false
@@ -355,14 +333,28 @@
                 this.currentGoodRow = row
                 this.saleReviseDialog = true
             },
-            doCancelSale(id) {
+            doCancelSale(row) {
+                this.currentGoodRow = row
                 this.$confirm(`${this.$t("common.cancel-sale-tip")}?`, this.$t("common.remind"), {
                     confirmButtonText: this.$t("common.yes"),
                     showCancelButton: false,
                     closeOnClickModal: false,
                     width: '6.4rem'
                 }).then(async () => {
-
+                    const idName = row.num ? 'type_id' : 'goods_id'
+                    myAjax({
+                        url: row.num ? 'goods/sale/others/cancel' : 'goods/sale/nft/cancel',
+                        data: {
+                            body: {
+                                [idName]: row[idName]
+                            }
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.$showOk(this.$t("common.ope-suc"))
+                            this.getLiist()
+                        }
+                    })
                 })
             },
             doReviseSale(row) {
@@ -436,9 +428,11 @@
                         &:nth-child(2n) {
                             margin: 0 .1rem;
                         }
+
                         &:last-child {
                             margin-right: 0;
                         }
+
                         &.btn-deliver,
                         &.btn-open {
                             background: #F1AE00;
@@ -456,6 +450,9 @@
                         &.btn-on-staking,
                         &.btn-on-sending {
                             background: #777E90;
+                        }
+                        &.btn-cancel-sale {
+                            background: #FF5E1A;
                         }
                     }
                 }
@@ -521,6 +518,9 @@
                 .list {
                     min-height: 5rem;
                     padding-bottom: .3rem;
+                }
+                .page-warp {
+                    padding-bottom: .373333333333333rem
                 }
             }
 

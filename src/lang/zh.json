@@ -25,11 +25,15 @@
         "yes": "确认",
         "net-price-modified-tip": "你的NFT价格将会被修改",
         "please-enter-price": "请输入价格",
+        "please-enter-unit-price": "请输入单价",
         "deliver": "赠送",
         "enter-address": "赠送地址",
         "enter-ad-tip": "请输入接收地址",
         "remain-times": "今日剩余赠送次数",
-        "transferred-tip": "您的NFT将被转移"
+        "transferred-tip": "您的NFT将被转移",
+        "no-data": "暂无数据",
+        "ope-suc": "操作成功"
+
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -100,7 +104,9 @@
         "compound-tip2": "请输入你想要合成的金礼包数量",
         "gold-pack": "金礼包",
         "sliver-pack": "银礼包",
-        "processing": "上架中"
+        "processing": "上架中",
+        "sale-price-mini": "至少5000000份",
+        "quantity-for-sale": "销售的数量"
     },
     "detail": {
         "attribute": "属性",

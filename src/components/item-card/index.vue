@@ -22,7 +22,7 @@
                 <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
             </template>
             <template v-else>
-                <div class="mid-content">
+                <div class="mid-content" :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
                     <span class="name">{{itemInfo.name}}</span>
                     <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
                 </div>

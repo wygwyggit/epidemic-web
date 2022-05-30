@@ -25,11 +25,14 @@
         "yes": "Yes",
         "net-price-modified-tip": "Your NFT price will be modified",
         "please-enter-price": "Please enter the price",
+        "please-enter-unit-price": "Please enter the Unit Price",
         "deliver": "Deliver",
         "enter-address": "Enter address",
         "enter-ad-tip": "Please enter recipient address",
         "remain-times": "Remaining times today",
-        "transferred-tip": "Your NFT will be transferred"
+        "transferred-tip": "Your NFT will be transferred",
+        "no-data": "No data",
+        "ope-suc": "Operation successful"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
@@ -98,7 +101,9 @@
         "compound-tip2": "Enter the number of Gold packs",
         "gold-pack": "Gold Pack",
         "sliver-pack": "Silver Pack",
-        "processing": "Processing"
+        "processing": "Processing",
+        "sale-price-mini": "Minimum 5000000 Adoge",
+        "quantity-for-sale": "Quantity for sale"
     },
     "detail": {
         "attribute": "Attribute",
