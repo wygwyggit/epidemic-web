@@ -8,7 +8,7 @@
                 </div>
                 <div class="right">
                     <div class="net-n">
-                        <p>{{$t("common.pledged")}}</p>
+                        <p>{{$t("account.staking")}}</p>
                         <p style="margin-top:3px">12 NFTs</p>
                     </div>
                     <ul>
@@ -38,9 +38,6 @@
                                 </p>
                                 <p class="value">100</p>
                             </div>
-                        </div>
-                        <div class="opt">
-                            <el-button type="primary">{{$t("blind-box.receive")}}</el-button>
                         </div>
                     </div>
                 </div>
@@ -686,7 +683,7 @@
                     border-radius: 12px 12px 12px 12px;
 
                     .net-n {
-                        margin-right: 20px;
+                        margin-right: 60px;
 
                         p:first-child {
                             color: #777E90;
@@ -703,7 +700,7 @@
                         li {
                             position: relative;
                             float: left;
-                            padding: 0 20px;
+                            padding: 0 30px;
                             text-align: center;
 
                             &::after {
@@ -736,7 +733,8 @@
                     .received-box {
                         display: flex;
                         align-items: center;
-                        padding-left: .266666666666667rem;
+                        margin-left: .4rem;
+                        padding-left: .5rem;
                         border-left: 1px solid #29374B;
 
                         .my-reward {
@@ -942,10 +940,15 @@
                         }
 
                         ul {
+                            width: 100%;
                             display: flex;
                             margin-top: 2rem;
                             padding-top: .16rem;
                             border-top: 1px solid #29374B;
+                            li {
+                                flex: 1;
+                                padding: 0;
+                            }
                         }
 
                         .received-box {

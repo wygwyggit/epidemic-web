@@ -65,13 +65,13 @@
                         </template>
 
                     </div>
-                    <div class="page-warp" v-if="!netList.length && !isLoading">
+                    <div class="page-warp" v-if="netList.length && !isLoading">
                         <div class="r">
                             <el-pagination background :hide-on-single-page="true" layout="total, prev, pager, next"
                                 @current-change="onPageChange" @prev-click="onPageChange"
                                 @next-click="onPageChange" :page-size="Number(page.pageSize)" :total="Number(total)"
                                 :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]"
-                                v-if="!netList.length">
+                                >
                             </el-pagination>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
         </div>
         <sale :row="currentGoodRow" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
             @sendSaleOk="sendSaleOk"></sale>
-        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
+        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name" :addr="currentGoodRow.user_addr"
             :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
             @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
@@ -115,7 +115,7 @@
                 prefixCls: 'views-account',
                 emptyImage,
                 page: {
-                    pageSize: 200000,
+                    pageSize: 20,
                     curPage: 1
                 },
                 total: 0,
