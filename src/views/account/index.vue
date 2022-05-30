@@ -50,7 +50,7 @@
                                             v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
                                         <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
                                     </template>
-                                    <template v-if="item.status == 2">
+                                    <template v-if="item.status == 2 || item.status == 8">
                                         <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                          <div class="btn btn-cancel-sale" @click="doCancelSale(item)">{{ $t("account.cancel-sale")}}</div>
                                     </template>

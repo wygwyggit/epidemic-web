@@ -40,14 +40,19 @@
             </template>
             <div class="opt-btn">
                 <button class="btn" :class="{'confirmed': salePrice.length}"
-                    @click="sendSale">{{$t("common.confirmed") }} </button>
+                    @click="doSubmit">{{$t("common.confirmed") }} </button>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
+    import {
+        payAddress,
+    } from "@/config/config.js";
+    import web3Tool from '@/utils/web3'
     export default {
         name: '',
         components: {},
@@ -69,10 +74,41 @@
         computed: {},
         watch: {},
         created() {},
-        mounted() {},
+        mounted() {
+            if (this.row.belong_type < 0) return
+            this.getChainInfo()
+        },
         beforeDestroy() {},
         methods: {
-            sendSale() {
+            getChainInfo() {
+                myAjax({
+                    url: `chain/chain_info?belong_type=${this.row.belong_type}`,
+                    method: 'GET',
+
+                }).then(res => {
+                    this.contract_addr = res.data.contract_addr
+                    this.abi = res.data.abi
+                })
+            },
+            doSubmit() {
+                if (this.row.belong_type < 0) {
+                    this.sendSale()
+                } else {
+                    this.doNftApprove()
+                }
+            },
+            doNftApprove() {
+                web3Tool.contract.call(this, {
+                    contractAddress: this.contract_addr || '',
+                    abi: this.abi,
+                    authAddr: payAddress,
+                    amount: this.row.goods_id,
+                    account: Cookie.getCookie("__account__") || null,
+                }).then(hash => {
+                    this.sendSale(hash)
+                })
+            },
+            sendSale(hash) {
                 if (!this.salePrice) return
                 let url = '',
                     params = {}
@@ -81,13 +117,15 @@
                     params = {
                         type_id: this.row.type_id,
                         amount: Number(this.salePrice),
-                        num: this.saleQuantity
+                        num: this.saleQuantity,
+                        tx: hash
                     }
                 } else {
                     url = 'goods/sale/nft'
                     params = {
                         amount: Number(this.salePrice),
                         goods_id: this.row.goods_id,
+                        tx: hash
                     }
                 }
                 this.isLoading = true
