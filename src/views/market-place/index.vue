@@ -157,12 +157,9 @@
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
-                            <div class="btns-wrap">
-                                <template v-if="item.status == -1">
-                                    <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
-                                </template>
-                                <template v-if="item.status == 2">
-                                    <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div>
+                            <div class="btns-wrap" v-if="item.status === 8">
+                                <template>
+                                    <div class="btn btn-sale" @click="doBuy(item)">{{$t("marketplace.buy")}}</div>
                                 </template>
                             </div>
                         </item-card>
@@ -359,7 +356,7 @@
                 </ul>
             </div>
         </el-drawer>
-        <sale :goods_id="currentGoodRow.goods_id" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false" @sendSaleOk="sendSaleOk"></sale>
+        <buy :row="currentGoodRow" :currentTabId="currentTabId" v-if="buyReviseDialog" @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk"></buy>
     </div>
 </template>
 
@@ -373,14 +370,14 @@
     import {
         netImgBaseUrl
     } from '@/config/config.js'
-    import Sale from '../account/components/sale'
+    import Buy from './components/buy'
 
     export default {
         name: '',
         components: {
             PageTabs,
             itemCard,
-            Sale
+            Buy
         },
         props: {},
         data() {
@@ -418,7 +415,7 @@
                 isShowRecored: false,
                 openIsLoading: true,
                 buyRecoredDrawer: false,
-                saleReviseDialog: false,
+                buyReviseDialog: false,
                 list: [],
                 recordList: [],
                 page: {
@@ -457,14 +454,14 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
-            sendSaleOk() {
+            sendBuyOk() {
                 this.page.curPage = 1
-                this.saleReviseDialog = false
+                this.buyReviseDialog = false
                 this.getLiist()
             },
-            doSale(row) {
+            doBuy(row) {
                 this.currentGoodRow = row
-                this.saleReviseDialog = true
+                this.buyReviseDialog = true
             },
             goDetail(id) {
                 this.$router.push({

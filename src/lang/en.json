@@ -152,7 +152,10 @@
         "frag": "Frag",
         "panamera-fragments": "Panamera Fragments",
         "car-fragments": "Car Fragments",
-        "phone-fragments": "Phone Fragments"
+        "phone-fragments": "Phone Fragments",
+        "buy": "Buy",
+        "title": "Confirm information",
+        "confirmed": "Confirmed"
     },
     "net-mining": {
         "participate": "Participate",
