@@ -209,10 +209,10 @@
                                 {{ item.name }}
                             </td>
                             <td>
-                                {{ item.price }}
+                                {{ item.payment_amount || '-' }}
                             </td>
                             <td>
-                                {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
+                                {{ item.order_time }}
                             </td>
                         </tr>
                     </tbody>
@@ -262,10 +262,10 @@
                                 {{ item.name }}
                             </td>
                             <td>
-                                {{ item.price }}
+                                {{ item.payment_amount || '-' }}
                             </td>
                             <td>
-                                {{ moment(item.time).format('YYYY-MM-DD HH:mm:ss') }}
+                                {{ item.order_time }}
                             </td>
                         </tr>
                     </tbody>
@@ -1065,6 +1065,11 @@
             //         }
             //     }
             // }
+        }
+
+        .dialog-content {
+            height: 450px;
+            overflow-y: auto;
         }
 
         .recored-dialog {
