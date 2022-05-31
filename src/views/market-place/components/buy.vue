@@ -2,51 +2,59 @@
     <div :class="prefixCls">
         <el-dialog :title="$t('marketplace.title')" :visible.sync="isShowDialog" width="6.4rem"
             @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
-            <template>
-                <ul v-if="currentTabId === 1">
-                    <li class="item">
-                        <div class="key">NFT ID:</div>
-                        <div class="val">{{ row.goods_id }}</div>
-                    </li>
-                    <li class="item">
-                        <div class="key">NFT Name:</div>
-                        <div class="val">{{ row.name }}</div>
-                    </li>
-                    <li class="item">
-                        <div class="key">Price:</div>
-                        <div class="val">
-                            <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                           {{ row.amount }} Adoge
-                        </div>
-                    </li>
-                </ul>
-                <ul v-else>
-                    <li class="item">
-                        <div class="key">Commodity:</div>
-                        <div class="val">{{ row.rarity }}</div>
-                    </li>
-                    <li class="item">
-                        <div class="key">Quantity:</div>
-                        <el-input-number v-model="num" :min="1" :max="row.num" ></el-input-number>
-                    </li>
-                    <li class="item">
-                        <div class="key">Total price:</div>
-                        <div class="val">
-                            <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                           {{ row.amount }} Adoge
-                        </div>
-                    </li>
-                </ul>
-            </template>
-            <div class="opt-btn">
-                <button class="btn" @click="sendBuy">{{$t("marketplace.confirmed") }} </button>
+            <div v-loading="isLoading">
+                <template>
+                    <ul v-if="currentTabId === 1">
+                        <li class="item">
+                            <div class="key">NFT ID:</div>
+                            <div class="val">{{ row.goods_id }}</div>
+                        </li>
+                        <li class="item">
+                            <div class="key">NFT Name:</div>
+                            <div class="val">{{ row.name }}</div>
+                        </li>
+                        <li class="item">
+                            <div class="key">Price:</div>
+                            <div class="val">
+                                <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
+                            {{ row.amount }} Adoge
+                            </div>
+                        </li>
+                    </ul>
+                    <ul v-else>
+                        <li class="item">
+                            <div class="key">Commodity:</div>
+                            <div class="val">{{ row.rarity }}</div>
+                        </li>
+                        <li class="item">
+                            <div class="key">Quantity:</div>
+                            <el-input-number v-model="num" :min="1" :max="row.num" ></el-input-number>
+                        </li>
+                        <li class="item">
+                            <div class="key">Total price:</div>
+                            <div class="val">
+                                <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
+                            {{ row.amount }} Adoge
+                            </div>
+                        </li>
+                    </ul>
+                </template>
+                <div class="opt-btn">
+                    <button class="btn" @click="doSubmit">{{$t("marketplace.confirmed") }} </button>
+                </div>
             </div>
         </el-dialog>
     </div>
 </template>
 
 <script>
+    import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
+    import {
+        payAddress,
+    } from "@/config/config.js";
+    import web3Tool from '@/utils/web3'
+
     export default {
         name: '',
         components: {},
@@ -63,7 +71,7 @@
         data() {
             return {
                 prefixCls: 'views-ml-by',
-                isLoading: false,
+                isLoading: true,
                 isShowDialog: true,
                 num: '',
                 saleQuantity: 1,
@@ -72,10 +80,39 @@
         computed: {},
         watch: {},
         created() {},
-        mounted() {},
+        mounted() {
+            this.isLoading = true
+            this.getChainInfo()
+        },
         beforeDestroy() {},
         methods: {
-            sendBuy() {
+            getChainInfo() {
+                myAjax({
+                    url: `chain/chain_info?belong_type=5`,
+                    method: 'GET',
+
+                }).then(res => {
+                    this.contract_addr = res.data.contract_addr
+                    this.abi = res.data.abi
+                    this.isLoading = false
+                })
+            },
+            doSubmit() {
+                this.doNftApprove()
+            },
+            doNftApprove() {
+                web3Tool.contract.call(this, {
+                    contractAddress: this.contract_addr || '',
+                    abi: this.abi,
+                    authAddr: payAddress,
+                    amount: '50000000000000000000',
+                    account: Cookie.getCookie("__account__") || null,
+                }).then(hash => {
+                    console.log(111)
+                    this.sendBuy(hash)
+                })
+            },
+            sendBuy(hash) {
                 if (this.currentTabId === 2 && !this.row.num) return
                 let url = 'goods/market/buy/goods',
                     params = {
@@ -83,10 +120,9 @@
                         pay_amount: this.row.amount * (this.num || 1),
                         remark: '',
                         num: this.num || 1,
-                        type: this.row.belong_type < 0 ? 2 : 1
+                        type: this.row.belong_type < 0 ? 2 : 1,
+                        tx: hash
                     };
-
-                this.isLoading = true
                 myAjax({
                     url,
                     data: {
