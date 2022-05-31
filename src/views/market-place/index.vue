@@ -193,7 +193,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
-                            <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
+                            <td :class="{orange: item.type === 'SELL', green: item.type === 'buy'}">
                                 {{ item.type }}
                             </td>
                             <td>
@@ -209,7 +209,7 @@
                                 {{ item.name }}
                             </td>
                             <td>
-                                {{ item.payment_amount || '-' }}
+                                {{ item.amount || '-' }}
                             </td>
                             <td>
                                 {{ item.order_time }}
@@ -218,11 +218,13 @@
                     </tbody>
                 </table>
             </div>
-            <el-pagination background :hide-on-single-page="true" layout="total, prev, next"
-                @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
-                :total="Number(total2)"
-                :current-page="Number(page2.curPage)" v-if="recordList.length && !openIsLoading">
-            </el-pagination>
+            <div class="page r" v-if="recordList.length && !openIsLoading">
+                <el-pagination background layout="total, sizes, prev, pager, next"
+                    @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
+                    :page-size="Number(page2.pageSize)" :total="Number(total2)" :current-page="Number(page2.curPage)"
+                    :page-sizes="[10, 20, 50, 100]">
+                </el-pagination>
+            </div>
         </el-dialog>
         <el-drawer :visible.sync="buyRecoredDrawer" direction="btt">
             <div slot="title">
@@ -246,7 +248,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
-                            <td :class="{orange: index % 2 !== 0, green: index % 2 === 0}">
+                            <td :class="{orange: item.type === 'SELL', green: item.type === 'buy'}">
                                 {{ item.type }}
                             </td>
                             <td>
@@ -262,7 +264,7 @@
                                 {{ item.name }}
                             </td>
                             <td>
-                                {{ item.payment_amount || '-' }}
+                                {{ item.amount || '-' }}
                             </td>
                             <td>
                                 {{ item.order_time }}
@@ -1067,12 +1069,16 @@
             // }
         }
 
-        .dialog-content {
-            height: 450px;
-            overflow-y: auto;
-        }
-
         .recored-dialog {
+
+            .el-dialog__body {
+                height: 550px;
+            }
+            
+            .dialog-content {
+                height: 450px;
+                overflow-y: auto;
+            }
 
             .header-title {
                 display: flex;
