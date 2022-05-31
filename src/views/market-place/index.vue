@@ -174,8 +174,9 @@
                         </item-card>
                     </div>
                 </div>
-                <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange"
-                    @prev-click="onPageChange" @next-click="onPageChange" :total="Number(total)"
+                <el-pagination background layout="total, prev, pager, next"
+                    @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                    :total="Number(total)" :hide-on-single-page="true" 
                     :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
                 </el-pagination>
             </div>
