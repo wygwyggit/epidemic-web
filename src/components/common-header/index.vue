@@ -318,6 +318,7 @@
                         const token = (res.data || {}).token
                         token && (Cookie.setCookie('ad_token', token))
                     }
+                    location.reload()
                 })
             },
             regUser() {

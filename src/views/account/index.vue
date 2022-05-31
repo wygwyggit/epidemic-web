@@ -29,7 +29,8 @@
                 </div>
                 <div class="list-content" v-loading="isLoading">
                     <div class="list clearfix">
-                        <el-empty :image="emptyImage" :description="$t('common.no-data')" v-if="!netList.length && !isLoading">
+                        <el-empty :image="emptyImage" :description="$t('common.no-data')"
+                            v-if="!netList.length && !isLoading">
                         </el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @select="goDetail"
@@ -37,7 +38,7 @@
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
                                         <div class="btn btn-open" v-if="item.belong_type == -1"
-                                            @click="openGiftBag(item.type_id)">
+                                            @click="openGiftBag(item)">
                                             {{$t("account.open")}}
                                         </div>
                                         <div class="btn btn-synthetic" v-if="item.type_id == 2"
@@ -52,7 +53,8 @@
                                     </template>
                                     <template v-if="item.status == 2 || item.status == 8">
                                         <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
-                                         <div class="btn btn-cancel-sale" @click="doCancelSale(item)">{{ $t("account.cancel-sale")}}</div>
+                                        <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
+                                            {{ $t("account.cancel-sale")}}</div>
                                     </template>
                                     <template v-if="item.status == 1">
                                         <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
@@ -68,10 +70,9 @@
                     <div class="page-warp" v-if="netList.length && !isLoading">
                         <div class="r">
                             <el-pagination background :hide-on-single-page="true" layout="total, prev, pager, next"
-                                @current-change="onPageChange" @prev-click="onPageChange"
-                                @next-click="onPageChange" :page-size="Number(page.pageSize)" :total="Number(total)"
-                                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]"
-                                >
+                                @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                                :page-size="Number(page.pageSize)" :total="Number(total)"
+                                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]">
                             </el-pagination>
                         </div>
                     </div>
@@ -81,12 +82,13 @@
         </div>
         <sale :row="currentGoodRow" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
             @sendSaleOk="sendSaleOk"></sale>
-        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name" :addr="currentGoodRow.user_addr"
-            :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
+        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
+            :addr="currentGoodRow.user_addr" :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
             @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"
             @compoundSuc="compoundSuc"></compound>
+        <open :row="currentGoodRow" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false" @openGiftOk="openGiftOk"></open>
     </div>
 </template>
 
@@ -99,6 +101,7 @@
     import giftBag from './components/gift-bag'
     import compound from './components/compound'
     import Sale from './components/sale'
+    import Open from './components/open'
     export default {
         name: '',
         components: {
@@ -107,7 +110,8 @@
             DeliverDialog,
             giftBag,
             compound,
-            Sale
+            Sale,
+            Open
         },
         props: {},
         data() {
@@ -121,6 +125,7 @@
                 total: 0,
                 isShowGiftBag: false,
                 isShowCompound: false,
+                isShowOpenGift: false,
                 giftBagList: [],
                 isLoading: true,
                 tabs: [{
@@ -216,29 +221,21 @@
                 this.currentGoodRow = row
                 this.isShowCompound = true
             },
-            openGiftBag(type_id) {
-                myAjax({
-                    url: 'user/prize/lottery/open',
-                    data: {
-                        body: {
-                            type_id,
-                            open_num: 1
-                        }
+            openGiftBag(row) {
+                this.currentGoodRow = row
+                this.isShowOpenGift = true
+            },
+            openGiftOk(data) {
+                this.isShowOpenGift = false
+                this.isShowGiftBag = true
+                this.giftBagList = data
+                this.giftBagList.forEach(x => {
+                    if (x.name.includes('-')) {
+                        x.title = x.name.split('-')[3]
+                    } else {
+                        x.title = x.name
                     }
-                }).then(res => {
-                    if ((res.data || {}).rewards) {
-                        this.isShowGiftBag = true
-                        this.giftBagList = res.data.rewards
-                        this.giftBagList.forEach(x => {
-                            if (x.name.includes('-')) {
-                                x.title = x.name.split('-')[3]
-                            } else {
-                                x.title = x.name
-                            }
-                        });
-                    }
-
-                })
+                });
             },
             handleCheckAllChange(val) {
                 let arr = this.checkObj[this.currentTabId].list.map(x => x.id)
@@ -275,6 +272,7 @@
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'user/goods/count',
+                        isPassFalse: true,
                         data: {
                             body: {
                                 status: this.checkListFilter.length ? this.checkListFilter : (this
@@ -299,6 +297,7 @@
                     this.isLoading = true
                     myAjax({
                         url: 'user/goods/list',
+                        isPassFalse: true,
                         data: {
                             body: {
                                 page: this.page.curPage,
@@ -451,6 +450,7 @@
                         &.btn-on-sending {
                             background: #777E90;
                         }
+
                         &.btn-cancel-sale {
                             background: #FF5E1A;
                         }
@@ -519,6 +519,7 @@
                     min-height: 5rem;
                     padding-bottom: .3rem;
                 }
+
                 .page-warp {
                     padding-bottom: .373333333333333rem
                 }
