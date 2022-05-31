@@ -345,7 +345,8 @@
                         url: row.num ? 'goods/sale/others/cancel' : 'goods/sale/nft/cancel',
                         data: {
                             body: {
-                                [idName]: row[idName]
+                                [idName]: row[idName],
+                                record_id: row.record_id || ''
                             }
                         }
                     }).then(res => {
