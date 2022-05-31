@@ -59,7 +59,7 @@
                                     <template v-if="item.status == 1">
                                         <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
                                     </template>
-                                    <template v-if="item.status == -2">
+                                    <template v-if="item.status == -2 || item.status == 4">
                                         <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
                                     </template>
                                 </div>
@@ -311,7 +311,6 @@
                     }).then(res => {
                         const data = res.data || {}
                         this.netList = data.items || []
-
                         if (this.checkListFilter.length) {
                             this.tabs[this.currentTabId - 1].num = data.total
                         } else {
@@ -450,6 +449,7 @@
                         &.btn-on-staking,
                         &.btn-on-sending {
                             background: #777E90;
+                            cursor: not-allowed;
                         }
 
                         &.btn-cancel-sale {
@@ -516,9 +516,10 @@
             .list-content {
                 flex: 1;
 
+
                 .list {
                     min-height: 5rem;
-                    padding-bottom: .3rem;
+                    padding: .266666666666667rem 0;
                 }
 
                 .page-warp {
@@ -528,7 +529,6 @@
 
             .components-item-card {
                 float: left;
-                margin-top: .32rem;
                 margin-right: 20px;
                 width: 265px;
 
