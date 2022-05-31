@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog custom-class="gift-bag-dialog" :close-on-click-modal="false" :show-close="false"
-            :visible.sync="isShowDialog" width="6.4rem" v-if="isShowDialog">
+            :visible.sync="isShowDialog" width="6.4rem" v-if="isShowDialog" >
             <div class="content">
                 <div class="main-cot">
                     <div class="img-warp">

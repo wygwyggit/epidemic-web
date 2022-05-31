@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('account.sale')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
+            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
             <template v-if="row.num">
                 <ul>
