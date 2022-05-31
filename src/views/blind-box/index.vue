@@ -50,8 +50,8 @@
             </p>
             <div class="open-btn-info">
                 <div class="ipt">10,000,000Adoge/BOX</div>
-                <el-button type="primary" :disabled="!isCanOpen" @click="openBlindBox" :loading="isLoading">
-                    <span v-if="!isLoading">{{isCanOpen ?  $t("blind-box.open") : '售罄'}}</span></el-button>
+                <el-button type="primary" disabled @click="openBlindBox" :loading="isLoading">
+                    <span v-if="!isLoading">售罄</span></el-button>
             </div>
         </div>
         <div class="invitation-reward">
@@ -465,6 +465,7 @@
                 return new Promise((resolve, reject) => {
                     myAjax({
                             url: "user/user_info",
+                            isPassFalse: true,
                             data: {
                                 addr: this.account,
                             },
@@ -536,8 +537,10 @@
                 myAjax({
                     url: "nft/lottery",
                     data: {
-                        addr: this.account,
-                        tx: hash,
+                        body: {
+                            addr: this.account,
+                            tx: hash,
+                        }
                     },
                 }).then((res) => {
                     if (res.ok) {
