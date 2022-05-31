@@ -218,6 +218,7 @@
                 this.getLiist()
             },
             doSynthetic(row) {
+                return false
                 this.currentGoodRow = row
                 this.isShowCompound = true
             },

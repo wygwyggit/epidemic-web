@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('account.open')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="openGiftDialogClosed" custom-class="open-gift-dialog">
+            @closed="openGiftDialogClosed" custom-class="open-gift-dialog" :close-on-click-modal="false">
 
             <ul>
                 <li class="item">

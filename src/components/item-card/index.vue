@@ -131,10 +131,11 @@
     $prefixCls: 'components-item-card';
 
     .#{$prefixCls} {
+        margin-bottom: .266666666666667rem;
+
         >li {
-            padding: .266666666666667rem .266666666666667rem .453333333333333rem .266666666666667rem;
+            padding: .133333333333333rem .133333333333333rem .266666666666667rem .133333333333333rem;
             width: 100%;
-            margin-bottom: 20px;
             border: 1px solid #29374B;
             border-radius: .133333333333333rem;
             text-align: center;

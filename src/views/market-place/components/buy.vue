@@ -82,7 +82,8 @@
                         record_id: this.row.record_id,
                         pay_amount: this.row.amount * (this.num || 1),
                         remark: '',
-                        num: this.num
+                        num: this.num || 1,
+                        type: this.row.belong_type < 0 ? 2 : 1
                     };
 
                 this.isLoading = true

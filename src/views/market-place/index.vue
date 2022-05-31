@@ -80,18 +80,21 @@
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.color")}}：</div>
                                     <el-checkbox-group v-model="checkListColor" @change="doSearch">
-                                        <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}</el-checkbox>
-                                        <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}</el-checkbox>
+                                        <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}
+                                        </el-checkbox>
+                                        <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}
+                                        </el-checkbox>
                                         <el-checkbox label="red" class="red">{{$t("marketplace.red")}}</el-checkbox>
                                         <el-checkbox label="blue" class="blue">{{$t("marketplace.blue")}}</el-checkbox>
-                                        <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}</el-checkbox>
+                                        <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}
+                                        </el-checkbox>
                                         <el-checkbox label="diamond">{{$t("marketplace.diamond")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.props")}}：</div>
                                     <el-checkbox-group v-model="checkListProps" @change="doSearch">
-                                        <el-checkbox label="shoes" >{{$t("marketplace.shoes")}}</el-checkbox>
+                                        <el-checkbox label="shoes">{{$t("marketplace.shoes")}}</el-checkbox>
                                         <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
                                         <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
                                         <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
@@ -123,22 +126,28 @@
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.pack")}}：</div>
                                     <el-checkbox-group v-model="checkListPack" @change="doSearch">
-                                        <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}</el-checkbox>
-                                        <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}</el-checkbox>
+                                        <el-checkbox label="silverPack" class="w-check">
+                                            {{$t("marketplace.silver-pack")}}</el-checkbox>
+                                        <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}
+                                        </el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.frag")}}：</div>
                                     <el-checkbox-group v-model="checkListFrag" @change="doSearch">
-                                        <el-checkbox label="panameraFragments" class="w-check">{{$t("marketplace.panamera-fragments")}}</el-checkbox>
-                                        <el-checkbox label="carFragments" class="w-check">{{$t("marketplace.car-fragments")}}</el-checkbox>
-                                        <el-checkbox label="phoneFragments" class="w-check">{{$t("marketplace.phone-fragments")}}</el-checkbox>
+                                        <el-checkbox label="panameraFragments" class="w-check">
+                                            {{$t("marketplace.panamera-fragments")}}</el-checkbox>
+                                        <el-checkbox label="carFragments" class="w-check">
+                                            {{$t("marketplace.car-fragments")}}</el-checkbox>
+                                        <el-checkbox label="phoneFragments" class="w-check">
+                                            {{$t("marketplace.phone-fragments")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div :class="['filter-btn', 'filter-right', {'is-filter': isShowFilter}]" @click="openFilterDrawer2">
+                    <div :class="['filter-btn', 'filter-right', {'is-filter': isShowFilter}]"
+                        @click="openFilterDrawer2">
                         <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
                         <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                     </div>
@@ -157,7 +166,7 @@
                                 </div>
                                 <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
-                            <div class="btns-wrap" v-if="item.status === 8">
+                            <div class="btns-wrap" v-if="item.status === 8 && isCanBuy">
                                 <template>
                                     <div class="btn btn-sale" @click="doBuy(item)">{{$t("marketplace.buy")}}</div>
                                 </template>
@@ -173,13 +182,14 @@
             </div>
         </div>
         <el-dialog title="Order record" custom-class="recored-dialog" :visible.sync="isShowRecored"
-        :close-on-click-modal="false" width="70%">
+            :close-on-click-modal="false" width="70%">
             <div slot="title" class="header-title">
                 <img src="../../assets/images/clock.png" alt="">
                 <span>Order record</span>
             </div>
             <div class="dialog-content" v-loading="openIsLoading">
-                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                <el-empty :image="emptyImage" description="No items for sale"
+                    v-if="!recordList.length && !openIsLoading">
                 </el-empty>
                 <table v-if="recordList.length">
                     <thead>
@@ -219,10 +229,9 @@
                 </table>
             </div>
             <div class="page r" v-if="recordList.length && !openIsLoading">
-                <el-pagination background layout="total, sizes, prev, pager, next"
-                    @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
-                    :page-size="Number(page2.pageSize)" :total="Number(total2)" :current-page="Number(page2.curPage)"
-                    :page-sizes="[10, 20, 50, 100]">
+                <el-pagination background layout="total, sizes, prev, pager, next" @current-change="onPageChange2"
+                    @prev-click="onPageChange2" @next-click="onPageChange2" :page-size="Number(page2.pageSize)"
+                    :total="Number(total2)" :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]">
                 </el-pagination>
             </div>
         </el-dialog>
@@ -234,7 +243,8 @@
                 </span>
             </div>
             <div class="content" v-loading="openIsLoading">
-                <el-empty :image="emptyImage" description="No items for sale" v-if="!recordList.length && !openIsLoading">
+                <el-empty :image="emptyImage" description="No items for sale"
+                    v-if="!recordList.length && !openIsLoading">
                 </el-empty>
                 <table v-if="recordList.length && !openIsLoading">
                     <thead>
@@ -273,10 +283,9 @@
                     </tbody>
                 </table>
                 <div class="page r" v-if="recordList.length && !openIsLoading">
-                    <el-pagination background layout="total, sizes, prev, pager, next"
-                        @current-change="onPageChange2" @prev-click="onPageChange2" @next-click="onPageChange2"
-                        :page-size="Number(page2.pageSize)" :total="Number(total2)" :current-page="Number(page2.curPage)"
-                        :page-sizes="[10, 20, 50, 100]">
+                    <el-pagination background layout="total, sizes, prev, pager, next" @current-change="onPageChange2"
+                        @prev-click="onPageChange2" @next-click="onPageChange2" :page-size="Number(page2.pageSize)"
+                        :total="Number(total2)" :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]">
                     </el-pagination>
                 </div>
             </div>
@@ -310,7 +319,7 @@
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.props")}}：</div>
                             <el-checkbox-group v-model="checkListProps" @change="doSearch">
-                                <el-checkbox label="shoes" >{{$t("marketplace.shoes")}}</el-checkbox>
+                                <el-checkbox label="shoes">{{$t("marketplace.shoes")}}</el-checkbox>
                                 <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
                                 <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
                                 <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
@@ -342,23 +351,29 @@
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.pack")}}：</div>
                             <el-checkbox-group v-model="checkListPack" @change="doSearch">
-                                <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}</el-checkbox>
-                                <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}</el-checkbox>
+                                <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}
+                                </el-checkbox>
+                                <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}
+                                </el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.frag")}}：</div>
                             <el-checkbox-group v-model="checkListFrag" @change="doSearch">
-                                <el-checkbox label="panameraFragments" class="block-item">{{$t("marketplace.panamera-fragments")}}</el-checkbox>
-                                <el-checkbox label="carFragments" class="block-item">{{$t("marketplace.car-fragments")}}</el-checkbox>
-                                <el-checkbox label="phoneFragments" class="block-item">{{$t("marketplace.phone-fragments")}}</el-checkbox>
+                                <el-checkbox label="panameraFragments" class="block-item">
+                                    {{$t("marketplace.panamera-fragments")}}</el-checkbox>
+                                <el-checkbox label="carFragments" class="block-item">{{$t("marketplace.car-fragments")}}
+                                </el-checkbox>
+                                <el-checkbox label="phoneFragments" class="block-item">
+                                    {{$t("marketplace.phone-fragments")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
                     </ul>
                 </ul>
             </div>
         </el-drawer>
-        <buy :row="currentGoodRow" :currentTabId="currentTabId" v-if="buyReviseDialog" @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk"></buy>
+        <buy :row="currentGoodRow" :currentTabId="currentTabId" v-if="buyReviseDialog"
+            @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk"></buy>
     </div>
 </template>
 
@@ -373,6 +388,7 @@
         netImgBaseUrl
     } from '@/config/config.js'
     import Buy from './components/buy'
+    import cookie from '../../utils/cookie';
 
     export default {
         name: '',
@@ -436,7 +452,6 @@
                 emptyImage
             }
         },
-        computed: {},
         watch: {},
         created() {
             this.options.forEach(x => {
@@ -444,13 +459,21 @@
             });
             this.isLoading = true
             Promise.all([this.getLiist(), this.getTotalInfo()])
-            .then(res => {
-                this.isLoading = false
-            })
+                .then(res => {
+                    this.isLoading = false
+                })
         },
         computed: {
             placeholderTxt() {
                 return this.$t("account.search-id-name")
+            },
+            isCanBuy() {
+                const addr = Cookie.getCookie('__account__'),
+                    token = Cookie.getCookie('ad_token')
+                if (addr && token) {
+                    return true
+                }
+                return false
             }
         },
         mounted() {},
@@ -477,6 +500,7 @@
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'user/records/list',
+                        isPassFalse: true,
                         data: {
                             body: {
                                 page: this.page2.curPage,
@@ -485,12 +509,12 @@
                             }
                         }
                     }).then(res => {
-                        if(res.ok && res.data) {
-                            this.openIsLoading = false
+                        if (res.ok && res.data) {
                             const data = res.data.data
                             this.recordList = data.items || []
                             this.total2 = data.total
                         }
+                        this.openIsLoading = false
                         resolve()
                     }).catch(err => {
                         reject(err)
@@ -546,7 +570,7 @@
             },
             handleClose(type) {
                 // 完成
-                if(type) {
+                if (type) {
 
                 }
                 this.isFilterDrawer = false
@@ -570,6 +594,7 @@
                 this.getRecords()
             },
             onSelectTab(item) {
+                if (this.isLoading) return
                 this.currentTabId = item.id
                 this.page.curPage = 1
                 this.isLoading = true
@@ -736,9 +761,11 @@
             border-color: #29374B;
             background: #14181f;
             color: #777E90;
+
             &::placeholder {
-                 color: #777E90;
+                color: #777E90;
             }
+
             &:hover {
                 border-color: #29374B;
             }
@@ -800,20 +827,26 @@
 
                     }
                 }
+
                 .search {
                     display: flex;
+
                     .input-keywords {
                         width: 7.333333333333333rem;
                         height: .64rem;
+
                         .el-input__inner {
                             height: 100%;
                         }
                     }
+
                     .el-select {
                         margin-left: .266666666666667rem;
+
                         .el-input {
                             width: 3.533333333333333rem;
                             height: .64rem;
+
                             .el-input__inner {
                                 height: 100%;
                             }
@@ -880,13 +913,13 @@
             }
 
             .list-content {
+                padding-top: .266666666666667rem;
                 min-height: 5rem;
                 flex: 1;
                 padding-bottom: .3rem;
 
                 .components-item-card {
                     float: left;
-                    margin-top: .32rem;
                     margin-right: 20px;
                     width: 265px;
 
@@ -961,8 +994,6 @@
                         align-items: center;
                         justify-content: space-between;
                         margin-top: 10px;
-                        padding-bottom: 10px;
-                        border-bottom: 1px solid #29374B;
 
                         .money {
                             font-size: .2667rem;
@@ -1074,7 +1105,7 @@
             .el-dialog__body {
                 height: 550px;
             }
-            
+
             .dialog-content {
                 height: 450px;
                 overflow-y: auto;
@@ -1396,7 +1427,8 @@
 
                             img {
                                 width: .3733rem;
-                                height: .3733rem;;
+                                height: .3733rem;
+                                ;
                                 margin: 0;
                             }
                         }
@@ -1408,12 +1440,14 @@
                         .input-keywords {
                             width: 4.3733rem;
                             height: .9067rem;
+
                             .el-input__inner {
                                 height: 100%;
                                 font-size: .2667rem;
                             }
 
-                            .el-input-group__append, .el-input-group__prepend {
+                            .el-input-group__append,
+                            .el-input-group__prepend {
                                 padding: 0 .2133rem 0 0;
                             }
 
@@ -1422,11 +1456,14 @@
                                 height: .4267rem;
                             }
                         }
+
                         .el-select {
                             margin-left: .266666666666667rem;
+
                             .el-input {
                                 width: 3.28rem;
                                 height: .9067rem;
+
                                 .el-input__inner {
                                     height: 100%;
                                     font-size: .2667rem;
