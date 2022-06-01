@@ -141,12 +141,6 @@
     import myAjax from "@/utils/ajax.js";
     import eventBus from "@/utils/eventBus";
     import web3Tool from '@/utils/web3'
-    import {
-        resolve
-    } from "path";
-    import {
-        rejects
-    } from 'assert';
     export default {
         name: "common-header",
         components: {},
@@ -468,7 +462,7 @@
                 height: 100%;
                 cursor: pointer;
                 opacity: 1;
-                color: #cbe8ff;
+                color: #fff;
                 font-size: 18px;
                 transition: color 0.7s;
 

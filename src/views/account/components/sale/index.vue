@@ -125,7 +125,8 @@
                     params = {
                         amount: Number(this.salePrice),
                         goods_id: this.row.goods_id,
-                        tx: hash
+                        tx: hash,
+                        type_id: this.row.type_id
                     }
                 }
                 this.isLoading = true

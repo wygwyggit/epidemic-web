@@ -31,7 +31,7 @@
                     let width = window.innerWidth
                     switch (val.path.replace('/', '')) {
                         case 'home': {
-                            this.bgColor = "#31BCFF"
+                            this.bgColor = "#FF9330"
                             break;
                         }
                         case 'details':
