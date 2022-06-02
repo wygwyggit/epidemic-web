@@ -9,7 +9,9 @@ import './element'
 import './style/common.scss'
 import './style/element-rewrite.scss'
 import '../rem.js'
-
+import vConsole from 'vconsole'
+let vC = new vConsole()
+console.log("test");
 
 Vue.config.productionTip = false
 Vue.prototype.Web3 = Web3

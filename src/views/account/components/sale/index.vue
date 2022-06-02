@@ -115,7 +115,6 @@
                 })
             },
             sendSale(hash) {
-                console.log('111')
                 if (!this.salePrice) return
                 let url = '',
                     params = {}
