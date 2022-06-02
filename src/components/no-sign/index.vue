@@ -116,4 +116,13 @@
             }
         }
     }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            .content {
+                padding: 0;
+                border: 0;
+            }
+        }
+    }
 </style>

@@ -112,7 +112,7 @@
                     data: {
                         body: {
                             owner_addr: Cookie.getCookie("__account__") || null,
-                            belong_type: 1,
+                            belong_type: this.belong_type || 1,
                             goods_id: this.goods_id,
                             give_num: 1,
                             to_addr: this.addressTxt,

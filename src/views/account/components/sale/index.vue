@@ -49,9 +49,6 @@
 <script>
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
-    import {
-        payAddress,
-    } from "@/config/config.js";
     import web3Tool from '@/utils/web3'
     export default {
         name: '',
@@ -77,9 +74,18 @@
         mounted() {
             if (this.row.belong_type < 0) return
             this.getChainInfo()
+            this.getContractAddress()
         },
         beforeDestroy() {},
         methods: {
+            getContractAddress() {
+                myAjax({
+                    url: 'chain/approve_addr',
+                    method: 'GET'
+                }).then(res => {
+                    this.approve_addr = res.data.approve_addr
+                })
+            },
             getChainInfo() {
                 myAjax({
                     url: `chain/chain_info?belong_type=${this.row.belong_type}`,
@@ -101,7 +107,7 @@
                 web3Tool.contract.call(this, {
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: payAddress,
+                    authAddr: this.approve_addr,
                     amount: this.row.goods_id,
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
@@ -109,6 +115,7 @@
                 })
             },
             sendSale(hash) {
+                console.log('111')
                 if (!this.salePrice) return
                 let url = '',
                     params = {}
@@ -118,7 +125,8 @@
                         type_id: this.row.type_id,
                         amount: Number(this.salePrice),
                         num: this.saleQuantity,
-                        tx: hash
+                        tx: hash,
+                        belong_type: this.row.belong_type
                     }
                 } else {
                     url = 'goods/sale/nft'
@@ -126,7 +134,8 @@
                         amount: Number(this.salePrice),
                         goods_id: this.row.goods_id,
                         tx: hash,
-                        type_id: this.row.type_id
+                        type_id: this.row.type_id,
+                        belong_type: this.row.belong_type
                     }
                 }
                 this.isLoading = true

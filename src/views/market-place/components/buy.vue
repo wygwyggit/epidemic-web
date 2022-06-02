@@ -17,7 +17,7 @@
                             <div class="key">Price:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                            {{ row.amount }} Adoge
+                                {{ row.amount }} Adoge
                             </div>
                         </li>
                     </ul>
@@ -28,13 +28,13 @@
                         </li>
                         <li class="item">
                             <div class="key">Quantity:</div>
-                            <el-input-number v-model="num" :min="1" :max="row.num" ></el-input-number>
+                            <el-input-number v-model="num" :min="1" :max="row.num"></el-input-number>
                         </li>
                         <li class="item">
                             <div class="key">Total price:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                            {{ row.amount }} Adoge
+                                {{ row.amount }} Adoge
                             </div>
                         </li>
                     </ul>
@@ -50,9 +50,6 @@
 <script>
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
-    import {
-        payAddress,
-    } from "@/config/config.js";
     import web3Tool from '@/utils/web3'
 
     export default {
@@ -81,21 +78,41 @@
         watch: {},
         created() {},
         mounted() {
-            this.isLoading = true
-            this.getChainInfo()
+            Promise.all([this.getChainInfo(), this.getContractAddress()]).then(() => {
+                this.isLoading = false
+            })
         },
         beforeDestroy() {},
         methods: {
-            getChainInfo() {
-                myAjax({
-                    url: `chain/chain_info?belong_type=5`,
-                    method: 'GET',
-
-                }).then(res => {
-                    this.contract_addr = res.data.contract_addr
-                    this.abi = res.data.abi
-                    this.isLoading = false
+            getContractAddress() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'chain/approve_addr',
+                        method: 'GET'
+                    }).then(res => {
+                        this.approve_addr = res.data.approve_addr
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
+
+            },
+            getChainInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: `chain/chain_info?belong_type=5`,
+                        method: 'GET',
+
+                    }).then(res => {
+                        this.contract_addr = res.data.contract_addr
+                        this.abi = res.data.abi
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
             },
             doSubmit() {
                 this.doNftApprove()
@@ -104,7 +121,7 @@
                 web3Tool.contract.call(this, {
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: payAddress,
+                    authAddr: this.approve_addr,
                     amount: '50000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {

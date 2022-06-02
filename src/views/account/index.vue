@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="main">
-            <template v-if="!isShowNoConnectWallet && !isShowNoSign">
+            <template v-if="isSign && isConnectWallet">
                 <div class="w">
                     <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                     <div class="top-search">
@@ -82,8 +82,8 @@
                 </div>
             </template>
             <template>
-                <no-connect-wallet v-if="isShowNoConnectWallet"></no-connect-wallet>
-                <no-sign v-if="isShowNoSign"></no-sign>
+                <no-connect-wallet v-if="!isConnectWallet"></no-connect-wallet>
+                <no-sign v-if="isConnectWallet && !isSign"></no-sign>
             </template>
 
         </div>
@@ -102,6 +102,7 @@
 </template>
 
 <script>
+    import eventBus from "@/utils/eventBus";
     import myAjax from '@/utils/ajax.js'
     import cookie from "@/utils/cookie.js";
     import PageTabs from '@/components/page-tabs'
@@ -193,28 +194,23 @@
                 isShowDeliverDialog: false,
                 saleReviseDialog: false,
                 saleReviseDialogTitle: '',
-                netList: []
+                netList: [],
+                isSign: false,
+                isConnectWallet: false
             }
         },
         computed: {
             placeholderTxt() {
                 return this.$t("account.search-id-name")
             },
-            isShowNoConnectWallet() {
-                const walletAddr = cookie.getCookie('__account__') || null
-                return !walletAddr
-            },
-            isShowNoSign() {
-                const sign = cookie.getCookie('ad_token') || null
-                return !sign
-            }
         },
         created() {
             let width = window.innerWidth;
             if (width < 768) {
                 this.page.pageSize = 100000
             }
-            if (!this.isShowNoConnectWallet && !this.isShowNoSign) {
+            this.initSignConnectData()
+            if (this.isSign && this.isConnectWallet) {
                 Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                     this.isLoading = false
                 })
@@ -223,9 +219,16 @@
             }
 
         },
-        mounted() {},
+        mounted() {
+            eventBus.$on('sign-fail', this.initSignConnectData)
+        },
         beforeDestroy() {},
         methods: {
+
+            initSignConnectData() {
+                this.isSign = cookie.getCookie('ad_token') || null
+                this.isConnectWallet = cookie.getCookie('__account__') || null
+            },
             sendSaleOk() {
                 this.page.curPage = 1
                 this.saleReviseDialog = false
@@ -582,8 +585,6 @@
             }
 
             .main {
-                padding: 0 .5rem;
-
                 .check-item {
 
                     .el-checkbox-group {

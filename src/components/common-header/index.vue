@@ -354,6 +354,9 @@
                         pwd: ''
                     }).then(signature => {
                         this.getToken(signature)
+                    }).catch(err => {
+                        this.$showError(err.message)
+                        eventBus.$emit("sign-fail");
                     })
                 })
                 //   if (window.ethereum) {
