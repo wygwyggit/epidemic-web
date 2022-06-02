@@ -292,6 +292,7 @@
                 this.getLiist()
             },
             doDeliver(row) {
+                return false
                 this.currentGoodRow = row
                 this.isShowDeliverDialog = true
             },
@@ -467,6 +468,10 @@
                         &.btn-open {
                             background: #F1AE00;
                         }
+                         &.btn-deliver {
+                             cursor: not-allowed;
+                             opacity: .6;
+                         }
 
                         &.btn-sale {
                             background: #00A73A;
