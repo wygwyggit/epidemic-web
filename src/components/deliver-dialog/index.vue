@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls" >
+    <div :class="prefixCls">
         <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
             :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" v-loading="isLoading">
             <div class="content">
@@ -23,9 +23,6 @@
 <script>
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
-    import {
-        payAddress,
-    } from "@/config/config.js";
     import web3Tool from '@/utils/web3'
     export default {
         name: '',
@@ -62,16 +59,29 @@
         computed: {},
         watch: {},
         created() {
-            Promise.all([this.getChainInfo(), this.getUserInfo()]).then(res => {
+            Promise.all([this.getChainInfo(), this.getUserInfo(), this.getContractAddress()]).then(res => {
                 this.isLoading = false
             })
-            this.getChainInfo()
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getContractAddress() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'chain/approve_addr',
+                        method: 'GET'
+                    }).then(res => {
+                        this.approve_addr = res.data.approve_addr
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+
+            },
             getUserInfo() {
-                 return new Promise((resolve, reject) => {
+                return new Promise((resolve, reject) => {
                     myAjax({
                         url: `user/user_info`,
                         data: {
@@ -130,7 +140,7 @@
                 web3Tool.contract.call(this, {
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: payAddress,
+                    authAddr: this.approve_addr,
                     amount: this.goods_id,
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
