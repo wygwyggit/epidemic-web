@@ -296,7 +296,7 @@
                                 'blue': 0,
                                 'red': 0,
                                 'orange': 0,
-                                'yellow' : 0
+                                'yellow': 0
                             }
                         }
                         this.tabs[0].num = this.coinCountData.count || 0
@@ -337,12 +337,12 @@
             },
             stakingConfirm() {
                 this.comfirmLoading = true
-                console.log( Object.values(this.stakingRarityMap), '33344')
+                console.log(Object.values(this.stakingRarityMap), '33344')
                 myAjax({
                     url: 'user/goods/pledged',
                     data: {
                         body: {
-                            goods_ids: Object.values(this.stakingRarityMap).flat() ,
+                            goods_ids: Object.values(this.stakingRarityMap).flat(),
                             days: this.pledgeParams.time
                         }
                     }
@@ -974,12 +974,12 @@
                         ul {
                             width: 100%;
                             display: flex;
-                            margin-top: 2rem;
-                            padding-top: .16rem;
-                            
+                            margin-top: 1.8rem;
+
+
                             li {
                                 flex: 1;
-                                padding: 0;
+                                padding: .17rem 0 0 0;
                                 border-top: 1px solid #29374B;
                             }
                         }
