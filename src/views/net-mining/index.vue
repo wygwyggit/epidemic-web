@@ -9,24 +9,12 @@
                 <div class="right">
                     <div class="net-n">
                         <p>{{$t("account.staking")}}</p>
-                        <p style="margin-top:3px">12 NFTs</p>
+                        <p style="margin-top:3px">{{ coinCountData.count }} NFTs</p>
                     </div>
                     <ul>
-                        <li>
-                            <p class="color blue">{{$t("account.blue")}}</p>
-                            <p class="num">1</p>
-                        </li>
-                        <li>
-                            <p class="color red">{{$t("account.red")}}</p>
-                            <p class="num">1</p>
-                        </li>
-                        <li>
-                            <p class="color orange">{{$t("account.orange")}}</p>
-                            <p class="num">1</p>
-                        </li>
-                        <li>
-                            <p class="color yellow">{{$t("account.yellow")}}</p>
-                            <p class="num">1</p>
+                        <li v-for="(value, key, index) in coinCountData.items" :key="index">
+                            <p class="color" :style="{color: key}">{{$t(`account.${key}`)}}</p>
+                            <p class="num">{{ value }}</p>
                         </li>
                     </ul>
                     <div class="received-box">
@@ -36,7 +24,7 @@
                                 <p class="key">
                                     {{$t("net-mining.reward")}}
                                 </p>
-                                <p class="value">100</p>
+                                <p class="value">{{ coinCountData.count }}</p>
                             </div>
                         </div>
                     </div>
@@ -45,9 +33,9 @@
         </div>
         <div class="main">
             <div class="w">
-                <page-tabs :tabs="tabs" :currentTab="currentTab" @on-select="onSelectTab"></page-tabs>
-                <div class="content-list">
-                    <template v-if="(currentTab === 'Not Pledged' || currentTab === '未质押') && list.length">
+                <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
+                <div class="content-list" v-loading="isLoading">
+                    <template v-if="(currentTabId === 0) && list.length">
                         <div class="select-wrap">
                             <div class="select-info">
                                 <span class="txt">Please click on the NFT card to select</span>
@@ -56,7 +44,8 @@
                                 </span>
                                 <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
                             </div>
-                            <div class="pledge" @click="doPledge">Pledge Now</div>
+                            <div class="staking" @click="doPledge" :class="{'active': selectIds.length > 0}">Pledge Now
+                            </div>
                         </div>
                         <div class="select-wrap-h5">
                             Please click on the NFT card to select
@@ -68,11 +57,18 @@
                                     Selected: {{selectIds.length}}
                                 </span>
                             </div>
-                            <el-button type="primary" @click="doPledgeH5">Pledge Now</el-button>
+                            <el-button type="primary" @click="doPledgeH5" :disabled="selectIds.length <= 0">Pledge Now
+                            </el-button>
                         </div>
                     </template>
                     <template v-if="list.length && !isLoading">
-                        <ul>
+                        <div class="list-card">
+                            <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
+                                @select="selectNftCard">
+                            </item-card>
+                        </div>
+
+                        <!-- <ul>
                             <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)"
                                 :class="{'select': item.select}">
                                 <div class="mark" v-if="item.select">
@@ -80,10 +76,10 @@
                                 </div>
                                 <div class="title">
                                     <div class="left">
-                                        #{{item.idx}}
+                                        #{{item.goods_id}}
                                     </div>
                                     <div class="right">
-                                        {{item.classes}}
+                                        {{item.rarity}}
                                     </div>
                                 </div>
                                 <div class="img-box">
@@ -93,7 +89,7 @@
                                     {{item.name}}
                                 </div>
                             </li>
-                        </ul>
+                        </ul> -->
                     </template>
                     <template v-if="!list.length && !isLoading">
                         <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
@@ -110,21 +106,9 @@
                 </div>
                 <div class="con">
                     <ul>
-                        <li>
-                            <div class="key blue">Blue</div>
-                            <div class="val">1</div>
-                        </li>
-                        <li>
-                            <div class="key red">Red</div>
-                            <div class="val">1</div>
-                        </li>
-                        <li>
-                            <div class="key orange">Orange</div>
-                            <div class="val">1</div>
-                        </li>
-                        <li>
-                            <div class="key yellow">Yellow</div>
-                            <div class="val">1</div>
+                        <li v-for="(value, key) in stakingRarityMap" :key="key">
+                            <div class="key" :style="{color: key}">{{ key }}</div>
+                            <div class="val">{{  value.length || 0 }}</div>
                         </li>
                     </ul>
                 </div>
@@ -157,7 +141,7 @@
                 </div>
             </div>
             <div class="btn-wrap">
-                <el-button type="primary">Confirm</el-button>
+                <el-button type="primary" :loading="comfirmLoading" @click="stakingConfirm">Confirm</el-button>
                 <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
             </div>
         </el-dialog>
@@ -169,21 +153,9 @@
                     </div>
                     <div class="con">
                         <ul>
-                            <li>
-                                <div class="key blue">Blue</div>
-                                <div class="val">1</div>
-                            </li>
-                            <li>
-                                <div class="key red">Red</div>
-                                <div class="val">1</div>
-                            </li>
-                            <li>
-                                <div class="key orange">Orange</div>
-                                <div class="val">1</div>
-                            </li>
-                            <li>
-                                <div class="key yellow">Yellow</div>
-                                <div class="val">1</div>
+                            <li v-for="(value, key) in stakingRarityMap" :key="key">
+                                <div class="key">{{ key }}</div>
+                                <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
                     </div>
@@ -224,116 +196,60 @@
 </template>
 
 <script>
-    //import itemCard from '@/components/item-card'
+    import myAjax from '@/utils/ajax.js'
+    import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
     import emptyImage from '@/assets/images/empty.png'
+    import Cookie from "@/utils/cookie.js";
+
     export default {
         name: '',
         components: {
-            PageTabs
-            //itemCard
+            PageTabs,
+            itemCard
         },
         props: {},
         data() {
             return {
                 prefixCls: 'views-net-mining',
                 emptyImage,
+                isLoading: true,
+                coinCountData: {
+                    count: 0
+                },
                 tabs: [{
+                    id: 1,
                     title: this.$t("common.ypledged"),
-                    num: 8
+                    num: 0
                 }, {
+                    id: 0,
                     title: this.$t("common.not-pledged"),
                     num: 0
                 }],
-                currentTab: 'Pledged',
-                list: [{
-                    id: 0,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im4.png',
-                    classes: '',
-                    name: 'MANCITY CLUB',
-                    select: false,
-                }, {
-                    id: 2,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im1.png',
-                    classes: '',
-                    name: 'SU BINGTIAN',
-                    select: false,
-                }, {
-                    id: 3,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im2.png',
-                    classes: '',
-                    name: 'KOBE BEAN BRYANT',
-                    select: false,
-                }, {
-                    id: 4,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im6.png',
-                    classes: '',
-                    name: 'EILEEN GU',
-                    select: false,
-                }, {
-                    id: 5,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im5.png',
-                    classes: '',
-                    name: 'KOBE BEAN BRYANT',
-                    select: false,
-                }, {
-                    id: 6,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im1.png',
-                    classes: '',
-                    name: 'KOBE BEAN BRYANT',
-                    select: false,
-                }, {
-                    id: 7,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im2.png',
-                    classes: 'Red',
-                    name: 'KOBE BEAN BRYANT',
-                    select: false,
-                }, {
-                    id: 8,
-                    idx: '00001',
-                    images: 'https://adoge-api-test.ctstatus.com/nftimgs/im3.png',
-                    classes: '',
-                    name: 'EILEEN GU',
-                    select: false,
-                }],
+                currentTabId: 1,
+                list: [],
+                stakingRarityMap: null,
                 isSelectAll: false,
-                isLoading: false,
                 dialogVisible: false,
                 drawer: false,
                 pledgeTimes: [{
                     id: 1,
                     title: '1 day'
                 }, {
-                    id: 2,
+                    id: 10,
                     title: '10 day'
                 }, {
-                    id: 3,
+                    id: 30,
                     title: '30 day'
                 }],
                 pledgeParams: {
                     time: 1
                 },
                 page: {
-                    pageSize: 20,
+                    pageSize: 200000,
                     curPage: 1
                 },
-                total: 0,
-                query: {
-                    keywords: '',
-                    latest: 0
-                },
-                options: [{
-                    value: 0,
-                    key: 'latest',
-                    label: 'latest'
-                }],
+                comfirmLoading: false
             }
         },
         computed: {
@@ -347,15 +263,112 @@
         },
         watch: {},
         created() {
-            this.options.forEach(x => {
-                x.label = this.$t(`account.${x.key}`)
-            });
+
         },
-        mounted() {},
+        mounted() {
+            this.initSignConnectData()
+            Promise.all([this.getCoinCount(), this.getList()]).then(() => {
+                this.isLoading = false
+            })
+        },
         beforeDestroy() {},
         methods: {
+            getPledgeContent() {
+                const obj = {}
+                this.selectIds.map(x => {
+                    obj[x.rarity] = [...(obj[x.rarity] || ''), x.goods_id]
+                })
+                this.stakingRarityMap = obj
+            },
+            initSignConnectData() {
+                this.isSign = Cookie.getCookie('ad_token') || null
+                this.isConnectWallet = Cookie.getCookie('__account__') || null
+            },
+            getCoinCount() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/stake/coin'
+                    }).then(res => {
+                        this.coinCountData = res.data || {}
+                        let keys = Object.keys(this.coinCountData.items)
+                        if (!keys.length) {
+                            this.coinCountData.items = {
+                                'blue': 0,
+                                'red': 0,
+                                'orange': 0,
+                                'yellow' : 0
+                            }
+                        }
+                        this.tabs[0].num = this.coinCountData.count || 0
+                        this.tabs[1].num = this.coinCountData.not_pledged || 0
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
+            getList() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/goods/list',
+                        data: {
+                            body: {
+                                page: this.page.curPage,
+                                per_page: this.page.pageSize,
+                                status: [this.currentTabId],
+                                addr: this.isConnectWallet,
+                                belong_type: this.currentTabId === 1 ? undefined : 1
+                            }
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.list = (res.data || {}).items || []
+                            this.list = this.list.map(x => ({
+                                ...x,
+                                goods_level: '',
+                                select: false
+                            }))
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
+            stakingConfirm() {
+                this.comfirmLoading = true
+                console.log( Object.values(this.stakingRarityMap), '33344')
+                myAjax({
+                    url: 'user/goods/pledged',
+                    data: {
+                        body: {
+                            goods_ids: Object.values(this.stakingRarityMap).flat() ,
+                            days: this.pledgeParams.time
+                        }
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        this.$showOk($t("common.ope-suc"))
+                        this.getList()
+                    }
+                    this.comfirmLoading = false
+                })
+            },
+            selectNftCard({
+                goods_id
+            }) {
+                const item = this.list.find(x => x.goods_id === goods_id)
+                item.select = !item.select
+                if (this.list.length === this.selectIds.length) {
+                    this.isSelectAll = true
+                } else {
+                    this.isSelectAll = false
+                }
+            },
             doPledge() {
                 this.dialogVisible = true
+                this.getPledgeContent()
+                console.log(this.stakingRarityMap)
             },
             doPledgeH5() {
                 this.drawer = true
@@ -376,7 +389,12 @@
                 }
             },
             onSelectTab(item) {
-                this.currentTab = item.title
+                if (this.isLoading) return
+                this.isLoading = true
+                this.currentTabId = item.id
+                this.getList().then(() => {
+                    this.isLoading = false
+                })
             },
             onPageChange() {
 
@@ -502,9 +520,11 @@
                 .left {
                     color: #fff;
                     font-size: .64rem;
+
                     span {
                         margin-right: .16rem;
                     }
+
                     .balance {
                         margin-top: .16rem;
                         font-size: .373333333333333rem;
@@ -630,6 +650,8 @@
 
                 .el-button {
                     width: 100%;
+                    font-size: .32rem;
+                    border-radius: .133333333333333rem;
                 }
             }
         }
@@ -663,6 +685,7 @@
 
             .w {
                 display: flex;
+                justify-content: space-between;
 
                 .left {
                     color: #fff;
@@ -678,7 +701,6 @@
                     display: flex;
                     align-items: center;
                     padding: 18px 20px;
-                    margin-left: 71px;
                     border: 1px solid #29374B;
                     border-radius: 12px 12px 12px 12px;
 
@@ -779,7 +801,75 @@
             padding: .506666666666667rem 0 1.946666666666667rem;
 
             .content-list {
+                min-height: 6rem;
                 overflow: hidden;
+
+                .list-card {
+                    padding: .266666666666667rem 0;
+                }
+
+                .components-item-card {
+                    float: left;
+                    margin-right: 20px;
+                    width: 265px;
+
+                    &:nth-child(4n) {
+                        margin-right: 0;
+                    }
+
+                    .btns-wrap {
+                        display: flex;
+                        justify-content: space-between;
+                    }
+
+                    .btn {
+                        flex: 1;
+                        height: 40px;
+                        line-height: 40px;
+                        text-align: center;
+                        border-radius: .133333333333333rem;
+                        color: #fff;
+                        cursor: pointer;
+                        font-size: .213333333333333rem;
+
+                        &:nth-child(2n) {
+                            margin: 0 .1rem;
+                        }
+
+                        &:last-child {
+                            margin-right: 0;
+                        }
+
+                        &.btn-deliver,
+                        &.btn-open {
+                            background: #F1AE00;
+                        }
+
+                        &.btn-deliver {
+                            cursor: not-allowed;
+                            opacity: .6;
+                        }
+
+                        &.btn-sale {
+                            background: #00A73A;
+                        }
+
+                        &.btn-synthetic {
+                            background: #9E00FF;
+                        }
+
+                        &.btn-on-sale,
+                        &.btn-on-staking,
+                        &.btn-on-sending {
+                            background: #777E90;
+                            cursor: not-allowed;
+                        }
+
+                        &.btn-cancel-sale {
+                            background: #FF5E1A;
+                        }
+                    }
+                }
 
                 .select-wrap {
                     display: flex;
@@ -807,7 +897,7 @@
                         }
                     }
 
-                    .pledge {
+                    .staking {
                         margin-left: 20px;
                         width: 265px;
                         height: 60px;
@@ -816,7 +906,12 @@
                         background: #777E90;
                         color: #fff;
                         border-radius: 10px;
-                        cursor: pointer;
+                        cursor: not-allowed;
+
+                        &.active {
+                            background: #32A3FF;
+                            cursor: pointer;
+                        }
                     }
                 }
 
@@ -825,70 +920,6 @@
                     flex-wrap: wrap;
                     width: auto;
                     margin: 0 -0.133333333333333rem;
-                }
-
-                li {
-                    position: relative;
-                    width: 3.533333333333333rem;
-                    flex-shrink: 0;
-                    margin: .266666666666667rem .133333333333333rem 0;
-                    padding: .266666666666667rem .16rem;
-                    background: #1D2633;
-                    border-radius: .133333333333333rem;
-                    border: 1px solid #32A3FF;
-                    cursor: pointer;
-
-                    .mark {
-                        position: absolute;
-                        left: 0;
-                        top: 0;
-                        right: 0;
-                        bottom: 0;
-                        background: rgba(0, 0, 0, .8) url('../../assets/images/select.png');
-                        background-size: .8rem .8rem;
-                        background-position: center center;
-                        background-repeat: no-repeat;
-                        border: 1px solid #32A3FF;
-                        border-radius: .133333333333333rem;
-                    }
-
-                    &.select {
-                        border: 0;
-                    }
-
-                    .title {
-                        display: flex;
-                        justify-content: space-between;
-                        font-size: .186666666666667rem;
-
-                        .left {
-
-                            color: #C4C4C4;
-                        }
-
-                        .right {
-                            color: #fff;
-                        }
-                    }
-
-                    .img-box {
-                        width: 100%;
-                        text-align: center;
-
-                        img {
-                            margin: .16rem 0;
-                            width: 100%;
-                            height: auto;
-                            border-radius: .16rem;
-                        }
-
-                    }
-
-                    .name {
-                        text-align: center;
-                        color: #fff;
-                        font-size: .213333333333333rem;
-                    }
                 }
 
             }
@@ -925,6 +956,7 @@
                         flex-direction: column;
                         margin: .266666666666667rem 0 0 0;
                         padding: .266666666666667rem 0;
+
                         .net-n {
                             position: absolute;
                             top: .55rem;
@@ -944,10 +976,11 @@
                             display: flex;
                             margin-top: 2rem;
                             padding-top: .16rem;
-                            border-top: 1px solid #29374B;
+                            
                             li {
                                 flex: 1;
                                 padding: 0;
+                                border-top: 1px solid #29374B;
                             }
                         }
 
@@ -978,12 +1011,20 @@
                 padding: .5rem;
 
                 .w {
-                    .content-list {
-                        li {
+                    .list-card {
+                        .components-item-card {
+                            margin-right: 0.26rem;
+                            width: 48.5%;
 
-                            border: 1px solid #29374B;
-                            width: 4rem;
+                            &:nth-child(3n) {
+                                margin-right: .26rem;
+                            }
+
+                            &:nth-child(2n) {
+                                margin-right: 0 !important;
+                            }
                         }
+
                     }
                 }
 
@@ -1022,6 +1063,8 @@
                         line-height: 1.493333333333333rem;
                         padding: 0;
                         text-align: center;
+                        font-size: .48rem;
+                        border: 0;
 
                     }
                 }

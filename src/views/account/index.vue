@@ -35,24 +35,27 @@
                                 v-if="!netList.length && !isLoading">
                             </el-empty>
                             <template v-if="netList.length && !isLoading">
-                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
-                                    @select="goDetail" @revise="doReviseSale" @deliver="doDeliver" type="sale">
+                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item">
                                     <div class="btns-wrap">
                                         <template v-if="item.status == 0">
-                                            <div class="btn btn-open" v-if="item.belong_type == -1"
-                                                @click="openGiftBag(item)">
+                                            <div class="btn btn-open" :class="{'disable': !item.can_open}"
+                                                v-if="item.belong_type == -1" @click="openGiftBag(item)">
                                                 {{$t("account.open")}}
                                             </div>
-                                            <div class="btn btn-synthetic" v-if="item.type_id == 2"
-                                                @click="doSynthetic(item)">
+                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                                v-if="item.type_id == 2" @click="doSynthetic(item)">
                                                 {{$t("account.synthetic")}}</div>
-                                            <div class="btn btn-synthetic" v-if="item.belong_type == -2"
-                                                @click="doSynthetic(item)">
+                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                                v-if="item.belong_type == -2" @click="doSynthetic(item)">
                                                 {{$t("account.synthetic")}}</div>
-                                            <div class="btn btn-deliver" @click="doDeliver(item)"
-                                                v-if="item.belong_type == 1">{{$t("common.deliver")}}</div>
-                                            <div class="btn btn-sale" @click="doSale(item)">{{$t("account.sale")}}</div>
+                                            <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
+                                                @click="doDeliver(item)" v-if="item.belong_type == 1">
+                                                {{$t("common.deliver")}}</div>
+                                            <div class="btn btn-sale" :class="{'disable': !item.can_sale}"
+                                                @click="doSale(item)">{{$t("account.sale")}}</div>
                                         </template>
+
+                                        <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                         <template v-if="item.status == 2 || item.status == 8">
                                             <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                             <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
@@ -248,11 +251,12 @@
                 this.getLiist()
             },
             doSynthetic(row) {
-                return false
+                if (!row.can_merge) return
                 this.currentGoodRow = row
                 this.isShowCompound = true
             },
             openGiftBag(row) {
+                if (!row.can_open) return
                 this.currentGoodRow = row
                 this.isShowOpenGift = true
             },
@@ -292,7 +296,7 @@
                 this.getLiist()
             },
             doDeliver(row) {
-                return false
+                if (!row.can_pawn) return
                 this.currentGoodRow = row
                 this.isShowDeliverDialog = true
             },
@@ -360,6 +364,7 @@
                 this.nets.salePrice = ''
             },
             doSale(row) {
+                if (!row.can_sale) return
                 this.currentGoodRow = row
                 this.saleReviseDialog = true
             },
@@ -397,14 +402,14 @@
                 this[val] = []
                 this.doSearch()
             },
-            goDetail(id) {
-                this.$router.push({
-                    path: '/details',
-                    query: {
-                        id
-                    }
-                })
-            },
+            // goDetail(id) {
+            //     this.$router.push({
+            //         path: '/details',
+            //         query: {
+            //             id
+            //         }
+            //     })
+            // },
             doSearch() {
                 this.page.curPage = 1
                 this.getLiist()
@@ -468,10 +473,11 @@
                         &.btn-open {
                             background: #F1AE00;
                         }
-                         &.btn-deliver {
-                             cursor: not-allowed;
-                             opacity: .6;
-                         }
+
+                        &.btn-deliver {
+                            cursor: not-allowed;
+                            opacity: .6;
+                        }
 
                         &.btn-sale {
                             background: #00A73A;
@@ -490,6 +496,11 @@
 
                         &.btn-cancel-sale {
                             background: #FF5E1A;
+                        }
+
+                        &.diabled {
+                            background: #777E90;
+                            cursor: not-allowed;
                         }
                     }
                 }
@@ -590,6 +601,8 @@
             }
 
             .main {
+                padding: .533333333333333rem;
+
                 .check-item {
 
                     .el-checkbox-group {
@@ -616,7 +629,7 @@
                     width: 100%;
 
                     .components-item-card {
-                        margin-right: .266666666666667rem;
+                        margin-right: .26rem;
                         width: 48.5%;
 
                         >li {
@@ -624,7 +637,7 @@
                         }
 
                         &:nth-child(3n) {
-                            margin-right: .266666666666667rem;
+                            margin-right: .26rem;
                         }
 
                         &:nth-child(2n) {

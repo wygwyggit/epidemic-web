@@ -388,7 +388,7 @@
         netImgBaseUrl
     } from '@/config/config.js'
     import Buy from './components/buy'
-    import cookie from '../../utils/cookie';
+
 
     export default {
         name: '',

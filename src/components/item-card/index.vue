@@ -1,6 +1,9 @@
 <template>
     <div :class="prefixCls">
-        <li>
+        <li :class="{'select': itemInfo.select}" @click="selectCard(itemInfo)">
+            <div class="mark" v-if="itemInfo.select">
+
+            </div>
             <template v-if="itemInfo.belong_type == -1 || itemInfo.belong_type == -2">
                 <div class="debris-header-info">
                     {{itemInfo.name}}
@@ -15,7 +18,7 @@
                 </div>
             </template>
 
-            <div class="img-content" @click="onClickHandle(itemInfo.id)">
+            <div class="img-content" >
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
             <template v-if="itemInfo.num">
@@ -102,6 +105,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            selectCard(row) {
+                this.$emit('select', row)
+            },
             doDeliver(row) {
                 this.$emit('deliver', row)
             },
@@ -134,12 +140,27 @@
         margin-bottom: .266666666666667rem;
 
         >li {
+            position: relative;
             padding: .133333333333333rem .133333333333333rem .266666666666667rem .133333333333333rem;
             width: 100%;
             border: 1px solid #29374B;
             border-radius: .133333333333333rem;
             text-align: center;
             background: #1D2633;
+
+            .mark {
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, .8) url('../../assets/images/select.png');
+                background-size: .8rem .8rem;
+                background-position: center center;
+                background-repeat: no-repeat;
+                border: 1px solid #32A3FF;
+                border-radius: .133333333333333rem;
+            }
 
             .debris-header-info {
                 color: #C4C4C4;
@@ -181,7 +202,7 @@
                 align-items: center;
                 padding-bottom: 10px;
                 color: #fff;
-                border-bottom: 1px solid #29374B;
+
 
                 .name {
                     font-size: .24rem;
@@ -197,8 +218,11 @@
             }
 
             .opt-buttom {
-                min-height: 40px;
-                margin-top: .18rem;
+                >div {
+                    padding-top: .18rem;
+                    border-top: 1px solid #29374B;
+                }
+
             }
 
 
@@ -247,8 +271,10 @@
             }
 
             .opt-buttom {
-                min-height: .693333333333333rem;
-                margin-top: .18rem;
+                >div {
+                    padding-top: .18rem;
+                    border-top: 1px solid #29374B;
+                }
             }
         }
     }
