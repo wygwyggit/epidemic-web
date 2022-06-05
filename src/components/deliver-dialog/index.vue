@@ -127,7 +127,7 @@
                             give_num: 1,
                             to_addr: this.addressTxt,
                             goods_name: this.goods_name,
-                            tx: hash
+                            approve_txn: hash
                         }
                     }
                 }).then(res => {

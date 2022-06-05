@@ -124,7 +124,7 @@
                         type_id: this.row.type_id,
                         amount: Number(this.salePrice),
                         num: this.saleQuantity,
-                        tx: hash,
+                        approve_txn: hash,
                         belong_type: this.row.belong_type
                     }
                 } else {
@@ -132,7 +132,7 @@
                     params = {
                         amount: Number(this.salePrice),
                         goods_id: this.row.goods_id,
-                        tx: hash,
+                        approve_txn: hash,
                         type_id: this.row.type_id,
                         belong_type: this.row.belong_type
                     }

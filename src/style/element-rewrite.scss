@@ -15,6 +15,18 @@
     }
 }
 
+.el-button {
+    &.is-disabled {
+        background: #777E90;
+        border: 0;
+
+        &:hover {
+            background: #777E90;
+            border: 0;
+        }
+    }
+}
+
 .el-button--primary {
     background: $--color-success;
     border-color: $--color-success;
@@ -145,6 +157,7 @@
             &:nth-child(2) {
                 margin-left: 0.266666666666667rem;
             }
+
         }
     }
 }

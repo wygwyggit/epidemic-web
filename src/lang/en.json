@@ -166,6 +166,7 @@
         "reward": "Reward",
         "cancel-staking": "Cancel Staking",
         "cancel-staking-tip": "Cancel the Staking",
-        "staking-tip": "Staking the NFT"
+        "staking-tip": "Staking the NFT",
+        "insufficient-balance": "Insufficient Balance"
     }
 }

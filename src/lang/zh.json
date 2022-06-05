@@ -169,6 +169,7 @@
         "reward": "奖励",
         "cancel-staking": "取消质押",
         "cancel-staking-tip": "取消质押",
-        "staking-tip": "质押NFT"
+        "staking-tip": "质押NFT",
+        "insufficient-balance": "余额不足"
     }
 }

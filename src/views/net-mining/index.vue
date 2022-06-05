@@ -100,7 +100,7 @@
 
         </div>
         <el-dialog title="Pledge Information" :visible.sync="dialogVisible" width="480px" custom-class="pledge-dialog">
-            <div class="content" v-loading="dialogLoading" >
+            <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
                         Please confirm the pledge content
@@ -136,14 +136,21 @@
                             <p class="balance">Balance: {{ balanceCount }}</p>
                         </div>
                         <div class="right">
-                            <div class="buy">
+                            <a class="buy"
+                                href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
+                                target="_blank">
                                 Buy
-                            </div>
+                            </a>
                         </div>
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="stakingConfirm">Confirm</el-button>
+                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                        {{ $t("marketplace.confirmed")}}
+                    </el-button>
+                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading" @click="stakingConfirm">
+                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("marketplace.confirmed")}}
+                    </el-button> -->
                     <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
                 </div>
             </div>
@@ -184,7 +191,11 @@
                         <div class="left">
                             <p><span>0.8</span>AmazingTeam</p>
                             <p class="balance">Balance: 100
-                                <a href="javascript:;" class="buy">buy</a>
+                                <a class="buy"
+                                    href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
+                                    target="_blank">
+                                    Buy
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -205,7 +216,8 @@
     import PageTabs from '@/components/page-tabs'
     import emptyImage from '@/assets/images/empty.png'
     import Cookie from "@/utils/cookie.js";
-
+    import Approve from '@/utils/approve.js'
+    import web3Tool from '@/utils/web3'
     export default {
         name: '',
         components: {
@@ -344,15 +356,15 @@
                     })
                 })
             },
-            stakingConfirm() {
+            stakingConfirm(hash) {
                 this.comfirmLoading = true
-                console.log(Object.values(this.stakingRarityMap), '33344')
                 myAjax({
                     url: 'user/goods/pledged',
                     data: {
                         body: {
                             goods_ids: Object.values(this.stakingRarityMap).flat(),
-                            days: this.pledgeParams.time
+                            days: this.pledgeParams.time,
+                            approve_txn: hash
                         }
                     }
                 }).then(res => {
@@ -377,23 +389,49 @@
             },
             doPledge() {
                 this.dialogVisible = this.dialogLoading = true
-                myAjax({
-                    url: 'user/balance_query',
-                    data: {
-                        body: {
-                            type: "adoge_token"
-                        }
-                    }
-                }).then(res => {
-                    if (res.ok) {
-                        this.balanceCount = (res.data || {}).balance || 0;
-                    }
-                    this.dialogLoading = false
-                })
+                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress()])
+                    .then(data => {
+                        const [p1, contract_addr_abi, approve_addr] = data
+                        this.contract_addr = contract_addr_abi.contract_addr
+                        this.abi = contract_addr_abi.abi
+                        this.approve_addr = approve_addr
+                        this.dialogLoading = false
+                    })
                 this.getPledgeContent()
+            },
+            getUserTeamTokenBalance() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/balance_query',
+                        data: {
+                            body: {
+                                type: "amazing_team_token"
+                            }
+                        }
+
+                    }).then(res => {
+                        if (res.ok) {
+                            this.balanceCount = (res.data || {}).balance || 0;
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
             },
             doPledgeH5() {
                 this.drawer = true
+            },
+            doApprove() {
+                web3Tool.contract.call(this, {
+                    contractAddress: this.contract_addr || '',
+                    abi: this.abi,
+                    authAddr: this.approve_addr,
+                    amount: '50000000000000000000',
+                    account: Cookie.getCookie("__account__") || null,
+                }).then(hash => {
+                    this.stakingConfirm(hash)
+                })
             },
             doSelectAll(flag) {
                 this.list = this.list.map(x => ({
@@ -555,6 +593,7 @@
                 }
 
                 .buy {
+                    display: inline-block;
                     margin-left: .266666666666667rem;
                     color: #45B26B;
                 }
@@ -657,6 +696,7 @@
                 }
 
                 .buy {
+                    display: inline-block;
                     width: 130px;
                     height: 40px;
                     line-height: 40px;

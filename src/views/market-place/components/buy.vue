@@ -125,7 +125,6 @@
                     amount: '50000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
-                    console.log(111)
                     this.sendBuy(hash)
                 })
             },
@@ -138,7 +137,7 @@
                         remark: '',
                         num: this.num || 1,
                         type: this.row.belong_type < 0 ? 2 : 1,
-                        tx: hash
+                        approve_txn: hash
                     };
                 myAjax({
                     url,
