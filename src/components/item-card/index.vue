@@ -4,7 +4,7 @@
             <div class="mark" v-if="itemInfo.select">
 
             </div>
-            <template v-if="itemInfo.belong_type == -1 || itemInfo.belong_type == -2">
+            <template v-if="itemInfo.belong_type < 0">
                 <div class="debris-header-info">
                     {{itemInfo.name}}
                 </div>

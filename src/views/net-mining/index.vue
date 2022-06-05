@@ -100,50 +100,54 @@
 
         </div>
         <el-dialog title="Pledge Information" :visible.sync="dialogVisible" width="480px" custom-class="pledge-dialog">
-            <div class="info-item pledge-content">
-                <div class="tit">
-                    Please confirm the pledge content
-                </div>
-                <div class="con">
-                    <ul>
-                        <li v-for="(value, key) in stakingRarityMap" :key="key">
-                            <div class="key" :style="{color: key}">{{ key }}</div>
-                            <div class="val">{{  value.length || 0 }}</div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="info-item time-content">
-                <div class="tit">
-                    Pledge time
-                </div>
-                <div class="con">
-                    <div v-for="(item, index) of pledgeTimes" :key="index"
-                        :class="{'select': item.id === pledgeParams.time}" @click="() => pledgeParams.time = item.id">
-                        {{item.title}}
+            <div class="content" v-loading="dialogLoading" >
+                <div class="info-item pledge-content">
+                    <div class="tit">
+                        Please confirm the pledge content
+                    </div>
+                    <div class="con">
+                        <ul>
+                            <li v-for="(value, key) in stakingRarityMap" :key="key">
+                                <div class="key" :style="{color: key}">{{ key }}</div>
+                                <div class="val">{{  value.length || 0 }}</div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="info-item balance-content">
-                <div class="tit">
-                    Pledge tickets
-                </div>
-                <div class="con">
-                    <div class="left">
-                        <p><span>0.8</span>AmazingTeam</p>
-                        <p class="balance">Balance: 100</p>
+                <div class="info-item time-content">
+                    <div class="tit">
+                        Pledge time
                     </div>
-                    <div class="right">
-                        <div class="buy">
-                            Buy
+                    <div class="con">
+                        <div v-for="(item, index) of pledgeTimes" :key="index"
+                            :class="{'select': item.id === pledgeParams.time}"
+                            @click="() => pledgeParams.time = item.id">
+                            {{item.title}}
                         </div>
                     </div>
                 </div>
+                <div class="info-item balance-content">
+                    <div class="tit">
+                        Pledge tickets
+                    </div>
+                    <div class="con">
+                        <div class="left">
+                            <p><span>{{ needAmazing }}</span>AmazingTeam</p>
+                            <p class="balance">Balance: {{ balanceCount }}</p>
+                        </div>
+                        <div class="right">
+                            <div class="buy">
+                                Buy
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-wrap">
+                    <el-button type="primary" :loading="comfirmLoading" @click="stakingConfirm">Confirm</el-button>
+                    <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
+                </div>
             </div>
-            <div class="btn-wrap">
-                <el-button type="primary" :loading="comfirmLoading" @click="stakingConfirm">Confirm</el-button>
-                <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
-            </div>
+
         </el-dialog>
         <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt">
             <div class="content">
@@ -214,6 +218,7 @@
                 prefixCls: 'views-net-mining',
                 emptyImage,
                 isLoading: true,
+                dialogLoading: true,
                 coinCountData: {
                     count: 0
                 },
@@ -245,6 +250,7 @@
                 pledgeParams: {
                     time: 1
                 },
+                balanceCount: 0,
                 page: {
                     pageSize: 200000,
                     curPage: 1
@@ -259,6 +265,9 @@
             selectIds() {
                 return this.list.filter(x => x.select)
             },
+            needAmazing() {
+                return this.selectIds.length * this.pledgeParams.time * 0.08
+            }
 
         },
         watch: {},
@@ -348,15 +357,16 @@
                     }
                 }).then(res => {
                     if (res.ok) {
-                        this.$showOk($t("common.ope-suc"))
+                        this.$showOk(this.$t("common.ope-suc"))
                         this.getList()
                     }
-                    this.comfirmLoading = false
+                    this.comfirmLoading = this.dialogVisible = false
                 })
             },
             selectNftCard({
                 goods_id
             }) {
+                if (this.currentTabId === 1) return
                 const item = this.list.find(x => x.goods_id === goods_id)
                 item.select = !item.select
                 if (this.list.length === this.selectIds.length) {
@@ -366,9 +376,21 @@
                 }
             },
             doPledge() {
-                this.dialogVisible = true
+                this.dialogVisible = this.dialogLoading = true
+                myAjax({
+                    url: 'user/balance_query',
+                    data: {
+                        body: {
+                            type: "adoge_token"
+                        }
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        this.balanceCount = (res.data || {}).balance || 0;
+                    }
+                    this.dialogLoading = false
+                })
                 this.getPledgeContent()
-                console.log(this.stakingRarityMap)
             },
             doPledgeH5() {
                 this.drawer = true
@@ -549,6 +571,7 @@
         }
 
         .pledge-dialog {
+
             .info-item {
                 .tit {
                     height: 32px;

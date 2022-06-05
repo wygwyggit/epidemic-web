@@ -498,7 +498,7 @@
                             background: #FF5E1A;
                         }
 
-                        &.diabled {
+                        &.disable {
                             background: #777E90;
                             cursor: not-allowed;
                         }
