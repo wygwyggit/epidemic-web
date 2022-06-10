@@ -1,14 +1,19 @@
 <template>
     <div :class="prefixCls">
         <common-header :bgColor="bgColor" ref="commonHeader"></common-header>
-        <router-view class="router-view "></router-view>
+        <router-view class="router-view" v-if="!isLoading"></router-view>
         <common-footer v-if="isShowFooter"></common-footer>
     </div>
 </template>
 
 <script>
+    import myAjax from '@/utils/ajax.js'
+     import Cookie from "@/utils/cookie.js";
     import CommonHeader from '@/components/common-header'
     import CommonFooter from '@/components/common-footer'
+    import {
+        mapMutations,
+    } from 'vuex'
     export default {
         components: {
             CommonHeader,
@@ -18,6 +23,7 @@
         data() {
             return {
                 prefixCls: '',
+                isLoading: true,
                 isShowFooter: true,
                 bgColor: ""
             }
@@ -52,12 +58,38 @@
 
         },
         async mounted() {
+            
+            Promise.all([this.getUserInfo()]).then(() => {
+                this.isLoading = false
+            })
         },
         beforeDestroy() {},
         methods: {
+            getUserInfo() {
+                return new Promise((resolve, reject) => {
+                    if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token') ) {
+                        this.isLoading = false
+                        return resolve()
+                    }
+                    myAjax({
+                        url: 'user/user_info',
+                        isPassFalse: true
+                    }).then(res => {
+                        if (res.ok) {
+                            this.UPDATE_USERINFO(res.data || {})
+                        }
+                        resolve()
+                    }).finally(err => {
+                        this.isLoading = false
+                    })
+                })
+            },
             doConnectAccount() {
                 this.$refs.commonHeader.connectWalletMetaMask(true)
-            }
+            },
+            ...mapMutations([
+                'UPDATE_USERINFO'
+            ])
         },
     }
 </script>

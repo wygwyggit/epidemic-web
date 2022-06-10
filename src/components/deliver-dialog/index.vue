@@ -13,7 +13,7 @@
                 <div class="tip">
                     {{$t('common.transferred-tip')}}
                 </div>
-                <el-button type="primary" :disabled="!addressTxt && user_give_left_count > 0" @click="doNftApprove">
+                <el-button type="primary" :disabled="!addressTxt && user_give_left_count > 0" :loading="submitLoading" @click="doNftApprove">
                     {{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
@@ -52,6 +52,7 @@
                 prefixCls: 'deliver-dialog',
                 isShowDialog: true,
                 isLoading: true,
+                submitLoading: false,
                 addressTxt: '',
                 user_give_left_count: '',
             }
@@ -137,6 +138,7 @@
                 })
             },
             doNftApprove() {
+                this.submitLoading = true
                 web3Tool.contract.call(this, {
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
@@ -145,6 +147,8 @@
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.doDeliver(hash)
+                }).catch(err => {
+                    this.submitLoading = false
                 })
             }
         },

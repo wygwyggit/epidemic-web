@@ -32,6 +32,11 @@
     border-color: $--color-success;
 }
 
+.el-loading-mask {
+    background: #131922 !important;
+    opacity: .9;
+}
+
 .el-dialog {
     background: #131922;
     border-radius: 0.133333333333333rem;
@@ -39,9 +44,7 @@
     .el-dialog__body {
         position: relative;
 
-        .el-loading-mask {
-            background: #131922;
-        }
+
     }
 
     .el-dialog__headerbtn {
@@ -50,7 +53,8 @@
     }
 
     .el-dialog__header {
-        padding: 0.266666666666667rem;
+        min-height: .6rem;
+        //padding: 0.266666666666667rem;
     }
 
     .el-dialog__title,

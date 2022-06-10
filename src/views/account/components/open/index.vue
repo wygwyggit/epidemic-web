@@ -17,7 +17,7 @@
             </ul>
 
             <div class="opt-btn">
-                <button class="btn" :loading="isLoading" @click="doOpenGift">{{$t("common.confirmed") }} </button>
+                <el-button class="btn" :loading="isLoading" @click="doOpenGift">{{$t("common.confirmed") }} </el-button>
             </div>
         </el-dialog>
     </div>
@@ -134,7 +134,6 @@
                 .btn {
                     width: 100%;
                     height: 0.8rem;
-                    line-height: 0.8rem;
                     text-align: center;
                     border: 0;
                     font-size: 0.32rem;

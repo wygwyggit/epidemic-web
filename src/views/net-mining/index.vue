@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <div class="top">
+        <div class="top" v-if="isSign && isConnectWallet">
             <div class="w">
                 <div class="left">
                     <img src="../../assets/images/net-mining.png" alt="">
@@ -32,43 +32,51 @@
             </div>
         </div>
         <div class="main">
-            <div class="w">
-                <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
-                <div class="content-list" v-loading="isLoading">
-                    <template v-if="(currentTabId === 0) && list.length">
-                        <div class="select-wrap">
-                            <div class="select-info">
-                                <span class="txt">Please click on the NFT card to select</span>
-                                <span class="selected-num">
-                                    Selected: {{selectIds.length}}
-                                </span>
-                                <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+            <template v-if="isSign && isConnectWallet">
+                <div class="w">
+                    <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
+                    <div class="content-list" v-loading="isLoading">
+                        <template v-if="(currentTabId === 0) && list.length && !isLoading">
+                            <div class="select-wrap">
+                                <div class="select-info">
+                                    <span class="txt">Please click on the NFT card to select</span>
+                                    <span class="selected-num">
+                                        Selected: {{selectIds.length}}
+                                    </span>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+                                </div>
+                                <div class="staking" @click="doPledge(1)" :class="{'active': selectIds.length > 0}">
+                                    Pledge
+                                    Now
+                                </div>
                             </div>
-                            <div class="staking" @click="doPledge" :class="{'active': selectIds.length > 0}">Pledge Now
+                            <div class="select-wrap-h5">
+                                Please click on the NFT card to select
                             </div>
-                        </div>
-                        <div class="select-wrap-h5">
-                            Please click on the NFT card to select
-                        </div>
-                        <div class="select-info-h5">
-                            <div>
-                                <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
-                                <span class="selected-num">
-                                    Selected: {{selectIds.length}}
-                                </span>
+                            <div class="select-info-h5">
+                                <div>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+                                    <span class="selected-num">
+                                        Selected: {{selectIds.length}}
+                                    </span>
+                                </div>
+                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">Pledge
+                                    Now
+                                </el-button>
                             </div>
-                            <el-button type="primary" @click="doPledgeH5" :disabled="selectIds.length <= 0">Pledge Now
-                            </el-button>
-                        </div>
-                    </template>
-                    <template v-if="list.length && !isLoading">
-                        <div class="list-card">
-                            <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
-                                @select="selectNftCard">
-                            </item-card>
-                        </div>
+                        </template>
+                        <template v-if="list.length && !isLoading">
+                            <div class="list-card">
+                                <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
+                                    @select="selectNftCard">
+                                    <div class="time-left" v-if="item.left_days">
+                                        <div class="label">{{  $t("net-mining.time-left")}}</div>
+                                        <div class="value">{{ item.left_days }}</div>
+                                    </div>
+                                </item-card>
+                            </div>
 
-                        <!-- <ul>
+                            <!-- <ul>
                             <li v-for="(item, index) of list" :key="index" @click="doSelect(item.id)"
                                 :class="{'select': item.select}">
                                 <div class="mark" v-if="item.select">
@@ -90,16 +98,22 @@
                                 </div>
                             </li>
                         </ul> -->
-                    </template>
-                    <template v-if="!list.length && !isLoading">
-                        <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
-                    </template>
+                        </template>
+                        <template v-if="!list.length && !isLoading">
+                            <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
+                        </template>
+                    </div>
                 </div>
-            </div>
+            </template>
+            <template>
+                <no-connect-wallet v-if="!isConnectWallet"></no-connect-wallet>
+                <no-sign v-if="isConnectWallet && !isSign"></no-sign>
+            </template>
 
 
         </div>
-        <el-dialog title="Pledge Information" :visible.sync="dialogVisible" width="480px" custom-class="pledge-dialog">
+        <el-dialog title="Staking Information" :visible.sync="dialogVisible" width="480px" :close-on-click-modal="false"
+            custom-class="pledge-dialog">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
@@ -145,19 +159,16 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
-                        {{ $t("marketplace.confirmed")}}
-                    </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading" @click="stakingConfirm">
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                        @click="doApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("marketplace.confirmed")}}
-                    </el-button> -->
-                    <!-- <el-button type="info" disabled>Insufficient Balance</el-button> -->
+                    </el-button>
                 </div>
             </div>
 
         </el-dialog>
         <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt">
-            <div class="content">
+            <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
                         Please confirm the pledge content
@@ -165,7 +176,7 @@
                     <div class="con">
                         <ul>
                             <li v-for="(value, key) in stakingRarityMap" :key="key">
-                                <div class="key">{{ key }}</div>
+                                <div class="key" :style="{color: key}">{{ key }}</div>
                                 <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
@@ -189,8 +200,8 @@
                     </div>
                     <div class="con">
                         <div class="left">
-                            <p><span>0.8</span>AmazingTeam</p>
-                            <p class="balance">Balance: 100
+                            <p><span>{{ needAmazing }}</span>AmazingTeam</p>
+                            <p class="balance">Balance: {{ balanceCount }}
                                 <a class="buy"
                                     href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
                                     target="_blank">
@@ -201,8 +212,10 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <!-- <el-button type="primary">Confirm</el-button> -->
-                    <el-button type="info" disabled>Insufficient Balance</el-button>
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                        @click="doApprove">
+                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("marketplace.confirmed")}}
+                    </el-button>
                 </div>
             </div>
 
@@ -211,6 +224,7 @@
 </template>
 
 <script>
+    import eventBus from "@/utils/eventBus";
     import myAjax from '@/utils/ajax.js'
     import itemCard from '@/components/item-card'
     import PageTabs from '@/components/page-tabs'
@@ -218,11 +232,15 @@
     import Cookie from "@/utils/cookie.js";
     import Approve from '@/utils/approve.js'
     import web3Tool from '@/utils/web3'
+    import NoConnectWallet from '@/components/no-connect-wallet'
+    import NoSign from '@/components/no-sign'
     export default {
         name: '',
         components: {
             PageTabs,
-            itemCard
+            itemCard,
+            NoConnectWallet,
+            NoSign
         },
         props: {},
         data() {
@@ -236,11 +254,11 @@
                 },
                 tabs: [{
                     id: 1,
-                    title: this.$t("common.ypledged"),
+                    title: this.$t("net-mining.ypledged"),
                     num: 0
                 }, {
                     id: 0,
-                    title: this.$t("common.not-pledged"),
+                    title: this.$t("net-mining.not-pledged"),
                     num: 0
                 }],
                 currentTabId: 1,
@@ -267,7 +285,9 @@
                     pageSize: 200000,
                     curPage: 1
                 },
-                comfirmLoading: false
+                comfirmLoading: false,
+                isSign: false,
+                isConnectWallet: false
             }
         },
         computed: {
@@ -288,9 +308,16 @@
         },
         mounted() {
             this.initSignConnectData()
-            Promise.all([this.getCoinCount(), this.getList()]).then(() => {
+            eventBus.$on('sign-fail', this.initSignConnectData)
+            if (this.isSign && this.isConnectWallet) {
+                Promise.all([this.getCoinCount(), this.getList()]).then(() => {
+                    this.isLoading = false
+                })
+            } else {
                 this.isLoading = false
-            })
+            }
+
+
         },
         beforeDestroy() {},
         methods: {
@@ -370,9 +397,11 @@
                 }).then(res => {
                     if (res.ok) {
                         this.$showOk(this.$t("common.ope-suc"))
-                        this.getList()
+                        Promise.all([this.getCoinCount(), this.getList()]).then(() => {
+                            this.comfirmLoading = this.dialogVisible = this.drawer = false
+                        })
                     }
-                    this.comfirmLoading = this.dialogVisible = false
+
                 })
             },
             selectNftCard({
@@ -387,8 +416,13 @@
                     this.isSelectAll = false
                 }
             },
-            doPledge() {
-                this.dialogVisible = this.dialogLoading = true
+            doPledge(flag) {
+                if (flag) {
+                    this.dialogVisible = true
+                } else {
+                    this.drawer = true
+                }
+                this.dialogLoading = true
                 Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress()])
                     .then(data => {
                         const [p1, contract_addr_abi, approve_addr] = data
@@ -880,56 +914,17 @@
                         margin-right: 0;
                     }
 
-                    .btns-wrap {
+                    .time-left {
                         display: flex;
                         justify-content: space-between;
-                    }
+                        font-size: .266666666666667rem;
 
-                    .btn {
-                        flex: 1;
-                        height: 40px;
-                        line-height: 40px;
-                        text-align: center;
-                        border-radius: .133333333333333rem;
-                        color: #fff;
-                        cursor: pointer;
-                        font-size: .213333333333333rem;
-
-                        &:nth-child(2n) {
-                            margin: 0 .1rem;
+                        .label {
+                            color: #C4C4C4;
                         }
 
-                        &:last-child {
-                            margin-right: 0;
-                        }
-
-                        &.btn-deliver,
-                        &.btn-open {
-                            background: #F1AE00;
-                        }
-
-                        &.btn-deliver {
-                            cursor: not-allowed;
-                            opacity: .6;
-                        }
-
-                        &.btn-sale {
-                            background: #00A73A;
-                        }
-
-                        &.btn-synthetic {
-                            background: #9E00FF;
-                        }
-
-                        &.btn-on-sale,
-                        &.btn-on-staking,
-                        &.btn-on-sending {
-                            background: #777E90;
-                            cursor: not-allowed;
-                        }
-
-                        &.btn-cancel-sale {
-                            background: #FF5E1A;
+                        .value {
+                            color: #fff;
                         }
                     }
                 }

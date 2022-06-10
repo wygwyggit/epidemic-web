@@ -1,9 +1,42 @@
 <template>
     <div :class="prefixCls">
-        <div class="page-title">
+        <div class="page-title" v-if="isSign && isConnectWallet">
             <div class="w">
-                <img src="../../assets/images/nav-my-account.png" alt="">
-                {{$t("account.my-account")}}
+                <div class="tit">
+                    <img src="../../assets/images/nav-my-account.png" alt="">
+                    {{$t("account.my-account")}}
+                </div>
+                <div class="my-rewards">
+                    <ul>
+                        <li>
+                            <div class="icon-img">
+                                <img src="../../assets/images/net-header.png" alt="">
+                            </div>
+                            <div class="right-info">
+                                <p>bronze medal</p>
+                                <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
+                            </div>
+                        </li>
+                        <router-link tag="li" :to="{name: 'egoWall'}">
+                            <div class="icon-img">
+                                <img src="../../assets/images/reward.png" alt="">
+                            </div>
+                            <div class="right-info">
+                                <p>ego wall</p>
+                            </div>
+                        </router-link>
+                        <li class="sign-in">
+                            <div class="sign-btn" @click="signIn">
+                                <img src="../../assets/images/sign-in.png" alt="">
+                                <span>
+                                    {{ userInfo.is_sign ? $t('account.signed-in') : $t('account.sign-in')}}
+                                </span>
+
+                            </div>
+                            <p class="txt">7 days in a row</p>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
         <div class="main">
@@ -101,6 +134,18 @@
             @compoundSuc="compoundSuc"></compound>
         <open :row="currentGoodRow" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false"
             @openGiftOk="openGiftOk"></open>
+        <el-dialog custom-class="sign-in-success" :close-on-click-modal="false" :show-close="false"
+            :visible.sync="isShowSignInSuccessDialog" width="7.46rem">
+            <div class="content">
+                <div class="success-main">
+                    <p class="txt">successfully</p>
+                </div>
+                <div class="close">
+                    <img src="../../assets/images/g-close.png" alt="" @click="() => this.isShowSignInSuccessDialog = false">
+                </div>
+            </div>
+        </el-dialog>
+
     </div>
 </template>
 
@@ -118,6 +163,10 @@
     import Open from './components/open'
     import NoConnectWallet from '@/components/no-connect-wallet'
     import NoSign from '@/components/no-sign'
+    import {
+        mapState,
+        mapMutations
+    } from 'vuex'
     export default {
         name: '',
         components: {
@@ -144,6 +193,7 @@
                 isShowGiftBag: false,
                 isShowCompound: false,
                 isShowOpenGift: false,
+                isShowSignInSuccessDialog: false,
                 giftBagList: [],
                 isLoading: true,
                 tabs: [{
@@ -206,6 +256,10 @@
             placeholderTxt() {
                 return this.$t("account.search-id-name")
             },
+            ...mapState({
+                userInfo: state => state.userInfo
+            }),
+
         },
         created() {
             let width = window.innerWidth;
@@ -227,7 +281,35 @@
         },
         beforeDestroy() {},
         methods: {
-
+            ...mapMutations([
+                'UPDATE_USERINFO'
+            ]),
+            // 用户签到
+            signIn() {
+                if (this.userInfo.is_sign) {
+                    return false
+                }
+                myAjax({
+                    url: 'user/sign/daily_sign'
+                }).then(res => {
+                    if (res.ok) {
+                        this.isShowSignInSuccessDialog = true
+                    } 
+                })
+                
+            },
+            getUserInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/user_info',
+                        isPassFalse: true
+                    }).then(res => {
+                        if (res.ok) {
+                            this.UPDATE_USERINFO(res.data || {})
+                        }
+                    })
+                })
+            },
             initSignConnectData() {
                 this.isSign = cookie.getCookie('ad_token') || null
                 this.isConnectWallet = cookie.getCookie('__account__') || null
@@ -312,7 +394,7 @@
                         data: {
                             body: {
                                 status: this.checkListFilter.length ? this.checkListFilter : (this
-                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4]),
+                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4, 1]),
                             }
 
                         }
@@ -423,19 +505,171 @@
     $prefixCls: "views-account";
 
     .#{$prefixCls} {
+        .sign-in-success {
+            background: transparent;
+
+            .el-dialog__header {
+                display: none;
+            }
+
+            .el-dialog__body {
+                padding: 0;
+            }
+
+            .success-main {
+                position: relative;
+                height: 4.333333333333333rem;
+                background: url('../../assets/images/sign-success.png');
+                background-size: cover;
+                .txt {
+                    position: absolute;
+                    bottom: .346666666666667rem;
+                    left: 50%;
+                    font-size: .426666666666667rem;
+                    font-weight: bold;
+                    color: #fff;
+                    transform: translateX(-50%);
+                }
+
+            }
+
+            .close {
+                text-align: center;
+                margin-top: .533333333333333rem;
+
+
+                img {
+                    width: .666666666666667rem;
+                    height: .666666666666667rem;
+                    cursor: pointer;
+                }
+
+            }
+        }
+
         .page-title {
-            height: 157px;
-            line-height: 157px;
+            padding: .533333333333333rem 0;
             background: #0B0F15;
             color: #fff;
-            font-size: 48px;
-            font-weight: 600;
 
-            img {
-                display: none;
-                width: .85rem;
-                height: .85rem;
-                vertical-align: text-bottom;
+
+            .w {
+                display: flex;
+                height: 100%;
+                justify-content: space-between;
+                align-items: center;
+
+                .tit {
+                    font-size: .64rem;
+                    font-weight: 600;
+
+                    img {
+                        display: none;
+                        width: .85rem;
+                        height: .85rem;
+                        vertical-align: text-bottom;
+                    }
+                }
+
+                .my-rewards {
+                    flex: 1;
+                    margin-left: 2.786666666666667rem;
+                    padding: .133333333333333rem .2rem;
+                    border: 1px solid #29374B;
+                    border-radius: .266666666666667rem;
+
+                    ul {
+                        width: 100%;
+                        display: flex;
+                    }
+
+                    li {
+                        position: relative;
+                        display: flex;
+                        align-items: center;
+
+                        &::after {
+                            position: absolute;
+                            right: 0;
+                            top: 50%;
+                            content: "";
+                            width: 1px;
+                            height: .533333333333333rem;
+                            background: #29374B;
+                            transform: translateY(-50%);
+                        }
+
+                        &:first-child {
+                            padding-right: .533333333333333rem;
+                        }
+
+                        &:nth-child(2n) {
+                            padding: 0 .533333333333333rem;
+                        }
+
+                        &:last-child {
+                            justify-content: center;
+                            font-size: .173333333333333rem;
+                            color: #FFDD28;
+                            padding-left: .533333333333333rem;
+                            flex-direction: column;
+
+                            &::after {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .sign-in {
+                        img {
+                            width: .266666666666667rem;
+                            height: .266666666666667rem;
+                            vertical-align: sub;
+                        }
+
+                        .txt {
+                            font-size: .186666666666667rem;
+                            color: #777E90;
+                        }
+
+                        .sign-btn {
+                            height: .4rem;
+                            line-height: .4rem;
+                            padding: 0 .133333333333333rem;
+                            border-radius: .266666666666667rem;
+                            background: #29374B;
+                            font-weight: bold;
+                            cursor: pointer;
+                        }
+                    }
+
+                    .icon-img img {
+                        width: .8rem;
+                        height: .8rem;
+                    }
+
+                    .right-info {
+                        margin-left: .16rem;
+
+                        p:first-child {
+                            font-size: .213333333333333rem;
+                            color: #777E90;
+                        }
+
+                        p.dot-num {
+                            margin-top: .04rem;
+                            width: max-content;
+                            padding: 0 .133333333333333rem;
+                            height: .333333333333333rem;
+                            line-height: .333333333333333rem;
+                            text-align: center;
+                            color: #FFEF9C;
+                            font-size: .186666666666667rem;
+                            background: #29374B;
+                            border-radius: .266666666666667rem;
+                        }
+                    }
+                }
             }
         }
 
@@ -474,10 +708,6 @@
                             background: #F1AE00;
                         }
 
-                        &.btn-deliver {
-                            cursor: not-allowed;
-                            opacity: .6;
-                        }
 
                         &.btn-sale {
                             background: #00A73A;
@@ -589,11 +819,56 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             .page-title {
-                height: 1.866666666666667rem;
-                line-height: 1.866666666666667rem;
                 font-size: .64rem;
                 text-align: center;
                 background: #14181f;
+
+                .w {
+                    padding: 0 .533333333333333rem;
+                    flex-direction: column;
+
+                    .my-rewards {
+                        width: 100%;
+                        margin: .533333333333333rem 0 0 0;
+
+                        li {
+                            padding: 0 !important;
+                            flex: 1;
+                            flex-direction: column;
+                            border-right: 1px solid #29374B;
+
+                            img {
+                                width: 1.333333333333333rem !important;
+                                height: 1.333333333333333rem !important;
+                            }
+
+                            &::after {
+                                display: none;
+                            }
+
+                            &:last-child {
+                                border: 0;
+                            }
+                        }
+
+                        .right-info {
+                            margin: 0;
+
+                            p:first-child {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .sign-btn {
+                        height: auto !important;
+                        background: transparent !important;
+
+                        span {
+                            display: none;
+                        }
+                    }
+                }
 
                 img {
                     display: inline-block;
@@ -601,7 +876,7 @@
             }
 
             .main {
-                padding: .533333333333333rem;
+                padding: 0 .533333333333333rem .533333333333333rem .533333333333333rem;
 
                 .check-item {
 

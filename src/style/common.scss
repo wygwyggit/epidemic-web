@@ -229,19 +229,39 @@ body {
     border-color: #131922;
     text-align: center;
     box-sizing: border-box;
+
     img {
         margin-left: 0.16rem;
     }
 }
+
 .blue {
     color: #0092E4;
 }
+
 .red {
     color: #FF0F00;
 }
+
 .orange {
     color: #FF5C00;
 }
+
 .yellow {
     color: #FFB800;
+}
+
+.back {
+    width: 1.813333333333333rem;
+    height: .746666666666667rem;
+    padding-left: .7rem;
+    line-height: .68rem;
+    color: $--color-success;
+    border-radius: 1.2rem;
+    border: 2px solid #004d8c;
+    background: url("../assets/images/back.png");
+    background-repeat: no-repeat;
+    background-position: .133333333333333rem center;
+    cursor: pointer;
+    font-size: 18px;
 }

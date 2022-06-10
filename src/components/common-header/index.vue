@@ -13,6 +13,10 @@
         </div>
 
         <div class="right">
+            <div class="pc-adoge-balance" v-if="adoge_balance">
+                {{ adoge_balance }}
+                adoge
+            </div>
             <template v-if="!account">
                 <div class="user-pc">
                     <div class="connect" @click="connectWalletMetaMask(false)">
@@ -90,7 +94,7 @@
                                 </div>
                                 <div class="num-info">
                                     <p>BALANCE</p>
-                                    <!-- <p class="num">10,000,000,000 Adoge</p> -->
+                                    <p class="num">{{ adoge_balance }} Adoge</p>
                                 </div>
                                 <div class="buy-btn">
                                     {{ $t("detail.buy") }}
@@ -158,6 +162,7 @@
                 isConnect: false,
                 isShowConnectDialog: false,
                 myBgColor: "",
+                adoge_balance: '',
                 isShowSlider: false,
                 isShowLangDialog: false,
                 isShowCodeDialog: false,
@@ -239,9 +244,25 @@
         mounted() {
             // 监听账号变化
             this.listenerAccountChange()
+            this.getAdogeBalance()
         },
         beforeDestroy() {},
         methods: {
+            getAdogeBalance() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/balance_query',
+                        isPassFalse: true,
+                        data: {
+                            body: {
+                                type: 'adoge_token'
+                            }
+                        }
+                    }).then(res => {
+                        this.adoge_balance = res.data.balance || 0
+                    })
+                })
+            },
             listenerAccountChange() {
                 ethereum.on('accountsChanged', async accounts => {
                     if (accounts.length === 0) {
@@ -484,6 +505,11 @@
             display: flex;
             align-items: center;
 
+            .pc-adoge-balance {
+                color: #fff;
+                font-size: .24rem;
+            }
+
             .header-above-slideicon {
                 display: none;
             }
@@ -663,6 +689,7 @@
                     }
 
                     .num-info {
+                        flex: 1;
                         margin: 0 0.4rem;
                         font-size: 0.426666666666667rem;
                     }
@@ -701,6 +728,10 @@
         .#{$prefixCls} {
             height: 2.186666666666667rem;
             background: #14181f;
+
+            .pc-adoge-balance {
+                display: none;
+            }
 
             .el-dialog {
                 .el-dialog__header {

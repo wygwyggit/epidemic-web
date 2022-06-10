@@ -5,11 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        web3Provider: null
+        userInfo: {}
     },
     mutations: {
-        UPDATE_WEB3PROVIDER: (state, data) => {
-            state.web3Provider = data
+        UPDATE_USERINFO: (state, data) => {
+            state.userInfo = data
         },
     },
     actions: {},

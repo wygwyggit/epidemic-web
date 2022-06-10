@@ -42,6 +42,11 @@ const routes = [{
         name: 'netMining',
         component: () =>
             import( /* webpackChunkName: "netMining" */ '@/views/net-mining/index.vue')
+    }, {
+        path: '/account/egoWall',
+        name: 'egoWall',
+        component: () =>
+            import( /* webpackChunkName: "netMining" */ '@/views/ego-wall/index.vue')
     }]
 },
 ]

@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('marketplace.title')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog">
+            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
             <div v-loading="isLoading">
                 <template>
                     <ul v-if="currentTabId === 1">

@@ -15,36 +15,36 @@
                         <img src="../../assets/images/clock_w.png" alt="">
                     </div>
                 </div>
-                <!-- <div class="bnb-box clearfix">
+                <div class="bnb-box clearfix">
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            0 BNB
+                            {{ amountInfo.sum_amount_bnb }} BNB
                         </div>
-                        <div class="sub-info">Total value</div>
+                        <div class="sub-info">{{$t("marketplace.total-value")}} </div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            0 <span>BNB</span>
+                            {{ amountInfo.max_amount_bnb }} <span>BNB</span>
                         </div>
-                        <div class="sub-info">Total value</div>
+                        <div class="sub-info">{{$t("marketplace.highest-price")}}</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            0 <span>BNB</span>
+                             {{ amountInfo.min_amount_bnb }} <span>BNB</span>
                         </div>
-                        <div class="sub-info">Total value</div>
+                        <div class="sub-info">{{$t("marketplace.lowest-price")}}</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            0 <span>BNB</span>
+                            {{ amountInfo.average_amount_bnb }}  <span>BNB</span>
                         </div>
-                        <div class="sub-info">Total value</div>
+                        <div class="sub-info">{{$t("marketplace.average-price")}}</div>
                     </div>
-                </div> -->
+                </div>
             </div>
 
         </div>
@@ -71,24 +71,24 @@
                         <div class="filter-content">
                             <ul class="check-list" v-if="currentTabId === 1">
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                                    <div class="label-name">{{$t("account.sale")}}：</div>
                                     <el-checkbox-group v-model="checkListSale" @change="doSearch">
                                         <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
                                         <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("marketplace.color")}}：</div>
+                                    <div class="label-name">{{$t("detail.color")}}：</div>
                                     <el-checkbox-group v-model="checkListColor" @change="doSearch">
-                                        <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}
+                                        <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}
                                         </el-checkbox>
-                                        <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}
+                                        <el-checkbox label="orange" class="orange">{{$t("account.orange")}}
                                         </el-checkbox>
-                                        <el-checkbox label="red" class="red">{{$t("marketplace.red")}}</el-checkbox>
-                                        <el-checkbox label="blue" class="blue">{{$t("marketplace.blue")}}</el-checkbox>
-                                        <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}
+                                        <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
+                                        <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
+                                        <el-checkbox label="purple" class="purple">{{$t("account.purple")}}
                                         </el-checkbox>
-                                        <el-checkbox label="diamond">{{$t("marketplace.diamond")}}</el-checkbox>
+                                        <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
@@ -102,7 +102,7 @@
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("marketplace.level")}}：</div>
+                                    <div class="label-name">{{$t("account.level")}}：</div>
                                     <el-checkbox-group v-model="checkListLvel" @change="doSearch">
                                         <el-checkbox :label="1">Lv-1</el-checkbox>
                                         <el-checkbox :label="2">Lv-2</el-checkbox>
@@ -117,7 +117,7 @@
                             </ul>
                             <ul class="check-list" v-else>
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                                    <div class="label-name">{{$t("account.sale")}}：</div>
                                     <el-checkbox-group v-model="checkListSale" @change="doSearch">
                                         <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
                                         <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
@@ -174,10 +174,9 @@
                         </item-card>
                     </div>
                 </div>
-                <el-pagination background layout="total, prev, pager, next"
-                    @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                    :total="Number(total)" :hide-on-single-page="true" 
-                    :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
+                <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange"
+                    @prev-click="onPageChange" @next-click="onPageChange" :total="Number(total)"
+                    :hide-on-single-page="true" :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
                 </el-pagination>
             </div>
         </div>
@@ -299,21 +298,21 @@
                 <ul class="check-list">
                     <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
-                            <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                            <div class="label-name">{{$t("account.sale")}}：</div>
                             <el-checkbox-group v-model="checkListSale" @change="doSearch">
                                 <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
                                 <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
-                            <div class="label-name">{{$t("marketplace.color")}}：</div>
+                            <div class="label-name">{{$t("detail.color")}}：</div>
                             <el-checkbox-group v-model="checkListColor" @change="doSearch">
-                                <el-checkbox label="yellow" class="yellow">{{$t("marketplace.yellow")}}</el-checkbox>
-                                <el-checkbox label="orange" class="orange">{{$t("marketplace.orange")}}</el-checkbox>
-                                <el-checkbox label="red" class="red">{{$t("marketplace.red")}}</el-checkbox>
-                                <el-checkbox label="blue" class="blue">{{$t("marketplace.blue")}}</el-checkbox>
-                                <el-checkbox label="purple" class="purple">{{$t("marketplace.purple")}}</el-checkbox>
-                                <el-checkbox label="diamond">{{$t("marketplace.diamond")}}</el-checkbox>
+                                <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
+                                <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
+                                <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
+                                <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
+                                <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
+                                <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
@@ -327,7 +326,7 @@
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
-                            <div class="label-name">{{$t("marketplace.level")}}：</div>
+                            <div class="label-name">{{$t("account.level")}}：</div>
                             <el-checkbox-group v-model="checkListLvel" @change="doSearch">
                                 <el-checkbox :label="1">Lv-1</el-checkbox>
                                 <el-checkbox :label="2">Lv-2</el-checkbox>
@@ -342,7 +341,7 @@
                     </ul>
                     <ul class="check-list" v-else>
                         <li class="check-item">
-                            <div class="label-name">{{$t("marketplace.sale")}}：</div>
+                            <div class="label-name">{{$t("account.sale")}}：</div>
                             <el-checkbox-group v-model="checkListSale" @change="doSearch">
                                 <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
                                 <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
@@ -410,6 +409,7 @@
                     title: this.$t("marketplace.other"),
                     num: 0
                 }],
+                amountInfo: {},
                 isLoading: true,
                 currentTabId: 1,
                 checkListColor: [],
@@ -458,7 +458,7 @@
                 x.label = this.$t(`account.${x.key}`)
             });
             this.isLoading = true
-            Promise.all([this.getLiist(), this.getTotalInfo()])
+            Promise.all([this.getLiist(), this.getTotalInfo(), this.getAmountInfo()])
                 .then(res => {
                     this.isLoading = false
                 })
@@ -494,6 +494,20 @@
                     query: {
                         id
                     }
+                })
+            },
+            getAmountInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'goods/market/price/amount',
+                    }).then(res => {
+                        if (res.ok && res.data) {
+                            this.amountInfo = res.data
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
                 })
             },
             getRecords() {
