@@ -99,7 +99,7 @@
         "staking": "Staking",
         "sending": "Sending",
         "open": "open",
-        "synthetic": "synthetic",
+        "synthetic": "Synthetic",
         "congratulation": "Congratulations on getting a",
         "please-wait-for-confirmation": "please wait for confirmation",
 
@@ -239,6 +239,7 @@
         "congratulations-on-getting-a-Gold-badge": "Congratulations on getting a Gold badge"
     },
     "exchange": {
+        "next": "Next",
         "gold-pack": "Gold Pack",
         "sliver-pack": "Silver Pack",
         "compound-tip1": "You will Burn 10 bronze medal to get a",

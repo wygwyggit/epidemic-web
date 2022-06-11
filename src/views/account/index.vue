@@ -83,7 +83,7 @@
                                                 {{$t("account.synthetic")}}</div>
                                             <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                                 v-if="item.belong_type == -2" @click="doSynthetic(item)">
-                                                {{$t("account.synthetic")}}</div>
+                                                {{$t("exchange.exchange")}}</div>
                                             <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
                                                 @click="doDeliver(item)" v-if="item.belong_type == 1">
                                                 {{$t("common.deliver")}}</div>

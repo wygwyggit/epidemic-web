@@ -49,34 +49,34 @@
                     </div>
                     <el-button type="primary" class="syn" @click="doCompound" :disabled="maxContent <= 0"
                         v-if="row.belong_type !== -2">
-                        {{ $t("account.synthetic")}}</el-button>
-                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>Next
+                        {{ $t("account.synthetic") }}</el-button>
+                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>{{ $t("exchange.next") }}
                     </el-button>
 
                 </div>
                 <div class="form-cot" v-else>
                     <div class="tip">
-                        Please fill in the complete information so that the staff can get in touch with you
+                        {{ $t("exchange.please-fill-in-the-complete-information") }}
                     </div>
                     <el-form ref="ruleForm" :rules="rules" :model="form" label-position="top" label-width="80px">
-                        <el-form-item label="Name" prop="name">
+                        <el-form-item :label="$t('exchange.name')" prop="name">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
-                        <el-form-item label="Phone number" prop="phone">
+                        <el-form-item :label="$t('exchange.phone-number')" prop="phone">
                             <el-input v-model="form.phone"></el-input>
                         </el-form-item>
-                        <el-form-item label="Telegram" prop="telegram">
+                        <el-form-item :label="$t('exchange.telegram')" prop="telegram">
                             <el-input v-model="form.telegram"></el-input>
                         </el-form-item>
-                        <el-form-item label="E-mail" prop="email">
+                        <el-form-item :label="$t('exchange.e-mail')" prop="email">
                             <el-input v-model="form.email"></el-input>
                         </el-form-item>
-                        <el-form-item label="Delivery addres" prop="delivery_addr">
+                        <el-form-item :label="$t('exchange.delivery-address')" prop="delivery_addr">
                             <el-input type="textarea" v-model="form.delivery_addr"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <div class="btn-wrapper">
-                                <el-button type="primary" class="syn" @click="submitForm">Confirm exchange</el-button>
+                                <el-button type="primary" class="syn" @click="submitForm"> {{ $t("exchange.confirm-exchange") }}</el-button>
                             </div>
 
                         </el-form-item>
