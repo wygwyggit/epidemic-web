@@ -411,6 +411,7 @@
             initData() {
                 return new Promise((resolve, reject) => {
                     this.account = cookie.getCookie("__account__");
+                    if (!this.account) return resolve()
                     this.getUserInfo()
                         .then((res) => {
                             resolve();

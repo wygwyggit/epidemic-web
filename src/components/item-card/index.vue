@@ -21,7 +21,7 @@
             <div class="img-content" >
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
-            <template v-if="itemInfo.num">
+            <template v-if="itemInfo.type_id < 0">
                 <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
             </template>
             <template v-else>
@@ -193,7 +193,6 @@
                 color: #fff;
                 padding-bottom: 10px;
                 color: #fff;
-                border-bottom: 1px solid #29374B;
             }
 
             .mid-content {

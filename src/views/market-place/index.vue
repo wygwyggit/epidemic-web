@@ -33,14 +33,14 @@
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                             {{ amountInfo.min_amount_bnb }} <span>BNB</span>
+                            {{ amountInfo.min_amount_bnb }} <span>BNB</span>
                         </div>
                         <div class="sub-info">{{$t("marketplace.lowest-price")}}</div>
                     </div>
                     <div class="bnb-item">
                         <div class="num">
                             <img src="../../assets/images/bnb-icon.png" alt="" class="icon">
-                            {{ amountInfo.average_amount_bnb }}  <span>BNB</span>
+                            {{ amountInfo.average_amount_bnb }} <span>BNB</span>
                         </div>
                         <div class="sub-info">{{$t("marketplace.average-price")}}</div>
                     </div>
@@ -52,30 +52,34 @@
             <div class="w">
                 <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
                 <div class="top-search">
-                    <!-- <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
+                    <div :class="['filter-btn', {'is-filter': isShowFilter}]" @click="openFilterDrawer">
                         <img src="../../assets/images/filter.png" alt="" v-show="!isShowFilter">
                         <img src="../../assets/images/is_filter.png" alt="" v-show="isShowFilter">
                         {{$t("account.filter")}}
-                    </div> -->
-                    <!-- <div class="search">
-                        <el-input :placeholder="placeholderTxt" v-model="query.keywords" class="input-keywords">
-                            <a href="javascript:;" slot="append" class="search-icon"></a>
+                    </div>
+                    <div class="search">
+                        <el-input :placeholder="$t('marketplace.search-id-or-name')" v-model="query.keywords" clearable
+                            @clear="doSearch" @keyup.enter.native="doSearch" class="input-keywords">
+                            <a href="javascript:;" slot="append" class="search-icon" @click="doSearch"></a>
                         </el-input>
-                        <el-select v-model="query.latest" placeholder="">
+                        <el-select v-model="query.sortField" placeholder="" @change="doSearch">
                             <el-option v-for="item in options" :key="item.value" :label="item.label"
                                 :value="item.value">
                             </el-option>
                         </el-select>
-                    </div> -->
+                        <div class="filter-btn-h5" @click="openFilterDrawer2">
+                            <img src="../../assets/images/filter.png" alt="">
+                        </div>
+                    </div>
                     <div class="filter-wrap" v-show="isShowFilter">
                         <div class="filter-content">
                             <ul class="check-list" v-if="currentTabId === 1">
                                 <li class="check-item">
                                     <div class="label-name">{{$t("account.sale")}}：</div>
-                                    <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                        <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
-                                        <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
-                                    </el-checkbox-group>
+                                    <el-radio-group v-model="checkListSale" @change="doSearch">
+                                        <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
+                                        <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
+                                    </el-radio-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("detail.color")}}：</div>
@@ -94,11 +98,11 @@
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.props")}}：</div>
                                     <el-checkbox-group v-model="checkListProps" @change="doSearch">
-                                        <el-checkbox label="shoes">{{$t("marketplace.shoes")}}</el-checkbox>
-                                        <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
-                                        <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
-                                        <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
-                                        <el-checkbox label="gloves">{{$t("marketplace.gloves")}}</el-checkbox>
+                                        <el-checkbox :label="10">{{$t("marketplace.shoes")}}</el-checkbox>
+                                        <el-checkbox :label="11">{{$t("marketplace.pants")}}</el-checkbox>
+                                        <el-checkbox :label="12">{{$t("marketplace.clothes")}}</el-checkbox>
+                                        <el-checkbox :label="13">{{$t("marketplace.hat")}}</el-checkbox>
+                                        <el-checkbox :label="14">{{$t("marketplace.gloves")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
@@ -118,28 +122,28 @@
                             <ul class="check-list" v-else>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("account.sale")}}：</div>
-                                    <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                        <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
-                                        <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
-                                    </el-checkbox-group>
+                                    <el-radio-group v-model="checkListSale" @change="doSearch">
+                                        <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
+                                        <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
+                                    </el-radio-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.pack")}}：</div>
                                     <el-checkbox-group v-model="checkListPack" @change="doSearch">
-                                        <el-checkbox label="silverPack" class="w-check">
+                                        <el-checkbox :label="2" class="w-check">
                                             {{$t("marketplace.silver-pack")}}</el-checkbox>
-                                        <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}
+                                        <el-checkbox :label="1" class="w-check">{{$t("marketplace.gold-pack")}}
                                         </el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.frag")}}：</div>
                                     <el-checkbox-group v-model="checkListFrag" @change="doSearch">
-                                        <el-checkbox label="panameraFragments" class="w-check">
+                                        <el-checkbox :label="24" class="w-check">
                                             {{$t("marketplace.panamera-fragments")}}</el-checkbox>
-                                        <el-checkbox label="carFragments" class="w-check">
+                                        <el-checkbox :label="23" class="w-check">
                                             {{$t("marketplace.car-fragments")}}</el-checkbox>
-                                        <el-checkbox label="phoneFragments" class="w-check">
+                                        <el-checkbox :label="22" class="w-check">
                                             {{$t("marketplace.phone-fragments")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
@@ -159,16 +163,17 @@
                         <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail">
                             <div class="price">
                                 Price
-                            </div>
-                            <div class="money_w">
-                                <div class="money">
-                                    {{ item.amount }}
+                                <div class="money_w">
+                                    <div class="money">
+                                        {{ item.amount }}
+                                    </div>
+                                    <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                                 </div>
-                                <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                             </div>
+
                             <div class="btns-wrap" v-if="item.status === 8 && isCanBuy">
                                 <template>
-                                    <div class="btn btn-sale" @click="doBuy(item)">{{$t("marketplace.buy")}}</div>
+                                    <div class="btn btn-sale" @click="doBuy(item)">{{$t("detail.buy")}}</div>
                                 </template>
                             </div>
                         </item-card>
@@ -293,19 +298,19 @@
             <div class="filter-content">
                 <div class="top-btn">
                     <img src="../../assets/images/close.png" alt="" @click="handleClose">
-                    <div @click="handleClose(1)">Done</div>
+                    <div @click="handleClose(1)" class="done-search">Done</div>
                 </div>
                 <ul class="check-list">
                     <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
-                            <div class="label-name">{{$t("account.sale")}}：</div>
-                            <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
-                                <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
-                            </el-checkbox-group>
+                            <div class="label-name">{{$t("account.sale")}}</div>
+                            <el-radio-group v-model="checkListSale" @change="doSearch">
+                                <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
+                                <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
+                            </el-radio-group>
                         </li>
                         <li class="check-item">
-                            <div class="label-name">{{$t("detail.color")}}：</div>
+                            <div class="label-name">{{$t("detail.color")}}</div>
                             <el-checkbox-group v-model="checkListColor" @change="doSearch">
                                 <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
                                 <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
@@ -316,17 +321,17 @@
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
-                            <div class="label-name">{{$t("marketplace.props")}}：</div>
+                            <div class="label-name">{{$t("marketplace.props")}}</div>
                             <el-checkbox-group v-model="checkListProps" @change="doSearch">
-                                <el-checkbox label="shoes">{{$t("marketplace.shoes")}}</el-checkbox>
-                                <el-checkbox label="pants">{{$t("marketplace.pants")}}</el-checkbox>
-                                <el-checkbox label="clothes">{{$t("marketplace.clothes")}}</el-checkbox>
-                                <el-checkbox label="hat">{{$t("marketplace.hat")}}</el-checkbox>
-                                <el-checkbox label="gloves">{{$t("marketplace.gloves")}}</el-checkbox>
+                                <el-checkbox :label="10">{{$t("marketplace.shoes")}}</el-checkbox>
+                                <el-checkbox :label="11">{{$t("marketplace.pants")}}</el-checkbox>
+                                <el-checkbox :label="12">{{$t("marketplace.clothes")}}</el-checkbox>
+                                <el-checkbox :label="13">{{$t("marketplace.hat")}}</el-checkbox>
+                                <el-checkbox :label="14">{{$t("marketplace.gloves")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
-                            <div class="label-name">{{$t("account.level")}}：</div>
+                            <div class="label-name">{{$t("account.level")}}</div>
                             <el-checkbox-group v-model="checkListLvel" @change="doSearch">
                                 <el-checkbox :label="1">Lv-1</el-checkbox>
                                 <el-checkbox :label="2">Lv-2</el-checkbox>
@@ -342,28 +347,28 @@
                     <ul class="check-list" v-else>
                         <li class="check-item">
                             <div class="label-name">{{$t("account.sale")}}：</div>
-                            <el-checkbox-group v-model="checkListSale" @change="doSearch">
-                                <el-checkbox :label="1">{{$t("marketplace.all-sale")}}</el-checkbox>
-                                <el-checkbox :label="2">{{$t("marketplace.my-sale")}}</el-checkbox>
-                            </el-checkbox-group>
+                            <el-radio-group v-model="checkListSale" @change="doSearch">
+                                <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
+                                <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
+                            </el-radio-group>
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.pack")}}：</div>
                             <el-checkbox-group v-model="checkListPack" @change="doSearch">
-                                <el-checkbox label="silverPack" class="w-check">{{$t("marketplace.silver-pack")}}
+                                <el-checkbox :label="2" class="w-check">{{$t("marketplace.silver-pack")}}
                                 </el-checkbox>
-                                <el-checkbox label="goldPack" class="w-check">{{$t("marketplace.gold-pack")}}
+                                <el-checkbox :label="1" class="w-check">{{$t("marketplace.gold-pack")}}
                                 </el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.frag")}}：</div>
                             <el-checkbox-group v-model="checkListFrag" @change="doSearch">
-                                <el-checkbox label="panameraFragments" class="block-item">
+                                <el-checkbox :label="24" class="block-item">
                                     {{$t("marketplace.panamera-fragments")}}</el-checkbox>
-                                <el-checkbox label="carFragments" class="block-item">{{$t("marketplace.car-fragments")}}
+                                <el-checkbox :label="23" class="block-item">{{$t("marketplace.car-fragments")}}
                                 </el-checkbox>
-                                <el-checkbox label="phoneFragments" class="block-item">
+                                <el-checkbox :label="22" class="block-item">
                                     {{$t("marketplace.phone-fragments")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
@@ -413,20 +418,40 @@
                 isLoading: true,
                 currentTabId: 1,
                 checkListColor: [],
-                checkListSale: [],
+                checkListSale: 1,
                 checkListLvel: [],
                 checkListProps: [],
                 checkListFrag: [],
                 checkListPack: [],
                 query: {
                     keywords: '',
-                    latest: 0,
+                    sortField: 0,
                     tabFilterIndex: 0
                 },
                 options: [{
+                    // 升序
                     value: 0,
-                    key: 'latest',
-                    label: 'latest'
+                    order_by: 'price',
+                    sort: 'asc',
+                    label: this.$t("marketplace.lowest-price")
+                }, {
+                    // 降序
+                    value: 1,
+                    order_by: 'price',
+                    sort: 'desc',
+                    label: this.$t("marketplace.highest-price")
+                }, {
+                    // 升序
+                    value: 2,
+                    order_by: 'on_sale_time',
+                    sort: 'desc',
+                    label: this.$t("marketplace.recently-listed")
+                }, {
+                    // 降序
+                    value: 3,
+                    order_by: 'on_sale_time',
+                    sort: 'asc',
+                    label: this.$t("marketplace.longest-listed")
                 }],
                 isShowFilter: false,
                 isFilterDrawer: false,
@@ -454,9 +479,6 @@
         },
         watch: {},
         created() {
-            this.options.forEach(x => {
-                x.label = this.$t(`account.${x.key}`)
-            });
             this.isLoading = true
             Promise.all([this.getLiist(), this.getTotalInfo(), this.getAmountInfo()])
                 .then(res => {
@@ -464,9 +486,6 @@
                 })
         },
         computed: {
-            placeholderTxt() {
-                return this.$t("account.search-id-name")
-            },
             isCanBuy() {
                 const addr = Cookie.getCookie('__account__'),
                     token = Cookie.getCookie('ad_token')
@@ -528,10 +547,11 @@
                             this.recordList = data.items || []
                             this.total2 = data.total
                         }
-                        this.openIsLoading = false
                         resolve()
                     }).catch(err => {
                         reject(err)
+                    }).finally(() => {
+                        this.openIsLoading = false
                     })
                 })
 
@@ -559,6 +579,16 @@
             },
             getLiist() {
                 return new Promise((resolve, reject) => {
+                    let type_id = [],
+                        optionItem = this.options.find(x => x.value === this.query.sortField)
+                    if (this.currentTabId === 1) {
+                        type_id = this.checkListProps
+                    } else if (this.currentTabId === 2) {
+                        type_id = this.checkListFrag.concat(this.checkListPack)
+                    }
+                    if (this.query.sortField) {
+
+                    }
                     myAjax({
                         url: 'market/goods/list',
                         data: {
@@ -566,7 +596,14 @@
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
                                 type: this.currentTabId,
-                                status: [8]
+                                status: [8],
+                                type_id,
+                                name: this.query.keywords,
+                                color: this.checkListColor,
+                                level: this.checkListLvel,
+                                sort: optionItem.sort,
+                                order_by: optionItem.order_by,
+                                addr: this.checkListSale === 1 ? null : Cookie.getCookie("__account__")
                             }
                         }
                     }).then(res => {
@@ -575,6 +612,8 @@
                             delete x.goods_level
                             return x
                         })
+                        this.tabs[this.currentTabId - 1].num = data.total || 0
+
                         this.total = data.total
                         resolve()
                     }).catch(err => {
@@ -620,6 +659,7 @@
 
             },
             doSearch() {
+                this.page.curPage = 1
                 this.getLiist()
             },
             openFilterDrawer() {
@@ -733,9 +773,7 @@
                 }
             }
 
-            .tab-filter-h5 {
-                display: none;
-            }
+
 
             .bnb-box {
                 display: flex;
@@ -808,11 +846,15 @@
             width: 100%;
 
             .top-search {
-                display: none;
+                display: flex;
                 position: relative;
                 justify-content: space-between;
                 margin: 20px 0;
                 width: 100%;
+
+                .filter-btn-h5 {
+                    display: none;
+                }
 
                 .filter-btn {
                     display: flex;
@@ -825,12 +867,14 @@
                     color: #777E90;
                     border-radius: .066666666666667rem;
                     cursor: pointer;
+                    color: #fff;
 
                     &.filter-right {
                         display: none;
                     }
 
                     &.is-filter {
+                        border: 1px solid #32A3FF;
                         color: #32A3FF;
                     }
 
@@ -892,6 +936,15 @@
                         font-size: .24rem;
                         font-weight: 400;
                         color: #777E90;
+                    }
+
+                    .el-radio-group {
+                        margin-left: .2667rem;
+
+                        .el-radio__label {
+                            color: #fff;
+                            font-size: .2133rem;
+                        }
                     }
 
                     .el-checkbox-group {
@@ -996,7 +1049,6 @@
                     }
 
                     .price {
-                        margin-top: 10px;
                         font-size: .1867rem;
                         font-weight: 500;
                         color: #777E90;
@@ -1196,6 +1248,16 @@
                 font-weight: 400;
                 color: #fff;
                 padding: .1333rem .5333rem;
+
+                .done-search {
+                    width: 2.133333333333333rem;
+                    height: .96rem;
+                    line-height: .96rem;
+                    text-align: center;
+                    background: #29374B;
+                    border-radius: .266666666666667rem;
+                    cursor: pointer;
+                }
             }
 
             .other-list {
@@ -1213,7 +1275,7 @@
 
                 .label-name {
                     margin-bottom: .2667rem;
-                    font-size: .5333rem;
+                    font-size: .533333333333333rem;
                     font-weight: 600;
                     color: #fff;
                 }
@@ -1358,23 +1420,6 @@
                     .tab-filter {
                         display: none;
                     }
-
-                    .tab-filter-h5 {
-                        display: block;
-                        margin-top: .266666666666667rem;
-                        height: .64rem;
-                        line-height: .64rem;
-                        padding: 0 .16rem;
-                        border: 1px solid #29374B;
-                        border-radius: .133333333333333rem;
-
-                        img {
-                            width: .426666666666667rem;
-                            height: .426666666666667rem;
-                            margin-left: .1rem;
-                            vertical-align: middle;
-                        }
-                    }
                 }
 
                 .bnb-box {
@@ -1435,7 +1480,6 @@
                         display: none;
 
                         &.filter-right {
-                            display: none;
                             width: .9067rem;
                             height: .9067rem;
 
@@ -1448,8 +1492,20 @@
                         }
                     }
 
+                    .filter-btn-h5 {
+                        display: inline-block;
+                        flex: 1;
+                        margin-left: .186666666666667rem;
+                        height: .906666666666667rem;
+                        border-radius: .133333333333333rem;
+                        border: 1px solid #29374B;
+                        text-align: center;
+                        cursor: pointer;
+                    }
+
                     .search {
                         display: flex;
+                        width: 100%;
 
                         .input-keywords {
                             width: 4.3733rem;

@@ -265,3 +265,14 @@ body {
     cursor: pointer;
     font-size: 18px;
 }
+.min-back {
+    display: none;
+}
+@media (max-width: 768px) {
+    .back {
+        display: none;
+    }
+    .min-back {
+        display: block;
+    }
+}

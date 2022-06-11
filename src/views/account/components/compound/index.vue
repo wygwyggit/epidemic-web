@@ -70,7 +70,7 @@ type_id: 24  帕拉梅拉碎片
             row: {
                 type: Object,
                 require: true
-            }
+            },
         },
         data() {
             return {

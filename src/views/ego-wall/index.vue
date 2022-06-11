@@ -4,6 +4,9 @@
             <div class="back" @click="goBack">
                 {{ $t("common.back") }}
             </div>
+            <div class="min-back" @click="goBack">
+                <img src="../../assets/images/back2.png" />
+            </div>
             <div class="page-title">
                 EGO WALL
             </div>
@@ -50,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <el-dialog  :visible.sync="dialogVisible" :width="dialogWidth" :close-on-click-modal="false"
+        <el-dialog :visible.sync="dialogVisible" :width="dialogWidth" :close-on-click-modal="false"
             custom-class="level-detail-dialog">
             <div class="content">
                 <div class="img-wrapper">
@@ -74,7 +77,6 @@
                         </div>
                     </li>
                 </ul>
-                 <el-button type="primary" v-if="currentItem.id === 'copper' || currentItem.id === 'silver'" :disabled="currentItem.count <= 0">{{ $t("ego-wall.upgrade") }}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -328,6 +330,7 @@
                     }
                 }
             }
+
             .el-button {
                 width: 100%;
                 height: .8rem;
@@ -335,6 +338,7 @@
                 background: #9E00FF;
                 border: 0;
                 font-size: .293333333333333rem;
+
                 &.is-disabled {
                     background: #777E90;
                 }

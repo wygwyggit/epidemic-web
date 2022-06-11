@@ -45,6 +45,8 @@
     },
     "blind-box": {
         "open-blind-box": "开启NFT盲盒",
+        "history": "历史记录",
+        "blindbox-history": "盲盒历史记录",
         "days": "天",
         "hrs": "时",
         "mins": "分",
@@ -82,6 +84,7 @@
         "purple": "紫色",
         "diamond": "钻石色",
         "sale": "售卖",
+        "copper": "铜",
         "for-sale": "出售中",
         "not-sale": "未出售",
         "level": "等级",

@@ -41,11 +41,6 @@ const myAjax = (options) => {
             }
             res(data)
         }).catch(err => {
-            Message.closeAll();
-            Message({
-                type: 'error',
-                message: '网络不稳定，请您稍后再试~'
-            })
             rej(err)
         })
     })

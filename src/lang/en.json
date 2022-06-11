@@ -44,6 +44,8 @@
         "contract": "Contract"
     },
     "blind-box": {
+        "history": "History",
+        "blindbox-history": "Blindbox history",
         "open-blind-box": "Open Blindbox",
         "days": "DAYS",
         "hrs": "HRS",
@@ -81,6 +83,7 @@
         "blue": "Blue",
         "purple": "Purple",
         "diamond": "Diamond",
+        "copper": "Copper",
         "sale": "Sale",
         "for-sale": "For sale",
         "not-sale": "Not sale",
@@ -135,7 +138,7 @@
         "txn-hash": "Txn Hash",
         "data-utc": "Data UTC",
         "total-value": "Total value",
-        "highest-price": "Highest price",
+        "highest-price": "High price",
         "lowest-price": "Lowest price",
         "average-price": "Average price",
         "fliter": "Fliter",

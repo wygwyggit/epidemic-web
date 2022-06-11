@@ -9,7 +9,7 @@
                 <div class="my-rewards">
                     <ul>
                         <li>
-                            <div class="icon-img">
+                            <div class="icon-img" @click="openCompoundDialog">
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
@@ -284,6 +284,13 @@
             ...mapMutations([
                 'UPDATE_USERINFO'
             ]),
+            openCompoundDialog() {
+                this.currentGoodRow = {
+                    type_id: 3,
+                    num: this.userInfo.copper_count || 0
+                }
+                this.isShowCompound = true
+            },
             // 用户签到
             signIn() {
                 if (this.userInfo.is_sign) {
@@ -294,6 +301,7 @@
                 }).then(res => {
                     if (res.ok) {
                         this.isShowSignInSuccessDialog = true
+                        this.getUserInfo()
                     } 
                 })
                 
@@ -413,6 +421,19 @@
             getLiist() {
                 return new Promise((resolve, reject) => {
                     this.isLoading = true
+                    let checkListFilter = []
+                    if (this.checkListFilter.length) {
+                        checkListFilter = this.checkListFilter
+                        if (checkListFilter.includes(4)) {
+                            checkListFilter = checkListFilter.concat([-1, 9])
+                        }
+                    } else {
+                        if (this.currentTabId == 1) {
+                            checkListFilter = [0, 8, 1, 4, 2, -1, 9]
+                        } else {
+                            checkListFilter = [0, 8, 4]
+                        }
+                    }
                     myAjax({
                         url: 'user/goods/list',
                         isPassFalse: true,
@@ -420,8 +441,7 @@
                             body: {
                                 page: this.page.curPage,
                                 per_page: this.page.pageSize,
-                                status: this.checkListFilter.length ? this.checkListFilter : (this
-                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4]),
+                                status: checkListFilter,
                                 type: this.currentTabId
                             }
                         }
