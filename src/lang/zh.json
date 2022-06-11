@@ -72,6 +72,7 @@
         "received-suc": "领取成功"
     },
     "account": {
+        "days-in-a-row": "天连续签到",
         "sign-in": "签到",
         "signed-in": "已签到",
         "my-account": "我的NFT",

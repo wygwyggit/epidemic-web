@@ -13,7 +13,7 @@
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p>bronze medal</p>
+                                <p>{{ $t("ego-wall.bronze-badge") }}</p>
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
@@ -22,7 +22,7 @@
                                 <img src="../../assets/images/reward.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p>ego wall</p>
+                                <p>{{ $t("ego-wall.ego-wall") }}</p>
                             </div>
                         </router-link>
                         <li class="sign-in">
@@ -33,7 +33,7 @@
                                 </span>
 
                             </div>
-                            <p class="txt">7 days in a row</p>
+                            <p class="txt">{{ userInfo.continuous_sign_days || 0 }} {{ $t("account.days-in-a-rowg")}}</p>
                         </li>
                     </ul>
                 </div>
@@ -50,7 +50,7 @@
                                     <li class="check-item">
                                         <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
                                         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                                            @change="handleCheckAllChange" class="all">All</el-checkbox>
+                                            @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}</el-checkbox>
                                         <el-checkbox-group v-model="checkListFilter"
                                             @change="handleCheckedCitiesChange">
                                             <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
@@ -597,6 +597,7 @@
                 align-items: center;
 
                 .tit {
+                    width: 3.84rem;
                     font-size: .64rem;
                     font-weight: 600;
 

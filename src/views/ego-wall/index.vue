@@ -8,12 +8,12 @@
                 <img src="../../assets/images/back2.png" />
             </div>
             <div class="page-title">
-                EGO WALL
+                {{ $t("ego-wall.ego-wall") }}
             </div>
             <div class="wall-list">
                 <div class="list-item">
                     <div class="wall-key">
-                        <span class="txt">VIP level</span>
+                        <span class="txt">{{ $t("ego-wall.vip-level") }}</span>
                         <span class="line"></span>
                     </div>
                     <div class="wall-content clearfix">
@@ -33,7 +33,7 @@
                 </div>
                 <div class="list-item">
                     <div class="wall-key">
-                        <span class="txt">Flatbread badge</span>
+                        <span class="txt">{{ $t("ego-wall.flatbread-badge") }}</span>
                         <span class="line"></span>
                     </div>
                     <div class="wall-content clearfix">
@@ -103,7 +103,7 @@
                         activeImgUrl: require('./images/level/vip1-active.png'),
                         inActiveImgUrl: require('./images/level/vip1-inactive.png'),
                         label: 'VIP1',
-                        desc: 'badge',
+                        desc: this.$t("ego-wall.badge"),
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x10`,
                         rightInterests: this.$t("ego-wall.VIP1-badge-lights-up")
                     },
@@ -113,7 +113,7 @@
                         activeImgUrl: require('./images/level/vip2-active.png'),
                         inActiveImgUrl: require('./images/level/vip2-inactive.png'),
                         label: 'VIP2',
-                        desc: 'badge',
+                        desc: this.$t("ego-wall.badge"),
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x20`,
                         rightInterests: this.$t("ego-wall.VIP2-badge-lights-up")
                     },
@@ -123,7 +123,7 @@
                         activeImgUrl: require('./images/level/vip3-active.png'),
                         inActiveImgUrl: require('./images/level/vip3-inactive.png'),
                         label: 'VIP3',
-                        desc: 'badge',
+                        desc: this.$t("ego-wall.badge"),
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x30`,
                         rightInterests: this.$t("ego-wall.VIP3-badge-lights-up")
                     },
@@ -133,7 +133,7 @@
                         activeImgUrl: require('./images/level/vip4-active.png'),
                         inActiveImgUrl: require('./images/level/vip4-inactive.png'),
                         label: 'VIP4',
-                        desc: 'Double the probability of rare items in gold gift packs',
+                        desc: this.$t("ego-wall.double-the-probability"),
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x60`,
                         rightInterests: `<p>${this.$t("ego-wall.VIP4-badge-lights-up")}</p>
                                          <p>${this.$t("ego-wall.double-the-probability")}</p>`
@@ -144,7 +144,7 @@
                         activeImgUrl: require('./images/level/vip5-active.png'),
                         inActiveImgUrl: require('./images/level/vip5-inactive.png'),
                         label: 'VIP5',
-                        desc: 'VIP4 + each time you open a gold gift bag to get an additional silver gift bag',
+                        desc: `VIP4 + ${this.$t("ego-wall.each-time-you-open")}`,
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x100`,
                         rightInterests: `<p>${this.$t("ego-wall.VIP5-badge-lights-up")}</p>
                                          <p>VIP4 + ${this.$t("ego-wall.each-time-you-open")}</p>`
@@ -155,7 +155,7 @@
                         activeImgUrl: require('./images/level/vip6-active.png'),
                         inActiveImgUrl: require('./images/level/vip6-inactive.png'),
                         label: 'VIP6',
-                        desc: 'VIP5 + online full service announcement + VIP6 limited NFT skin',
+                        desc: `VIP5 + ${this.$t("ego-wall.online-full-service")}`,
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x150`,
                         rightInterests: `<p>${this.$t("ego-wall.VIP6-badge-lights-up")}</p>
                                          <p>VIP5 + ${this.$t("ego-wall.online-full-service")}</p>`
@@ -166,7 +166,7 @@
                         activeImgUrl: require('./images/level/vip7-active.png'),
                         inActiveImgUrl: require('./images/level/vip7-inactive.png'),
                         label: 'VIP7',
-                        desc: 'VIP6 + a purple NFT',
+                        desc: `VIP6 + ${this.$t("ego-wall.a-purple-NFT")}`,
                         getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x60`,
                         rightInterests: `<p>${this.$t("ego-wall.VIP7-badge-lights-up")}</p>
                                          <p>VIP6 + ${this.$t("ego-wall.a-purple-NFT")}</p>`
@@ -174,10 +174,10 @@
                 ],
                 badgeData: [{
                     id: 'copper',
-                    label: 'Bronze badge',
+                    label: this.$t("ego-wall.bronze-badge"),
                     inActiveImgUrl: require('./images/badge/inactive.png'),
                     activeImgUrl: require('./images/badge/bronze.png'),
-                    desc: 'Dividend trading blind box gain of 2%',
+                    desc: this.$t("ego-wall.dividend-trading-2%"),
                     Illuminated: false,
                     count: 0,
                     getConditionsTxt: `${this.$t("ego-wall.open-the-golden")}`,
@@ -185,10 +185,10 @@
                                      <p>${this.$t("ego-wall.dividend-trading-2%")}</p>`
                 }, {
                     id: 'silver',
-                    label: 'Silver badge',
+                    label: this.$t("ego-wall.silver-badge"),
                     inActiveImgUrl: require('./images/badge/inactive.png'),
                     activeImgUrl: require('./images/badge/silver.png'),
-                    desc: 'Dividend trading blind box gain of 3%',
+                    desc: this.$t("ego-wall.dividend-trading-3%"),
                     Illuminated: false,
                     count: 0,
                     getConditionsTxt: `${this.$t("ego-wall.burn-1-Bronze-Badge")}`,
@@ -196,10 +196,10 @@
                                      <p>${this.$t("ego-wall.dividend-trading-3%")}</p>`
                 }, {
                     id: 'gold',
-                    label: 'Gold badge',
+                    label: this.$t("ego-wall.gold-badge"),
                     inActiveImgUrl: require('./images/badge/inactive.png'),
                     activeImgUrl: require('./images/badge/gold.png'),
-                    desc: 'Dividend trading blind box gain of 4%',
+                    desc: this.$t("ego-wall.dividend-trading-4%"),
                     Illuminated: false,
                     count: 0,
                     getConditionsTxt: `${this.$t("ego-wall.burn-1-Silver-Badge")}`,

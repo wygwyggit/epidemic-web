@@ -72,6 +72,7 @@
         "received-suc": "Received successfully"
     },
     "account": {
+        "days-in-a-row": "days-in-a-row",
         "sign-in": "Sign in",
         "signed-in": "Signed in",
         "my-account": "My account",
