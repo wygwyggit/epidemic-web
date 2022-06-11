@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog custom-class="gift-bag-dialog" :close-on-click-modal="false" :show-close="false"
-            :visible.sync="isShowDialog" width="6.4rem" v-if="isShowDialog" >
+            :visible.sync="isShowDialog" width="6.4rem" v-if="isShowDialog">
             <div class="content">
                 <div class="main-cot">
                     <div class="img-warp">
@@ -15,6 +15,7 @@
                     <div class="tip">
                         <span>{{ $t("account.congratulation")}}</span>
                         <span class="tip-name">{{ giftInfo.name }}</span>
+                        <span>{{ $t("account.please-wait-for-confirmation") }}</span>
                     </div>
                 </div>
 
@@ -48,7 +49,7 @@
         computed: {},
         watch: {},
         created() {
-            this.giftInfo = this.rowList[0]
+            this.giftInfo = this.rowList[0] || {}
             if (this.giftInfo.name.includes('-')) {
                 this.giftInfo.title = this.giftInfo.name.split('-')[3]
             } else {
@@ -75,7 +76,7 @@
     }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
     $prefixCls: "views-account-gift-bag";
 
     .#{$prefixCls} {
@@ -92,6 +93,7 @@
 
         .gift-bag-dialog {
             background: transparent;
+
             .el-dialog__header {
                 display: none;
             }
@@ -136,10 +138,11 @@
                 color: #fff;
 
                 span {
-                    display: block;
-                    margin: .16rem 0;
+                    display: inline-block;
+                    line-height: .4rem;
 
                     &.tip-name {
+                        margin: 0 .05rem;
                         color: #31CA70;
                     }
                 }

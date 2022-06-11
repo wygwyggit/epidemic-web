@@ -101,10 +101,9 @@
         "open": "开礼包",
         "synthetic": "融合",
         "congratulation": "恭喜你获得",
-        "compound-tip1": "消耗10个银礼包可合成1个",
-        "compound-tip2": "请输入你想要合成的金礼包数量",
-        "gold-pack": "金礼包",
-        "sliver-pack": "银礼包",
+        "please-wait-for-confirmation": "请等待确认",
+
+
         "processing": "上架中",
         "sale-price-mini": "至少5000000份",
         "quantity-for-sale": "销售的数量"
@@ -154,7 +153,7 @@
         "search-id-or-name": "以ID或名称查找",
         "high-price": "价格最高",
         "recently-listed": "最近上架",
-        "longest-listed": "价格最低",
+        "longest-listed": "最早上架",
         "your-unit-price-will-be-modified": "您道具的单价将被修改",
         "remind": "注意",
         "cancel-the-sale": "取消出售",
@@ -239,5 +238,25 @@
         "you-will-burn-1-Silver-Flatbread": "您将燃烧1个银大饼徽章+ 4000枚AmazingTeam代币升级成金大饼徽章",
         "congratulations-on-getting-a-Silver-badge": "恭喜你获得一个银大饼徽章",
         "congratulations-on-getting-a-Gold-badge": "恭喜你获得一个金大饼徽章"
+    },
+    "exchange": {
+        "gold-pack": "金礼包",
+        "sliver-pack": "银礼包",
+        "compound-tip1": "消耗10个银礼包可合成1个",
+        "compound-tip2": "请输入你想要合成的金礼包数量",
+        "exchange": "兑换",
+        "you-will-burn-100-Panamera": "您将燃烧100个帕拉梅拉碎片获得一辆帕拉梅拉真车",
+        "you-will-burn-100-Phone": "您将燃烧100个手机碎片获得一部iPhone 13 Pro手机",
+        "you-will-burn-100-Car": "您将燃烧100个汽车碎片获得一辆梅赛德斯奔驰真车",
+        "please-fill-in-the-complete-information": "请填写完整信息，以便工作人员与您取得联系",
+        "name": "姓名",
+        "phone-number": "电话号码",
+        "telegram": "电报",
+        "e-mail": "电子邮件",
+        "delivery-address": "邮寄地址",
+        "confirm-exchange": "确认兑换",
+        "congratulations-on-getting-a-Panamera": "恭喜您获得帕拉梅拉 请等待确认",
+        "congratulations-on-getting-a-iphone": "恭喜您获得iPhone13 Pro 请等待确认",
+        "congratulations-on-getting-a-mercedes": "恭喜您获得梅赛德斯奔驰 请等待确认"
     }
 }

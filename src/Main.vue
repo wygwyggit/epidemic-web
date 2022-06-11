@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <common-header :bgColor="bgColor" ref="commonHeader"></common-header>
-        <router-view class="router-view" v-if="!isLoading"></router-view>
+        <router-view class="router-view"></router-view>
         <common-footer v-if="isShowFooter"></common-footer>
     </div>
 </template>

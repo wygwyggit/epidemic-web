@@ -610,6 +610,9 @@
                         const data = res.data || {}
                         this.list = (data.items || []).map(x => {
                             delete x.goods_level
+                            if (this.currentTabId === 1) {
+                                delete x.num
+                            }
                             return x
                         })
                         this.tabs[this.currentTabId - 1].num = data.total || 0

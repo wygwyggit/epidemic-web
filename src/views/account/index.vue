@@ -79,6 +79,9 @@
                                                 v-if="item.type_id == 2" @click="doSynthetic(item)">
                                                 {{$t("account.synthetic")}}</div>
                                             <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                                v-if="item.type_id == 3" @click="doSynthetic(item)">
+                                                {{$t("account.synthetic")}}</div>
+                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                                 v-if="item.belong_type == -2" @click="doSynthetic(item)">
                                                 {{$t("account.synthetic")}}</div>
                                             <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
@@ -97,7 +100,7 @@
                                         <template v-if="item.status == 1">
                                             <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
                                         </template>
-                                        <template v-if="item.status == -2 || item.status == 4">
+                                        <template v-if="item.status == -2 || item.status == 4 || item.status == 9">
                                             <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
                                         </template>
                                     </div>
@@ -141,7 +144,8 @@
                     <p class="txt">successfully</p>
                 </div>
                 <div class="close">
-                    <img src="../../assets/images/g-close.png" alt="" @click="() => this.isShowSignInSuccessDialog = false">
+                    <img src="../../assets/images/g-close.png" alt=""
+                        @click="() => this.isShowSignInSuccessDialog = false">
                 </div>
             </div>
         </el-dialog>
@@ -302,9 +306,9 @@
                     if (res.ok) {
                         this.isShowSignInSuccessDialog = true
                         this.getUserInfo()
-                    } 
+                    }
                 })
-                
+
             },
             getUserInfo() {
                 return new Promise((resolve, reject) => {
@@ -396,13 +400,25 @@
             },
             getTotalInfo() {
                 return new Promise((resolve, reject) => {
+                    let checkListFilter = []
+                    if (this.checkListFilter.length) {
+                        checkListFilter = this.checkListFilter
+                        if (checkListFilter.includes(4)) {
+                            checkListFilter = checkListFilter.concat([-1, 9])
+                        }
+                    } else {
+                        if (this.currentTabId == 1) {
+                            checkListFilter = [0, 8, 1, 4, 2, -1, 9]
+                        } else {
+                            checkListFilter = [0, 8, 4, 1, -1, 9]
+                        }
+                    }
                     myAjax({
                         url: 'user/goods/count',
                         isPassFalse: true,
                         data: {
                             body: {
-                                status: this.checkListFilter.length ? this.checkListFilter : (this
-                                    .currentTabId == 1 ? [0, 8, 1, 4, 2] : [0, 8, 4, 1]),
+                                status: checkListFilter,
                             }
 
                         }
@@ -541,6 +557,7 @@
                 height: 4.333333333333333rem;
                 background: url('../../assets/images/sign-success.png');
                 background-size: cover;
+
                 .txt {
                     position: absolute;
                     bottom: .346666666666667rem;

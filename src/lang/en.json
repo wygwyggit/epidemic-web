@@ -101,10 +101,8 @@
         "open": "open",
         "synthetic": "synthetic",
         "congratulation": "Congratulations on getting a",
-        "compound-tip1": "You will Burn 10 bronze medal to get a",
-        "compound-tip2": "Enter the number of Gold packs",
-        "gold-pack": "Gold Pack",
-        "sliver-pack": "Silver Pack",
+        "please-wait-for-confirmation": "please wait for confirmation",
+
         "processing": "Processing",
         "sale-price-mini": "Minimum 5000000 Adoge",
         "quantity-for-sale": "Quantity for sale"
@@ -170,16 +168,16 @@
         "your-NFT-price-will-be-modified": "Your NFT price will be modified",
         "pack": "Pack",
         "frag": "Frag",
-        "panamera-fragments": "Panamera Fragments",
-        "car-fragments": "Car Fragments",
-        "phone-fragments": "Phone Fragments",
+        "panamera-fragments": "Shards of Panamera",
+        "car-fragments": "Shards of Car",
+        "phone-fragments": "Shards of Phone",
         "energy": "Energy",
-        "when-you-collect-100-panamera-fragments": "When you collect 100 Panamera fragments, you can burn to get a real Panamera",
-        "when-you-collect-100-phone-fragments": "When you collect 100 phone fragments, you can burn to get a real phone",
-        "when-you-collect-100-car-fragments": "When you collect 100 car fragments, you can burn to get a real car",
+        "when-you-collect-100-panamera-fragments": "When you collect 100 Panamera Shards, you can burn to get a real Panamera",
+        "when-you-collect-100-phone-fragments": "When you collect 100 phone Shards, you can burn to get a real phone",
+        "when-you-collect-100-car-fragments": "When you collect 100 car Shards, you can burn to get a real car",
         "adgoes-sports-equipment-can-improve-certain-abilities": "ADOGE sports equipment can improve certain abilities",
-        "chance-to-wim-silver-pack": "Chance to wim: Silver Pack, AmazingTeam Tokens, Orange NFT, Red NFT, Co-branded NFT, Limited NFT for this issue, Clothes, Hat, Gloves, Flatbread Badge NFT, Car fragments, Panamera fragments.",
-        "chance-to-wim-bronze-medal": "Chance to wim: Bronze Medal, AmazingTeam Tokens, Yellow NFTs, Orange NFTs, Limited NFTs, Shoes, Pants, Clothes, Hats, Gloves, Gold Bags, Car fragments, Phone fragments."
+        "chance-to-wim-silver-pack": "Chance to wim: Silver Pack, AmazingTeam Tokens, Orange NFT, Red NFT, Co-branded NFT, Limited NFT for this issue, Clothes, Hat, Gloves, Flatbread Badge NFT, Car Shards, Panamera Shards.",
+        "chance-to-wim-bronze-medal": "Chance to wim: Bronze Medal, AmazingTeam Tokens, Yellow NFTs, Orange NFTs, Limited NFTs, Shoes, Pants, Clothes, Hats, Gloves, Gold Bags, Car Shards, Phone Shards."
     },
     "net-mining": {
         "available": "Available",
@@ -239,5 +237,25 @@
         "you-will-burn-1-Silver-Flatbread": "You will burn 1 Silver Flatbread Badge + 4000 AmazingTeam Tokens to get a Gold Flatbread Badge",
         "congratulations-on-getting-a-Silver-badge": "Congratulations on getting a Silver badge",
         "congratulations-on-getting-a-Gold-badge": "Congratulations on getting a Gold badge"
+    },
+    "exchange": {
+        "gold-pack": "Gold Pack",
+        "sliver-pack": "Silver Pack",
+        "compound-tip1": "You will Burn 10 bronze medal to get a",
+        "compound-tip2": "Enter the number of Gold packs",
+        "exchange": "Exchange",
+        "you-will-burn-100-Panamera": "You will burn 100 Panamera shards to get a real Panamera",
+        "you-will-burn-100-Phone": "You will burn 100 Phone shards to get a real iPhone 13 Pro",
+        "you-will-burn-100-Car": "You will burn 100 Car shards to get a real mercedes-bens",
+        "please-fill-in-the-complete-information": "Please fill in the complete information so that the staff can get in touch with you",
+        "name": "Name",
+        "phone-number": "Phone number",
+        "telegram": "Telegram",
+        "e-mail": "E-mail",
+        "delivery-address": "Delivery address",
+        "confirm-exchange": "Confirm exchange",
+        "congratulations-on-getting-a-Panamera": "Congratulations on getting a Panamera please wait for confirmation",
+        "congratulations-on-getting-a-iphone": "Congratulations on getting a iPhone 13 Pro please wait for confirmation",
+        "congratulations-on-getting-a-mercedes": "Congratulations on getting a mercedes-bens please wait for confirmation"
     }
 }

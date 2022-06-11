@@ -1,9 +1,9 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog  custom-class="compound-dialog" :close-on-click-modal="false" :show-close="false" :visible.sync="isShowDialog"
-            width="7rem" v-if="isShowDialog">
+        <el-dialog custom-class="compound-dialog" :close-on-click-modal="false" :show-close="false" top="11vh"
+            :visible.sync="isShowDialog" :width="dialogWidth" v-if="isShowDialog">
             <div class="content">
-                <div class="main-cot">
+                <div class="main-cot" v-if="!isShowFormWrapper">
                     <div class="compound-thing">
                         <img src="./images/silver-gift/main.png" alt="" v-if="row.type_id == 2">
                         <img src="./images/bronze/main.png" alt="" v-if="row.type_id == 3">
@@ -15,7 +15,7 @@
                         <img src="./images/arrow.png" alt="">
                     </div>
                     <div class="debris-thing">
-                         <img src="./images/silver-gift/small.png" alt="" v-if="row.type_id == 2">
+                        <img src="./images/silver-gift/small.png" alt="" v-if="row.type_id == 2">
                         <img src="./images/bronze/small.png" alt="" v-if="row.type_id == 3">
                         <img src="./images/phone-fragments/small.png" alt="" v-if="row.type_id == 22">
                         <img src="./images/car-fragments/small.png" alt="" v-if="row.type_id == 23">
@@ -28,18 +28,59 @@
                     </div>
                     <div class="tip-count">
                         <template>
-                            <div>{{ $t("account.compound-tip1")}}</div>
-                            <div>
-                                <span>{{ $t("account.compound-tip2")}}</span>
-                                <el-input-number v-model="num" size="mini" @change="handleChange" @keydown.native="e => e.returnValue = ''" :min="0" :max="maxContent"
-                                    >
-                                </el-input-number>
-                            </div>
+                            <div v-if="row.type_id == 22">{{ $t("exchange.you-will-burn-100-Phone")}}</div>
+                            <div v-if="row.type_id == 23">{{ $t("exchange.you-will-burn-100-Car")}}</div>
+                            <div v-if="row.type_id == 24">{{ $t("exchange.you-will-burn-100-Panamera")}}</div>
+                            <template v-if="row.type_id == 2 || row.type_id == 3">
+                                <div>
+                                    {{ $t("exchange.compound-tip1")}}
+                                    <span v-if="row.type_id == 3" class="type-name">{{ $t("exchange.sliver-pack") }}</span>
+                                    <span v-if="row.type_id == 2" class="type-name">{{ $t("exchange.gold-pack") }}</span>
+                                </div>
+                                <div>
+                                    <span>{{ $t("exchange.compound-tip2")}}</span>
+                                    <el-input-number v-model="num" size="mini" @change="handleChange"
+                                        @keydown.native="e => e.returnValue = ''" :min="0" :max="maxContent">
+                                    </el-input-number>
+                                </div>
+
+                            </template>
                         </template>
                     </div>
-                    <div class="syn" @click="doCompound">
-                        {{ $t("account.synthetic")}}
+                    <el-button type="primary" class="syn" @click="doCompound" :disabled="maxContent <= 0"
+                        v-if="row.belong_type !== -2">
+                        {{ $t("account.synthetic")}}</el-button>
+                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>Next
+                    </el-button>
+
+                </div>
+                <div class="form-cot" v-else>
+                    <div class="tip">
+                        Please fill in the complete information so that the staff can get in touch with you
                     </div>
+                    <el-form ref="ruleForm" :rules="rules" :model="form" label-position="top" label-width="80px">
+                        <el-form-item label="Name" prop="name">
+                            <el-input v-model="form.name"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Phone number" prop="phone">
+                            <el-input v-model="form.phone"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Telegram" prop="telegram">
+                            <el-input v-model="form.telegram"></el-input>
+                        </el-form-item>
+                        <el-form-item label="E-mail" prop="email">
+                            <el-input v-model="form.email"></el-input>
+                        </el-form-item>
+                        <el-form-item label="Delivery addres" prop="delivery_addr">
+                            <el-input type="textarea" v-model="form.delivery_addr"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="btn-wrapper">
+                                <el-button type="primary" class="syn" @click="submitForm">Confirm exchange</el-button>
+                            </div>
+
+                        </el-form-item>
+                    </el-form>
                 </div>
 
             </div>
@@ -76,8 +117,45 @@ type_id: 24  帕拉梅拉碎片
             return {
                 prefixCls: 'views-account-compound',
                 isShowDialog: true,
+                isShowFormWrapper: false,
+                submitLoading: false,
                 needNum: 100,
+                dialogWidth: '480px',
                 num: '',
+                form: {
+                    name: '',
+                    phone: '',
+                    telegram: '',
+                    email: '',
+                    delivery_addr: ''
+                },
+                rules: {
+                    name: [{
+                        required: true,
+                        message: '请输入',
+                        trigger: 'blur'
+                    }, ],
+                    phone: [{
+                        required: true,
+                        message: '请输入',
+                        trigger: 'blur'
+                    }, ],
+                    telegram: [{
+                        required: true,
+                        message: '请输入',
+                        trigger: 'blur'
+                    }, ],
+                    email: [{
+                        required: true,
+                        message: '请输入',
+                        trigger: 'blur'
+                    }, ],
+                    delivery_addr: [{
+                        required: true,
+                        message: '请输入',
+                        trigger: 'blur'
+                    }, ]
+                }
             }
         },
         computed: {
@@ -87,15 +165,45 @@ type_id: 24  帕拉梅拉碎片
         },
         watch: {},
         created() {
-            if (this.row.type_id == 2 || this.row.type_id == 3 ) {
+            if (this.row.type_id == 2 || this.row.type_id == 3) {
                 this.needNum = 10
+            }
+            let width = window.innerWidth;
+            if (width < 768) {
+                this.dialogWidth = "8.9rem";
             }
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doNext() {
+                this.isShowFormWrapper = true
+            },
             handleChange() {
 
+            },
+            submitForm() {
+                this.$refs['ruleForm'].validate((valid) => {
+                    if (valid) {
+                        this.submitLoading = true
+                        myAjax({
+                            url: 'exchange/submit',
+                            data: {
+                                body: {
+                                    type_id: this.row.type_id,
+                                    ...this.form,
+                                }
+                            }
+                        }).then(res => {
+                            if (res.ok) {
+                                this.$showOk(this.$t("common.ope-suc"))
+                                this.isShowDialog = this.submitLoading = false
+                                const data = [res.data]
+                                this.$emit('compoundSuc', data)
+                            }
+                        })
+                    }
+                });
             },
             doCompound() {
                 if (!this.num) return
@@ -128,14 +236,17 @@ type_id: 24  帕拉梅拉碎片
     .#{$prefixCls} {
         .compound-dialog {
             background: transparent;
+
             .el-dialog__header {
+                display: none;
                 padding: 0;
             }
+
             .el-dialog__body {
                 padding: 0;
-                text-align: center;
             }
         }
+
         .el-input-number {
             width: 1.6rem;
             line-height: .4rem;
@@ -160,9 +271,30 @@ type_id: 24  帕拉梅拉碎片
         }
 
         .content {
-            width: 7rem;
+            width: 100%;
+
+            .syn {
+                width: 5.866666666666666rem;
+                height: .8rem;
+                line-height: .8rem;
+                padding: 0;
+                margin: .3rem auto;
+                background: #9E00FF;
+                color: #fff;
+                font-size: .293333333333333rem;
+                text-align: center;
+                border-radius: .133333333333333rem;
+                cursor: pointer;
+                border: 0;
+
+                &.is-disabled {
+                    background: #777E90;
+                    cursor: not-allowed;
+                }
+            }
 
             .main-cot {
+                padding-bottom: .2rem;
                 background: #131922;
                 text-align: center;
                 border-radius: .133333333333333rem;
@@ -224,8 +356,10 @@ type_id: 24  帕拉梅拉碎片
                 }
 
                 .tip-count {
+                    padding: 0 .5rem;
                     margin-top: .5rem;
                     color: #777E90;
+                    word-break: break-word;
                     font-size: .213333333333333rem;
 
                     >div {
@@ -233,30 +367,56 @@ type_id: 24  帕拉梅拉碎片
                         align-items: center;
                         justify-content: center;
                         margin-bottom: .173333333333333rem;
+                        .type-name {
+                            margin-left: .08rem;
+                        }
                     }
-                }
-
-                .syn {
-                    width: 5.866666666666666rem;
-                    height: .8rem;
-                    margin: .3rem auto;
-                    line-height: .8rem;
-                    background: #9E00FF;
-                    color: #fff;
-                    font-size: .293333333333333rem;
-                    text-align: center;
-                    border-radius: .133333333333333rem;
-                    cursor: pointer;
                 }
             }
 
+            .form-cot {
+                padding: .16rem .266666666666667rem .453333333333333rem .266666666666667rem;
+                background: #131922;
 
+                .tip {
+                    background: #151D27;
+                    padding: .266666666666667rem .2rem;
+                    font-size: .24rem;
+                    color: #fff;
+                    word-break: break-word;
+                    border-radius: .133333333333333rem;
+                }
+
+                .btn-wrapper {
+                    text-align: center;
+
+                    .syn {
+                        margin-bottom: 0;
+                        width: 100%;
+                    }
+                }
+            }
+
+            .el-form {
+                .el-form-item__label {
+                    padding-bottom: 0;
+                    color: #777E90;
+                    font-size: .2rem;
+                }
+
+                .el-input__inner,
+                .el-textarea__inner {
+                    background: transparent;
+                    border-color: #29374B;
+                }
+
+            }
 
         }
 
         .close {
             margin-top: .533333333333333rem;
-
+            text-align: center;
 
             img {
                 width: .666666666666667rem;
@@ -264,6 +424,15 @@ type_id: 24  帕拉梅拉碎片
                 cursor: pointer;
             }
 
+        }
+    }
+
+    @media (max-width: 768px) {
+        .#{$prefixCls} {
+            .syn {
+                font-size: .586666666666667rem !important;
+                height: 1.333333333333333rem !important;
+            }
         }
     }
 </style>

@@ -21,7 +21,7 @@
             <div class="img-content" >
                 <img :src="netImgBaseUrl + itemInfo.image">
             </div>
-            <template v-if="itemInfo.type_id < 0">
+            <template v-if="itemInfo.num">
                 <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
             </template>
             <template v-else>
