@@ -40,7 +40,7 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <button class="btn" @click="doSubmit">{{$t("marketplace.confirmed") }} </button>
+                    <button class="btn" @click="doSubmit">{{$t("common.confirmed") }} </button>
                 </div>
             </div>
         </el-dialog>
@@ -87,10 +87,10 @@
             getContractAddress() {
                 return new Promise((resolve, reject) => {
                     myAjax({
-                        url: 'chain/approve_addr',
+                        url: 'chain/token_approve_addr',
                         method: 'GET'
                     }).then(res => {
-                        this.approve_addr = res.data.approve_addr
+                        this.approve_addr = res.data.token_approve_addr
                         resolve()
                     }).catch(err => {
                         reject(err)

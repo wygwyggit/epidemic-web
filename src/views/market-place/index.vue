@@ -508,12 +508,12 @@
                 this.buyReviseDialog = true
             },
             goDetail(id) {
-                this.$router.push({
-                    path: '/details',
-                    query: {
-                        id
-                    }
-                })
+            //     this.$router.push({
+            //         path: '/details',
+            //         query: {
+            //             id
+            //         }
+            //     })
             },
             getAmountInfo() {
                 return new Promise((resolve, reject) => {

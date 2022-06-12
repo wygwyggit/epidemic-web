@@ -126,6 +126,7 @@
         "sale": "出售"
     },
     "marketplace": {
+        "title": "购买",
         "nfts": "NFT",
         "other": "其他",
         "all": "所有",

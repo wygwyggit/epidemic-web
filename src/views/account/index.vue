@@ -539,13 +539,13 @@
                 this.doSearch()
             },
             goCardDetail(row) {
-                console.log(row)
-                this.$router.push({
-                    path: '/details',
-                    query: {
-                        id: row.goods_id
-                    }
-                })
+                // console.log(row)
+                // this.$router.push({
+                //     path: '/details',
+                //     query: {
+                //         id: row.goods_id
+                //     }
+                // })
             },
             doSearch() {
                 this.page.curPage = 1

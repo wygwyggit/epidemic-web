@@ -17,7 +17,7 @@
                     <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
                 </div>
             </template>
-            <div class="img-mid-content can-detail" @click="goCardDetail">
+            <div class="img-mid-content can-detail" >
                 <div class="img-content">
                     <img :src="netImgBaseUrl + itemInfo.image">
                 </div>
@@ -106,7 +106,7 @@
         beforeDestroy() {},
         methods: {
             goCardDetail() {
-                this.$emit('goDetail', this.itemInfo)
+                //this.$emit('goDetail', this.itemInfo)
             },
             selectCard(row) {
                 this.$emit('select', row)
