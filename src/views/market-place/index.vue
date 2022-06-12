@@ -59,7 +59,7 @@
                     </div>
                     <div class="search">
                         <el-input :placeholder="$t('marketplace.search-id-or-name')" v-model="query.keywords" clearable
-                            @clear="doSearch" @keyup.enter.native="doSearch" class="input-keywords">
+                            @clear="doSearch" @keyup.enter.native="doSearch" class="input-keywords" v-show="currentTabId === 1">
                             <a href="javascript:;" slot="append" class="search-icon" @click="doSearch"></a>
                         </el-input>
                         <el-select v-model="query.sortField" placeholder="" @change="doSearch">
