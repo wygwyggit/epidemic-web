@@ -202,7 +202,7 @@
                     curPage: 1
                 },
                 total: 0,
-                isShowGiftBag: true,
+                isShowGiftBag: false,
                 isShowCompound: false,
                 isShowOpenGift: false,
                 isShowSignInSuccessDialog: false,
