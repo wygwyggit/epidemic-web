@@ -1,16 +1,23 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog custom-class="compound-dialog" :close-on-click-modal="false" :show-close="false" top="11vh"
-            :visible.sync="isShowDialog" :width="dialogWidth" v-if="isShowDialog">
-            <div class="content">
+        <el-dialog custom-class="compound-dialog" :close-on-click-modal="false" top="11vh" :visible.sync="isShowDialog"
+            :width="dialogWidth" v-if="isShowDialog" @close="doClose">
+            <div slot="title" v-if="!isShowFormWrapper">
+                <div class="compound-thing">
+                    <img src="./images/silver-gift/main.png" alt="" v-if="row.type_id == 2">
+                    <img src="./images/bronze/main.png" alt="" v-if="row.type_id == 3">
+                    <img src="./images/phone-fragments/main.png" alt="" v-if="row.type_id == 22">
+                    <img src="./images/car-fragments/main.png" alt="" v-if="row.type_id == 23">
+                    <img src="./images/parramera-fragment/main.png" alt="" v-if="row.type_id == 24">
+                </div>
+            </div>
+            <div slot="title" v-else>
+                <div class="compound-back" @click="() => this.isShowFormWrapper = false">
+                     <img src="../../../../assets/images/back2.png" />
+                </div>
+            </div>
+            <div class="compound-content">
                 <div class="main-cot" v-if="!isShowFormWrapper">
-                    <div class="compound-thing">
-                        <img src="./images/silver-gift/main.png" alt="" v-if="row.type_id == 2">
-                        <img src="./images/bronze/main.png" alt="" v-if="row.type_id == 3">
-                        <img src="./images/phone-fragments/main.png" alt="" v-if="row.type_id == 22">
-                        <img src="./images/car-fragments/main.png" alt="" v-if="row.type_id == 23">
-                        <img src="./images/parramera-fragment/main.png" alt="" v-if="row.type_id == 24">
-                    </div>
                     <div class="arrow-icon">
                         <img src="./images/arrow.png" alt="">
                     </div>
@@ -34,8 +41,10 @@
                             <template v-if="row.type_id == 2 || row.type_id == 3">
                                 <div>
                                     {{ $t("exchange.compound-tip1")}}
-                                    <span v-if="row.type_id == 3" class="type-name">{{ $t("exchange.sliver-pack") }}</span>
-                                    <span v-if="row.type_id == 2" class="type-name">{{ $t("exchange.gold-pack") }}</span>
+                                    <span v-if="row.type_id == 3"
+                                        class="type-name">{{ $t("exchange.sliver-pack") }}</span>
+                                    <span v-if="row.type_id == 2"
+                                        class="type-name">{{ $t("exchange.gold-pack") }}</span>
                                 </div>
                                 <div>
                                     <span>{{ $t("exchange.compound-tip2")}}</span>
@@ -50,7 +59,8 @@
                     <el-button type="primary" class="syn" @click="doCompound" :disabled="maxContent <= 0"
                         v-if="row.belong_type !== -2">
                         {{ $t("account.synthetic") }}</el-button>
-                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>{{ $t("exchange.next") }}
+                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>
+                        {{ $t("exchange.next") }}
                     </el-button>
 
                 </div>
@@ -76,7 +86,8 @@
                         </el-form-item>
                         <el-form-item>
                             <div class="btn-wrapper">
-                                <el-button type="primary" class="syn" @click="submitForm"> {{ $t("exchange.confirm-exchange") }}</el-button>
+                                <el-button type="primary" class="syn" @click="submitForm">
+                                    {{ $t("exchange.confirm-exchange") }}</el-button>
                             </div>
 
                         </el-form-item>
@@ -84,9 +95,9 @@
                 </div>
 
             </div>
-            <div class="close">
+            <!-- <div class="close">
                 <img src="../../../../assets/images/g-close.png" alt="" @click="doClose">
-            </div>
+            </div> -->
         </el-dialog>
 
     </div>
@@ -238,8 +249,8 @@ type_id: 24  帕拉梅拉碎片
             background: transparent;
 
             .el-dialog__header {
-                display: none;
                 padding: 0;
+                background: #131922;
             }
 
             .el-dialog__body {
@@ -270,7 +281,23 @@ type_id: 24  帕拉梅拉碎片
             }
         }
 
-        .content {
+        .compound-thing {
+            img {
+                display: block;
+                width: 100%;
+                height: 4rem;
+            }
+        }
+        .compound-back {
+            padding-top: .2rem;
+            padding-left: .26rem;
+            cursor: pointer;
+            img {
+                width: 38px;
+            }
+        }
+
+        .compound-content {
             width: 100%;
 
             .syn {
@@ -300,13 +327,7 @@ type_id: 24  帕拉梅拉碎片
                 border-radius: .133333333333333rem;
                 overflow: hidden;
 
-                .compound-thing {
-                    img {
-                        display: block;
-                        width: 100%;
-                        height: 4rem;
-                    }
-                }
+
 
                 .arrow-icon {
                     margin: .266666666666667rem 0;
@@ -367,6 +388,7 @@ type_id: 24  帕拉梅拉碎片
                         align-items: center;
                         justify-content: center;
                         margin-bottom: .173333333333333rem;
+
                         .type-name {
                             margin-left: .08rem;
                         }

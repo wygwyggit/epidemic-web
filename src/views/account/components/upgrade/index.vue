@@ -9,7 +9,7 @@
                 </div>
             </div>
             <div v-loading="isLoading">
-                <div class="content">
+                <div class="upgrade-content">
                     <div class="arrow-icon">
                         <img src="../compound/images/arrow.png" alt="">
                     </div>
@@ -187,7 +187,7 @@
             }
         }
 
-        .content {
+        .upgrade-content {
             padding-bottom: .4rem;
             text-align: center;
 

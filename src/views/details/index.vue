@@ -207,6 +207,7 @@
 </template>
 
 <script>
+import myAjax from '@/utils/ajax.js'
     export default {
         data() {
             return {
@@ -241,7 +242,26 @@
                 ],
             };
         },
+        mounted() {
+            Promise.all([this.getDetailInfo()]).then(() => {
+
+            })
+        },
         methods: {
+            getDetailInfo() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/goods/query',
+                        data: {
+                            body: {
+                                goodsId: this.$route.query.id
+                            }
+                        }
+                    }).then(res => {
+                        
+                    })
+                })
+            },
             goBack() {
                 this.$router.back(-1);
             },
@@ -262,7 +282,7 @@
                 padding-left: 10px;
                 line-height: 50px;
                 color: $--color-success;
-                margin: 50px 0;
+                margin: 0 0 .666666666666667rem 0;
                 border-radius: 90px;
                 border: 2px solid #004d8c;
                 background: url("../../assets/images/back.png");
@@ -286,7 +306,7 @@
                 .top {
                     display: flex;
                     align-items: center;
-                    padding: 8px 10px;
+                    padding: .16rem;
                     font-size: 14px;
                     font-family: Poppins-Medium, Poppins;
                     font-weight: 500;
@@ -305,13 +325,13 @@
             .blind-box {
                 display: flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: space-between;
 
                 .left {
-                    width: 560px;
-                    height: 560px;
-                    padding: 12px;
-                    border-radius: 10px;
+                    width: 7.333333333333333rem;
+                    height: 7.333333333333333rem;
+                    padding: .266666666666667rem;
+                    border-radius: .4rem;
                     box-sizing: border-box;
                     border: 1px solid #004d8c;
 
@@ -323,43 +343,36 @@
                 }
 
                 .right {
-                    margin-left: 42px;
+                    flex: 1;
+                    margin-left: 1.2rem;
                     text-align: left;
 
+
                     .anchor {
-                        font-size: 24px;
-                        font-family: Poppins-Medium, Poppins;
-                        font-weight: 500;
+                        font-size: .32rem;
                         color: #fff;
-                        line-height: 16px;
                     }
 
                     .title {
-                        font-size: 36px;
-                        font-family: Poppins-Bold, Poppins;
+                        font-size: .48rem;
                         font-weight: bold;
                         color: $--color-success;
                         line-height: 48px;
                     }
 
                     .tip {
-                        font-size: 14px;
-                        font-family: Poppins-Medium, Poppins;
-                        font-weight: 500;
+                        font-size: .186666666666667rem;
                         color: #777e90;
-                        line-height: 16px;
                     }
 
                     .attribute-wrap {
-                        width: 480px;
-                        height: 96px;
-                        margin-top: 30px;
-                        border-radius: 5px;
+                        margin-top: .4rem;
+                        border-radius: .133333333333333rem;
 
                         .attr-name {
                             display: flex;
                             align-items: center;
-                            padding: 20px;
+                            padding: .266666666666667rem .16rem;
 
                             .item {
                                 display: flex;

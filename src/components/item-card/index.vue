@@ -17,21 +17,21 @@
                     <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
                 </div>
             </template>
-
-            <div class="img-content" >
-                <img :src="netImgBaseUrl + itemInfo.image">
-            </div>
-            <template v-if="itemInfo.num">
-                <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
-            </template>
-            <template v-else>
-                <div class="mid-content"
-                    :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
-                    <span class="name">{{itemInfo.name}}</span>
-                    <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
+            <div class="img-mid-content can-detail" @click="goCardDetail">
+                <div class="img-content">
+                    <img :src="netImgBaseUrl + itemInfo.image">
                 </div>
-            </template>
-
+                <template v-if="itemInfo.num">
+                    <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
+                </template>
+                <template v-else>
+                    <div class="mid-content"
+                        :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
+                        <span class="name">{{itemInfo.name}}</span>
+                        <span class="level" v-if="itemInfo.goods_level">Lv{{itemInfo.goods_level}}</span>
+                    </div>
+                </template>
+            </div>
             <div class="opt-buttom">
                 <slot></slot>
             </div>
@@ -105,6 +105,9 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            goCardDetail() {
+                this.$emit('goDetail', this.itemInfo)
+            },
             selectCard(row) {
                 this.$emit('select', row)
             },
@@ -173,19 +176,25 @@
                 font-size: .213333333333333rem;
             }
 
-            .img-content {
-                margin: .133333333333333rem 0;
-                width: 100%;
-                border-radius: 10px;
-                overflow: hidden;
-                cursor: pointer;
+            .img-mid-content {
+                &.can-detail {
+                    cursor: pointer;
+                }
 
-                img {
+                .img-content {
+                    margin: .133333333333333rem 0;
                     width: 100%;
-                    height: 100%;
-                    display: block;
+                    border-radius: 10px;
+                    overflow: hidden;
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        display: block;
+                    }
                 }
             }
+
 
             .card-num {
                 text-align: center;

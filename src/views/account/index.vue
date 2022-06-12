@@ -70,7 +70,7 @@
                                 v-if="!netList.length && !isLoading">
                             </el-empty>
                             <template v-if="netList.length && !isLoading">
-                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item">
+                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @goDetail="goCardDetail">
                                     <div class="btns-wrap">
                                         <template v-if="item.status == 0">
                                             <div class="btn btn-open" :class="{'disable': !item.can_open}"
@@ -538,14 +538,15 @@
                 this[val] = []
                 this.doSearch()
             },
-            // goDetail(id) {
-            //     this.$router.push({
-            //         path: '/details',
-            //         query: {
-            //             id
-            //         }
-            //     })
-            // },
+            goCardDetail(row) {
+                console.log(row)
+                this.$router.push({
+                    path: '/details',
+                    query: {
+                        id: row.goods_id
+                    }
+                })
+            },
             doSearch() {
                 this.page.curPage = 1
                 this.getLiist()
