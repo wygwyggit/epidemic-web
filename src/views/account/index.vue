@@ -422,13 +422,13 @@
                     if (this.checkListFilter.length) {
                         checkListFilter = this.checkListFilter
                         if (checkListFilter.includes(4)) {
-                            checkListFilter = checkListFilter.concat([-1, 9])
+                            checkListFilter = checkListFilter.concat([-1, 9, 11])
                         }
                     } else {
                         if (this.currentTabId == 1) {
-                            checkListFilter = [0, 8, 1, 4, 2, -1, 9]
+                            checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
                         } else {
-                            checkListFilter = [0, 8, 4, 1, -1, 9]
+                            checkListFilter = [0, 8, 4, 2, -1, 9, 2, 11]
                         }
                     }
                     myAjax({
@@ -459,13 +459,13 @@
                     if (this.checkListFilter.length) {
                         checkListFilter = this.checkListFilter
                         if (checkListFilter.includes(4)) {
-                            checkListFilter = checkListFilter.concat([-1, 9])
+                            checkListFilter = checkListFilter.concat([-1, 9, 11])
                         }
                     } else {
                         if (this.currentTabId == 1) {
-                            checkListFilter = [0, 8, 1, 4, 2, -1, 9]
+                            checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
                         } else {
-                            checkListFilter = [0, 8, 4]
+                            checkListFilter = [0, 8, 4, 2]
                         }
                     }
                     myAjax({
