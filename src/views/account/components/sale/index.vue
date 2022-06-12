@@ -1,46 +1,48 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('account.sale')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
+            @close="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
-            <template v-if="row.num">
-                <ul>
-                    <li class="item">
-                        <div class="key">{{ $t("account.available") }}</div>
-                        <div class="val">{{ row.num }}</div>
-                    </li>
-                    <li class="item">
-                        <div class="key">{{ $t("account.quantity-for-sale") }}</div>
-                        <div class="val">
-                            <el-input-number v-model="saleQuantity" :min="1" :max="row.num"></el-input-number>
-                        </div>
-                    </li>
-                    <li class="input-box">
+            <div v-loading="isLoading">
+                <template v-if="row.num">
+                    <ul>
+                        <li class="item">
+                            <div class="key">{{ $t("account.available") }}</div>
+                            <div class="val">{{ row.num }}</div>
+                        </li>
+                        <li class="item">
+                            <div class="key">{{ $t("account.quantity-for-sale") }}</div>
+                            <div class="val">
+                                <el-input-number v-model="saleQuantity" :min="1" :max="row.num"></el-input-number>
+                            </div>
+                        </li>
+                        <li class="input-box">
+                            <div class="label">
+                                <span>Adoge</span>
+                            </div>
+                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')"
+                                onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
+                        </li>
+                    </ul>
+                </template>
+                <template v-else>
+                    <p class="tit">
+                        <span>{{ $t("account.price") }}</span>
+                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}</span>
+                    </p>
+                    <div class="input-box">
                         <div class="label">
                             <span>Adoge</span>
                         </div>
-                        <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')"
+                        <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')"
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
-                    </li>
-                </ul>
-            </template>
-            <template v-else>
-                <p class="tit">
-                    <span>{{ $t("account.price") }}</span>
-                    <span class="mini-tip">{{ $t("account.sale-price-mini") }}</span>
-                </p>
-                <div class="input-box">
-                    <div class="label">
-                        <span>Adoge</span>
                     </div>
-                    <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')"
-                        onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
+                    <p class="price-tip">{{$t("common.net-price-modified-tip")}}</p>
+                </template>
+                <div class="opt-btn">
+                    <button class="btn" :class="{'confirmed': salePrice.length}"
+                        @click="doSubmit">{{$t("common.confirmed") }} </button>
                 </div>
-                <p class="price-tip">{{$t("common.net-price-modified-tip")}}</p>
-            </template>
-            <div class="opt-btn">
-                <button class="btn" :class="{'confirmed': salePrice.length}"
-                    @click="doSubmit">{{$t("common.confirmed") }} </button>
             </div>
         </el-dialog>
     </div>
@@ -48,6 +50,7 @@
 
 <script>
     import Cookie from "@/utils/cookie.js";
+    import Approve from '@/utils/approve.js'
     import myAjax from '@/utils/ajax.js'
     import web3Tool from '@/utils/web3'
     export default {
@@ -62,7 +65,7 @@
         data() {
             return {
                 prefixCls: 'views-account-sale',
-                isLoading: false,
+                isLoading: true,
                 isShowDialog: true,
                 salePrice: '',
                 saleQuantity: 1,
@@ -72,30 +75,20 @@
         watch: {},
         created() {},
         mounted() {
-            if (this.row.belong_type < 0) return
-            this.getChainInfo()
-            this.getContractAddress()
+            if (this.row.belong_type < 0) {
+                this.isLoading = false
+                return false
+            }
+            Promise.all([Approve.getChainInfo(this.row.belong_type), Approve.getApproveAddress('nft')]).then(data => {
+                const [contract_addr_abi, nft_approve_addr] = data
+                this.contract_addr = contract_addr_abi.contract_addr
+                this.abi = contract_addr_abi.abi
+                this.approve_addr = nft_approve_addr
+                this.isLoading = false
+            })
         },
         beforeDestroy() {},
         methods: {
-            getContractAddress() {
-                myAjax({
-                    url: 'chain/approve_addr',
-                    method: 'GET'
-                }).then(res => {
-                    this.approve_addr = res.data.approve_addr
-                })
-            },
-            getChainInfo() {
-                myAjax({
-                    url: `chain/chain_info?belong_type=${this.row.belong_type}`,
-                    method: 'GET',
-
-                }).then(res => {
-                    this.contract_addr = res.data.contract_addr
-                    this.abi = res.data.abi
-                })
-            },
             doSubmit() {
                 if (this.row.belong_type < 0) {
                     this.sendSale()
@@ -104,7 +97,7 @@
                 }
             },
             doNftApprove() {
-                web3Tool.contract.call(this, {
+                web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.approve_addr,

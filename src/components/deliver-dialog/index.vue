@@ -1,19 +1,20 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
-            :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" v-loading="isLoading">
-            <div class="content">
+            :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog">
+            <div class="content" v-loading="isLoading">
                 <div class="addr">
                     <div class="tit">{{$t('common.enter-address')}}</div>
                     <el-input v-model="addressTxt" :placeholder="$t('common.enter-ad-tip')"></el-input>
                 </div>
                 <div class="remaining-times">
-                    {{$t('common.remain-times')}}: <span>{{ user_give_left_count }}</span>
+                    {{$t('common.remain-times')}}: <span>{{ userInfo.user_give_left_count }}</span>
                 </div>
                 <div class="tip">
                     {{$t('common.transferred-tip')}}
                 </div>
-                <el-button type="primary" :disabled="!addressTxt && user_give_left_count > 0" :loading="submitLoading" @click="doNftApprove">
+                <el-button type="primary" :disabled="!addressTxt && user_give_left_count > 0" :loading="submitLoading"
+                    @click="doNftApprove">
                     {{$t('common.deliver')}}</el-button>
             </div>
         </el-dialog>
@@ -21,9 +22,12 @@
 </template>
 
 <script>
-    import Cookie from "@/utils/cookie.js";
+    import Approve from '@/utils/approve.js'
     import myAjax from '@/utils/ajax.js'
     import web3Tool from '@/utils/web3'
+    import {
+        mapState
+    } from 'vuex'
     export default {
         name: '',
         components: {
@@ -57,63 +61,24 @@
                 user_give_left_count: '',
             }
         },
-        computed: {},
+        computed: {
+            ...mapState({
+                userInfo: state => state.userInfo
+            }),
+        },
         watch: {},
         created() {
-            Promise.all([this.getChainInfo(), this.getUserInfo(), this.getContractAddress()]).then(res => {
+            Promise.all([Approve.getChainInfo(this.belong_type), Approve.getApproveAddress('nft')]).then(data => {
+                const [contract_addr_abi, nft_approve_addr] = data
+                this.contract_addr = contract_addr_abi.contract_addr
+                this.abi = contract_addr_abi.abi
+                this.nft_approve_addr = nft_approve_addr
                 this.isLoading = false
             })
         },
         mounted() {},
         beforeDestroy() {},
         methods: {
-            getContractAddress() {
-                return new Promise((resolve, reject) => {
-                    myAjax({
-                        url: 'chain/approve_addr',
-                        method: 'GET'
-                    }).then(res => {
-                        this.approve_addr = res.data.approve_addr
-                        resolve()
-                    }).catch(err => {
-                        reject(err)
-                    })
-                })
-
-            },
-            getUserInfo() {
-                return new Promise((resolve, reject) => {
-                    myAjax({
-                        url: `user/user_info`,
-                        data: {
-                            body: {
-                                addr: this.addr
-                            }
-                        }
-
-                    }).then(res => {
-                        this.user_give_left_count = res.data.user_give_left_count
-                        resolve()
-                    }).catch(err => {
-                        reject(err)
-                    })
-                })
-            },
-            getChainInfo() {
-                return new Promise((resolve, reject) => {
-                    myAjax({
-                        url: `chain/chain_info?belong_type=${this.belong_type}`,
-                        method: 'GET',
-
-                    }).then(res => {
-                        this.contract_addr = res.data.contract_addr
-                        this.abi = res.data.abi
-                        resolve()
-                    }).catch(err => {
-                        reject(err)
-                    })
-                })
-            },
             doClose() {
                 this.$emit('close')
             },
@@ -122,7 +87,7 @@
                     url: 'user/give/create',
                     data: {
                         body: {
-                            owner_addr: Cookie.getCookie("__account__") || null,
+                            owner_addr: this.userInfo.addr  || null,
                             belong_type: this.belong_type || 1,
                             goods_id: this.goods_id,
                             give_num: 1,
@@ -139,12 +104,12 @@
             },
             doNftApprove() {
                 this.submitLoading = true
-                web3Tool.contract.call(this, {
+                web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: this.approve_addr,
+                    authAddr: this.nft_approve_addr,
                     amount: this.goods_id,
-                    account: Cookie.getCookie("__account__") || null,
+                    account: this.userInfo.addr || null,
                 }).then(hash => {
                     this.doDeliver(hash)
                 }).catch(err => {
@@ -162,6 +127,7 @@
         .deliver-dialog {
             .content {
                 color: #777E90;
+                text-align: left;
 
                 .addr {
                     .tit {

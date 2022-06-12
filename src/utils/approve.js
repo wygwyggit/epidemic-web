@@ -18,13 +18,18 @@ const approveUtils = {
         })
 
     },
-    getApproveAddress() {
+    getApproveAddress(type) {
         return new Promise((resolve, reject) => {
             myAjax({
-                url: 'chain/approve_addr',
+                url: type === 'token' ? 'chain/token_approve_addr' : 'chain/nft_approve_addr',
                 method: 'GET'
             }).then(res => {
-                resolve(res.data.approve_addr)
+                if (type === 'token') {
+                    resolve(res.data.token_approve_addr)
+                } else {
+                    resolve(res.data.nft_approve_addr)
+                }
+                
             }).catch(err => {
                 reject(err)
             })

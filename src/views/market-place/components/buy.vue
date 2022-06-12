@@ -118,7 +118,7 @@
                 this.doNftApprove()
             },
             doNftApprove() {
-                web3Tool.contract.call(this, {
+                web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.approve_addr,

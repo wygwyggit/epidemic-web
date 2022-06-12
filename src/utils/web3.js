@@ -22,9 +22,7 @@ class Web3Tool {
     }
     contract(options = {}) {
         return new Promise((resolve, reject) => {
-            console.log(options)
-            let web3 = new this.Web3(window.web3.currentProvider),
-                abiContract = new web3.eth.Contract(options.abi, options.contractAddress)
+            let abiContract = new this.web3.eth.Contract(options.abi, options.contractAddress)
             abiContract.methods.approve(options.authAddr, options.amount).send({
                 from: options.account || ''
             }, function (err, res) {

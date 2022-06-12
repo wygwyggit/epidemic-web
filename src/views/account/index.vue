@@ -33,7 +33,8 @@
                                 </span>
 
                             </div>
-                            <p class="txt">{{ userInfo.continuous_sign_days || 0 }} {{ $t("account.days-in-a-rowg")}}</p>
+                            <p class="txt">{{ userInfo.continuous_sign_days || 0 }} {{ $t("account.days-in-a-row")}}
+                            </p>
                         </li>
                     </ul>
                 </div>
@@ -50,7 +51,8 @@
                                     <li class="check-item">
                                         <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
                                         <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                                            @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}</el-checkbox>
+                                            @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}
+                                        </el-checkbox>
                                         <el-checkbox-group v-model="checkListFilter"
                                             @change="handleCheckedCitiesChange">
                                             <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
@@ -81,6 +83,9 @@
                                             <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                                 v-if="item.type_id == 3" @click="doSynthetic(item)">
                                                 {{$t("account.synthetic")}}</div>
+                                            <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
+                                                v-if="item.type_id == 16" @click="doUpgrade(item)">
+                                                {{$t("ego-wall.upgrade")}}</div>
                                             <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                                 v-if="item.belong_type == -2" @click="doSynthetic(item)">
                                                 {{$t("exchange.exchange")}}</div>
@@ -135,11 +140,12 @@
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"
             @compoundSuc="compoundSuc"></compound>
+        <upgrade v-if="isShowUpgrade" :row="currentGoodRow" @close="() => this.isShowUpgrade = false" @submitOk="upgradeSubmitOk"></upgrade>
         <open :row="currentGoodRow" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false"
             @openGiftOk="openGiftOk"></open>
         <el-dialog custom-class="sign-in-success" :close-on-click-modal="false" :show-close="false"
             :visible.sync="isShowSignInSuccessDialog" width="7.46rem">
-            <div class="content">
+            <div class="sign-in-content">
                 <div class="success-main">
                     <p class="txt">successfully</p>
                 </div>
@@ -167,6 +173,7 @@
     import Open from './components/open'
     import NoConnectWallet from '@/components/no-connect-wallet'
     import NoSign from '@/components/no-sign'
+    import Upgrade from './components/upgrade'
     import {
         mapState,
         mapMutations
@@ -182,7 +189,8 @@
             Sale,
             Open,
             NoConnectWallet,
-            NoSign
+            NoSign,
+            Upgrade
         },
         props: {},
         data() {
@@ -198,6 +206,7 @@
                 isShowCompound: false,
                 isShowOpenGift: false,
                 isShowSignInSuccessDialog: false,
+                isShowUpgrade: false,
                 giftBagList: [],
                 isLoading: true,
                 tabs: [{
@@ -348,6 +357,15 @@
                 if (!row.can_merge) return
                 this.currentGoodRow = row
                 this.isShowCompound = true
+            },
+            doUpgrade(row) {
+                if (!row.can_level_up) return
+                this.currentGoodRow = row
+                this.isShowUpgrade = true
+            },
+            upgradeSubmitOk() {
+                this.isShowUpgrade = false
+                this.getLiist()
             },
             openGiftBag(row) {
                 if (!row.can_open) return
@@ -751,7 +769,8 @@
                             background: #00A73A;
                         }
 
-                        &.btn-synthetic {
+                        &.btn-synthetic,
+                        &.btn-upgrade {
                             background: #9E00FF;
                         }
 

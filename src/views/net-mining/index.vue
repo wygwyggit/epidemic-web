@@ -423,12 +423,12 @@
                     this.drawer = true
                 }
                 this.dialogLoading = true
-                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress()])
+                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress('token')])
                     .then(data => {
-                        const [p1, contract_addr_abi, approve_addr] = data
+                        const [p1, contract_addr_abi, token_approve_addr] = data
                         this.contract_addr = contract_addr_abi.contract_addr
                         this.abi = contract_addr_abi.abi
-                        this.approve_addr = approve_addr
+                        this.approve_addr = token_approve_addr
                         this.dialogLoading = false
                     })
                 this.getPledgeContent()
@@ -457,7 +457,7 @@
                 this.drawer = true
             },
             doApprove() {
-                web3Tool.contract.call(this, {
+                web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.approve_addr,
