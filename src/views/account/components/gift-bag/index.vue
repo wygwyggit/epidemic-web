@@ -162,6 +162,8 @@
                     z-index: 9999;
                     color: #fff;
                     cursor: pointer;
+                    font-size: .4rem;
+                    font-weight: bold;
                 }
 
                 .left {
