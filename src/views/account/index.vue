@@ -13,7 +13,7 @@
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p class="tit">{{ $t("ego-wall.bronze-badge") }}</p>
+                                <p class="li-tit">{{ $t("ego-wall.bronze-badge") }}</p>
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
@@ -928,7 +928,7 @@
                         .right-info {
                             margin: 0;
 
-                            p.tit {
+                            p.li-tit {
                                 display: none;
                             }
                         }
