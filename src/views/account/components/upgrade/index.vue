@@ -126,7 +126,7 @@
                     contractAddress: this.tokenInfo.contract_addr || '',
                     abi: this.tokenInfo.abi,
                     authAddr: this.token_approve_addr,
-                    amount: this.row.goods_id,
+                    amount: '50000000000000000000',
                     account: this.userInfo.addr || null,
                 }).then(hash => {
                     this.tokenHash = hash

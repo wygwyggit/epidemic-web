@@ -1,7 +1,8 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="$t('account.sale')" :visible.sync="isShowDialog" width="6.4rem"
-            @close="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
+        <el-dialog :title="row.amount ? $t('account.revise') : $t('account.sale')" :visible.sync="isShowDialog"
+            width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"
+            :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
             <div v-loading="isLoading">
                 <template v-if="row.num">
@@ -75,7 +76,8 @@
         watch: {},
         created() {},
         mounted() {
-            if (this.row.belong_type < 0) {
+            this.row.amount && (this.salePrice = this.row.amount)
+            if (this.row.belong_type < 0 || this.row.amount) {
                 this.isLoading = false
                 return false
             }
@@ -90,7 +92,7 @@
         beforeDestroy() {},
         methods: {
             doSubmit() {
-                if (this.row.belong_type < 0) {
+                if (this.row.belong_type < 0 || this.row.amount) {
                     this.sendSale()
                 } else {
                     this.doNftApprove()
@@ -112,22 +114,40 @@
                 let url = '',
                     params = {}
                 if (this.row.num) {
-                    url = 'goods/sale/others'
-                    params = {
-                        type_id: this.row.type_id,
-                        amount: Number(this.salePrice),
-                        num: this.saleQuantity,
-                        approve_txn: hash,
-                        belong_type: this.row.belong_type
+                    if (this.row.amount) {
+                        url = 'goods/sale/others/update'
+                        params = {
+                            amount: Number(this.salePrice),
+                            type_id: this.row.type_id,
+                            record_id: this.row.record_id
+                        }
+                    } else {
+                        url = 'goods/sale/others'
+                        params = {
+                            type_id: this.row.type_id,
+                            amount: Number(this.salePrice),
+                            num: this.saleQuantity,
+                            approve_txn: hash,
+                            belong_type: this.row.belong_type
+                        }
                     }
+
                 } else {
-                    url = 'goods/sale/nft'
-                    params = {
-                        amount: Number(this.salePrice),
-                        goods_id: this.row.goods_id,
-                        approve_txn: hash,
-                        type_id: this.row.type_id,
-                        belong_type: this.row.belong_type
+                    if (this.row.amount) {
+                        url = 'goods/sale/nft/update'
+                        params = {
+                            amount: Number(this.salePrice),
+                            goods_id: this.row.goods_id
+                        }
+                    } else {
+                        url = 'goods/sale/nft'
+                        params = {
+                            type_id: this.row.type_id,
+                            amount: Number(this.salePrice),
+                            num: this.saleQuantity,
+                            approve_txn: hash,
+                            belong_type: this.row.belong_type
+                        }
                     }
                 }
                 this.isLoading = true

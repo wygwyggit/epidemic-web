@@ -101,6 +101,8 @@
                                             <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                             <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
                                                 {{ $t("account.cancel-sale")}}</div>
+                                                <div class="btn btn-revise" @click="doRevise(item)">
+                                                {{ $t("account.revise")}}</div>
                                         </template>
                                         <template v-if="item.status == 1">
                                             <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
@@ -406,6 +408,10 @@
                 this.checkListFilter = []
                 this.isLoading = true
                 this.getLiist()
+            },
+            doRevise(row) {
+                this.currentGoodRow = row
+                this.saleReviseDialog = true
             },
             doDeliver(row) {
                 if (!row.can_pawn) return
@@ -785,6 +791,9 @@
 
                         &.btn-cancel-sale {
                             background: #FF5E1A;
+                        }
+                        &.btn-revise {
+                            background: #00A73A;
                         }
 
                         &.disable {
