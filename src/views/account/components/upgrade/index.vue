@@ -86,11 +86,17 @@
             if (width < 768) {
                 this.dialogWidth = "8.9rem";
             }
-            Promise.all([this.getBalance(), Approve.getChainInfo(this.row.belong_type), Approve.getApproveAddress(
+            Promise.all([this.getBalance(), Approve.getChainInfo(0), Approve.getChainInfo(this.row.belong_type), Approve.getApproveAddress(
                 'nft'), Approve.getApproveAddress('token')]).then(data => {
-                const [p1, contract_addr_abi, nft_approve_addr, token_approve_addr] = data
-                this.contract_addr = contract_addr_abi.contract_addr
-                this.abi = contract_addr_abi.abi
+                const [p1, token_contract_addr_abi, nft_contract_addr_abi, nft_approve_addr, token_approve_addr] = data
+                this.nftInfo = {
+                    contract_addr: nft_contract_addr_abi.contract_addr,
+                    abi: nft_contract_addr_abi.abi
+                }
+                this.tokenInfo = {
+                    contract_addr: token_contract_addr_abi.contract_addr,
+                    abi: token_contract_addr_abi.abi
+                }
                 this.nft_approve_addr = nft_approve_addr
                 this.token_approve_addr = token_approve_addr
                 this.isLoading = false
@@ -105,8 +111,8 @@
             doNftApprove() {
                 this.submitLoading = true
                 web3Tool.contract({
-                    contractAddress: this.contract_addr || '',
-                    abi: this.abi,
+                    contractAddress: this.nftInfo.contract_addr || '',
+                    abi: this.nftInfo.abi,
                     authAddr: this.nft_approve_addr,
                     amount: this.row.goods_id,
                     account: this.userInfo.addr || null,
@@ -117,8 +123,8 @@
             },
             doTokenApprove() {
                 web3Tool.contract({
-                    contractAddress: this.contract_addr || '',
-                    abi: this.abi,
+                    contractAddress: this.tokenInfo.contract_addr || '',
+                    abi: this.tokenInfo.abi,
                     authAddr: this.token_approve_addr,
                     amount: this.row.goods_id,
                     account: this.userInfo.addr || null,

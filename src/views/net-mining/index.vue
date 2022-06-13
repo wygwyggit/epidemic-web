@@ -71,7 +71,7 @@
                                     @select="selectNftCard">
                                     <div class="time-left" v-if="item.left_days">
                                         <div class="label">{{  $t("net-mining.time-left")}}</div>
-                                        <div class="value">{{ item.left_days }}</div>
+                                        <div class="value">{{ (item.left_days + 1) }}</div>
                                     </div>
                                 </item-card>
                             </div>
