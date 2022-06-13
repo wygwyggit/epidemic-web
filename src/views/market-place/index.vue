@@ -218,10 +218,10 @@
                                 {{ item.order_id }}
                             </td>
                             <td>
-                                {{ item.txt_hash }}
+                                {{ item.transfer_txn }}
                             </td>
                             <td>
-                                {{ item.nft_id }}
+                                {{ item.goods_id }}
                             </td>
                             <td>
                                 {{ item.name }}
@@ -279,7 +279,7 @@
                                 {{ item.nft_id }}
                             </td>
                             <td>
-                                {{ item.name }}
+                                {{ localStorage.getItem("lang") == 'ZH' ? item.name : item.english_name}}
                             </td>
                             <td>
                                 {{ item.amount || '-' }}

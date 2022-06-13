@@ -8,7 +8,10 @@
                         <div class="gift-title">
                             {{ giftInfo.title }}
                         </div>
-                        <img :src="giftInfo.image">
+                        <div class="img">
+                            <img :src="netImgBaseUrl + giftInfo.image">
+                        </div>
+
                         <div class="left" @click="handleRow('-')" v-if="rowList.length > 1">&lt;</div>
                         <div class="right" @click="handleRow('+')" v-if="rowList.length > 1">&gt;</div>
                     </div>
@@ -30,6 +33,9 @@
 </template>
 
 <script>
+    import {
+        netImgBaseUrl
+    } from '@/config/config.js'
     export default {
         name: 'gift-bag',
         components: {},
@@ -42,6 +48,7 @@
         data() {
             return {
                 prefixCls: 'views-account-gift-bag',
+                netImgBaseUrl,
                 isShowDialog: true,
                 curIdx: 0,
                 giftInfo: {}
@@ -152,9 +159,13 @@
             .img-warp {
                 position: relative;
                 width: 6.4rem;
-                height: 5.066666666666666rem;
-                border: 2px solid #31CA70;
-                border-radius: .266666666666667rem;
+                // height: 5.066666666666666rem;
+
+                .img {
+                    width: 100%;
+                    border: 2px solid #31CA70;
+                    border-radius: .266666666666667rem;
+                }
 
                 .left,
                 .right {
@@ -177,6 +188,7 @@
 
 
                 img {
+                    display: block;
                     width: 100%;
                     height: 100%;
 
