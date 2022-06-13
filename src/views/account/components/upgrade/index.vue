@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog custom-class="upgrade-dialog" :close-on-click-modal="false" top="11vh" :visible.sync="isShowDialog"
-            :width="dialogWidth" @close="upgradeDialogClosed" v-if="isShowDialog" v-loading="dialogLoading">
+            :width="dialogWidth" @close="upgradeDialogClosed" v-if="isShowDialog" :show-close="!submitLoading">
             <div slot="title">
                 <div class="upgrade-thing">
                     <img src="./images/sliver/main.png" alt="" v-if="row.type_id == 16">
@@ -70,7 +70,6 @@
                 isShowDialog: true,
                 isLoading: true,
                 submitLoading: false,
-                dialogLoading: false,
                 dialogWidth: '480px',
                 amazingAdogeBalance: '',
             }
@@ -139,7 +138,6 @@
             },
             doSend() {
                 if (!this.nftHash || !this.tokenHash) return
-                this.dialogLoading = true
                 myAjax({
                     url: 'user/btc/upgrade',
                     data: {
@@ -156,7 +154,7 @@
                         this.$emit('submitOk')
                     }
                 }).finally(() => {
-                    this.submitLoading = this.dialogLoading = false
+                    this.submitLoading = false
                 })
             },
             getBalance() {

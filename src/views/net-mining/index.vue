@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls">
+    <div :class="prefixCls" >
         <div class="top" v-if="isSign && isConnectWallet">
             <div class="w">
                 <div class="left">
@@ -113,7 +113,7 @@
 
         </div>
         <el-dialog title="Staking Information" :visible.sync="dialogVisible" width="480px" :close-on-click-modal="false"
-            custom-class="pledge-dialog">
+            custom-class="pledge-dialog" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">

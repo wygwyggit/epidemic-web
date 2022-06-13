@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
-            :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" v-loading="dialogLoading">
+            :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" :show-close="!submitLoading">
             <div class="content" v-loading="isLoading">
                 <div class="addr">
                     <div class="tit">{{$t('common.enter-address')}}</div>
@@ -56,7 +56,6 @@
                 prefixCls: 'deliver-dialog',
                 isShowDialog: true,
                 isLoading: true,
-                dialogLoading: false,
                 submitLoading: false,
                 addressTxt: '',
                 user_give_left_count: '',
@@ -84,7 +83,6 @@
                 this.$emit('close')
             },
             doDeliver(hash) {
-                this.dialogLoading = true
                 myAjax({
                     url: 'user/give/create',
                     data: {
@@ -103,7 +101,7 @@
                         this.$emit('sendOk')
                     }
                 }).finally(() => {
-                    this.submitLoading = this.dialogLoading = false
+                    this.submitLoading  = false
                 })
             },
             doNftApprove() {
