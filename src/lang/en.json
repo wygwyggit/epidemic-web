@@ -35,7 +35,9 @@
         "remain-times": "Remaining times today",
         "transferred-tip": "Your NFT will be transferred",
         "no-data": "No data",
-        "ope-suc": "Operation successful"
+        "ope-suc": "Operation successful",
+        "off-line": "Your token has expired, please sign again",
+        "off-line-title": "offLine"
     },
     "home": {
         "amazing-doge": "AmazingDoge",

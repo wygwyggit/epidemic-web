@@ -5,12 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        userInfo: {}
+        userInfo: {},
+        offLineDialogVisible: false,
     },
     mutations: {
         UPDATE_USERINFO: (state, data) => {
             state.userInfo = data
         },
+        SHOW_OFFLINEDIALOGVISIBLE: state => {
+            state.offLineDialogVisible = true
+        }
     },
     actions: {},
     modules: {}

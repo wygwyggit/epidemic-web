@@ -488,10 +488,11 @@
                             this.getTotalInfo()
                         }
                         this.total = data.total
-                        this.isLoading = false
                         resolve()
                     }).catch(err => {
                         reject(err)
+                    }).finally(() => {
+                        this.isLoading = false
                     })
                 })
 

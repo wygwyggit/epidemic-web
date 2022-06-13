@@ -1,6 +1,7 @@
 <template>
     <div :class="prefixCls">
         <common-header :bgColor="bgColor" ref="commonHeader"></common-header>
+        <offline-notice></offline-notice>
         <router-view class="router-view"></router-view>
         <common-footer v-if="isShowFooter"></common-footer>
     </div>
@@ -8,7 +9,8 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
-     import Cookie from "@/utils/cookie.js";
+    import Cookie from "@/utils/cookie.js";
+    import OfflineNotice from '@/components/offline-notice';
     import CommonHeader from '@/components/common-header'
     import CommonFooter from '@/components/common-footer'
     import {
@@ -17,7 +19,8 @@
     export default {
         components: {
             CommonHeader,
-            CommonFooter
+            CommonFooter,
+            OfflineNotice
         },
         props: {},
         data() {
@@ -54,11 +57,9 @@
                 }
             }
         },
-        created() {
-
-        },
+        created() {},
         async mounted() {
-            
+
             Promise.all([this.getUserInfo()]).then(() => {
                 this.isLoading = false
             })
@@ -67,28 +68,35 @@
         methods: {
             getUserInfo() {
                 return new Promise((resolve, reject) => {
-                    if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token') ) {
+                    if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token')) {
                         this.isLoading = false
                         return resolve()
                     }
                     myAjax({
-                        url: 'user/user_info',
-                        isPassFalse: true
-                    }).then(res => {
-                        if (res.ok) {
-                            this.UPDATE_USERINFO(res.data || {})
-                        }
-                        resolve()
-                    }).finally(err => {
-                        this.isLoading = false
-                    })
+                            url: 'user/user_info',
+                            isPassFalse: true
+                        }).then(res => {
+                            if (res.ok) {
+                                this.UPDATE_USERINFO(res.data || {})
+                            }
+                            resolve()
+                        }).catch(error => {
+                            const response = error.response
+                            if (response.status == '403') {
+                                this.SHOW_OFFLINEDIALOGVISIBLE()
+                            }
+                        })
+                        .finally(err => {
+                            this.isLoading = false
+                        })
                 })
             },
             doConnectAccount() {
                 this.$refs.commonHeader.connectWalletMetaMask(true)
             },
             ...mapMutations([
-                'UPDATE_USERINFO'
+                'UPDATE_USERINFO',
+                'SHOW_OFFLINEDIALOGVISIBLE'
             ])
         },
     }

@@ -35,7 +35,9 @@
         "remain-times": "今日剩余赠送次数",
         "transferred-tip": "您的NFT将被转移",
         "no-data": "暂无数据",
-        "ope-suc": "操作成功"
+        "ope-suc": "操作成功",
+        "off-line": "您的token已过期，请重新签名",
+        "off-line-title": "下线通知"
     },
     "home": {
         "amazing-doge": "AmazingDoge",
