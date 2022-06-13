@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import Approve from '@/utils/approve.js'
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
     import web3Tool from '@/utils/web3'
@@ -78,42 +79,16 @@
         watch: {},
         created() {},
         mounted() {
-            Promise.all([this.getChainInfo(), this.getContractAddress()]).then(() => {
+            Promise.all([Approve.getChainInfo(5), Approve.getApproveAddress('token')]).then(data => {
+                const [contract_addr_abi, token_approve_addr] = data
+                this.contract_addr = contract_addr_abi.contract_addr
+                this.abi = contract_addr_abi.abi
+                this.token_approve_addr = token_approve_addr
                 this.isLoading = false
             })
         },
         beforeDestroy() {},
         methods: {
-            getContractAddress() {
-                return new Promise((resolve, reject) => {
-                    myAjax({
-                        url: 'chain/token_approve_addr',
-                        method: 'GET'
-                    }).then(res => {
-                        this.approve_addr = res.data.token_approve_addr
-                        resolve()
-                    }).catch(err => {
-                        reject(err)
-                    })
-                })
-
-            },
-            getChainInfo() {
-                return new Promise((resolve, reject) => {
-                    myAjax({
-                        url: `chain/chain_info?belong_type=5`,
-                        method: 'GET',
-
-                    }).then(res => {
-                        this.contract_addr = res.data.contract_addr
-                        this.abi = res.data.abi
-                        resolve()
-                    }).catch(err => {
-                        reject(err)
-                    })
-                })
-
-            },
             doSubmit() {
                 this.doNftApprove()
             },
@@ -121,7 +96,7 @@
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: this.approve_addr,
+                    authAddr: this.token_approve_addr,
                     amount: '50000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {

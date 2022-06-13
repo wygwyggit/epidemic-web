@@ -1,4 +1,5 @@
 import myAjax from '@/utils/ajax.js'
+import Cookie from "@/utils/cookie.js";
 const approveUtils = {
     getChainInfo(belong_type) {
         return new Promise((resolve, reject) => {
@@ -21,7 +22,7 @@ const approveUtils = {
     getApproveAddress(type) {
         return new Promise((resolve, reject) => {
             myAjax({
-                url: type === 'token' ? 'chain/token_approve_addr' : 'chain/nft_approve_addr',
+                url: type === 'token' ? `chain/token_approve_addr?addr=${Cookie.getCookie('__account__')}` : 'chain/nft_approve_addr',
                 method: 'GET'
             }).then(res => {
                 if (type === 'token') {
