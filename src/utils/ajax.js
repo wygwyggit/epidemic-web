@@ -20,7 +20,7 @@ const myAjax = (options) => {
                 'token': Cookie.getCookie('ad_token') || '',
                 'addr': Cookie.getCookie("__account__") || '',
             }
-        }: {}), options.data || {})
+        } : {}), options.data || {})
         axios({
             url: url,
             method: options.method || 'post',
@@ -36,11 +36,19 @@ const myAjax = (options) => {
                 Message.closeAll();
                 Message({
                     type: 'error',
-                    message: data.reason || '网络不稳定，请您稍后再试~'
+                    message: data.reason || '服务器开小差啦~'
                 })
             }
             res(data)
         }).catch(err => {
+            const response = err.response
+            if (response.status == '500') {
+                Message.closeAll();
+                Message({
+                    type: 'error',
+                    message: '服务器开小差啦~'
+                })
+            }
             rej(err)
         })
     })

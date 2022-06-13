@@ -13,7 +13,7 @@
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p>{{ $t("ego-wall.bronze-badge") }}</p>
+                                <p class="tit">{{ $t("ego-wall.bronze-badge") }}</p>
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
@@ -70,7 +70,8 @@
                                 v-if="!netList.length && !isLoading">
                             </el-empty>
                             <template v-if="netList.length && !isLoading">
-                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" @goDetail="goCardDetail">
+                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
+                                    @goDetail="goCardDetail">
                                     <div class="btns-wrap">
                                         <template v-if="item.status == 0">
                                             <div class="btn btn-open" :class="{'disable': !item.can_open}"
@@ -85,6 +86,9 @@
                                                 {{$t("account.synthetic")}}</div>
                                             <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
                                                 v-if="item.type_id == 16" @click="doUpgrade(item)">
+                                                {{$t("ego-wall.upgrade")}}</div>
+                                            <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
+                                                v-if="item.type_id == 17" @click="doUpgrade(item)">
                                                 {{$t("ego-wall.upgrade")}}</div>
                                             <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                                 v-if="item.belong_type == -2" @click="doSynthetic(item)">
@@ -101,7 +105,7 @@
                                             <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                             <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
                                                 {{ $t("account.cancel-sale")}}</div>
-                                                <div class="btn btn-revise" @click="doRevise(item)">
+                                            <div class="btn btn-revise" @click="doRevise(item)">
                                                 {{ $t("account.revise")}}</div>
                                         </template>
                                         <template v-if="item.status == 1">
@@ -142,7 +146,8 @@
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"
             @compoundSuc="compoundSuc"></compound>
-        <upgrade v-if="isShowUpgrade" :row="currentGoodRow" @close="() => this.isShowUpgrade = false" @submitOk="upgradeSubmitOk"></upgrade>
+        <upgrade v-if="isShowUpgrade" :row="currentGoodRow" @close="() => this.isShowUpgrade = false"
+            @submitOk="upgradeSubmitOk"></upgrade>
         <open :row="currentGoodRow" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false"
             @openGiftOk="openGiftOk"></open>
         <el-dialog custom-class="sign-in-success" :close-on-click-modal="false" :show-close="false"
@@ -792,8 +797,9 @@
                         &.btn-cancel-sale {
                             background: #FF5E1A;
                         }
+
                         &.btn-revise {
-                            background: #00A73A;
+                            background: #32A3FF;
                         }
 
                         &.disable {
@@ -922,7 +928,7 @@
                         .right-info {
                             margin: 0;
 
-                            p:first-child {
+                            p.tit {
                                 display: none;
                             }
                         }

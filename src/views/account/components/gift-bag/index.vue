@@ -159,12 +159,13 @@
             .img-warp {
                 position: relative;
                 width: 6.4rem;
-                // height: 5.066666666666666rem;
+                min-height: 5.066666666666666rem;
 
                 .img {
                     width: 100%;
                     border: 2px solid #31CA70;
                     border-radius: .266666666666667rem;
+                    overflow: hidden;
                 }
 
                 .left,

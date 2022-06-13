@@ -270,9 +270,11 @@ body {
 }
 @media (max-width: 768px) {
     .back {
+        
         display: none;
     }
     .min-back {
+        padding-left: .3rem;
         display: block;
     }
 }

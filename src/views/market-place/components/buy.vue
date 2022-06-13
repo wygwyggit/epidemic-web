@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('marketplace.title')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false">
+            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false" v-loading="dialogLoading">
             <div v-loading="isLoading">
                 <template>
                     <ul v-if="currentTabId === 1">
@@ -70,6 +70,7 @@
             return {
                 prefixCls: 'views-ml-by',
                 isLoading: true,
+                dialogLoading: false,
                 isShowDialog: true,
                 num: '',
                 saleQuantity: 1,
@@ -105,6 +106,7 @@
             },
             sendBuy(hash) {
                 if (this.currentTabId === 2 && !this.row.num) return
+                this.dialogLoading = true
                 let url = 'goods/market/buy/goods',
                     params = {
                         record_id: this.row.record_id,
@@ -123,6 +125,8 @@
                     if (res.ok) {
                         this.$emit('sendBuyOk')
                     }
+                }).finally(() => {
+                    this.dialogLoading = false
                 })
             },
             saleReviseDialogClosed() {

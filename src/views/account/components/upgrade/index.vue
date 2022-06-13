@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog custom-class="upgrade-dialog" :close-on-click-modal="false" top="11vh" :visible.sync="isShowDialog"
-            :width="dialogWidth" @close="upgradeDialogClosed" v-if="isShowDialog">
+            :width="dialogWidth" @close="upgradeDialogClosed" v-if="isShowDialog" v-loading="dialogLoading">
             <div slot="title">
                 <div class="upgrade-thing">
                     <img src="./images/sliver/main.png" alt="" v-if="row.type_id == 16">
@@ -70,6 +70,7 @@
                 isShowDialog: true,
                 isLoading: true,
                 submitLoading: false,
+                dialogLoading: false,
                 dialogWidth: '480px',
                 amazingAdogeBalance: '',
             }
@@ -86,9 +87,12 @@
             if (width < 768) {
                 this.dialogWidth = "8.9rem";
             }
-            Promise.all([this.getBalance(), Approve.getChainInfo(0), Approve.getChainInfo(this.row.belong_type), Approve.getApproveAddress(
-                'nft'), Approve.getApproveAddress('token')]).then(data => {
-                const [p1, token_contract_addr_abi, nft_contract_addr_abi, nft_approve_addr, token_approve_addr] = data
+            Promise.all([this.getBalance(), Approve.getChainInfo(0), Approve.getChainInfo(this.row.belong_type), Approve
+                .getApproveAddress(
+                    'nft'), Approve.getApproveAddress('token')
+            ]).then(data => {
+                const [p1, token_contract_addr_abi, nft_contract_addr_abi, nft_approve_addr,
+                token_approve_addr] = data
                 this.nftInfo = {
                     contract_addr: nft_contract_addr_abi.contract_addr,
                     abi: nft_contract_addr_abi.abi
@@ -135,6 +139,7 @@
             },
             doSend() {
                 if (!this.nftHash || !this.tokenHash) return
+                this.dialogLoading = true
                 myAjax({
                     url: 'user/btc/upgrade',
                     data: {
@@ -151,7 +156,7 @@
                         this.$emit('submitOk')
                     }
                 }).finally(() => {
-                    this.submitLoading = false
+                    this.submitLoading = this.dialogLoading = false
                 })
             },
             getBalance() {
