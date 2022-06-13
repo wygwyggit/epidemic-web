@@ -14,6 +14,7 @@
                     </div>
                     <div class="tip">
                         <span>{{ $t("account.congratulation")}}</span>
+                        <span class="tip-name">{{ giftInfo.num > 1 ? giftInfo.num : $t('account.one')}} </span>
                         <span class="tip-name">{{ giftInfo.name }}</span>
                         <span>{{ $t("account.please-wait-for-confirmation") }}</span>
                     </div>

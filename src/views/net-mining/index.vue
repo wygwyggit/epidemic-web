@@ -161,11 +161,11 @@
                 <div class="btn-wrap">
                       <el-button type="primary" :loading="comfirmLoading"
                         @click="doApprove">
-                        {{ $t("marketplace.confirmed")}}
+                        {{ $t("common.confirmed")}}
                     </el-button>
                     <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
-                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("marketplace.confirmed")}}
+                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button> -->
                 </div>
             </div>
@@ -218,7 +218,7 @@
                 <div class="btn-wrap">
                     <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
-                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("marketplace.confirmed")}}
+                        {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
                 </div>
             </div>

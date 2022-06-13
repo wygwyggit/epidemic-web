@@ -144,6 +144,8 @@
                         this.$showOk(this.$t("common.ope-suc"))
                         this.$emit('submitOk')
                     }
+                }).finally(() => {
+                    this.submitLoading = false
                 })
             },
             getBalance() {

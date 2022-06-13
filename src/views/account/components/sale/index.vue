@@ -140,6 +140,8 @@
                     if (res.ok) {
                         this.$emit('sendSaleOk')
                     }
+                }).finally(() => {
+                    this.isLoading = false
                 })
             },
             saleReviseDialogClosed() {
