@@ -129,6 +129,8 @@
         "sale": "Sale"
     },
     "marketplace": {
+        "done": "Done",
+        "reset": "Reset",
         "title": "Buy",
         "nfts": "NFTs",
         "other": "Other",

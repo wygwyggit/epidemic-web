@@ -76,14 +76,14 @@
                             <ul class="check-list" v-if="currentTabId === 1">
                                 <li class="check-item">
                                     <div class="label-name">{{$t("account.sale")}}：</div>
-                                    <el-radio-group v-model="checkListSale" @change="doSearch">
+                                    <el-radio-group v-model="checkListSale">
                                         <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                         <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
                                     </el-radio-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("detail.color")}}：</div>
-                                    <el-checkbox-group v-model="checkListColor" @change="doSearch">
+                                    <el-checkbox-group v-model="checkListColor">
                                         <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}
                                         </el-checkbox>
                                         <el-checkbox label="orange" class="orange">{{$t("account.orange")}}
@@ -97,7 +97,7 @@
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.props")}}：</div>
-                                    <el-checkbox-group v-model="checkListProps" @change="doSearch">
+                                    <el-checkbox-group v-model="checkListProps">
                                         <el-checkbox :label="10">{{$t("marketplace.shoes")}}</el-checkbox>
                                         <el-checkbox :label="11">{{$t("marketplace.pants")}}</el-checkbox>
                                         <el-checkbox :label="12">{{$t("marketplace.clothes")}}</el-checkbox>
@@ -107,7 +107,7 @@
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("account.level")}}：</div>
-                                    <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                                    <el-checkbox-group v-model="checkListLvel">
                                         <el-checkbox :label="1">Lv-1</el-checkbox>
                                         <el-checkbox :label="2">Lv-2</el-checkbox>
                                         <el-checkbox :label="3">Lv-3</el-checkbox>
@@ -122,14 +122,14 @@
                             <ul class="check-list" v-else>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("account.sale")}}：</div>
-                                    <el-radio-group v-model="checkListSale" @change="doSearch">
+                                    <el-radio-group v-model="checkListSale">
                                         <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                         <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
                                     </el-radio-group>
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.pack")}}：</div>
-                                    <el-checkbox-group v-model="checkListPack" @change="doSearch">
+                                    <el-checkbox-group v-model="checkListPack" >
                                         <el-checkbox :label="2" class="w-check">
                                             {{$t("marketplace.silver-pack")}}</el-checkbox>
                                         <el-checkbox :label="1" class="w-check">{{$t("marketplace.gold-pack")}}
@@ -138,7 +138,7 @@
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.frag")}}：</div>
-                                    <el-checkbox-group v-model="checkListFrag" @change="doSearch">
+                                    <el-checkbox-group v-model="checkListFrag">
                                         <el-checkbox :label="24" class="w-check">
                                             {{$t("marketplace.panamera-fragments")}}</el-checkbox>
                                         <el-checkbox :label="23" class="w-check">
@@ -148,6 +148,10 @@
                                     </el-checkbox-group>
                                 </li>
                             </ul>
+                            <div class="search-btns">
+                                <el-button type="primary" @click="doSearch">{{ $t("marketplace.done") }}</el-button>
+                                <el-button @click="doResetFilter">{{ $t("marketplace.reset") }}</el-button>
+                            </div>
                         </div>
                     </div>
                     <div :class="['filter-btn', 'filter-right', {'is-filter': isShowFilter}]"
@@ -298,20 +302,20 @@
             <div class="filter-content">
                 <div class="top-btn">
                     <img src="../../assets/images/close.png" alt="" @click="handleClose">
-                    <div @click="handleClose(1)" class="done-search">Done</div>
+                    <div @click="handleClose" class="done-search" >{{ $t("marketplace.done") }}</div>
                 </div>
                 <ul class="check-list">
                     <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
                             <div class="label-name">{{$t("account.sale")}}</div>
-                            <el-radio-group v-model="checkListSale" @change="doSearch">
+                            <el-radio-group v-model="checkListSale" >
                                 <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                 <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
                             </el-radio-group>
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("detail.color")}}</div>
-                            <el-checkbox-group v-model="checkListColor" @change="doSearch">
+                            <el-checkbox-group v-model="checkListColor">
                                 <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
                                 <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
                                 <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
@@ -322,7 +326,7 @@
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.props")}}</div>
-                            <el-checkbox-group v-model="checkListProps" @change="doSearch">
+                            <el-checkbox-group v-model="checkListProps">
                                 <el-checkbox :label="10">{{$t("marketplace.shoes")}}</el-checkbox>
                                 <el-checkbox :label="11">{{$t("marketplace.pants")}}</el-checkbox>
                                 <el-checkbox :label="12">{{$t("marketplace.clothes")}}</el-checkbox>
@@ -332,7 +336,7 @@
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("account.level")}}</div>
-                            <el-checkbox-group v-model="checkListLvel" @change="doSearch">
+                            <el-checkbox-group v-model="checkListLvel">
                                 <el-checkbox :label="1">Lv-1</el-checkbox>
                                 <el-checkbox :label="2">Lv-2</el-checkbox>
                                 <el-checkbox :label="3">Lv-3</el-checkbox>
@@ -347,14 +351,14 @@
                     <ul class="check-list" v-else>
                         <li class="check-item">
                             <div class="label-name">{{$t("account.sale")}}：</div>
-                            <el-radio-group v-model="checkListSale" @change="doSearch">
+                            <el-radio-group v-model="checkListSale">
                                 <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                 <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
                             </el-radio-group>
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.pack")}}：</div>
-                            <el-checkbox-group v-model="checkListPack" @change="doSearch">
+                            <el-checkbox-group v-model="checkListPack">
                                 <el-checkbox :label="2" class="w-check">{{$t("marketplace.silver-pack")}}
                                 </el-checkbox>
                                 <el-checkbox :label="1" class="w-check">{{$t("marketplace.gold-pack")}}
@@ -363,7 +367,7 @@
                         </li>
                         <li class="check-item">
                             <div class="label-name">{{$t("marketplace.frag")}}：</div>
-                            <el-checkbox-group v-model="checkListFrag" @change="doSearch">
+                            <el-checkbox-group v-model="checkListFrag">
                                 <el-checkbox :label="24" class="block-item">
                                     {{$t("marketplace.panamera-fragments")}}</el-checkbox>
                                 <el-checkbox :label="23" class="block-item">{{$t("marketplace.car-fragments")}}
@@ -498,6 +502,16 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            doResetFilter() {
+                this.checkListSale = 1
+                this.checkListColor = []
+                this.checkListPack = []
+                this.checkListProps = []
+                this.checkListLvel = []
+                this.checkListFrag = []
+                this.isShowFilter = false
+                this.getLiist()
+            },
             sendBuyOk() {
                 this.page.curPage = 1
                 this.buyReviseDialog = false
@@ -626,9 +640,7 @@
             },
             handleClose(type) {
                 // 完成
-                if (type) {
-
-                }
+                this.doSearch()
                 this.isFilterDrawer = false
             },
             onPageChange(page) {
@@ -658,10 +670,8 @@
                     this.isLoading = false
                 })
             },
-            doClearSearchQuery() {
-
-            },
             doSearch() {
+                this.isShowFilter = false
                 this.page.curPage = 1
                 this.getLiist()
             },
