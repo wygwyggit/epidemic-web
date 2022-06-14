@@ -13,7 +13,7 @@
             </div>
             <div slot="title" v-else>
                 <div class="compound-back" @click="() => this.isShowFormWrapper = false">
-                     <img src="../../../../assets/images/back2.png" />
+                    <img src="../../../../assets/images/back2.png" />
                 </div>
             </div>
             <div class="compound-content">
@@ -229,6 +229,13 @@ type_id: 24  帕拉梅拉碎片
                 }).then(res => {
                     if (res.ok) {
                         const data = (res.data || {}).items || []
+                        data.forEach(x => {
+                            if (x.name.includes('-')) {
+                                x.title = x.name.split('-')[3]
+                            } else {
+                                x.title = x.name
+                            }
+                        });
                         this.$emit('compoundSuc', data)
                     }
                 })
@@ -288,10 +295,12 @@ type_id: 24  帕拉梅拉碎片
                 height: 4rem;
             }
         }
+
         .compound-back {
             padding-top: .2rem;
             padding-left: .26rem;
             cursor: pointer;
+
             img {
                 width: 38px;
             }

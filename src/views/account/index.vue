@@ -389,6 +389,7 @@
                     } else {
                         x.title = x.name
                     }
+                    console.log(x, 'dddd')
                 });
             },
             handleCheckAllChange(val) {

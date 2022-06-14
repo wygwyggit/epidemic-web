@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls" v-loading="isLoading">
-        <div class="w" v-if="!isLoading">
+        <div class="w" v-if="!isLoading && userInfo.addr">
             <div class="back" @click="goBack">
                 {{ $t("common.back") }}
             </div>
@@ -84,6 +84,7 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
+    import eventBus from '@/utils/eventBus.js'
     import {
         mapState
     } from 'vuex'
@@ -216,16 +217,9 @@
         },
         watch: {},
         created() {
-            this.levelData.forEach(x => {
-                if (x.id <= this.userInfo.vip_level) {
-                    x.Illuminated = true
-                }
-            })
-            Promise.all([this.getLimitNftCount()]).then(() => {
-                this.isLoading = false
-            })
         },
         mounted() {
+            eventBus.$on('initUserOk', this.initPageData)
             let width = window.innerWidth;
             if (width < 768) {
                 this.dialogWidth = "8.9rem";
@@ -233,6 +227,16 @@
         },
         beforeDestroy() {},
         methods: {
+            initPageData() {
+                this.levelData.forEach(x => {
+                    if (x.id <= this.userInfo.vip_level) {
+                        x.Illuminated = true
+                    }
+                })
+                Promise.all([this.getLimitNftCount()]).then(() => {
+                    this.isLoading = false
+                })
+            },
             openLevelDetailInfo(item) {
                 this.currentItem = item
                 this.dialogVisible = true

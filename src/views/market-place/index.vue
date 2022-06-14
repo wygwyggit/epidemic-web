@@ -59,7 +59,8 @@
                     </div>
                     <div class="search">
                         <el-input :placeholder="$t('marketplace.search-id-or-name')" v-model="query.keywords" clearable
-                            @clear="doSearch" @keyup.enter.native="doSearch" class="input-keywords" v-show="currentTabId === 1">
+                            @clear="doSearch" @keyup.enter.native="doSearch" class="input-keywords"
+                            v-show="currentTabId === 1">
                             <a href="javascript:;" slot="append" class="search-icon" @click="doSearch"></a>
                         </el-input>
                         <el-select v-model="query.sortField" placeholder="" @change="doSearch">
@@ -129,7 +130,7 @@
                                 </li>
                                 <li class="check-item">
                                     <div class="label-name">{{$t("marketplace.pack")}}：</div>
-                                    <el-checkbox-group v-model="checkListPack" >
+                                    <el-checkbox-group v-model="checkListPack">
                                         <el-checkbox :label="2" class="w-check">
                                             {{$t("marketplace.silver-pack")}}</el-checkbox>
                                         <el-checkbox :label="1" class="w-check">{{$t("marketplace.gold-pack")}}
@@ -224,7 +225,7 @@
                                 {{ item.goods_id }}
                             </td>
                             <td>
-                                {{ item.name }}
+                                {{ lang == 'ZH' ? item.name : item.english_name}}
                             </td>
                             <td>
                                 {{ item.amount || '-' }}
@@ -237,7 +238,7 @@
                 </table>
             </div>
             <div class="page r" v-if="recordList.length && !openIsLoading">
-                <el-pagination background layout="total, sizes, prev, pager, next" @current-change="onPageChange2"
+                <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange2"
                     @prev-click="onPageChange2" @next-click="onPageChange2" :page-size="Number(page2.pageSize)"
                     :total="Number(total2)" :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]">
                 </el-pagination>
@@ -273,13 +274,13 @@
                                 {{ item.order_id }}
                             </td>
                             <td>
-                                {{ item.txt_hash }}
+                                {{ item.transfer_txn }}
                             </td>
                             <td>
-                                {{ item.nft_id }}
+                                {{ item.goods_id }}
                             </td>
                             <td>
-                                {{ localStorage.getItem("lang") == 'ZH' ? item.name : item.english_name}}
+                                {{ lang == 'ZH' ? item.name : item.english_name}}
                             </td>
                             <td>
                                 {{ item.amount || '-' }}
@@ -291,7 +292,7 @@
                     </tbody>
                 </table>
                 <div class="page r" v-if="recordList.length && !openIsLoading">
-                    <el-pagination background layout="total, sizes, prev, pager, next" @current-change="onPageChange2"
+                    <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange2"
                         @prev-click="onPageChange2" @next-click="onPageChange2" :page-size="Number(page2.pageSize)"
                         :total="Number(total2)" :current-page="Number(page2.curPage)" :page-sizes="[10, 20, 50, 100]">
                     </el-pagination>
@@ -302,13 +303,13 @@
             <div class="filter-content">
                 <div class="top-btn">
                     <img src="../../assets/images/close.png" alt="" @click="handleClose">
-                    <div @click="handleClose" class="done-search" >{{ $t("marketplace.done") }}</div>
+                    <div @click="handleClose" class="done-search">{{ $t("marketplace.done") }}</div>
                 </div>
                 <ul class="check-list">
                     <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
                             <div class="label-name">{{$t("account.sale")}}</div>
-                            <el-radio-group v-model="checkListSale" >
+                            <el-radio-group v-model="checkListSale">
                                 <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                 <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
                             </el-radio-group>
@@ -478,11 +479,13 @@
                 currentGoodRow: {},
                 netImgBaseUrl,
                 moment,
-                emptyImage
+                emptyImage,
+                lang: '',
             }
         },
         watch: {},
         created() {
+            this.lang = localStorage.getItem('lang') || 'EN'
             this.isLoading = true
             Promise.all([this.getLiist(), this.getTotalInfo(), this.getAmountInfo()])
                 .then(res => {
@@ -522,12 +525,12 @@
                 this.buyReviseDialog = true
             },
             goDetail(id) {
-            //     this.$router.push({
-            //         path: '/details',
-            //         query: {
-            //             id
-            //         }
-            //     })
+                //     this.$router.push({
+                //         path: '/details',
+                //         query: {
+                //             id
+                //         }
+                //     })
             },
             getAmountInfo() {
                 return new Promise((resolve, reject) => {

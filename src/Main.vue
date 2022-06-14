@@ -9,6 +9,7 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
+    import eventBus from '@/utils/eventBus.js'
     import Cookie from "@/utils/cookie.js";
     import OfflineNotice from '@/components/offline-notice';
     import CommonHeader from '@/components/common-header'
@@ -59,8 +60,8 @@
         },
         created() {},
         async mounted() {
-
             Promise.all([this.getUserInfo()]).then(() => {
+                eventBus.$emit('initUserOk')
                 this.isLoading = false
             })
         },
