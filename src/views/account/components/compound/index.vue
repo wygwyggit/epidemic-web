@@ -40,14 +40,15 @@
                             <div v-if="row.type_id == 24">{{ $t("exchange.you-will-burn-100-Panamera")}}</div>
                             <template v-if="row.type_id == 2 || row.type_id == 3">
                                 <div>
-                                    {{ $t("exchange.compound-tip1")}}
+                                    
+                                    {{ $t("exchange.compound-tip-a")}} {{ row.type_id == 3 ? $t("account.bronze-medal") : $t("exchange.sliver-pack") }} {{ $t("exchange.compound-tip-b")}}
                                     <span v-if="row.type_id == 3"
                                         class="type-name">{{ $t("exchange.sliver-pack") }}</span>
                                     <span v-if="row.type_id == 2"
                                         class="type-name">{{ $t("exchange.gold-pack") }}</span>
                                 </div>
                                 <div>
-                                    <span>{{ $t("exchange.compound-tip2")}}</span>
+                                    <span>{{ $t("exchange.compound-tip-c")}}{{row.type_id == 2 ? $t("exchange.gold-pack") : $t("exchange.sliver-pack")}}{{ $t("exchange.compound-tip-d")}}</span>
                                     <el-input-number v-model="num" size="mini" @change="handleChange"
                                         @keydown.native="e => e.returnValue = ''" :min="0" :max="maxContent">
                                     </el-input-number>

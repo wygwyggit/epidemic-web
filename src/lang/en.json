@@ -87,6 +87,7 @@
         "purple": "Purple",
         "diamond": "Diamond",
         "copper": "Copper",
+        "bronze-medal": "Bronze medal",
         "sale": "Sale",
         "for-sale": "For sale",
         "not-sale": "Not sale",
@@ -110,7 +111,8 @@
         "gold": "Gold",
         "processing": "Processing",
         "sale-price-mini": "Minimum 5000000 Adoge",
-        "quantity-for-sale": "Quantity for sale"
+        "quantity-for-sale": "Quantity for sale",
+        "quantity-for-open": "Open quantity"
     },
     "detail": {
         "attribute": "Attribute",
@@ -129,6 +131,7 @@
         "sale": "Sale"
     },
     "marketplace": {
+        "nft-name": "NFT Name",
         "done": "Done",
         "reset": "Reset",
         "title": "Buy",
@@ -250,8 +253,10 @@
         "next": "Next",
         "gold-pack": "Gold Pack",
         "sliver-pack": "Silver Pack",
-        "compound-tip1": "You will Burn 10 bronze medal to get a",
-        "compound-tip2": "Enter the number of Gold packs",
+        "compound-tip-a": "You will Burn 10",
+        "compound-tip-b": "to get a",
+        "compound-tip-c": "Enter the number of",
+        "compound-tip-d": "",
         "exchange": "Exchange",
         "you-will-burn-100-Panamera": "You will burn 100 Panamera shards to get a real Panamera",
         "you-will-burn-100-Phone": "You will burn 100 Phone shards to get a real iPhone 13 Pro",

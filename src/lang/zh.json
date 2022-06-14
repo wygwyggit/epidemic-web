@@ -77,7 +77,7 @@
         "days-in-a-row": "天连续签到",
         "sign-in": "签到",
         "signed-in": "已签到",
-        "my-account": "我的NFT",
+        "my-account": "我的",
         "filter": "筛选",
         "clear": "清除",
         "yellow": "黄色",
@@ -88,6 +88,7 @@
         "diamond": "钻石色",
         "sale": "售卖",
         "copper": "铜",
+        "bronze-medal": "铜牌",
         "for-sale": "出售中",
         "not-sale": "未出售",
         "level": "等级",
@@ -100,7 +101,7 @@
         "available": "可使用",
         "on-sale": "出售中",
         "staking": "质押中",
-        "sending": "转增中",
+        "sending": "转赠中",
         "open": "开礼包",
         "synthetic": "融合",
         "congratulation": "恭喜你获得",
@@ -110,7 +111,8 @@
         "gold": "金徽章",
         "processing": "上架中",
         "sale-price-mini": "至少5000000份",
-        "quantity-for-sale": "销售的数量"
+        "quantity-for-sale": "销售的数量",
+        "quantity-for-open": "开启的数量"
     },
     "detail": {
         "attribute": "属性",
@@ -129,6 +131,7 @@
         "sale": "出售"
     },
     "marketplace": {
+        "nft-name": "NFT名称",
         "done": "搜索",
         "reset": "重置",
         "title": "购买",
@@ -250,8 +253,10 @@
         "next": "下一步",
         "gold-pack": "金礼包",
         "sliver-pack": "银礼包",
-        "compound-tip1": "消耗10个银礼包可合成1个",
-        "compound-tip2": "请输入你想要合成的金礼包数量",
+        "compound-tip-a": "消耗10个",
+        "compound-tip-b": "可合成1个",
+        "compound-tip-c": "请输入你想要合成的",
+        "compound-tip-d": "数量",
         "exchange": "兑换",
         "you-will-burn-100-Panamera": "您将燃烧100个帕拉梅拉碎片获得一辆帕拉梅拉真车",
         "you-will-burn-100-Phone": "您将燃烧100个手机碎片获得一部iPhone 13 Pro手机",

@@ -10,11 +10,11 @@
                             <div class="val">{{ row.goods_id }}</div>
                         </li>
                         <li class="item">
-                            <div class="key">NFT Name:</div>
+                            <div class="key">{{ $t("marketplace.nft-name")}}:</div>
                             <div class="val">{{ row.name }}</div>
                         </li>
                         <li class="item">
-                            <div class="key">Price:</div>
+                            <div class="key">{{ $t("marketplace.price")}}:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
                                 {{ row.amount }} Adoge

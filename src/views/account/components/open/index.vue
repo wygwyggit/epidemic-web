@@ -9,7 +9,7 @@
                     <div class="val">{{ row.num }}</div>
                 </li>
                 <li class="item">
-                    <div class="key">{{ $t("account.quantity-for-sale") }}</div>
+                    <div class="key">{{ $t("account.quantity-for-open") }}</div>
                     <div class="val">
                         <el-input-number v-model="openQuantity" :min="1" :max="row.num"></el-input-number>
                     </div>

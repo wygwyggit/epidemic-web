@@ -5,11 +5,11 @@
                 <div class="tit-tab">
                     <div class="left">
                         <img src="../../assets/images/nav-marketplace.png" alt="">
-                        Marketplace
+                        {{ $t("common.marketplace")}}
                     </div>
                     <div class="right" @click="handleRecored">
                         <img src="../../assets/images/clock.png" alt="">
-                        Order record
+                        {{ $t("marketplace.order-record")}}
                     </div>
                     <div class="right min" @click="handleRecoredDrawer">
                         <img src="../../assets/images/clock_w.png" alt="">
