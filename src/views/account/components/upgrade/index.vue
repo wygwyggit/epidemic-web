@@ -134,6 +134,8 @@
                 }).then(hash => {
                     this.tokenHash = hash
                     this.doSend()
+                }).catch(err => {
+                     this.submitLoading = false
                 })
             },
             doSend() {

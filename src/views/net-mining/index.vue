@@ -24,7 +24,7 @@
                                 <p class="key">
                                     {{$t("net-mining.reward")}}
                                 </p>
-                                <p class="value">{{ coinCountData.count }}</p>
+                                <p class="value">{{ coinCountData.reward }}</p>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                                     @select="selectNftCard">
                                     <div class="time-left" v-if="item.left_days">
                                         <div class="label">{{  $t("net-mining.time-left") }}</div>
-                                        <div class="value">{{ Number(item.left_days) + 1 }}</div>
+                                        <div class="value">{{ item.left_days }}</div>
                                     </div>
                                 </item-card>
                             </div>
