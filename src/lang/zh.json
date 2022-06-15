@@ -110,9 +110,9 @@
         "silver": "银徽章",
         "gold": "金徽章",
         "processing": "上架中",
-        "sale-price-mini": "至少5000000份",
+        "sale-price-mini": "至少5000000个Adoge",
         "quantity-for-sale": "销售的数量",
-        "quantity-for-open": "开启的数量"
+        "quantity-for-open": "开启数量"
     },
     "detail": {
         "attribute": "属性",
@@ -193,7 +193,7 @@
     "net-mining": {
         "available": "可质押",
         "reward": "奖励",
-        "please-click-on-the-NFT-card-to-select": "请点击NFT卡片进行选择",
+        "please-click-to-select": "请点击NFT卡片进行选择",
         "selected": "已选",
         "select-all": "全选",
         "stacking-now": "开启质押",
@@ -208,9 +208,7 @@
         "staking-tickets": "质押所需门票",
         "balance": "余额",
         "insufficient-balance": "余额不足",
-        "time-left": "剩余质押时间",
-        "ypledged": "已质押",
-        "not-pledged": "未质押"
+        "time-left": "剩余质押时间"
     },
     "ego-wall": {
         "ego-wall": "成就墙",

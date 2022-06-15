@@ -16,10 +16,10 @@
                             <router-link tag="a" :to="{path: 'marketplace'}">{{$t("common.marketplace")}}</router-link>
                         </li>
                         <li class="item">
-                            <router-link tag="a" :to="{path: 'netMining'}">{{$t("common.net-mining")}}</router-link>
-                        </li>
-                        <li class="item">
                             <router-link tag="a" :to="{path: 'account'}">{{$t("common.my-account")}}</router-link>
+                        </li>
+                         <li class="item">
+                            <router-link tag="a" :to="{path: 'netMining'}">{{$t("common.net-mining")}}</router-link>
                         </li>
                     </ul>
                     <div class="out-link">

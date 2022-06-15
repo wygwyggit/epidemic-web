@@ -193,7 +193,7 @@
     "net-mining": {
         "available": "Available",
         "reward": "Reward",
-        "please-click-on-the-NFT-card-to-select": "Please click on the NFT card to select",
+        "please-click-to-select": "Please click on the NFT card to select",
         "selected": "Selected",
         "select-all": "Select All",
         "stacking-now": "Stacking Now",
@@ -208,9 +208,7 @@
         "staking-tickets": "Staking-tickets",
         "balance": "Balance",
         "insufficient-balance": "Insufficient Balance",
-        "time-left": "Time left",
-        "ypledged": "Pledged",
-        "not-pledged": "Not Pledged"
+        "time-left": "Time left"
     },
     "ego-wall": {
         "ego-wall": "EGO WALL",

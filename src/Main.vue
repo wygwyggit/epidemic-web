@@ -27,7 +27,6 @@
         data() {
             return {
                 prefixCls: '',
-                isLoading: true,
                 isShowFooter: true,
                 bgColor: ""
             }
@@ -50,6 +49,10 @@
                             }
                             this.bgColor = "#32A3FF"
                             break;
+                        case 'account',
+                             'netMining':
+                             this.getUserInfo()
+                            break;
                         default:
                             this.bgColor = "#32A3FF"
                             this.isShowFooter = true
@@ -60,17 +63,12 @@
         },
         created() {},
         async mounted() {
-            Promise.all([this.getUserInfo()]).then(() => {
-                eventBus.$emit('initUserOk')
-                this.isLoading = false
-            })
         },
         beforeDestroy() {},
         methods: {
             getUserInfo() {
                 return new Promise((resolve, reject) => {
                     if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token')) {
-                        this.isLoading = false
                         return resolve()
                     }
                     myAjax({
@@ -82,13 +80,9 @@
                             }
                             resolve()
                         }).catch(error => {
-                            const response = error.response
-                            if (response.status == '403') {
-                                this.SHOW_OFFLINEDIALOGVISIBLE()
-                            }
                         })
                         .finally(err => {
-                            this.isLoading = false
+                            eventBus.$emit('initUserOk')
                         })
                 })
             },
@@ -97,7 +91,6 @@
             },
             ...mapMutations([
                 'UPDATE_USERINFO',
-                'SHOW_OFFLINEDIALOGVISIBLE'
             ])
         },
     }

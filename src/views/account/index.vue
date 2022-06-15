@@ -13,7 +13,7 @@
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p class="li-tit">{{ $t("ego-wall.bronze-badge") }}</p>
+                                <p class="li-tit">{{ $t("account.bronze-medal") }}</p>
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
@@ -751,14 +751,15 @@
                 .components-item-card {
 
                     .btns-wrap {
+                        min-height: .68rem;
                         display: flex;
                         justify-content: space-between;
                     }
 
                     .btn {
                         flex: 1;
-                        height: 40px;
-                        line-height: 40px;
+                        height: .533333333333333rem;
+                        line-height: .533333333333333rem;
                         text-align: center;
                         border-radius: .133333333333333rem;
                         color: #fff;

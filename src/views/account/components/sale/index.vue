@@ -38,7 +38,7 @@
                         <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')"
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                     </div>
-                    <p class="price-tip">{{$t("common.net-price-modified-tip")}}</p>
+                    <p class="price-tip" v-if="row.amount">{{$t("common.net-price-modified-tip")}}</p>
                 </template>
                 <div class="opt-btn">
                     <button class="btn" :class="{'confirmed': salePrice.length}"

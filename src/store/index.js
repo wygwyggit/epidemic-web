@@ -16,6 +16,12 @@ export default new Vuex.Store({
             state.offLineDialogVisible = true
         }
     },
-    actions: {},
+    actions: {
+        showOffLineDialog: ( {
+            commit
+        }) => {
+            commit('SHOW_OFFLINEDIALOGVISIBLE')
+        }
+    },
     modules: {}
 })

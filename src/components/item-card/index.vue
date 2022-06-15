@@ -226,9 +226,8 @@
             }
 
             .opt-buttom {
-                min-height: .666666666666667rem;
                 >div {
-                    padding-top: .18rem;
+                    padding-top: .133333333333333rem;
                     border-top: 1px solid #29374B;
                 }
 

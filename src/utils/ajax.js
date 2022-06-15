@@ -1,19 +1,16 @@
+import store from '@/store/index'
 import axios from 'axios'
 import Cookie from "@/utils/cookie.js";
 import {
     apiBasePath,
-    napiBasePath,
-    capiBasePath
 } from '@/config/config'
 import {
     Message
 } from 'element-ui'
-
-// 防止请求 104或415 后继续发出请求或执行响应
-let isLogout = false
+let isOffLine = false
 const myAjax = (options) => {
     return new Promise((res, rej) => {
-        if (isLogout) return res()
+        if (isOffLine) return res()
         let url = apiBasePath + options.url
         const data = Object.assign((!options.notHeaderParams ? {
             header: {
@@ -41,13 +38,21 @@ const myAjax = (options) => {
             }
             res(data)
         }).catch(err => {
+            isOffLine = true
             const response = err.response
-            if (response.status == '500') {
-                Message.closeAll();
-                Message({
-                    type: 'error',
-                    message: '服务器开小差啦~'
-                })
+            switch (response.status) {
+                case 500:
+                    Message.closeAll();
+                    Message({
+                        type: 'error',
+                        message: '服务器开小差啦~'
+                    })
+                    break;
+                case 403:
+                    store.dispatch('showOffLineDialog')
+                    break;
+                default:
+                    break;
             }
             rej(err)
         })

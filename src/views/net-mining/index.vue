@@ -39,29 +39,27 @@
                         <template v-if="(currentTabId === 0) && list.length && !isLoading">
                             <div class="select-wrap">
                                 <div class="select-info">
-                                    <span class="txt">Please click on the NFT card to select</span>
+                                    <span class="txt">{{ $t("net-mining.please-click-to-select") }}</span>
                                     <span class="selected-num">
-                                        Selected: {{selectIds.length}}
+                                         {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
-                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">{{ $t("net-mining.select-all") }}</el-checkbox>
                                 </div>
                                 <div class="staking" @click="doPledge(1)" :class="{'active': selectIds.length > 0}">
-                                    Pledge
-                                    Now
+                                   {{ $t("net-mining.stacking-now") }}
                                 </div>
                             </div>
                             <div class="select-wrap-h5">
-                                Please click on the NFT card to select
+                                {{ $t("net-mining.please-click-to-select") }}
                             </div>
                             <div class="select-info-h5">
                                 <div>
-                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">Select All</el-checkbox>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">{{ $t("net-mining.select-all") }}</el-checkbox>
                                     <span class="selected-num">
-                                        Selected: {{selectIds.length}}
+                                        {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
                                 </div>
-                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">Pledge
-                                    Now
+                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">{{ $t("net-mining.stacking-now") }}
                                 </el-button>
                             </div>
                         </template>
@@ -70,7 +68,7 @@
                                 <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
                                     @select="selectNftCard">
                                     <div class="time-left" v-if="item.left_days">
-                                        <div class="label">{{  $t("net-mining.time-left")}}</div>
+                                        <div class="label">{{  $t("net-mining.time-left") }}</div>
                                         <div class="value">{{ Number(item.left_days) + 1 }}</div>
                                     </div>
                                 </item-card>
@@ -100,7 +98,7 @@
                         </ul> -->
                         </template>
                         <template v-if="!list.length && !isLoading">
-                            <el-empty :image="emptyImage" description="No unstaking NFTs"></el-empty>
+                            <el-empty :image="emptyImage" :description="$t('common.no-data')"></el-empty>
                         </template>
                     </div>
                 </div>
@@ -112,17 +110,17 @@
 
 
         </div>
-        <el-dialog title="Staking Information" :visible.sync="dialogVisible" width="480px" :close-on-click-modal="false"
+        <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px" :close-on-click-modal="false"
             custom-class="pledge-dialog" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
-                        Please confirm the pledge content
+                        {{ $t('net-mining.please-confirm-the-staking-content') }}
                     </div>
                     <div class="con">
                         <ul>
                             <li v-for="(value, key) in stakingRarityMap" :key="key">
-                                <div class="key" :style="{color: key}">{{ key }}</div>
+                                <div class="key" :style="{color: key}">{{ $t(`account.${key}`) }}</div>
                                 <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
@@ -130,7 +128,7 @@
                 </div>
                 <div class="info-item time-content">
                     <div class="tit">
-                        Pledge time
+                          {{ $t('net-mining.staking-time') }}
                     </div>
                     <div class="con">
                         <div v-for="(item, index) of pledgeTimes" :key="index"
@@ -142,18 +140,18 @@
                 </div>
                 <div class="info-item balance-content">
                     <div class="tit">
-                        Pledge tickets
+                         {{ $t('net-mining.staking-tickets') }}
                     </div>
                     <div class="con">
                         <div class="left">
                             <p><span>{{ needAmazing }}</span>AmazingTeam</p>
-                            <p class="balance">Balance: {{ balanceCount }}</p>
+                            <p class="balance">{{ $t('net-mining.balance') }}: {{ balanceCount }}</p>
                         </div>
                         <div class="right">
                             <a class="buy"
                                 href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
                                 target="_blank">
-                                Buy
+                                {{ $t('detail.buy') }}
                             </a>
                         </div>
                     </div>
@@ -258,11 +256,11 @@
                 },
                 tabs: [{
                     id: 1,
-                    title: this.$t("net-mining.ypledged"),
+                    title: this.$t("common.staking"),
                     num: 0
                 }, {
                     id: 0,
-                    title: this.$t("net-mining.not-pledged"),
+                    title: this.$t("account.available"),
                     num: 0
                 }],
                 currentTabId: 1,
@@ -273,13 +271,13 @@
                 drawer: false,
                 pledgeTimes: [{
                     id: 1,
-                    title: '1 day'
+                    title: this.$t('net-mining.1-day')
                 }, {
                     id: 10,
-                    title: '10 day'
+                    title: this.$t('net-mining.10-days')
                 }, {
                     id: 30,
-                    title: '30 day'
+                    title: this.$t('net-mining.30-days')
                 }],
                 pledgeParams: {
                     time: 1
@@ -314,7 +312,7 @@
             this.initSignConnectData()
             eventBus.$on('sign-fail', this.initSignConnectData)
             if (this.isSign && this.isConnectWallet) {
-                Promise.all([this.getCoinCount(), this.getList()]).then(() => {
+                Promise.all([this.getCoinCount(), this.getList()]).finally(() => {
                     this.isLoading = false
                 })
             } else {
@@ -421,6 +419,7 @@
                 }
             },
             doPledge(flag) {
+                if (!this.selectIds.length) return
                 if (flag) {
                     this.dialogVisible = true
                 } else {
