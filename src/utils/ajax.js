@@ -7,10 +7,8 @@ import {
 import {
     Message
 } from 'element-ui'
-let isOffLine = false
 const myAjax = (options) => {
     return new Promise((res, rej) => {
-        if (isOffLine) return res()
         let url = apiBasePath + options.url
         const data = Object.assign((!options.notHeaderParams ? {
             header: {
@@ -38,7 +36,6 @@ const myAjax = (options) => {
             }
             res(data)
         }).catch(err => {
-            isOffLine = true
             const response = err.response
             switch (response.status) {
                 case 500:

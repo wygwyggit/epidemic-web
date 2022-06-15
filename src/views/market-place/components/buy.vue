@@ -40,7 +40,7 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <button class="btn" @click="doSubmit">{{$t("common.confirmed") }} </button>
+                    <el-button class="btn" @click="doSubmit" :loading="submitLoading">{{$t("common.confirmed") }} </el-button>
                 </div>
             </div>
         </el-dialog>
@@ -72,6 +72,7 @@
                 isLoading: true,
                 dialogLoading: false,
                 isShowDialog: true,
+                submitLoading: false,
                 num: '',
                 saleQuantity: 1,
             }
@@ -91,7 +92,25 @@
         beforeDestroy() {},
         methods: {
             doSubmit() {
-                this.doNftApprove()
+                this.submitLoading = true
+                myAjax({
+                    url: 'goods/market/order/locking',
+                    data: {
+                        body: {
+                            record_id: this.row.record_id
+                        }
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        if (res.is_lockng) {
+                            this.$showError(this.$t("marketplace.order-locked"))
+                            this.submitLoading = false
+                        } else {
+                            this.doNftApprove()
+                        }
+                    }
+                })
+                
             },
             doNftApprove() {
                 web3Tool.contract({
@@ -102,6 +121,8 @@
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.sendBuy(hash)
+                }).catch(err => {
+                    this.submitLoading = false
                 })
             },
             sendBuy(hash) {
@@ -268,7 +289,6 @@
                 .btn {
                     width: 100%;
                     height: 0.8rem;
-                    line-height: 0.8rem;
                     text-align: center;
                     border: 0;
                     font-size: 0.32rem;

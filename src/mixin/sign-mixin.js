@@ -17,7 +17,7 @@ export default {
             })
         },
         getNonce() {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => { 
                 myAjax({
                     url: `auth/nonce?addr=${this.account}`,
                     method: 'GET'

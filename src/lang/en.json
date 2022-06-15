@@ -131,6 +131,7 @@
         "sale": "Sale"
     },
     "marketplace": {
+        "order-locked": "Order locked",
         "nft-name": "NFT Name",
         "done": "Done",
         "reset": "Reset",
