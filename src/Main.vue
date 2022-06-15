@@ -49,9 +49,9 @@
                             }
                             this.bgColor = "#32A3FF"
                             break;
-                        case 'account',
-                             'netMining':
-                             this.getUserInfo()
+                        case 'account':
+                        case 'netMining':
+                            this.getUserInfo()
                             break;
                         default:
                             this.bgColor = "#32A3FF"
@@ -62,8 +62,7 @@
             }
         },
         created() {},
-        async mounted() {
-        },
+        async mounted() {},
         beforeDestroy() {},
         methods: {
             getUserInfo() {
@@ -79,8 +78,7 @@
                                 this.UPDATE_USERINFO(res.data || {})
                             }
                             resolve()
-                        }).catch(error => {
-                        })
+                        }).catch(error => {})
                         .finally(err => {
                             eventBus.$emit('initUserOk')
                         })
