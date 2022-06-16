@@ -218,6 +218,10 @@
                             this.currentTab = val.path.replace("/", "");
                             this.myBgColor = this.bgColor;
                             break;
+                        case "account":
+                        case 'account/egoWall':
+                            this.currentTab = 'account'
+                            break;
                         default:
                             let width = window.innerWidth;
                             if (width < 768) {

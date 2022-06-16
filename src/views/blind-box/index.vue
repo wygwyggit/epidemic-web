@@ -431,7 +431,6 @@
                     abiContract.methods.approve(payAddress, amount).send({
                         from: this.account
                     }, function (err, res) {
-                        console.log(res, '333')
                         if (err) {
                             reject(err)
                         }

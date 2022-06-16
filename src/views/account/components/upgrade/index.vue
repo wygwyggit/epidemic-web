@@ -108,7 +108,6 @@
         beforeDestroy() {},
         methods: {
             upgradeDialogClosed() {
-                console.log('aaa')
                 this.$emit('close')
             },
             doNftApprove() {

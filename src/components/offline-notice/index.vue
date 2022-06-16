@@ -32,7 +32,6 @@
             return {}
         },
         created() {
-            console.log(signMixin)
         },
         computed: {
             ...mapState({

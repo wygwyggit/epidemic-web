@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls" >
+    <div :class="prefixCls">
         <div class="top" v-if="isSign && isConnectWallet">
             <div class="w">
                 <div class="left">
@@ -41,12 +41,13 @@
                                 <div class="select-info">
                                     <span class="txt">{{ $t("net-mining.please-click-to-select") }}</span>
                                     <span class="selected-num">
-                                         {{ $t("net-mining.selected") }}: {{selectIds.length}}
+                                        {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
-                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">{{ $t("net-mining.select-all") }}</el-checkbox>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">
+                                        {{ $t("net-mining.select-all") }}</el-checkbox>
                                 </div>
                                 <div class="staking" @click="doPledge(1)" :class="{'active': selectIds.length > 0}">
-                                   {{ $t("net-mining.stacking-now") }}
+                                    {{ $t("net-mining.stacking-now") }}
                                 </div>
                             </div>
                             <div class="select-wrap-h5">
@@ -54,12 +55,14 @@
                             </div>
                             <div class="select-info-h5">
                                 <div>
-                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">{{ $t("net-mining.select-all") }}</el-checkbox>
+                                    <el-checkbox v-model="isSelectAll" @change="doSelectAll">
+                                        {{ $t("net-mining.select-all") }}</el-checkbox>
                                     <span class="selected-num">
                                         {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
                                 </div>
-                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">{{ $t("net-mining.stacking-now") }}
+                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">
+                                    {{ $t("net-mining.stacking-now") }}
                                 </el-button>
                             </div>
                         </template>
@@ -110,8 +113,8 @@
 
 
         </div>
-        <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px" :close-on-click-modal="false"
-            custom-class="pledge-dialog" :show-close="!comfirmLoading">
+        <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px"
+            :close-on-click-modal="false" custom-class="pledge-dialog" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
@@ -128,7 +131,7 @@
                 </div>
                 <div class="info-item time-content">
                     <div class="tit">
-                          {{ $t('net-mining.staking-time') }}
+                        {{ $t('net-mining.staking-time') }}
                     </div>
                     <div class="con">
                         <div v-for="(item, index) of pledgeTimes" :key="index"
@@ -140,7 +143,7 @@
                 </div>
                 <div class="info-item balance-content">
                     <div class="tit">
-                         {{ $t('net-mining.staking-tickets') }}
+                        {{ $t('net-mining.staking-tickets') }}
                     </div>
                     <div class="con">
                         <div class="left">
@@ -157,28 +160,27 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                      <el-button type="primary" :loading="comfirmLoading"
-                        @click="doApprove">
+                    <!-- <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
                         {{ $t("common.confirmed")}}
-                    </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    </el-button> -->
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button> -->
+                    </el-button>
                 </div>
             </div>
 
         </el-dialog>
-        <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt">
+        <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
-                        Please confirm the pledge content
+                        {{ $t('net-mining.please-confirm-the-staking-content') }}
                     </div>
                     <div class="con">
                         <ul>
                             <li v-for="(value, key) in stakingRarityMap" :key="key">
-                                <div class="key" :style="{color: key}">{{ key }}</div>
+                                <div class="key" :style="{color: key}">{{ $t(`account.${key}`) }}</div>
                                 <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
@@ -186,7 +188,7 @@
                 </div>
                 <div class="info-item time-content">
                     <div class="tit">
-                        Pledge time
+                        {{ $t('net-mining.staking-time') }}
                     </div>
                     <div class="con">
                         <div v-for="(item, index) of pledgeTimes" :key="index"
@@ -198,22 +200,25 @@
                 </div>
                 <div class="info-item balance-content">
                     <div class="tit">
-                        Pledge tickets
+                        {{ $t('net-mining.staking-tickets') }}
                     </div>
                     <div class="con">
                         <div class="left">
                             <p><span>{{ needAmazing }}</span>AmazingTeam</p>
-                            <p class="balance">Balance: {{ balanceCount }}
+                            <p class="balance">{{ $t('net-mining.balance') }}: {{ balanceCount }}
                                 <a class="buy"
                                     href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
                                     target="_blank">
-                                    Buy
+                                    {{ $t('detail.buy') }}
                                 </a>
                             </p>
                         </div>
                     </div>
                 </div>
                 <div class="btn-wrap">
+                    <!-- <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                        {{ $t("common.confirmed")}}
+                    </el-button> -->
                     <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
@@ -386,7 +391,6 @@
                 })
             },
             stakingConfirm(hash) {
-                this.comfirmLoading = true
                 myAjax({
                     url: 'user/goods/pledged',
                     data: {
@@ -400,10 +404,11 @@
                     if (res.ok) {
                         this.$showOk(this.$t("common.ope-suc"))
                         Promise.all([this.getCoinCount(), this.getList()]).then(() => {
-                            this.comfirmLoading = this.dialogVisible = this.drawer = false
+                            this.dialogVisible = this.drawer = false
                         })
                     }
-
+                }).finally(() => {
+                    this.comfirmLoading = false
                 })
             },
             selectNftCard({
@@ -426,7 +431,8 @@
                     this.drawer = true
                 }
                 this.dialogLoading = true
-                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress('token')])
+                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress(
+                        'token')])
                     .then(data => {
                         const [p1, contract_addr_abi, token_approve_addr] = data
                         this.contract_addr = contract_addr_abi.contract_addr
@@ -460,6 +466,7 @@
                 this.drawer = true
             },
             doApprove() {
+                this.comfirmLoading = true
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
@@ -468,6 +475,8 @@
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.stakingConfirm(hash)
+                }).catch(err => {
+                    this.comfirmLoading = false
                 })
             },
             doSelectAll(flag) {

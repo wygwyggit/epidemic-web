@@ -178,7 +178,7 @@
 
             .img-mid-content {
                 &.can-detail {
-                    cursor: pointer;
+                    //cursor: pointer;
                 }
 
                 .img-content {

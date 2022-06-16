@@ -17,14 +17,14 @@
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
-                        <router-link tag="li" :to="{name: 'egoWall'}">
+                        <li @click="() => this.$router.push({name: 'egoWall'})">
                             <div class="icon-img">
                                 <img src="../../assets/images/reward.png" alt="">
                             </div>
                             <div class="right-info">
                                 <p>{{ $t("ego-wall.ego-wall") }}</p>
                             </div>
-                        </router-link>
+                        </li>
                         <li class="sign-in">
                             <div class="sign-btn" @click="signIn">
                                 <img src="../../assets/images/sign-in.png" alt="">
@@ -714,6 +714,7 @@
                     .icon-img img {
                         width: .8rem;
                         height: .8rem;
+                        cursor: pointer;
                     }
 
                     .right-info {

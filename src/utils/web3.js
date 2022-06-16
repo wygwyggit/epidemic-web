@@ -2,7 +2,7 @@ import Web3 from 'web3'
 
 class Web3Tool {
     constructor() {
-        this.web3 = new Web3(window.web3.currentProvider)
+        this.web3 = new Web3(window.ethereum)
     }
     init(callback) {
         if (typeof window.ethereum === "undefined") {

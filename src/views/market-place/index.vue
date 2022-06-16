@@ -666,9 +666,12 @@
             },
             onSelectTab(item) {
                 if (this.isLoading) return
+                this.isShowFilter = false
                 this.currentTabId = item.id
                 this.page.curPage = 1
+                this.query.keywords = ''
                 this.isLoading = true
+                this.doResetFilter()
                 this.getLiist().then(() => {
                     this.isLoading = false
                 })
@@ -676,7 +679,10 @@
             doSearch() {
                 this.isShowFilter = false
                 this.page.curPage = 1
-                this.getLiist()
+                this.isLoading = true
+                this.getLiist().then(() => {
+                    this.isLoading = false
+                })
             },
             openFilterDrawer() {
                 this.isShowFilter = !this.isShowFilter
@@ -742,6 +748,8 @@
                 margin-bottom: 44px;
 
                 .left {
+                    display: flex;
+                    align-items: center;
                     font-size: 48px;
                     font-weight: 600;
 

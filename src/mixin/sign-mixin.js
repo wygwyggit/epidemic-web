@@ -13,6 +13,7 @@ export default {
                 addr: this.account,
                 pwd: ''
             }).then(signature => {
+                Cookie.delCookie("ad_token")
                 this.getToken(signature)
             })
         },

@@ -7,19 +7,29 @@
                 <div class="right">
                     <ul class="clearfix">
                         <li class="item">
-                            <router-link tag="a" :to="{path: 'home'}">{{$t("common.home")}}</router-link>
+                            <router-link :to="{path: 'home'}">
+                                <a>{{$t("common.home")}}</a>
+                            </router-link>
                         </li>
                         <li class="item">
-                            <router-link tag="a" :to="{path: 'blindBox'}">{{$t("common.blind-box")}}</router-link>
+                            <router-link  :to="{path: 'blindBox'}">
+                                <a>{{$t("common.blind-box")}}</a>
+                            </router-link>
                         </li>
                         <li class="item">
-                            <router-link tag="a" :to="{path: 'marketplace'}">{{$t("common.marketplace")}}</router-link>
+                            <router-link  :to="{path: 'marketplace'}">
+                                <a>{{$t("common.marketplace")}}</a>
+                            </router-link>
                         </li>
                         <li class="item">
-                            <router-link tag="a" :to="{path: 'account'}">{{$t("common.my-account")}}</router-link>
+                            <router-link :to="{path: 'account'}">
+                                <a>{{$t("common.my-account")}}</a>
+                            </router-link>
                         </li>
                          <li class="item">
-                            <router-link tag="a" :to="{path: 'netMining'}">{{$t("common.net-mining")}}</router-link>
+                            <router-link :to="{path: 'netMining'}">
+                                <a>{{$t("common.net-mining")}}</a>
+                            </router-link>
                         </li>
                     </ul>
                     <div class="out-link">
