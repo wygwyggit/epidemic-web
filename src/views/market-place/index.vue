@@ -219,7 +219,8 @@
                                 {{ item.order_id }}
                             </td>
                             <td>
-                                {{ item.transfer_txn }}
+                                <span class="hash-txt">
+                                    {{ item.transfer_txn || item.approve_txn }}</span>
                             </td>
                             <td>
                                 {{ item.goods_id }}
@@ -274,7 +275,8 @@
                                 {{ item.order_id }}
                             </td>
                             <td>
-                                {{ item.transfer_txn }}
+                                <span class="hash-txt">
+                                    {{ item.transfer_txn || item.approve_txn }}</span>
                             </td>
                             <td>
                                 {{ item.goods_id }}
@@ -1235,7 +1237,6 @@
                     td {
                         height: 0.853333333333333rem;
                         font-size: .24rem;
-                        line-height: 0.853333333333333rem;
                         border-top: 1px solid #152132;
 
                         &.orange {
@@ -1244,6 +1245,15 @@
 
                         &.green {
                             color: #00CF08;
+                        }
+
+                        .hash-txt {
+                            display: inline-block;
+                            width: 1.866666666666667rem;
+                            line-height: 0.853333333333333rem;
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
                         }
                     }
                 }
@@ -1380,7 +1390,6 @@
                         td {
                             height: 0.853333333333333rem;
                             padding-right: .2133rem;
-                            line-height: 0.853333333333333rem;
                             border-top: 1px solid #152132;
                             white-space: nowrap;
 
@@ -1390,6 +1399,14 @@
 
                             &.green {
                                 color: #00CF08;
+                            }
+
+                            .hash-txt {
+                                display: inline-block;
+                                width: 1.866666666666667rem;
+                                white-space: nowrap;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
                             }
                         }
                     }
