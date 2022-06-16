@@ -551,12 +551,12 @@
                 this.doSearch()
             },
             goCardDetail(row) {
-                this.$router.push({
-                    path: '/details',
-                    query: {
-                        id: row.goods_id
-                    }
-                })
+                // this.$router.push({
+                //     path: '/details',
+                //     query: {
+                //         id: row.goods_id
+                //     }
+                // })
             },
             doSearch() {
                 this.page.curPage = 1

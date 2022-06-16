@@ -219,6 +219,11 @@
         created() {
         },
         mounted() {
+            if (!this.userInfo.addr) {
+                this.$router.replace({
+					name:'account',
+				})
+            }
             eventBus.$on('initUserOk', this.initPageData)
             let width = window.innerWidth;
             if (width < 768) {
