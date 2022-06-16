@@ -23,18 +23,18 @@
                     </ul>
                     <ul v-else>
                         <li class="item">
-                            <div class="key">Commodity:</div>
+                            <div class="key">{{ $t("marketplace.commodity") }}:</div>
                             <div class="val">{{ row.rarity }}</div>
                         </li>
                         <li class="item">
-                            <div class="key">Quantity:</div>
+                            <div class="key">{{ $t("marketplace.quantity") }}:</div>
                             <el-input-number v-model="num" :min="1" :max="row.num"></el-input-number>
                         </li>
                         <li class="item">
-                            <div class="key">Total price:</div>
+                            <div class="key">{{ $t("marketplace.total-price") }}:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                                {{ row.amount }} Adoge
+                                {{ totalPrice }} Adoge
                             </div>
                         </li>
                     </ul>
@@ -77,7 +77,11 @@
                 saleQuantity: 1,
             }
         },
-        computed: {},
+        computed: {
+            totalPrice() {
+                return this.row.amount * this.num
+            }
+        },
         watch: {},
         created() {},
         mounted() {
