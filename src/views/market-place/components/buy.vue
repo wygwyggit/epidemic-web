@@ -116,7 +116,7 @@
                     }
                 }).then(res => {
                     if (res.ok) {
-                        if (res.is_lockng) {
+                        if (res.data.is_lockng) {
                             this.$showError(this.$t("marketplace.order-locked"))
                             this.submitLoading = false
                         } else {
