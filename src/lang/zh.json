@@ -132,6 +132,7 @@
     },
     "marketplace": {
         "order-locked": "订单已锁定",
+        "do-not-buy": "你不能购买自己的商品",
         "nft-name": "NFT名称",
         "done": "搜索",
         "reset": "重置",

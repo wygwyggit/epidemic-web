@@ -1,7 +1,8 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('marketplace.title')" :visible.sync="isShowDialog" width="6.4rem"
-            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false" v-loading="dialogLoading">
+            @closed="saleReviseDialogClosed" custom-class="sale-revise-dialog" :close-on-click-modal="false"
+            v-loading="dialogLoading">
             <div v-loading="isLoading">
                 <template>
                     <ul v-if="currentTabId === 1">
@@ -40,7 +41,8 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" @click="doSubmit" :loading="submitLoading">{{$t("common.confirmed") }} </el-button>
+                    <el-button class="btn" @click="doSubmit" :loading="submitLoading">{{$t("common.confirmed") }}
+                    </el-button>
                 </div>
             </div>
         </el-dialog>
@@ -52,7 +54,9 @@
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
     import web3Tool from '@/utils/web3'
-
+    import {
+        mapState
+    } from 'vuex'
     export default {
         name: '',
         components: {},
@@ -80,7 +84,10 @@
         computed: {
             totalPrice() {
                 return this.row.amount * this.num
-            }
+            },
+            ...mapState({
+                userInfo: state => state.userInfo
+            }),
         },
         watch: {},
         created() {},
@@ -96,6 +103,9 @@
         beforeDestroy() {},
         methods: {
             doSubmit() {
+                if (this.userInfo.addr === this.row.owner_addr) {
+                    return this.$showError(this.$t("marketplace.do-not-buy"))
+                }
                 this.submitLoading = true
                 myAjax({
                     url: 'goods/market/order/locking',
@@ -114,7 +124,7 @@
                         }
                     }
                 })
-                
+
             },
             doNftApprove() {
                 web3Tool.contract({
