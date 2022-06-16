@@ -1,5 +1,5 @@
 <template>
-    <div id="web-app">
+    <div id="adogenft-app">
         <router-view />
     </div>
 </template>
