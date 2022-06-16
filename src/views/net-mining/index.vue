@@ -160,13 +160,13 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                    <!-- <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
                         {{ $t("common.confirmed")}}
-                    </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    </el-button> -->
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button> -->
+                    </el-button>
                 </div>
             </div>
 
@@ -216,13 +216,13 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                    <!-- <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
                         {{ $t("common.confirmed")}}
-                    </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    </el-button> -->
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         @click="doApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button> -->
+                    </el-button>
                 </div>
             </div>
 
