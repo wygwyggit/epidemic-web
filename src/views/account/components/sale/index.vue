@@ -96,6 +96,7 @@
         beforeDestroy() {},
         methods: {
             doSubmit() {
+                if (!this.salePrice) return
                 if (this.row.belong_type < 0 || this.row.amount) {
                     this.sendSale()
                 } else {
