@@ -212,7 +212,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
-                            <td :class="{orange: item.type === 'SELL', green: item.type === 'buy'}">
+                            <td :class="{orange: item.type === 'SELL', green: item.type === 'BUY'}">
                                 {{ item.type }}
                             </td>
                             <td>
@@ -267,7 +267,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, index) in recordList" :key="index">
-                            <td :class="{orange: item.type === 'SELL', green: item.type === 'buy'}">
+                            <td :class="{orange: item.type === 'SELL', green: item.type === 'BUY'}">
                                 {{ item.type }}
                             </td>
                             <td>
@@ -1217,7 +1217,7 @@
                 thead {
                     th {
                         height: 0.533333333333333rem;
-                        font-size: 0.266666666666667rem;
+                        font-size: .266666666666667rem;
                         line-height: 0.533333333333333rem;
                         border-top: 1px solid #152132;
                     }
