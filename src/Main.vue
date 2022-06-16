@@ -51,6 +51,7 @@
                             break;
                         case 'account':
                         case 'netMining':
+                            this.bgColor = "#32A3FF"
                             this.getUserInfo()
                             break;
                         default:

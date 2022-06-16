@@ -343,7 +343,6 @@
                 this.isConnectWallet = cookie.getCookie('__account__') || null
             },
             sendSaleOk() {
-                this.page.curPage = 1
                 this.saleReviseDialog = false
                 this.getLiist()
             },

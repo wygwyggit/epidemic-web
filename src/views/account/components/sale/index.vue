@@ -14,7 +14,7 @@
                         <li class="item">
                             <div class="key">{{ $t("account.quantity-for-sale") }}</div>
                             <div class="val">
-                                <el-input-number v-model="saleQuantity" :min="1" :max="row.num"></el-input-number>
+                                <el-input-number v-model="saleQuantity" :min="1" :max="row.num" :disabled="row.amount"></el-input-number>
                             </div>
                         </li>
                         <li class="input-box">
@@ -76,7 +76,10 @@
         watch: {},
         created() {},
         mounted() {
-            this.row.amount && (this.salePrice = this.row.amount)
+            if (this.row.amount) {
+                this.salePrice = this.row.amount
+                this.saleQuantity = this.row.num
+            }
             if (this.row.belong_type < 0 || this.row.amount) {
                 this.isLoading = false
                 return false
