@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="row.amount ? $t('account.revise') : $t('account.sale')" :visible.sync="isShowDialog"
-            width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"
+            width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"  :show-close="!submitLoading"
             :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
             <div v-loading="isLoading">
@@ -41,8 +41,8 @@
                     <p class="price-tip" v-if="row.amount">{{$t("common.net-price-modified-tip")}}</p>
                 </template>
                 <div class="opt-btn">
-                    <button class="btn" :class="{'confirmed': salePrice.length}"
-                        @click="doSubmit">{{$t("common.confirmed") }} </button>
+                    <el-button class="btn" :class="{'confirmed': salePrice.length}" :loading="submitLoading"
+                        @click="doSubmit">{{$t("common.confirmed") }} </el-button>
                 </div>
             </div>
         </el-dialog>
@@ -68,6 +68,7 @@
                 prefixCls: 'views-account-sale',
                 isLoading: true,
                 isShowDialog: true,
+                submitLoading: false,
                 salePrice: '',
                 saleQuantity: 1,
             }
@@ -102,6 +103,7 @@
                 }
             },
             doNftApprove() {
+                this.submitLoading = true
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
@@ -110,10 +112,13 @@
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.sendSale(hash)
+                }).catch(err => {
+                    this.submitLoading = false
                 })
             },
             sendSale(hash) {
                 if (!this.salePrice) return
+                this.submitLoading = true
                 let url = '',
                     params = {}
                 if (this.row.num) {
@@ -154,7 +159,6 @@
                         }
                     }
                 }
-                this.isLoading = true
                 myAjax({
                     url,
                     data: {
@@ -165,7 +169,7 @@
                         this.$emit('sendSaleOk')
                     }
                 }).finally(() => {
-                    this.isLoading = false
+                    this.submitLoading = false
                 })
             },
             saleReviseDialogClosed() {
@@ -296,7 +300,6 @@
                 .btn {
                     width: 100%;
                     height: 0.8rem;
-                    line-height: 0.8rem;
                     text-align: center;
                     border: 0;
                     font-size: 0.32rem;

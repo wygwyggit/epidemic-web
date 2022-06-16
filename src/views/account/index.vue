@@ -111,7 +111,7 @@
                                         <template v-if="item.status == 1">
                                             <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
                                         </template>
-                                        <template v-if="item.status == -2 || item.status == 4 || item.status == 9">
+                                        <template v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
                                             <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
                                         </template>
                                     </div>
