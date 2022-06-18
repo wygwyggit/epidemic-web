@@ -30,7 +30,7 @@
                                 <div class="attr-name">
                                     <div class="item">
                                         <label class="label"> {{ $t("detail.color") }}:</label>
-                                        <p class="con">{{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
+                                        <p class="con" :style="{color: rowInfo.rarity}">{{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
                                     </div>
                                     <div class="item">
                                         <label class="label">{{ $t("account.level") }}:</label>

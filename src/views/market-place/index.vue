@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <div class="top">
+        <div class="page-top">
             <div class="w">
                 <div class="tit-tab">
                     <div class="left">
@@ -753,7 +753,7 @@
             }
         }
 
-        .top {
+        .page-top {
             padding: 64px 0 40px;
             background: #0B0F15;
             color: #fff;
@@ -1432,7 +1432,7 @@
 
     @media (max-width: 768px) {
         .#{$prefixCls} {
-            .top {
+            .page-top {
                 padding: .8rem .533333333333333rem .533333333333333rem;
 
                 .tit-tab {

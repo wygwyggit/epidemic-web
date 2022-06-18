@@ -360,6 +360,9 @@
                 this.getLiist()
             },
             compoundSuc(data) {
+                if (this.currentGoodRow.type_id == 3) {
+                     this.getUserInfo()
+                }
                 this.isShowCompound = false
                 this.isShowGiftBag = true
                 this.giftBagList = data
@@ -441,11 +444,12 @@
                             checkListFilter = checkListFilter.concat([-1, 9, 11])
                         }
                     } else {
-                        if (this.currentTabId == 1) {
-                            checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
-                        } else {
-                            checkListFilter = [0, 8, 4, 2, -1, 9, 2, 11]
-                        }
+                        checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
+                        // if (this.currentTabId == 1) {
+                        //     checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
+                        // } else {
+                        //     checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
+                        // }
                     }
                     myAjax({
                         url: 'user/goods/count',
@@ -478,11 +482,12 @@
                             checkListFilter = checkListFilter.concat([-1, 9, 11])
                         }
                     } else {
-                        if (this.currentTabId == 1) {
-                            checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
-                        } else {
-                            checkListFilter = [0, 8, 4, 2]
-                        }
+                        checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
+                        // if (this.currentTabId == 1) {
+                        //     checkListFilter = [0, 8, 1, 4, 2, -1, 9, 11]
+                        // } else {
+                        //     checkListFilter = [0, 8, 4, 2]
+                        // }
                     }
                     myAjax({
                         url: 'user/goods/list',
