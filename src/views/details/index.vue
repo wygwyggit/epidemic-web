@@ -111,13 +111,18 @@
                                         </div>
                                         <div class="bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
                                         <!-- 状态区分 -->
-                                        <button class="buy" v-if="false">{{ $t("detail.buy") }}</button>
+
                                         <div class="btns">
-                                            <el-button class="btn-revise" @click="() => this.saleReviseDialog = true">
-                                                {{ $t("detail.revise") }}</el-button>
-                                            <el-button class="btn-cancel-sale" @click="doCancelSale">
-                                                {{ $t("detail.cancelSale") }}
-                                            </el-button>
+                                            <el-button class="btn-buy" v-if="from === 'marketplace'" @click="doBuy">
+                                                {{ $t("detail.buy") }}</el-button>
+                                            <template v-if="from === 'account'">
+                                                <el-button class="btn-revise"
+                                                    @click="() => this.saleReviseDialog = true">
+                                                    {{ $t("detail.revise") }}</el-button>
+                                                <el-button class="btn-cancel-sale" @click="doCancelSale">
+                                                    {{ $t("detail.cancelSale") }}
+                                                </el-button>
+                                            </template>
                                         </div>
                                     </div>
                                 </div>
@@ -214,13 +219,13 @@
                                 </thead>
                                 <tbody>
                                     <tr v-for="(item, index) of rowInfo.order_history" :key="index">
-                                        <td>{{item.buyer}}</td>
-                                        <td>{{item.seller}}</td>
+                                        <td>{{item.payer_addr}}</td>
+                                        <td>{{item.seller_addr}}</td>
                                         <td>
                                             <img src="../../assets/images/info.png">
-                                            {{item.Price}}</td>
-                                        <td>{{item.Date}}</td>
-                                        <td>{{item.Txn}}</td>
+                                            {{item.price}}</td>
+                                        <td>{{item.order_time}}</td>
+                                        <td>{{item.transfer_txn}}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -240,6 +245,8 @@
         </open>
         <compound v-if="isShowCompound" :row="rowInfo" @close="() => this.isShowCompound = false"
             @compoundSuc="compoundSuc"></compound>
+        <buy :row="rowInfo" v-if="buyReviseDialog" @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk">
+        </buy>
     </div>
 </template>
 
@@ -251,6 +258,7 @@
     import Open from '../account/components/open'
     import Compound from '../account/components/compound'
     import emptyImage from '@/assets/images/empty.png'
+    import Buy from '../market-place/components/buy.vue'
     import {
         netImgBaseUrl
     } from '@/config/config.js'
@@ -260,12 +268,17 @@
             DeliverDialog,
             GiftBag,
             Open,
-            Compound
+            Compound,
+            Buy
         },
         props: {
             row: {
                 type: Object,
                 require: true
+            },
+            from: {
+                type: String,
+                default: 'account'
             }
         },
         data() {
@@ -279,6 +292,7 @@
                 isShowOpenGift: false,
                 isShowGiftBag: false,
                 isShowCompound: false,
+                buyReviseDialog: false,
                 netImgBaseUrl,
                 emptyImage,
                 isUpdate: false,
@@ -291,6 +305,14 @@
             })
         },
         methods: {
+            doBuy() {
+                this.buyReviseDialog = true
+            },
+            sendBuyOk() {
+                this.isUpdate = true
+                this.buyReviseDialog = false
+                this.getDetailInfo()
+            },
             compoundSuc() {
                 this.isUpdate = true
                 this.isShowCompound = false
@@ -355,13 +377,6 @@
                     }).then(res => {
                         if (res.ok) {
                             this.rowInfo = res.data
-                            this.rowInfo.order_history = [{
-                                "payer_addr": "0x902dd02c59fa1e974f04513f2f29e07b7810c793",
-                                "seller_addr": "0x142e38d6a87c9c5d2ab81d3ad24f512e26a5cf0b",
-                                "price": 10,
-                                "order_time": "2022-06-14 02:31:32",
-                                "transfer_txn": "0x8dc8716e184b3ce5c8a9e03ee63ce8d5df20da439bc9be12e567fef187080698"
-                            }]
                         }
                     }).finally(() => {
                         this.isLoading = false
@@ -526,7 +541,8 @@
                                 border-radius: .133333333333333rem;
                                 color: #fff;
 
-                                &.btn-sale {
+                                &.btn-sale,
+                                &.btn-buy {
                                     background: #00A73A;
                                 }
 
@@ -684,10 +700,14 @@
                 }
             }
         }
-        .el-table th.el-table__cell, .el-table tr, .el-table th.el-table__cell.is-leaf {
+
+        .el-table th.el-table__cell,
+        .el-table tr,
+        .el-table th.el-table__cell.is-leaf {
             background: #131922;
             border-bottom: 1px solid #29374B;
         }
+
         .el-table__row:hover {
             background: #131922 !important;
         }

@@ -5,7 +5,7 @@
             v-loading="dialogLoading">
             <div v-loading="isLoading">
                 <template>
-                    <ul v-if="currentTabId === 1">
+                    <ul v-if="row.belong_type > 0">
                         <li class="item">
                             <div class="key">NFT ID:</div>
                             <div class="val">{{ row.goods_id }}</div>
@@ -65,10 +65,6 @@
                 type: Object,
                 require: true
             },
-            currentTabId: {
-                type: Number,
-                default: 1
-            }
         },
         data() {
             return {
@@ -140,7 +136,7 @@
                 })
             },
             sendBuy(hash) {
-                if (this.currentTabId === 2 && !this.row.num) return
+                if (this.row.belong_type < 0 && !this.row.num) return
                 this.dialogLoading = true
                 let url = 'goods/market/buy/goods',
                     params = {

@@ -71,7 +71,7 @@
                             </el-empty>
                             <template v-if="netList.length && !isLoading">
                                 <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
-                                    @goDetail="goCardDetail">
+                                    @goDetail="goCardDetail(item)">
                                     <div class="btns-wrap">
                                         <template v-if="item.status == 0">
                                             <div class="btn btn-open" :class="{'disable': !item.can_open}"

@@ -165,7 +165,8 @@
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="No items for sale" v-if="!list.length && !isLoading">
                         </el-empty>
-                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" @select="goDetail">
+                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
+                            @goDetail="goCardDetail(item)">
                             <div class="price">
                                 Price
                                 <div class="money_w">
@@ -185,9 +186,9 @@
                     </div>
                 </div>
                 <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange"
-                   :page-size="Number(page.pageSize)"
-                    @prev-click="onPageChange" @next-click="onPageChange" :total="Number(total)"
-                    :hide-on-single-page="true" :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
+                    :page-size="Number(page.pageSize)" @prev-click="onPageChange" @next-click="onPageChange"
+                    :total="Number(total)" :hide-on-single-page="true" :current-page="Number(page.curPage)"
+                    v-if="list.length && !isLoading">
                 </el-pagination>
             </div>
         </div>
@@ -302,7 +303,7 @@
                 </div>
             </div>
         </el-drawer>
-        <el-drawer :visible.sync="isFilterDrawer" direction="btt" class="el-drawer2" :show-close="false">
+        <el-drawer :visible.sync="isFilterDrawer" direction="btt" custom-class="el-drawer2" :show-close="false">
             <div class="filter-content">
                 <div class="top-btn">
                     <img src="../../assets/images/close.png" alt="" @click="handleClose">
@@ -384,7 +385,8 @@
                 </ul>
             </div>
         </el-drawer>
-        <buy :row="currentGoodRow" :currentTabId="currentTabId" v-if="buyReviseDialog"
+        <Details :row="currentGoodRow" v-if="isShowDetails" @on-close="detailsDrawerClose" from="marketplace"></Details>
+        <buy :row="currentGoodRow"  v-if="buyReviseDialog"
             @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk"></buy>
     </div>
 </template>
@@ -400,14 +402,15 @@
         netImgBaseUrl
     } from '@/config/config.js'
     import Buy from './components/buy'
-
+    import Details from '../details'
 
     export default {
         name: '',
         components: {
             PageTabs,
             itemCard,
-            Buy
+            Buy,
+            Details
         },
         props: {},
         data() {
@@ -467,6 +470,7 @@
                 openIsLoading: true,
                 buyRecoredDrawer: false,
                 buyReviseDialog: false,
+                isShowDetails: false,
                 list: [],
                 recordList: [],
                 page: {
@@ -508,6 +512,16 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            detailsDrawerClose(updata) {
+                if (updata) {
+                    this.getLiist()
+                }
+                this.isShowDetails = false
+            },
+            goCardDetail(row) {
+                this.currentGoodRow = row
+                this.isShowDetails = true
+            },
             doResetFilter() {
                 this.checkListSale = 1
                 this.checkListColor = []
@@ -704,7 +718,7 @@
     $prefixCls: "views-market-place";
 
     .#{$prefixCls} {
-        .el-drawer {
+        .el-drawer2 {
             height: 90% !important;
             background: #000;
             overflow-y: scroll;
@@ -1266,8 +1280,8 @@
             text-align: right;
         }
 
-        .el-drawer2 {
-            .el-drawer {
+        .el-drawer {
+            .el-drawe2 {
                 height: 80% !important;
             }
 
@@ -1348,7 +1362,7 @@
             }
         }
 
-        .el-drawer {
+        .el-drawer2 {
             height: 55% !important;
             background: #000;
             overflow-y: scroll;
