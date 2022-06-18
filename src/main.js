@@ -9,6 +9,8 @@ import './element'
 import './style/common.scss'
 import './style/element-rewrite.scss'
 import '../rem.js'
+import directives from './directives'
+Vue.use(directives)
 Vue.config.productionTip = false
 Vue.prototype.Web3 = Web3
 new Vue({

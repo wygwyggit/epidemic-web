@@ -16,6 +16,9 @@ const myAjax = (options) => {
                 'addr': Cookie.getCookie("__account__") || '',
             }
         } : {}), options.data || {})
+        if (data.body) {
+            data.body.language = localStorage.getItem("lang").toLowerCase()
+        }
         axios({
             url: url,
             method: options.method || 'post',

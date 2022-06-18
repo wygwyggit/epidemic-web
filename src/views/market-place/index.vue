@@ -185,6 +185,7 @@
                     </div>
                 </div>
                 <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange"
+                   :page-size="Number(page.pageSize)"
                     @prev-click="onPageChange" @next-click="onPageChange" :total="Number(total)"
                     :hide-on-single-page="true" :current-page="Number(page.curPage)" v-if="list.length && !isLoading">
                 </el-pagination>

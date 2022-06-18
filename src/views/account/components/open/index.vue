@@ -1,7 +1,7 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="$t('account.open')" :visible.sync="isShowDialog" width="6.4rem"
-            @close="openGiftDialogClosed" custom-class="open-gift-dialog" :close-on-click-modal="false">
+        <el-dialog :title="$t('account.open')" :visible.sync="isShowDialog" width="6.4rem" @close="openGiftDialogClosed"
+            custom-class="open-gift-dialog" :close-on-click-modal="false">
 
             <ul>
                 <li class="item">
@@ -26,7 +26,7 @@
 <script>
     import myAjax from '@/utils/ajax.js'
     export default {
-        name: '',
+        name: 'open',
         components: {},
         props: {
             row: {
@@ -45,8 +45,7 @@
         computed: {},
         watch: {},
         created() {},
-        mounted() {
-        },
+        mounted() {},
         beforeDestroy() {},
         methods: {
             doOpenGift() {
@@ -62,6 +61,13 @@
                 }).then(res => {
                     if (res.ok) {
                         const data = (res.data || {}).rewards
+                        data.forEach(x => {
+                            if (x.name.includes('-')) {
+                                x.title = x.name.split('-')[3]
+                            } else {
+                                x.title = x.name
+                            }
+                        });
                         this.$emit('openGiftOk', data)
                     } else {
                         this.$showError('操作失败')

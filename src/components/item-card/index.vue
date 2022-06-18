@@ -14,10 +14,10 @@
                     <div class="l">
                         # {{itemInfo.goods_id}}
                     </div>
-                    <div class="r" v-if="itemInfo.rarity">{{$t(`account.${itemInfo.rarity}`)}}</div>
+                    <div class="r" v-if="itemInfo.rarity">{{ $t(`account.${itemInfo.rarity}`)}}</div>
                 </div>
             </template>
-            <div class="img-mid-content can-detail" @click="goCardDetail">
+            <div class="img-mid-content" :class="{'can-detail': ![3, 16, 17].includes(itemInfo.type_id)}" @click="goCardDetail">
                 <div class="img-content">
                     <img :src="netImgBaseUrl + itemInfo.image">
                 </div>
@@ -106,6 +106,7 @@
         beforeDestroy() {},
         methods: {
             goCardDetail() {
+                if ([3, 16, 17].includes(this.itemInfo.type_id)) return false
                 this.$emit('goDetail', this.itemInfo)
             },
             selectCard(row) {
@@ -178,7 +179,7 @@
 
             .img-mid-content {
                 &.can-detail {
-                    //cursor: pointer;
+                    cursor: pointer;
                 }
 
                 .img-content {

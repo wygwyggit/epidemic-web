@@ -47,6 +47,7 @@
                             if (width < 768) {
                                 this.isShowFooter = false
                             }
+                            this.getUserInfo()
                             this.bgColor = "#32A3FF"
                             break;
                         case 'account':

@@ -101,17 +101,21 @@
                                         </template>
 
                                         <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
-                                        <template v-if="item.status == 2 || item.status == 8">
+                                        <template v-if="item.status == 8">
                                             <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
                                             <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
                                                 {{ $t("account.cancel-sale")}}</div>
                                             <div class="btn btn-revise" @click="doRevise(item)">
                                                 {{ $t("account.revise")}}</div>
                                         </template>
+                                        <template v-if="item.status == 2">
+                                            <div class="btn btn-on-processing">{{ $t("account.processing")}}</div>
+                                        </template>
                                         <template v-if="item.status == 1">
                                             <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
                                         </template>
-                                        <template v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
+                                        <template
+                                            v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
                                             <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
                                         </template>
                                     </div>
@@ -162,7 +166,7 @@
                 </div>
             </div>
         </el-dialog>
-
+        <Details :row="currentGoodRow" v-if="isShowDetails" @on-close="detailsDrawerClose"></Details>
     </div>
 </template>
 
@@ -181,6 +185,7 @@
     import NoConnectWallet from '@/components/no-connect-wallet'
     import NoSign from '@/components/no-sign'
     import Upgrade from './components/upgrade'
+    import Details from '../details'
     import {
         mapState,
         mapMutations
@@ -197,7 +202,8 @@
             Open,
             NoConnectWallet,
             NoSign,
-            Upgrade
+            Upgrade,
+            Details
         },
         props: {},
         data() {
@@ -214,6 +220,7 @@
                 isShowOpenGift: false,
                 isShowSignInSuccessDialog: false,
                 isShowUpgrade: false,
+                isShowDetails: false,
                 giftBagList: [],
                 isLoading: true,
                 tabs: [{
@@ -304,6 +311,12 @@
             ...mapMutations([
                 'UPDATE_USERINFO'
             ]),
+            detailsDrawerClose(updata) {
+                if (updata) {
+                    this.getLiist()
+                }
+                this.isShowDetails = false
+            },
             openCompoundDialog() {
                 this.currentGoodRow = {
                     type_id: 3,
@@ -382,14 +395,6 @@
                 this.isShowOpenGift = false
                 this.isShowGiftBag = true
                 this.giftBagList = data
-                this.giftBagList.forEach(x => {
-                    if (x.name.includes('-')) {
-                        x.title = x.name.split('-')[3]
-                    } else {
-                        x.title = x.name
-                    }
-                    console.log(x, 'dddd')
-                });
             },
             handleCheckAllChange(val) {
                 let arr = this.checkObj[this.currentTabId].list.map(x => x.id)
@@ -551,12 +556,8 @@
                 this.doSearch()
             },
             goCardDetail(row) {
-                // this.$router.push({
-                //     path: '/details',
-                //     query: {
-                //         id: row.goods_id
-                //     }
-                // })
+                this.currentGoodRow = row
+                this.isShowDetails = true
             },
             doSearch() {
                 this.page.curPage = 1
@@ -790,6 +791,7 @@
 
                         &.btn-on-sale,
                         &.btn-on-staking,
+                        &.btn-on-processing,
                         &.btn-on-sending {
                             background: #777E90;
                             cursor: not-allowed;

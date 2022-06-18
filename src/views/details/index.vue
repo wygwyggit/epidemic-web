@@ -1,245 +1,288 @@
 <template>
-    <div class="details-wrap">
-        <div class="detail-con">
-            <div class="detail-main w">
-                <div class="back" @click="goBack">
-                    {{ $t("common.back") }}
-                </div>
-                <div class="min-back" @click="goBack">
-                    <img src="../../assets/images/back2.png" />
-                    <span class="con"># 010001</span>
-                </div>
-                <div class="blind-box">
-                    <div class="left">
-                        <img src="../../assets/images/product.png" />
+    <div :class="prefixCls" v-loading.fullscreen="isLoading">
+        <el-drawer :visible.sync="isShowDetailsDrawer" direction="ttb" size="100%" :show-close="false"
+            :custom-class="prefixCls + '-drawer'">
+            <div slot="title">
+
+            </div>
+            <div class="detail-con" v-if="!isLoading">
+                <div class="detail-main w">
+                    <div class="back" @click="handlerClose">
+                        {{ $t("common.back") }}
                     </div>
-                    <div class="right">
-                        <div class="anchor"># 010001</div>
-                        <div class="title">CZ Hoodie Limited NFT</div>
-                        <div class="tip">Diamond Color, Amazing Everyday!</div>
-                        <div class="attribute-wrap border">
-                            <div class="attr-title top">
-                                <img src="../../assets/images/bookmark.png" />
-                                {{ $t("detail.attribute") }}
-                            </div>
-                            <div class="attr-name">
-                                <div class="item">
-                                    <label class="label"> {{ $t("detail.color") }}:</label>
-                                    <p class="con">{{ $t("account.diamond") }}</p>
-                                </div>
-                                <div class="item">
-                                    <label class="label">{{ $t("account.level") }}:</label>
-                                    <p class="con">Lv8</p>
-                                </div>
-                            </div>
+                    <div class="min-back" @click="handlerClose">
+                        <img src="../../assets/images/back2.png" />
+                        <span class="con" v-if="rowInfo.goods_id"># {{ rowInfo.goods_id }}</span>
+                    </div>
+                    <div class="blind-box">
+                        <div class="left">
+                            <img :src="netImgBaseUrl + rowInfo.image" v-if="rowInfo.image" />
                         </div>
-                        <div class="price-wrap border">
-                            <div class="price-title top">
-                                <img src="../../assets/images/price_tag.png" />
-                                {{ $t("account.price") }}
-                            </div>
-                            <div class="con">
-                                <div class="price-title">{{ $t("account.price") }}:</div>
-                                <div class="price">
-                                    15,000,000,000 Adoge
-                                    <div class="price-bnb">≈ 5.55 BNB</div>
+                        <div class="right">
+                            <div class="anchor" v-if="rowInfo.goods_id"># {{ rowInfo.goods_id }}</div>
+                            <div class="title">{{ rowInfo.name }}</div>
+                            <div class="tip">{{ rowInfo.goods_desc }}</div>
+                            <div class="attribute-wrap border" v-if="rowInfo.belong_type > 0">
+                                <div class="attr-title top">
+                                    <img src="../../assets/images/bookmark.png" />
+                                    {{ $t("detail.attribute") }}
                                 </div>
-                                <div class="bnb">≈ 5.55 BNB</div>
-                                <!-- 状态区分 -->
-                                <button class="buy" v-if="false">{{ $t("detail.buy") }}</button>
-                                <div class="operate">
-                                    <button class="revise">{{ $t("detail.revise") }}</button>
-                                    <button class="cancel-sale">
-                                        {{ $t("detail.cancelSale") }}
-                                    </button>
+                                <div class="attr-name">
+                                    <div class="item">
+                                        <label class="label"> {{ $t("detail.color") }}:</label>
+                                        <p class="con">{{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
+                                    </div>
+                                    <div class="item">
+                                        <label class="label">{{ $t("account.level") }}:</label>
+                                        <p class="con">Lv{{ rowInfo.goods_level }}</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="owner">
-                            <label class="label">{{ $t("detail.owner") }}</label>: 0xf23570fd586cabfcfd5df8772be02609
-                        </div>
-                    </div>
-                </div>
-                <div class="sale-history-pc border">
-                    <div class="sale-title top">
-                        <img src="../../assets/images/clock.png" />
-                        {{ $t("detail.sale-history") }}
-                    </div>
-                    <el-table :data="tableData" style="width: 100%" :highlight-current-row="false">
-                        <el-table-column>
-                            <template slot="header">
-                                {{ $t("detail.buyer") }}
+                            <div class="quantity" v-else>
+                                <span class="label">{{ $t("marketplace.quantity") }}:</span>
+                                {{ rowInfo.num }}
+                            </div>
+                            <template v-if="rowInfo.status == 0">
+                                <div class="opts-wrap border">
+                                    <div class="opts-title top">
+                                        <img src="../../assets/images/price_tag.png" />
+                                        {{ $t("account.sale") }}
+                                    </div>
+                                    <div class="card-opt">
+                                        <div class="btns">
+                                            <el-button type="primary" class="btn-sale" :disabled="!rowInfo.can_sale"
+                                                @click="() => this.saleReviseDialog = true"> {{ $t("account.sale") }}
+                                            </el-button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-opt" v-if="rowInfo.belong_type == 1">
+                                    <div class="btns">
+                                        <el-button type="primary" class="btn-deliver" :disabled="!rowInfo.can_pawn"
+                                            @click="() => this.isShowDeliverDialog = true">
+                                            {{ $t("common.deliver") }}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="card-opt" v-if="rowInfo.belong_type == -1">
+                                    <div class="btns">
+                                        <el-button type="primary" class="btn-open" :disabled="!rowInfo.can_open"
+                                            @click="() => this.isShowOpenGift = true">
+                                            {{$t("account.open")}}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="card-opt" v-if="rowInfo.type_id == 2">
+                                    <div class="btns">
+                                        <el-button type="primary" class="btn-synthetic" :disabled="!rowInfo.can_merge"
+                                            @click="() => this.isShowCompound = true">
+                                            {{$t("account.synthetic")}}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="card-opt" v-if="rowInfo.type_id == 3">
+                                    <div class="btns">
+                                        <el-button type="primary" class="btn-synthetic" :disabled="!rowInfo.can_merge"
+                                            @click="() => this.isShowCompound = true">
+                                            {{$t("account.synthetic")}}
+                                        </el-button>
+                                    </div>
+                                </div>
+                                <div class="card-opt" v-if="rowInfo.belong_type == -2">
+                                    <div class="btns">
+                                        <el-button type="primary" class="btn-synthetic" :disabled="!rowInfo.can_merge"
+                                            @click="() => this.isShowCompound = true">
+                                            {{$t("exchange.exchange")}}
+                                        </el-button>
+                                    </div>
+                                </div>
+
                             </template>
-                            <template slot-scope="scope">
-                                <a href="javascript:;">{{ scope.row.buyer }}</a>
-                            </template>
-                        </el-table-column>
-                        <el-table-column>
-                            <template slot="header">
-                                {{ $t("detail.seller") }}
-                            </template>
-                            <template slot-scope="scope">
-                                <a href="javascript:;">{{ scope.row.seller }}</a>
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="Price">
-                            <template slot="header">
-                                {{ $t("account.price") }}
-                            </template>
-                            <template slot-scope="scope">
-                                <div class="group">
-                                    <img src="../../assets/images/info.png" alt="" />
-                                    {{ scope.row.Price }}
+                            <template v-if="rowInfo.status == 8">
+                                <div class="opts-wrap border">
+                                    <div class="opts-title top">
+                                        <img src="../../assets/images/price_tag.png" />
+                                        {{ rowInfo.belong_type  &lt; 0 ? $t("marketplace.unit-price") : $t("account.price") }}
+                                    </div>
+                                    <div class="card-opt">
+                                        <div class="price">
+                                            {{ rowInfo.amount }} Adoge
+                                            <div class="price-bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
+                                        </div>
+                                        <div class="bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
+                                        <!-- 状态区分 -->
+                                        <button class="buy" v-if="false">{{ $t("detail.buy") }}</button>
+                                        <div class="btns">
+                                            <el-button class="btn-revise" @click="() => this.saleReviseDialog = true">
+                                                {{ $t("detail.revise") }}</el-button>
+                                            <el-button class="btn-cancel-sale" @click="doCancelSale">
+                                                {{ $t("detail.cancelSale") }}
+                                            </el-button>
+                                        </div>
+                                    </div>
                                 </div>
                             </template>
-                        </el-table-column>
-                        <el-table-column prop="Date">
-                            <template slot="header"> {{ $t("detail.date") }} UTC </template>
-                        </el-table-column>
-                        <el-table-column prop="Txn">
-                            <template slot="header">
-                                {{ $t("detail.txn-hash") }}
+                            <template v-if="[1, 2, -2, 4, 9, -1].includes(rowInfo.status)">
+                                <div class="card-opt">
+                                    <div class="btns">
+                                        <el-button class="btn-on-processing" disabled v-if="rowInfo.status == 2">
+                                            {{ $t("account.processing")}}</el-button>
+                                        <el-button class="btn-on-staking" disabled v-if="rowInfo.status == 1">
+                                            {{ $t("account.staking")}}</el-button>
+                                        <el-button class="btn-on-sending" disabled
+                                            v-if="rowInfo.status == -2 || rowInfo.status == 4 || rowInfo.status == 9 || rowInfo.status == -1">
+                                            {{ $t("account.sending")}}</el-button>
+                                    </div>
+                                </div>
                             </template>
-                            <template slot-scope="scope">
-                                <a href="javascript:;">{{ scope.row.Txn }}</a>
-                            </template>
-                        </el-table-column>
-                    </el-table>
-                </div>
-                <div class="sale-history-h5">
-                    <div class="tit">
-                        <img src="../../assets/images/clock.png" />
-                        {{ $t("detail.sale-history") }}
-                    </div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>{{ $t("detail.buyer") }}</th>
-                                <th>{{ $t("detail.seller") }}</th>
-                                <th>{{ $t("account.price") }}</th>
-                                <th>{{ $t("detail.date") }} UTC</th>
-                                <th>{{ $t("detail.txn-hash")}}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="(item, index) of tableData" :key="index">
-                                <td>{{item.buyer}}</td>
-                                <td>{{item.seller}}</td>
-                                <td>
-                                    <img src="../../assets/images/info.png">
-                                    {{item.Price}}</td>
-                                <td>{{item.Date}}</td>
-                                <td>{{item.Txn}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="recommend-wrap">
-                    <div class="rd-top">
-                        <div class="rd-title">{{ $t("detail.recommend") }}</div>
-                        <div class="rd-more">
-                            {{ $t("detail.more") }}
-                            <img src="../../assets/images/vector.png" alt="" />
+                            <div class="owner">
+                                <label class="label">{{ $t("detail.owner") }}:</label> {{ rowInfo.owner_addr }}
+                            </div>
                         </div>
                     </div>
-                    <div class="rd-list">
-                        <div class="rd-item">
-                            <div class="rd-diamond">
-                                <div class="left"># 010001</div>
-                                <div class="right">{{ $t("account.diamond") }}</div>
-                            </div>
-                            <div class="info">
-                                <img src="../../assets/images/product.png" />
-                                <div class="name">CZ Hoodie Limited NFT</div>
-                            </div>
-                            <div class="rd-price">
-                                <div class="rd-price-title">{{ $t("account.price") }}</div>
-                                <div class="rd-price-con">1,000,000,000 Adoge</div>
-                            </div>
+                    <div class="sale-history-pc border">
+                        <div class="sale-title top">
+                            <img src="../../assets/images/clock.png" />
+                            {{ $t("detail.sale-history") }}
                         </div>
-                        <div class="rd-item">
-                            <div class="rd-diamond">
-                                <div class="left"># 010001</div>
-                                <div class="right">{{ $t("account.diamond") }}</div>
-                            </div>
-                            <div class="info">
-                                <img src="../../assets/images/product.png" />
-                                <div class="name">CZ Hoodie Limited NFT</div>
-                            </div>
-                            <div class="rd-price">
-                                <div class="rd-price-title">{{ $t("account.price") }}</div>
-                                <div class="rd-price-con">1,000,000,000 Adoge</div>
-                            </div>
+                        <div class="list-content">
+                            <el-empty :image="emptyImage" :description="$t('common.no-data')"
+                                v-if="!(rowInfo.order_history || []).length && !isLoading">
+                            </el-empty>
+                            <el-table :data="rowInfo.order_history" style="width: 100%" :highlight-current-row="false"
+                                v-if="(rowInfo.order_history || []).length && !isLoading">
+                                <el-table-column>
+                                    <template slot="header">
+                                        {{ $t("detail.buyer") }}
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <a href="javascript:;">{{ scope.row.payer_addr }}</a>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        {{ $t("detail.seller") }}
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <a href="javascript:;">{{ scope.row.seller_addr }}</a>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="Price">
+                                    <template slot="header">
+                                        {{ $t("account.price") }}
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <div class="group">
+                                            <img src="../../assets/images/info.png" alt="" />
+                                            {{ scope.row.price }}
+                                        </div>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="order_time">
+                                    <template slot="header"> {{ $t("detail.date") }} UTC </template>
+                                </el-table-column>
+                                <el-table-column>
+                                    <template slot="header">
+                                        {{ $t("detail.txn-hash") }}
+                                    </template>
+                                    <template slot-scope="scope">
+                                        <a href="javascript:;">{{ scope.row.transfer_txn }}</a>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
                         </div>
-                        <div class="rd-item">
-                            <div class="rd-diamond">
-                                <div class="left"># 010001</div>
-                                <div class="right">{{ $t("account.diamond") }}</div>
-                            </div>
-                            <div class="info">
-                                <img src="../../assets/images/product.png" />
-                                <div class="name">CZ Hoodie Limited NFT</div>
-                            </div>
-                            <div class="rd-price">
-                                <div class="rd-price-title">{{ $t("account.price") }}</div>
-                                <div class="rd-price-con">1,000,000,000 Adoge</div>
-                            </div>
+
+                    </div>
+                    <div class="sale-history-h5">
+                        <div class="tit">
+                            <img src="../../assets/images/clock.png" />
+                            {{ $t("detail.sale-history") }}
                         </div>
-                        <div class="rd-item">
-                            <div class="rd-diamond">
-                                <div class="left"># 010001</div>
-                                <div class="right">{{ $t("account.diamond") }}</div>
-                            </div>
-                            <div class="info">
-                                <img src="../../assets/images/product.png" />
-                                <div class="name">CZ Hoodie Limited NFT</div>
-                            </div>
-                            <div class="rd-price">
-                                <div class="rd-price-title">{{ $t("account.price") }}</div>
-                                <div class="rd-price-con">1,000,000,000 Adoge</div>
-                            </div>
+                        <div class="list-content">
+                            <el-empty :image="emptyImage" :description="$t('common.no-data')"
+                                v-if="!(rowInfo.order_history || []).length && !isLoading">
+                            </el-empty>
+                            <table v-if="(rowInfo.order_history || []).length && !isLoading">
+                                <thead>
+                                    <tr>
+                                        <th>{{ $t("detail.buyer") }}</th>
+                                        <th>{{ $t("detail.seller") }}</th>
+                                        <th>{{ $t("account.price") }}</th>
+                                        <th>{{ $t("detail.date") }} UTC</th>
+                                        <th>{{ $t("detail.txn-hash")}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="(item, index) of rowInfo.order_history" :key="index">
+                                        <td>{{item.buyer}}</td>
+                                        <td>{{item.seller}}</td>
+                                        <td>
+                                            <img src="../../assets/images/info.png">
+                                            {{item.Price}}</td>
+                                        <td>{{item.Date}}</td>
+                                        <td>{{item.Txn}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
+
                     </div>
                 </div>
             </div>
-        </div>
+        </el-drawer>
+        <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
+        <sale :row="rowInfo" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
+            @sendSaleOk="sendSaleOk"></sale>
+        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="rowInfo.goods_id" :goods_name="rowInfo.name"
+            :addr="rowInfo.owner_addr" :belong_type="rowInfo.belong_type" @sendOk="deliverSuccess"
+            @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
+        <open :row="rowInfo" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false" @openGiftOk="openGiftOk">
+        </open>
+        <compound v-if="isShowCompound" :row="rowInfo" @close="() => this.isShowCompound = false"
+            @compoundSuc="compoundSuc"></compound>
     </div>
 </template>
 
 <script>
-import myAjax from '@/utils/ajax.js'
+    import myAjax from '@/utils/ajax.js'
+    import Sale from '../account/components/sale'
+    import DeliverDialog from '@/components/deliver-dialog'
+    import GiftBag from '../account/components/gift-bag'
+    import Open from '../account/components/open'
+    import Compound from '../account/components/compound'
+    import emptyImage from '@/assets/images/empty.png'
+    import {
+        netImgBaseUrl
+    } from '@/config/config.js'
     export default {
+        components: {
+            Sale,
+            DeliverDialog,
+            GiftBag,
+            Open,
+            Compound
+        },
+        props: {
+            row: {
+                type: Object,
+                require: true
+            }
+        },
         data() {
             return {
-                tableData: [{
-                        buyer: "0xa36954...86ce",
-                        seller: "0xfcd548...87a8",
-                        Price: "5,500,000,000 Adoge",
-                        Date: "2022-03-13 14:26:50",
-                        Txn: "0xee5808...839f",
-                    },
-                    {
-                        buyer: "0xa36954...86ce",
-                        seller: "0xfcd548...87a8",
-                        Price: "5,500,000,000 Adoge",
-                        Date: "2022-03-13 14:26:50",
-                        Txn: "0xee5808...839f",
-                    },
-                    {
-                        buyer: "0xa36954...86ce",
-                        seller: "0xfcd548...87a8",
-                        Price: "5,500,000,000 Adoge",
-                        Date: "2022-03-13 14:26:50",
-                        Txn: "0xee5808...839f",
-                    },
-                    {
-                        buyer: "0xa36954...86ce",
-                        seller: "0xfcd548...87a8",
-                        Price: "5,500,000,000 Adoge",
-                        Date: "2022-03-13 14:26:50",
-                        Txn: "0xee5808...839f",
-                    },
-                ],
+                rowInfo: {},
+                prefixCls: 'details-wrap',
+                isLoading: true,
+                isShowDetailsDrawer: true,
+                saleReviseDialog: false,
+                isShowDeliverDialog: false,
+                isShowOpenGift: false,
+                isShowGiftBag: false,
+                isShowCompound: false,
+                netImgBaseUrl,
+                emptyImage,
+                isUpdate: false,
+                giftBagList: []
             };
         },
         mounted() {
@@ -248,51 +291,101 @@ import myAjax from '@/utils/ajax.js'
             })
         },
         methods: {
-            getDetailInfo() {
-                return new Promise((resolve, reject) => {
+            compoundSuc() {
+                this.isUpdate = true
+                this.isShowCompound = false
+                this.getDetailInfo()
+            },
+            doGiftClose() {
+                this.isShowGiftBag = false
+                this.isUpdate = true
+                this.getDetailInfo()
+            },
+            openGiftOk(data) {
+                this.isShowOpenGift = false
+                this.isShowGiftBag = true
+                this.giftBagList = data
+            },
+            deliverSuccess() {
+
+            },
+            doCancelSale() {
+                this.$confirm(`${this.$t("common.cancel-sale-tip")}?`, this.$t("common.remind"), {
+                    confirmButtonText: this.$t("common.yes"),
+                    showCancelButton: false,
+                    closeOnClickModal: false,
+                    width: '6.4rem'
+                }).then(async () => {
+                    const idName = this.rowInfo.belong_type < 0 ? 'type_id' : 'goods_id'
                     myAjax({
-                        url: 'user/goods/query',
+                        url: this.rowInfo.belong_type < 0 ? 'goods/sale/others/cancel' :
+                            'goods/sale/nft/cancel',
                         data: {
                             body: {
-                                goodsId: this.$route.query.id
+                                [idName]: this.rowInfo[idName],
+                                record_id: this.rowInfo.record_id || ''
                             }
                         }
                     }).then(res => {
-                        
+                        if (res.ok) {
+                            this.$showOk(this.$t("common.ope-suc"))
+                            this.getDetailInfo()
+                        }
                     })
                 })
             },
-            goBack() {
-                this.$router.back(-1);
+            sendSaleOk() {
+                this.getDetailInfo()
+                this.saleReviseDialog = false
+            },
+            getDetailInfo() {
+                this.isLoading = true
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'goods/detail',
+                        data: {
+                            body: {
+                                goods_id: Number(this.row.goods_id),
+                                type_id: Number(this.row.type_id),
+                                status: Number(this.row.status),
+                                owner_addr: this.row.owner_addr,
+                                record_id: Number(this.row.record_id) || null
+                            }
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.rowInfo = res.data
+                            this.rowInfo.order_history = [{
+                                "payer_addr": "0x902dd02c59fa1e974f04513f2f29e07b7810c793",
+                                "seller_addr": "0x142e38d6a87c9c5d2ab81d3ad24f512e26a5cf0b",
+                                "price": 10,
+                                "order_time": "2022-06-14 02:31:32",
+                                "transfer_txn": "0x8dc8716e184b3ce5c8a9e03ee63ce8d5df20da439bc9be12e567fef187080698"
+                            }]
+                        }
+                    }).finally(() => {
+                        this.isLoading = false
+                    })
+                })
+            },
+            handlerClose(done) {
+                this.$emit('on-close', this.isUpdate)
             },
         },
     };
 </script>
 
-<style lang='scss' scoped>
-    .details-wrap {
+<style lang='scss'>
+    $prefixCls: "details-wrap";
+
+    .#{$prefixCls} {
         padding: 45px 0;
-        text-align: center;
         background-color: #131922;
 
         .detail-main {
-            .back {
-                width: 136px;
-                height: 56px;
-                padding-left: 10px;
-                line-height: 50px;
-                color: $--color-success;
-                margin: 0 0 .666666666666667rem 0;
-                border-radius: 90px;
-                border: 2px solid #004d8c;
-                background: url("../../assets/images/back.png");
-                background-repeat: no-repeat;
-                background-position: 15px center;
-                cursor: pointer;
-                font-size: 18px;
-            }
 
             .min-back {
+                padding-left: 0;
                 display: none;
             }
 
@@ -300,7 +393,7 @@ import myAjax from '@/utils/ajax.js'
                 border: 1px solid #152132;
             }
 
-            .price-wrap,
+            .opts-wrap,
             .attribute-wrap,
             .sale-history-pc {
                 .top {
@@ -324,7 +417,7 @@ import myAjax from '@/utils/ajax.js'
 
             .blind-box {
                 display: flex;
-                align-items: center;
+                margin-top: .666666666666667rem;
                 justify-content: space-between;
 
                 .left {
@@ -361,6 +454,7 @@ import myAjax from '@/utils/ajax.js'
                     }
 
                     .tip {
+                        margin: .133333333333333rem 0;
                         font-size: .186666666666667rem;
                         color: #777e90;
                     }
@@ -375,9 +469,18 @@ import myAjax from '@/utils/ajax.js'
                             padding: .266666666666667rem .16rem;
 
                             .item {
+                                padding: 0 .16rem;
                                 display: flex;
                                 align-items: center;
-                                margin-right: 80px;
+                                flex: 1;
+
+                                &:first-child {
+                                    border-right: 1px solid #29374B;
+                                }
+
+                                &:last-child {
+                                    padding-left: .7rem;
+                                }
                             }
 
                             .label {
@@ -399,22 +502,69 @@ import myAjax from '@/utils/ajax.js'
                         }
                     }
 
-                    .price-wrap {
-                        margin-top: 20px;
+                    .quantity {
+                        margin-top: .466666666666667rem;
+                        font-size: .24rem;
+                        color: #fff;
 
-                        .con {
-                            padding: 20px;
+                        .label {
+                            color: #777E90;
+                        }
 
-                            .price-title {
-                                display: none;
+                    }
+
+                    .card-opt {
+                        padding: .266666666666667rem;
+
+                        .btns {
+                            display: flex;
+
+                            .el-button {
+                                flex: 1;
+                                height: .8rem;
+                                font-size: .293333333333333rem;
+                                border-radius: .133333333333333rem;
+                                color: #fff;
+
+                                &.btn-sale {
+                                    background: #00A73A;
+                                }
+
+                                &.btn-deliver,
+                                &.btn-open {
+                                    background: #F1AE00;
+                                }
+
+                                &.btn-cancel-sale {
+                                    background: #FF5E1A;
+                                }
+
+                                &.btn-revise {
+                                    background: #32A3FF;
+                                }
+
+                                &.btn-on-processing {
+                                    background: #777E90;
+                                }
+
+                                &.btn-synthetic {
+                                    background: #9E00FF;
+                                }
                             }
+                        }
+                    }
+
+                    .opts-wrap {
+                        margin-top: .266666666666667rem;
+
+                        .card-opt {
 
                             .price-bnb {
                                 display: none;
                             }
 
                             .price {
-                                font-size: 32px;
+                                font-size: .426666666666667rem;
                                 font-family: Poppins-SemiBold, Poppins;
                                 font-weight: 600;
                                 color: #fff;
@@ -422,11 +572,11 @@ import myAjax from '@/utils/ajax.js'
                             }
 
                             .bnb {
-                                font-size: 24px;
+                                font-size: .32rem;
                                 font-family: Poppins-SemiBold, Poppins;
                                 font-weight: 600;
                                 color: #777e90;
-                                line-height: 32px;
+                                line-height: .533333333333333rem;
                             }
 
                             .buy {
@@ -454,7 +604,6 @@ import myAjax from '@/utils/ajax.js'
                                     font-size: 22px;
                                     font-weight: 600;
                                     color: #fcfcfd;
-                                    line-height: 60px;
                                     border: none;
                                     border-radius: 10px;
                                 }
@@ -474,10 +623,8 @@ import myAjax from '@/utils/ajax.js'
                     }
 
                     .owner {
-                        margin-top: 30px;
-                        font-size: 16px;
-                        font-family: Poppins-Medium, Poppins;
-                        font-weight: 500;
+                        margin-top: .4rem;
+                        font-size: .213333333333333rem;
                         color: #5b82e3;
                         line-height: 16px;
                         border: none;
@@ -536,122 +683,37 @@ import myAjax from '@/utils/ajax.js'
                     }
                 }
             }
+        }
+        .el-table th.el-table__cell, .el-table tr, .el-table th.el-table__cell.is-leaf {
+            background: #131922;
+            border-bottom: 1px solid #29374B;
+        }
+        .el-table__row:hover {
+            background: #131922 !important;
+        }
+    }
 
-            .recommend-wrap {
-                margin-top: 55px;
+    /*详情弹窗*/
+    .#{$prefixCls}-drawer {
+        #el-drawer__title {
+            display: none;
+        }
 
-                .rd-top {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    padding-bottom: 30px;
-                    border-bottom: 1px solid #152132;
-                }
-
-                .rd-title {
-                    font-size: 36px;
-                    font-family: Poppins-SemiBold, Poppins;
-                    font-weight: 600;
-                    color: #fff;
-                    line-height: 64px;
-                }
-
-                .rd-more {
-                    display: flex;
-                    align-items: center;
-                    font-size: 24px;
-                    font-family: Poppins-SemiBold, Poppins;
-                    font-weight: 600;
-                    color: $--color-success;
-                    line-height: 32px;
-
-                    img {
-                        width: 18px;
-                        height: 18px;
-                        margin-left: 10px;
-                    }
-                }
-
-                .rd-list {
-                    display: flex;
-                    align-items: center;
-                    justify-content: space-between;
-                    margin-top: 45px;
-
-                    .rd-item {
-                        padding: 6px;
-                        background: #1d2633;
-                        border-radius: 10px;
-                        border: 1px solid #004d8c;
-
-                        .rd-diamond {
-                            display: flex;
-                            align-items: center;
-                            justify-content: space-between;
-
-                            .right,
-                            .left {
-                                font-size: 14px;
-                                font-family: Poppins-Medium, Poppins;
-                                font-weight: 500;
-                                color: #c4c4c4;
-                                line-height: 24px;
-                            }
-
-                            .right {
-                                color: #ffffff;
-                            }
-                        }
-
-                        .info {
-                            margin-top: 10px;
-                            padding-bottom: 10px;
-                            border-bottom: 1px solid #131922;
-
-                            img {
-                                width: 220px;
-                                border-radius: 10px;
-                            }
-
-                            .name {
-                                margin-top: 20px;
-                                font-size: 18px;
-                                font-family: Poppins-SemiBold, Poppins;
-                                font-weight: 600;
-                                color: #ffffff;
-                                line-height: 24px;
-                            }
-                        }
-
-                        .rd-price-title {
-                            margin-top: 13px;
-                            font-size: 14px;
-                            font-family: Poppins-Medium, Poppins;
-                            font-weight: 500;
-                            color: #777e90;
-                            line-height: 18px;
-                        }
-
-                        .rd-price-con {
-                            font-size: 18px;
-                            font-family: Poppins-Medium, Poppins;
-                            font-weight: 500;
-                            color: $--color-success;
-                            line-height: 24px;
-                        }
-                    }
-                }
-            }
+        .el-drawer__body {
+            padding: .666666666666667rem 0;
+            overflow-y: auto;
+            background: #131922;
         }
     }
 </style>
-<style lang='scss' scoped>
+<style lang='scss'>
     @media (max-width: 768px) {
-        .details-wrap {
-            padding: 0.4rem 0.8rem;
-            margin-bottom: 2.1333rem;
+        $prefixCls: "details-wrap";
 
+        .#{$prefixCls} {
             .detail-main {
+                padding: 0.4rem .6rem;
+
                 .sale-history-h5 {
                     display: block;
                     margin-top: .266666666666667rem;
@@ -660,6 +722,8 @@ import myAjax from '@/utils/ajax.js'
                     text-align: left;
 
                     .tit {
+                        display: flex;
+                        align-items: center;
                         height: .853333333333333rem;
                         line-height: .853333333333333rem;
                         padding-left: .32rem;
@@ -668,9 +732,9 @@ import myAjax from '@/utils/ajax.js'
                         border-bottom: 1px solid #152132;
 
                         img {
-                            width: .32rem;
-                            height: .32rem;
-                            vertical-align: middle;
+                            margin-right: .293333333333333rem;
+                            width: .346666666666667rem;
+                            height: .346666666666667rem;
 
                         }
                     }
@@ -716,7 +780,6 @@ import myAjax from '@/utils/ajax.js'
                 }
 
                 .sale-history-pc,
-                .recommend-wrap,
                 .back {
                     display: none;
                 }
@@ -746,13 +809,14 @@ import myAjax from '@/utils/ajax.js'
                     text-align: center;
 
                     .left {
-                        width: 8.4rem;
-                        height: 8.4rem;
-                        padding: 0;
+                        width: 100%;
+                        height: auto;
+                        padding: .133333333333333rem;
                         border-radius: 0.2667rem;
                         box-sizing: border-box;
 
                         img {
+                            display: block;
                             width: 100%;
                             height: 100%;
                             border: 1px solid $--color-primary;
@@ -769,6 +833,7 @@ import myAjax from '@/utils/ajax.js'
                         }
 
                         .title {
+                            color: #fff;
                             font-size: 0.64rem;
                             line-height: 0.64rem;
                         }
@@ -793,7 +858,6 @@ import myAjax from '@/utils/ajax.js'
                             }
 
                             .attr-name .item {
-                                margin-right: 1.3333rem;
 
                                 .label {
                                     font-size: 0.3733rem;
@@ -805,17 +869,21 @@ import myAjax from '@/utils/ajax.js'
                             }
                         }
 
-                        .price-wrap {
-                            border-radius: 0.2667rem;
+                        .card-opt {
+                            .btns {
+                                .el-button {
+                                    height: 1rem;
+                                }
+                            }
                         }
 
-                        .price-wrap .con {
+                        .opts-wrap .con {
                             display: flex;
                             align-items: center;
                             padding: 0.1333rem 0.2667rem;
                             box-sizing: border-box;
 
-                            .price-title {
+                            .opts-title {
                                 display: block;
                                 color: #777e90;
                                 font-size: 0.3733rem;
@@ -892,11 +960,9 @@ import myAjax from '@/utils/ajax.js'
 
                             padding: 0.32rem 0.1333rem;
                             color: #fff;
-                            font-size: 0.2667rem;
+                            font-size: .32rem;
                             border: 1px solid #152132;
                             box-sizing: border-box;
-                            font-family: Poppins-Medium,
-                            Poppins;
                         }
                     }
                 }

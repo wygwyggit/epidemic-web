@@ -5,7 +5,7 @@
             :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
             <div v-loading="isLoading">
-                <template v-if="row.num">
+                <template v-if="row.belong_type < 0">
                     <ul>
                         <li class="item">
                             <div class="key">{{ $t("account.available") }}</div>
@@ -122,7 +122,7 @@
                 this.submitLoading = true
                 let url = '',
                     params = {}
-                if (this.row.num) {
+                if (this.row.belong_type < 0) {
                     if (this.row.amount) {
                         url = 'goods/sale/others/update'
                         params = {
