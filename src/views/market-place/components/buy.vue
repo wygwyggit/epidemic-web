@@ -91,14 +91,11 @@
         },
         watch: {},
         created() {},
-        mounted() {
-            Promise.all([Approve.getChainInfo(5), Approve.getApproveAddress('token')]).then(data => {
-                const [contract_addr_abi, token_approve_addr] = data
-                this.contract_addr = contract_addr_abi.contract_addr
-                this.abi = contract_addr_abi.abi
-                this.token_approve_addr = token_approve_addr
-                this.isLoading = false
-            })
+        async mounted() {
+            const data = await Approve.getChainInfo(5)
+            this.contract_addr = data.contract_addr
+            this.abi = data.abi
+            this.isLoading = false
         },
         beforeDestroy() {},
         methods: {
@@ -120,13 +117,16 @@
                             this.$showError(this.$t("marketplace.order-locked"))
                             this.submitLoading = false
                         } else {
-                            this.doNftApprove()
+                            Approve.getApproveAddress('token').then(token_approve_addr => {
+                                this.token_approve_addr = token_approve_addr
+                                this.doNftApprove()
+                            })
                         }
                     }
                 })
-
             },
             doNftApprove() {
+                console.log(this.contract_addr)
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,

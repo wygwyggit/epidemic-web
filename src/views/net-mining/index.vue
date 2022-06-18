@@ -160,11 +160,11 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                    <el-button type="primary" :loading="comfirmLoading" @click="beforeApprove">
                         {{ $t("common.confirmed")}}
                     </el-button>
                     <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
-                        @click="doApprove">
+                        @click="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button> -->
                 </div>
@@ -216,11 +216,11 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="doApprove">
+                    <el-button type="primary" :loading="comfirmLoading" @click="beforeApprove">
                         {{ $t("common.confirmed")}}
                     </el-button>
                     <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
-                        @click="doApprove">
+                        @click="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button> -->
                 </div>
@@ -431,13 +431,11 @@
                     this.drawer = true
                 }
                 this.dialogLoading = true
-                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), Approve.getApproveAddress(
-                        'token')])
+                Promise.all([this.getUserTeamTokenBalance(), Approve.getChainInfo(0), ])
                     .then(data => {
-                        const [p1, contract_addr_abi, token_approve_addr] = data
+                        const [p1, contract_addr_abi] = data
                         this.contract_addr = contract_addr_abi.contract_addr
                         this.abi = contract_addr_abi.abi
-                        this.approve_addr = token_approve_addr
                         this.dialogLoading = false
                     })
                 this.getPledgeContent()
@@ -465,12 +463,17 @@
             doPledgeH5() {
                 this.drawer = true
             },
+            async beforeApprove() {
+                const token_approve_addr = await Approve.getApproveAddress('token')
+                this.token_approve_addr = token_approve_addr
+                this.doApprove()
+            },
             doApprove() {
                 this.comfirmLoading = true
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
-                    authAddr: this.approve_addr,
+                    authAddr: this.token_approve_addr,
                     amount: '50000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {

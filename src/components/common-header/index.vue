@@ -220,6 +220,7 @@
                             break;
                         case "account":
                         case 'account/egoWall':
+                            this.myBgColor = this.bgColor;
                             this.currentTab = 'account'
                             break;
                         default:

@@ -39,11 +39,10 @@
                         <template
                             v-if="row.type_id == 17">{{ $t("ego-wall.you-will-burn-1-Silver-Flatbread")}}</template>
                     </div>
-                    <el-button type="primary" :loading="submitLoading" @click="doNftApprove">
+                    <el-button type="primary" :loading="submitLoading" @click="beforeApprove">
                         {{ $t("ego-wall.upgrade") }}</el-button>
                 </div>
             </div>
-
         </el-dialog>
     </div>
 </template>
@@ -88,10 +87,9 @@
             }
             Promise.all([this.getBalance(), Approve.getChainInfo(0), Approve.getChainInfo(this.row.belong_type), Approve
                 .getApproveAddress(
-                    'nft'), Approve.getApproveAddress('token')
+                    'nft'), 
             ]).then(data => {
-                const [p1, token_contract_addr_abi, nft_contract_addr_abi, nft_approve_addr,
-                token_approve_addr] = data
+                const [p1, token_contract_addr_abi, nft_contract_addr_abi, nft_approve_addr] = data
                 this.nftInfo = {
                     contract_addr: nft_contract_addr_abi.contract_addr,
                     abi: nft_contract_addr_abi.abi
@@ -100,8 +98,7 @@
                     contract_addr: token_contract_addr_abi.contract_addr,
                     abi: token_contract_addr_abi.abi
                 }
-                this.nft_approve_addr = nft_approve_addr
-                this.token_approve_addr = token_approve_addr
+                this.nft_approve_addr = nft_approve_addr  
                 this.isLoading = false
             })
         },
@@ -109,6 +106,11 @@
         methods: {
             upgradeDialogClosed() {
                 this.$emit('close')
+            },
+           async beforeApprove() {
+              const token_approve_addr = await Approve.getApproveAddress('token')
+              this.token_approve_addr = token_approve_addr
+              this.doNftApprove()
             },
             doNftApprove() {
                 this.submitLoading = true
@@ -121,6 +123,8 @@
                 }).then(hash => {
                     this.nftHash = hash
                     this.doTokenApprove()
+                }).catch(err => {
+                    this.submitLoading = false
                 })
             },
             doTokenApprove() {
