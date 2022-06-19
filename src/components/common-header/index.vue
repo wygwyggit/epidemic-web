@@ -551,8 +551,8 @@
                     line-height: 40px;
                     border: 1px solid #fff;
                     border-radius: 0.68rem;
-                    padding: 0 10px;
-                    font-size: 14px;
+                    padding: 0 .133333333333333rem;
+                    font-size: 12px;
                     color: #fff;
                     cursor: pointer;
                     background: rgba(255, 255, 255, 0.1);
@@ -813,6 +813,7 @@
                 padding: .8rem .533333333333333rem .533333333333333rem .533333333333333rem;
 
                 .page-logo {
+                    margin-right: .7rem;
                     img {
                         width: 4rem;
                         height: auto;
