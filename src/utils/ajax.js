@@ -17,7 +17,7 @@ const myAjax = (options) => {
             }
         } : {}), options.data || {})
         if (data.body) {
-            data.body.language = localStorage.getItem("lang").toLowerCase()
+            data.body.language =  localStorage.getItem("lang") ? localStorage.getItem("lang").toLowerCase() : 'en'
         }
         axios({
             url: url,
