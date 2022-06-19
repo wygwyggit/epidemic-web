@@ -1,63 +1,64 @@
 <template>
     <div :class="prefixCls" :style="{ background: myBgColor }">
-        <div class="left">
-            <div class="page-logo">
-                <img src="../../assets/images/logo.png" alt="" />
-            </div>
-            <div class="page-tabs">
-                <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
-                    :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
-                    {{ $t(`common.${tab.text}`) }}
+        <div class="w" :class="{'home-tab': currentTab === 'home'}">
+            <div class="left">
+                <div class="page-logo">
+                    <img src="../../assets/images/logo.png" alt="" />
                 </div>
-            </div>
-        </div>
-
-        <div class="right">
-            <div class="pc-adoge-balance" v-if="adoge_balance">
-                {{ adoge_balance }}
-                adoge
-            </div>
-            <template v-if="!account">
-                <div class="user-pc">
-                    <div class="connect" @click="connectWalletMetaMask(false)">
-                        {{ $t("common.connect") }}
+                <div class="page-tabs">
+                    <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
+                        :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
+                        {{ $t(`common.${tab.text}`) }}
                     </div>
                 </div>
-            </template>
-            <template v-else>
-                <p class="adoge-num"></p>
-                <div class="user-pc">
+            </div>
+
+            <div class="right">
+                <div class="pc-adoge-balance" v-if="adoge_balance">
+                    {{ adoge_balance }}
+                    adoge
+                </div>
+                <template v-if="!account">
+                    <div class="user-pc">
+                        <div class="connect" @click="connectWalletMetaMask(false)">
+                            {{ $t("common.connect") }}
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <p class="adoge-num"></p>
+                    <div class="user-pc">
+                        <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
+                            popper-class="el-popover-black">
+                            <div class="pop-tip" slot="reference">
+                                <div class="wallet">
+                                    <img src="../../assets/images/wallet.png" alt="" />
+                                    {{ smallAccount }}
+                                </div>
+                            </div>
+                            <div class="dis-connect" @click="disconnected">
+                                {{ $t("common.disConnect") }}
+                                <img src="../../assets/images/out.png" alt="" />
+                            </div>
+                        </el-popover>
+                    </div>
+                </template>
+                <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
+                    <img src="../../assets/images/line.png" alt="" />
+                </a>
+                <div class="lang-opt">
+                    <!-- <div class="item current">EN</div>
+                <div class="item other">ZH</div> -->
                     <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
                         popper-class="el-popover-black">
                         <div class="pop-tip" slot="reference">
-                            <div class="wallet">
-                                <img src="../../assets/images/wallet.png" alt="" />
-                                {{ smallAccount }}
-                            </div>
+                            <div class="item current">{{ lang }}</div>
                         </div>
-                        <div class="dis-connect" @click="disconnected">
-                            {{ $t("common.disConnect") }}
-                            <img src="../../assets/images/out.png" alt="" />
+                        <div class="other-lang" style="cursor: pointer" @click="doChangeLang">
+                            {{ otherLang }}
                         </div>
                     </el-popover>
-                </div>
-            </template>
-            <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
-                <img src="../../assets/images/line.png" alt="" />
-            </a>
-            <div class="lang-opt">
-                <!-- <div class="item current">EN</div>
-                <div class="item other">ZH</div> -->
-                <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
-                    popper-class="el-popover-black">
-                    <div class="pop-tip" slot="reference">
-                        <div class="item current">{{ lang }}</div>
-                    </div>
-                    <div class="other-lang" style="cursor: pointer" @click="doChangeLang">
-                        {{ otherLang }}
-                    </div>
-                </el-popover>
-                <!-- <el-dropdown @command="doChangeLang">
+                    <!-- <el-dropdown @command="doChangeLang">
                     <span class="el-dropdown-link">
                         <div class="item current">{{lang}}</div>
                     </span>
@@ -65,8 +66,10 @@
                         <el-dropdown-item>{{otherLang}}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown> -->
+                </div>
             </div>
         </div>
+
         <div class="header-slideout" :style="{ width: isShowSlider ? '100%' : '0' }">
             <div class="content" v-show="isShowSlider">
                 <div class="close" @click="closeSlider"></div>
@@ -451,121 +454,139 @@
     $prefixCls: "components-common-header";
 
     .#{$prefixCls} {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 0.453333333333333rem;
+        position: relative;
         width: 100%;
         height: 100px;
         background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
         z-index: 999;
 
-        .left {
+        .w {
+            position: relative;
             display: flex;
             align-items: center;
-        }
+            justify-content: space-between;
 
-        .page-logo {
-            margin-right: 41px;
-            font-size: 28px;
-            font-weight: 700;
-
-            img {
-                width: 170px;
-                height: 60px;
-            }
-        }
-
-        .page-tabs {
-            display: flex;
-            align-items: center;
-            height: 100px;
-
-            .tab-item {
-                display: flex;
-                align-items: center;
-                position: relative;
-                margin-right: 17px;
-                padding: 0 10px;
-                height: 100%;
-                cursor: pointer;
-                opacity: 1;
-                color: #fff;
-                font-size: 18px;
-                transition: color 0.7s;
-
-                &.tab-active {
-                    color: #fff;
-                    border-bottom: 2px solid #fff;
-                }
-
-                &:last-child {
-                    margin-right: 0;
+            &.home-tab {
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: -1.2rem;
+                    width: 11.693333333333333rem;
+                    height: 3.453333333333333rem;
+                    background: #000 url('../../assets/images/tab-bg.png');
+                    background-size: 100% auto;
+                    z-index: -1;
                 }
             }
-        }
 
-        .right {
-            display: flex;
-            align-items: center;
 
-            .pc-adoge-balance {
-                color: #fff;
-                font-size: .24rem;
-            }
-
-            .header-above-slideicon {
-                display: none;
-            }
-
-            .user {
-                position: relative;
-                margin-right: 20px;
-            }
-
-            .connect,
-            .wallet {
+            .left {
                 display: flex;
                 align-items: center;
-                height: 40px;
-                line-height: 40px;
-                border: 1px solid #fff;
-                border-radius: 0.68rem;
-                padding: 0 10px;
-                font-size: 14px;
-                color: #fff;
-                cursor: pointer;
+            }
+
+            .page-logo {
+                margin-right: .8rem;
 
                 img {
-                    vertical-align: middle;
+                    width: 2.96rem;
+                    height: .6rem;
                 }
             }
 
-            .adoge-num {
-                // width: 100px;
-                // white-space: nowrap;
-                // overflow: hidden;
-                // text-overflow: ellipsis;
-                margin-right: 20px;
-                color: #fff;
-                font-size: 18px;
+            .page-tabs {
+                display: flex;
+                align-items: center;
+                height: 100px;
+
+                .tab-item {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    margin-right: 17px;
+                    padding: 0 10px;
+                    height: 100%;
+                    cursor: pointer;
+                    opacity: 1;
+                    color: #fff;
+                    font-size: .213333333333333rem;
+                    transition: color 0.7s;
+
+                    &.tab-active {
+                        color: #fff;
+                        border-bottom: 2px solid #fff;
+                    }
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
             }
 
-            .lang-opt {
-                position: relative;
-                margin-left: 20px;
+            .right {
+                display: flex;
+                align-items: center;
 
-                .item {
-                    width: 51px;
+                .pc-adoge-balance {
+                    color: #fff;
+                    font-size: .24rem;
+                }
+
+                .header-above-slideicon {
+                    display: none;
+                }
+
+                .user {
+                    position: relative;
+                    margin-right: 20px;
+                }
+
+                .connect,
+                .wallet {
+                    display: flex;
+                    align-items: center;
                     height: 40px;
-                    border-radius: 51px;
-                    background: #fff;
-                    color: $--color-success;
-                    text-align: center;
                     line-height: 40px;
+                    border: 1px solid #fff;
+                    border-radius: 0.68rem;
+                    padding: 0 10px;
                     font-size: 14px;
+                    color: #fff;
                     cursor: pointer;
+                    background: rgba(255, 255, 255, 0.1);
+
+                    img {
+                        vertical-align: middle;
+                    }
+                }
+
+                .adoge-num {
+                    // width: 100px;
+                    // white-space: nowrap;
+                    // overflow: hidden;
+                    // text-overflow: ellipsis;
+                    margin-right: 20px;
+                    color: #fff;
+                    font-size: 18px;
+                }
+
+                .lang-opt {
+                    position: relative;
+                    margin-left: 20px;
+
+                    .item {
+                        width: 51px;
+                        height: 40px;
+                        border-radius: 51px;
+                        background: rgba(255, 255, 255, 0.1);
+                        color: #fff;
+                        text-align: center;
+                        line-height: 40px;
+                        font-size: 14px;
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -595,6 +616,7 @@
                 }
             }
         }
+
 
         .code-dialog {
             text-align: center;
@@ -786,15 +808,20 @@
                 }
             }
 
-            .page-logo {
-                img {
-                    width: 3.093333333333333rem;
-                    height: 1.2rem;
+
+            .home-tab {
+                padding: .8rem .533333333333333rem .533333333333333rem .533333333333333rem;
+
+                .page-logo {
+                    img {
+                        width: 4rem;
+                        height: auto;
+                    }
                 }
             }
 
             .page-tabs {
-                display: none;
+                display: none !important;
             }
 
             .adoge-num,
