@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls">
+    <div :class="prefixCls" v-loading="isLoading">
         <div class="content">
             <img src="../no-connect-wallet/no-wallet.png" alt="">
             <p>{{ $t("common.please-authorize") }}</p>
@@ -19,7 +19,8 @@
         props: {},
         data() {
             return {
-                prefixCls: 'components-no-connect-wallet'
+                prefixCls: 'components-no-connect-wallet',
+                isLoading: false
             }
         },
         computed: {},

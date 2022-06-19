@@ -925,6 +925,7 @@
                     margin-right: 20px;
                     width: 265px;
 
+
                     &:nth-child(4n) {
                         margin-right: 0;
                     }

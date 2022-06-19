@@ -361,7 +361,7 @@
             },
             compoundSuc(data) {
                 if (this.currentGoodRow.type_id == 3) {
-                     this.getUserInfo()
+                    this.getUserInfo()
                 }
                 this.isShowCompound = false
                 this.isShowGiftBag = true

@@ -30,7 +30,8 @@
                                 <div class="attr-name">
                                     <div class="item">
                                         <label class="label"> {{ $t("detail.color") }}:</label>
-                                        <p class="con" :style="{color: rowInfo.rarity}">{{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
+                                        <p class="con" :style="{color: rowInfo.rarity}">
+                                            {{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
                                     </div>
                                     <div class="item">
                                         <label class="label">{{ $t("account.level") }}:</label>
@@ -42,7 +43,7 @@
                                 <span class="label">{{ $t("marketplace.quantity") }}:</span>
                                 {{ rowInfo.num }}
                             </div>
-                            <template v-if="rowInfo.status == 0">
+                            <template v-if="rowInfo.status == 0 && isConnectAndSignin">
                                 <div class="opts-wrap border">
                                     <div class="opts-title top">
                                         <img src="../../assets/images/price_tag.png" />
@@ -98,7 +99,7 @@
                                 </div>
 
                             </template>
-                            <template v-if="rowInfo.status == 8">
+                            <template v-if="rowInfo.status == 8 && isConnectAndSignin">
                                 <div class="opts-wrap border">
                                     <div class="opts-title top">
                                         <img src="../../assets/images/price_tag.png" />
@@ -113,9 +114,9 @@
                                         <!-- 状态区分 -->
 
                                         <div class="btns">
-                                            <el-button class="btn-buy" v-if="from === 'marketplace'" @click="doBuy">
+                                            <el-button class="btn-buy" v-if="from === 'marketplace' && !isOwnerProduct" @click="doBuy">
                                                 {{ $t("detail.buy") }}</el-button>
-                                            <template v-if="from === 'account'">
+                                            <template v-if="from === 'account' || (from === 'marketplace' && isOwnerProduct)">
                                                 <el-button class="btn-revise"
                                                     @click="() => this.saleReviseDialog = true">
                                                     {{ $t("detail.revise") }}</el-button>
@@ -127,7 +128,7 @@
                                     </div>
                                 </div>
                             </template>
-                            <template v-if="[1, 2, -2, 4, 9, -1].includes(rowInfo.status)">
+                            <template v-if="[1, 2, -2, 4, 9, -1].includes(rowInfo.status) && isConnectAndSignin">
                                 <div class="card-opt">
                                     <div class="btns">
                                         <el-button class="btn-on-processing" disabled v-if="rowInfo.status == 2">
@@ -251,6 +252,7 @@
 </template>
 
 <script>
+    import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
     import Sale from '../account/components/sale'
     import DeliverDialog from '@/components/deliver-dialog'
@@ -279,6 +281,23 @@
             from: {
                 type: String,
                 default: 'account'
+            }
+        },
+        computed: {
+            isConnectAndSignin() {
+                const addr = Cookie.getCookie('__account__'),
+                    token = Cookie.getCookie('ad_token')
+                if (addr && token) {
+                    return true
+                }
+                return false
+            },
+            isOwnerProduct() {
+                const addr = Cookie.getCookie('__account__')
+                if (this.rowInfo.owner_addr === addr) {
+                    return true
+                }
+                return false
             }
         },
         data() {

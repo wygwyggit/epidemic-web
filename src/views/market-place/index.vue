@@ -247,7 +247,7 @@
                 </el-pagination>
             </div>
         </el-dialog>
-        <el-drawer :visible.sync="buyRecoredDrawer" direction="btt">
+        <el-drawer :visible.sync="buyRecoredDrawer" direction="btt" custom-class="el-drawer2">
             <div slot="title">
                 <img src="../../assets/images/clock.png" alt="" />
                 <span>
@@ -386,8 +386,8 @@
             </div>
         </el-drawer>
         <Details :row="currentGoodRow" v-if="isShowDetails" @on-close="detailsDrawerClose" from="marketplace"></Details>
-        <buy :row="currentGoodRow"  v-if="buyReviseDialog"
-            @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk"></buy>
+        <buy :row="currentGoodRow" v-if="buyReviseDialog" @close="() => this.buyReviseDialog = false"
+            @sendBuyOk="sendBuyOk"></buy>
     </div>
 </template>
 
@@ -1030,6 +1030,7 @@
                     float: left;
                     margin-right: 20px;
                     width: 265px;
+
 
                     &:nth-child(4n) {
                         margin-right: 0;

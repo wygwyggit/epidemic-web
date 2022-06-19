@@ -13,6 +13,7 @@ export default {
                 addr: this.account,
                 pwd: ''
             }).then(signature => {
+                this.isLoading = true
                 Cookie.delCookie("ad_token")
                 this.getToken(signature)
             })
@@ -48,8 +49,10 @@ export default {
                 if (res.ok) {
                     const token = (res.data || {}).token
                     token && (Cookie.setCookie('ad_token', token))
+                    location.reload()
                 }
-                location.reload()
+            }).finally(res => {
+                this.isLoading = false
             })
         }
     }

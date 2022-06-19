@@ -40,10 +40,9 @@
         "off-line-title": "下线通知"
     },
     "home": {
-        "amazing-doge": "AmazingDoge",
-        "amazing-tip": "Have a surprise everyday",
-        "buy-adoge": "购买 Adoge",
-        "contract": "合约"
+        "amazing-doge": "AmazingDoge is a new breed of Doge. The purpose of birth is to surprise every investor",
+        "amazing-tip": "This is a brand new social experiment, we want to see how many miracles and surprises Amazingdoge can create!",
+        "white-paper": "White Paper"
     },
     "blind-box": {
         "open-blind-box": "开启NFT盲盒",

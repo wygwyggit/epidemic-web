@@ -11,7 +11,7 @@
                 <li class="item">
                     <div class="key">{{ $t("account.quantity-for-open") }}</div>
                     <div class="val">
-                        <el-input-number v-model="openQuantity" :min="1" :max="row.num"></el-input-number>
+                        <el-input-number v-model="openQuantity" :min="1" :max="row.num > 5 ? 5 : row.num"></el-input-number>
                     </div>
                 </li>
             </ul>

@@ -52,9 +52,12 @@
                             break;
                         case 'account':
                         case 'netMining':
+                        case 'marketplace':
                         case 'account/egoWall':
                             this.bgColor = "#32A3FF"
-                            this.getUserInfo()
+                            if (Cookie.getCookie('__account__')) {
+                                this.getUserInfo()
+                            }
                             break;
                         default:
                             this.bgColor = "#32A3FF"
