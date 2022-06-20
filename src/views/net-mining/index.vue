@@ -922,8 +922,8 @@
 
                 .components-item-card {
                     float: left;
-                    margin-right: .48rem;
-                    width: 3.9rem;
+                    margin-right: .52rem;
+                    width: 3.6rem;
 
                     &:nth-child(4n) {
                         margin-right: 0;
