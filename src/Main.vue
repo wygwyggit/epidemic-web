@@ -26,7 +26,7 @@
         props: {},
         data() {
             return {
-                prefixCls: '',
+                prefixCls: 'main-content',
                 isShowFooter: true,
                 bgColor: ""
             }
@@ -101,4 +101,9 @@
 </script>
 
 <style lang="scss" scoped>
+    $prefixCls: "main-content";
+
+    .#{$prefixCls} {
+
+    }
 </style>

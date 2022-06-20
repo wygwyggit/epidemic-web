@@ -650,7 +650,6 @@
                             return x
                         })
                         this.tabs[this.currentTabId - 1].num = data.total || 0
-
                         this.total = data.total
                         resolve()
                     }).catch(err => {

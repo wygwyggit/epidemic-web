@@ -69,54 +69,6 @@
                 </div>
             </div>
         </div>
-
-        <div class="header-slideout" :style="{ width: isShowSlider ? '100%' : '0' }">
-            <div class="content" v-show="isShowSlider">
-                <div class="close" @click="closeSlider"></div>
-                <nav>
-                    <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
-                        @click="redirectTo(tab)">
-                        <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name === 'home'" />
-                        <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name === 'blindBox'" />
-                        <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name === 'marketplace'" />
-                        <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name === 'account'" />
-                        <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name === 'netMining'" />
-                        {{ $t(`common.${tab.text}`) }}</a>
-                    <a href="javascript:;" class="item lang" @click="selectLang">
-                        <img src="../../assets/images/nav-lang.png" alt="" />
-                        {{ $t("common.language") }}
-                        <span class="r">{{ lang }}</span>
-                    </a>
-                </nav>
-                <div class="bottom">
-                    <div class="user-info">
-                        <template v-if="account">
-                            <div class="user-h5">
-                                <div class="head-img">
-                                    <img src="../../assets/images/reward-token.png" alt="" />
-                                </div>
-                                <div class="num-info">
-                                    <p>BALANCE</p>
-                                    <p class="num">{{ adoge_balance }} Adoge</p>
-                                </div>
-                                <div class="buy-btn">
-                                    {{ $t("detail.buy") }}
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                    <div class="out-link">
-                        <a href="https://twitter.com/AmazingDogeCoin" target="_blank">
-                            <img src="../../assets/images/Twitter.png" alt="" />
-                        </a>
-                        <a href="https://t.me/amazingdoge_cn" target="_blank">
-                            <img src="../../assets/images/Telegram App.png" alt="" />
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" :width="dialogWidth">
             <ul>
@@ -137,6 +89,55 @@
                 <li @click="doChangeLang">{{ otherLang }}</li>
             </ul>
         </el-dialog>
+        <el-drawer :custom-class="prefixCls + '-drawer'" :visible.sync="isShowSlider" size="100%" direction="ltr">
+            <div class="header-slideout">
+                <div class="content" v-show="isShowSlider">
+                    <div class="close" @click="closeSlider"></div>
+                    <nav>
+                        <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
+                            @click="redirectTo(tab)">
+                            <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name === 'home'" />
+                            <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name === 'blindBox'" />
+                            <img src="../../assets/images/nav-marketplace.png" alt=""
+                                v-if="tab.name === 'marketplace'" />
+                            <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name === 'account'" />
+                            <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name === 'netMining'" />
+                            {{ $t(`common.${tab.text}`) }}</a>
+                        <a href="javascript:;" class="item lang" @click="selectLang">
+                            <img src="../../assets/images/nav-lang.png" alt="" />
+                            {{ $t("common.language") }}
+                            <span class="r">{{ lang }}</span>
+                        </a>
+                    </nav>
+                    <div class="bottom">
+                        <div class="user-info">
+                            <template v-if="account">
+                                <div class="user-h5">
+                                    <div class="head-img">
+                                        <img src="../../assets/images/reward-token.png" alt="" />
+                                    </div>
+                                    <div class="num-info">
+                                        <p>BALANCE</p>
+                                        <p class="num">{{ adoge_balance }} Adoge</p>
+                                    </div>
+                                    <div class="buy-btn">
+                                        {{ $t("detail.buy") }}
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="out-link">
+                            <a href="https://twitter.com/AmazingDogeCoin" target="_blank">
+                                <img src="../../assets/images/Twitter.png" alt="" />
+                            </a>
+                            <a href="https://t.me/amazingdoge_cn" target="_blank">
+                                <img src="../../assets/images/Telegram App.png" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-drawer>
     </div>
 </template>
 <script>
@@ -459,8 +460,6 @@
         height: 100px;
         background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
-        z-index: 999;
-
         .w {
             position: relative;
             display: flex;
@@ -644,107 +643,116 @@
             }
         }
 
-        .header-slideout {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            min-height: 100%;
+
+    }
+
+    .#{$prefixCls}-drawer {
+        .el-drawer__header {
+            display: none;
+        }
+
+        .el-drawer__body {
+            padding: .666666666666667rem 0;
+            overflow-y: auto;
             background: #1d2633;
-            color: #fff;
-            z-index: 99;
-            transition: all 0.3s;
 
-            .content {
-                margin: 1.28rem 0.853333333333333rem 1.333333333333333rem 0.853333333333333rem;
-            }
+            .header-slideout {
+                min-height: 100%;
+                color: #fff;
+                z-index: 999;
+                transition: all 0.3s;
 
-            .close {
-                margin-bottom: 0.64rem;
-                width: 0.853333333333333rem;
-                height: 0.853333333333333rem;
-                background: url("../../assets/images/close.png");
-                background-size: cover;
-                cursor: pointer;
-            }
-
-            nav {
-                .item {
-                    display: block;
-                    width: 100%;
-                    height: 1.92rem;
-                    line-height: 1.92rem;
-                    font-size: 0.48rem;
-                    color: #fff;
-                    background: url("../../assets/images/link.png");
-                    background-repeat: no-repeat;
-                    background-position: right center;
-
-                    img {
-                        width: 0.586666666666667rem;
-                        height: 0.586666666666667rem;
-                        margin-right: 0.2rem;
-                        vertical-align: text-top;
-                    }
-
-                    &.lang {
-                        background: none;
-
-                        span {
-                            font-weight: bolder;
-                        }
-                    }
+                .content {
+                    margin: 1.28rem 0.853333333333333rem 1.333333333333333rem 0.853333333333333rem;
                 }
-            }
 
-            .bottom {
-                margin-top: 2.666666666666667rem;
-            }
+                .close {
+                    margin-bottom: 0.64rem;
+                    width: 0.853333333333333rem;
+                    height: 0.853333333333333rem;
+                    background: url("../../assets/images/close.png");
+                    background-size: cover;
+                    cursor: pointer;
+                }
 
-            .user-info {
-                .user-h5 {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                nav {
+                    .item {
+                        display: block;
+                        width: 100%;
+                        height: 1.92rem;
+                        line-height: 1.92rem;
+                        font-size: 0.48rem;
+                        color: #fff;
+                        background: url("../../assets/images/link.png");
+                        background-repeat: no-repeat;
+                        background-position: right center;
 
-                    .head-img {
                         img {
-                            width: 1.066666666666667rem;
-                            height: 1.066666666666667rem;
-                            vertical-align: middle;
+                            width: 0.586666666666667rem;
+                            height: 0.586666666666667rem;
+                            margin-right: 0.2rem;
+                            vertical-align: text-top;
+                        }
+
+                        &.lang {
+                            background: none;
+
+                            span {
+                                font-weight: bolder;
+                            }
                         }
                     }
+                }
 
-                    .num-info {
-                        flex: 1;
-                        margin: 0 0.4rem;
-                        font-size: 0.426666666666667rem;
-                    }
+                .bottom {
+                    margin-top: 2.666666666666667rem;
+                }
 
-                    .buy-btn {
-                        padding: 0 0.4rem;
-                        height: 0.8rem;
-                        line-height: 0.8rem;
-                        background: #00cf08;
-                        font-size: 0.373333333333333rem;
-                        border-radius: 0.533333333333333rem;
-                        cursor: pointer;
+                .user-info {
+                    .user-h5 {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .head-img {
+                            img {
+                                width: 1.066666666666667rem;
+                                height: 1.066666666666667rem;
+                                vertical-align: middle;
+                            }
+                        }
+
+                        .num-info {
+                            flex: 1;
+                            margin: 0 0.4rem;
+                            font-size: 0.426666666666667rem;
+                        }
+
+                        .buy-btn {
+                            padding: 0 0.4rem;
+                            height: 0.8rem;
+                            line-height: 0.8rem;
+                            background: #00cf08;
+                            font-size: 0.373333333333333rem;
+                            border-radius: 0.533333333333333rem;
+                            cursor: pointer;
+                        }
                     }
                 }
-            }
 
-            .out-link {
-                margin-top: 0.773333333333333rem;
-                text-align: center;
+                .out-link {
+                    margin-top: 0.773333333333333rem;
+                    text-align: center;
 
-                a {
-                    img {
-                        width: 0.72rem;
-                        height: 0.72rem;
-                    }
+                    a {
+                        img {
+                            width: 0.72rem;
+                            height: 0.72rem;
+                        }
 
-                    &:first-child img {
-                        margin-right: 0.8rem;
+                        &:first-child img {
+                            margin-right: 0.8rem;
+                        }
                     }
                 }
             }
@@ -809,14 +817,26 @@
             }
 
 
-            .home-tab {
+            .w {
                 padding: .8rem .533333333333333rem .533333333333333rem .533333333333333rem;
 
                 .page-logo {
                     margin-right: .7rem;
+
                     img {
                         width: 4rem;
                         height: auto;
+                    }
+                }
+
+                &.home-tab {
+                    &::after {
+                        width: 100%;
+                        height: 6.266666666666667rem;
+                        left: 0;
+                        top: 0;
+                        background: #000 url('../../assets/images/tab-h5-bg.png');
+                        background-size: 100% auto;
                     }
                 }
             }
