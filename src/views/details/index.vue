@@ -114,9 +114,11 @@
                                         <!-- 状态区分 -->
 
                                         <div class="btns">
-                                            <el-button class="btn-buy" v-if="from === 'marketplace' && !isOwnerProduct" @click="doBuy">
+                                            <el-button class="btn-buy" v-if="from === 'marketplace' && !isOwnerProduct"
+                                                @click="doBuy">
                                                 {{ $t("detail.buy") }}</el-button>
-                                            <template v-if="from === 'account' || (from === 'marketplace' && isOwnerProduct)">
+                                            <template
+                                                v-if="from === 'account' || (from === 'marketplace' && isOwnerProduct)">
                                                 <el-button class="btn-revise"
                                                     @click="() => this.saleReviseDialog = true">
                                                     {{ $t("detail.revise") }}</el-button>
@@ -678,33 +680,9 @@
             .sale-history-pc {
                 margin-top: 45px;
 
-                /deep/ .el-table,
-                /deep/ .el-table__expanded-cell,
-                /deep/ .el-table tr,
-                /deep/ .el-table th.el-table__cell,
-                /deep/ .el-table--border::after,
-                /deep/ .el-table--group::after,
-                /deep/ .el-table::before,
-                /deep/ .el-table th,
-                .el-table tr {
-                    background-color: #14181f !important;
-                }
-
-                /deep/ .el-table td.el-table__cell,
-                /deep/ .el-table th.el-table__cell.is-leaf,
-                /deep/ .el-table--border::after {
-                    border-bottom: 1px solid #152132;
-                    background-color: #152132 !important;
-                }
-
-                /deep/ .el-table__row:hover,
-                /deep/ .el-table--enable-row-hover .el-table__body tr:hover>td {
-                    background: #14181f;
-                }
-
-                /deep/ .el-table td,
-                /deep/.el-table th.is-leaf {
-                    border-bottom: 1px solid #152132 !important;
+                .el-table,
+                .el-table__expanded-cel {
+                    background-color: transparent;
                 }
 
                 .group {
@@ -720,15 +698,18 @@
             }
         }
 
-        .el-table th.el-table__cell,
-        .el-table tr,
+        .el-table td.el-table__cell,
         .el-table th.el-table__cell.is-leaf {
-            background: #131922;
             border-bottom: 1px solid #29374B;
         }
 
-        .el-table__row:hover {
-            background: #131922 !important;
+        .el-table tr,
+        .el-table th.el-table__cell,
+        .el-table--enable-row-hover .el-table__body tr:hover>td.el-table__cell,
+        .el-table--border::after,
+        .el-table--group::after,
+        .el-table::before {
+            background-color: transparent;
         }
     }
 

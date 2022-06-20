@@ -650,7 +650,6 @@
                             return x
                         })
                         this.tabs[this.currentTabId - 1].num = data.total || 0
-
                         this.total = data.total
                         resolve()
                     }).catch(err => {
@@ -1028,8 +1027,8 @@
 
                 .components-item-card {
                     float: left;
-                    margin-right: 20px;
-                    width: 265px;
+                    margin-right: .48rem;
+                    width: 3.9rem;
 
 
                     &:nth-child(4n) {

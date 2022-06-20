@@ -1,63 +1,64 @@
 <template>
     <div :class="prefixCls" :style="{ background: myBgColor }">
-        <div class="left">
-            <div class="page-logo">
-                <img src="../../assets/images/logo.png" alt="" />
-            </div>
-            <div class="page-tabs">
-                <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
-                    :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
-                    {{ $t(`common.${tab.text}`) }}
+        <div class="w" :class="{'home-tab': currentTab === 'home'}">
+            <div class="left">
+                <div class="page-logo">
+                    <img src="../../assets/images/logo.png" alt="" />
                 </div>
-            </div>
-        </div>
-
-        <div class="right">
-            <div class="pc-adoge-balance" v-if="adoge_balance">
-                {{ adoge_balance }}
-                adoge
-            </div>
-            <template v-if="!account">
-                <div class="user-pc">
-                    <div class="connect" @click="connectWalletMetaMask(false)">
-                        {{ $t("common.connect") }}
+                <div class="page-tabs">
+                    <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
+                        :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
+                        {{ $t(`common.${tab.text}`) }}
                     </div>
                 </div>
-            </template>
-            <template v-else>
-                <p class="adoge-num"></p>
-                <div class="user-pc">
+            </div>
+
+            <div class="right">
+                <div class="pc-adoge-balance" v-if="adoge_balance">
+                    {{ adoge_balance }}
+                    adoge
+                </div>
+                <template v-if="!account">
+                    <div class="user-pc">
+                        <div class="connect" @click="connectWalletMetaMask(false)">
+                            {{ $t("common.connect") }}
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <p class="adoge-num"></p>
+                    <div class="user-pc">
+                        <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
+                            popper-class="el-popover-black">
+                            <div class="pop-tip" slot="reference">
+                                <div class="wallet">
+                                    <img src="../../assets/images/wallet.png" alt="" />
+                                    {{ smallAccount }}
+                                </div>
+                            </div>
+                            <div class="dis-connect" @click="disconnected">
+                                {{ $t("common.disConnect") }}
+                                <img src="../../assets/images/out.png" alt="" />
+                            </div>
+                        </el-popover>
+                    </div>
+                </template>
+                <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
+                    <img src="../../assets/images/line.png" alt="" />
+                </a>
+                <div class="lang-opt">
+                    <!-- <div class="item current">EN</div>
+                <div class="item other">ZH</div> -->
                     <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
                         popper-class="el-popover-black">
                         <div class="pop-tip" slot="reference">
-                            <div class="wallet">
-                                <img src="../../assets/images/wallet.png" alt="" />
-                                {{ smallAccount }}
-                            </div>
+                            <div class="item current">{{ lang }}</div>
                         </div>
-                        <div class="dis-connect" @click="disconnected">
-                            {{ $t("common.disConnect") }}
-                            <img src="../../assets/images/out.png" alt="" />
+                        <div class="other-lang" style="cursor: pointer" @click="doChangeLang">
+                            {{ otherLang }}
                         </div>
                     </el-popover>
-                </div>
-            </template>
-            <a href="javascript:;" class="header-above-slideicon" @click="openSlider">
-                <img src="../../assets/images/line.png" alt="" />
-            </a>
-            <div class="lang-opt">
-                <!-- <div class="item current">EN</div>
-                <div class="item other">ZH</div> -->
-                <el-popover placement="bottom-start" trigger="click" :visible-arrow="false"
-                    popper-class="el-popover-black">
-                    <div class="pop-tip" slot="reference">
-                        <div class="item current">{{ lang }}</div>
-                    </div>
-                    <div class="other-lang" style="cursor: pointer" @click="doChangeLang">
-                        {{ otherLang }}
-                    </div>
-                </el-popover>
-                <!-- <el-dropdown @command="doChangeLang">
+                    <!-- <el-dropdown @command="doChangeLang">
                     <span class="el-dropdown-link">
                         <div class="item current">{{lang}}</div>
                     </span>
@@ -65,55 +66,9 @@
                         <el-dropdown-item>{{otherLang}}</el-dropdown-item>
                     </el-dropdown-menu>
                 </el-dropdown> -->
-            </div>
-        </div>
-        <div class="header-slideout" :style="{ width: isShowSlider ? '100%' : '0' }">
-            <div class="content" v-show="isShowSlider">
-                <div class="close" @click="closeSlider"></div>
-                <nav>
-                    <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
-                        @click="redirectTo(tab)">
-                        <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name === 'home'" />
-                        <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name === 'blindBox'" />
-                        <img src="../../assets/images/nav-marketplace.png" alt="" v-if="tab.name === 'marketplace'" />
-                        <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name === 'account'" />
-                        <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name === 'netMining'" />
-                        {{ $t(`common.${tab.text}`) }}</a>
-                    <a href="javascript:;" class="item lang" @click="selectLang">
-                        <img src="../../assets/images/nav-lang.png" alt="" />
-                        {{ $t("common.language") }}
-                        <span class="r">{{ lang }}</span>
-                    </a>
-                </nav>
-                <div class="bottom">
-                    <div class="user-info">
-                        <template v-if="account">
-                            <div class="user-h5">
-                                <div class="head-img">
-                                    <img src="../../assets/images/reward-token.png" alt="" />
-                                </div>
-                                <div class="num-info">
-                                    <p>BALANCE</p>
-                                    <p class="num">{{ adoge_balance }} Adoge</p>
-                                </div>
-                                <div class="buy-btn">
-                                    {{ $t("detail.buy") }}
-                                </div>
-                            </div>
-                        </template>
-                    </div>
-                    <div class="out-link">
-                        <a href="https://twitter.com/AmazingDogeCoin" target="_blank">
-                            <img src="../../assets/images/Twitter.png" alt="" />
-                        </a>
-                        <a href="https://t.me/amazingdoge_cn" target="_blank">
-                            <img src="../../assets/images/Telegram App.png" alt="" />
-                        </a>
-                    </div>
                 </div>
             </div>
         </div>
-
         <!-- <el-dialog :title="connectTitle" custom-class="connect-dialog" :visible.sync="isShowConnectDialog"
             :close-on-click-modal="false" :width="dialogWidth">
             <ul>
@@ -134,6 +89,55 @@
                 <li @click="doChangeLang">{{ otherLang }}</li>
             </ul>
         </el-dialog>
+        <el-drawer :custom-class="prefixCls + '-drawer'" :visible.sync="isShowSlider" size="100%" direction="ltr">
+            <div class="header-slideout">
+                <div class="content" v-show="isShowSlider">
+                    <div class="close" @click="closeSlider"></div>
+                    <nav>
+                        <a href="javascript:;" v-for="tab in tabs" :key="tab.name" class="item" :class="tab.text"
+                            @click="redirectTo(tab)">
+                            <img src="../../assets/images/nav-home.png" alt="" v-if="tab.name === 'home'" />
+                            <img src="../../assets/images/nav-blind-box.png" alt="" v-if="tab.name === 'blindBox'" />
+                            <img src="../../assets/images/nav-marketplace.png" alt=""
+                                v-if="tab.name === 'marketplace'" />
+                            <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name === 'account'" />
+                            <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name === 'netMining'" />
+                            {{ $t(`common.${tab.text}`) }}</a>
+                        <a href="javascript:;" class="item lang" @click="selectLang">
+                            <img src="../../assets/images/nav-lang.png" alt="" />
+                            {{ $t("common.language") }}
+                            <span class="r">{{ lang }}</span>
+                        </a>
+                    </nav>
+                    <div class="bottom">
+                        <div class="user-info">
+                            <template v-if="account">
+                                <div class="user-h5">
+                                    <div class="head-img">
+                                        <img src="../../assets/images/reward-token.png" alt="" />
+                                    </div>
+                                    <div class="num-info">
+                                        <p>BALANCE</p>
+                                        <p class="num">{{ adoge_balance }} Adoge</p>
+                                    </div>
+                                    <div class="buy-btn">
+                                        {{ $t("detail.buy") }}
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div class="out-link">
+                            <a href="https://twitter.com/AmazingDogeCoin" target="_blank">
+                                <img src="../../assets/images/Twitter.png" alt="" />
+                            </a>
+                            <a href="https://t.me/amazingdoge_cn" target="_blank">
+                                <img src="../../assets/images/Telegram App.png" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </el-drawer>
     </div>
 </template>
 <script>
@@ -451,121 +455,137 @@
     $prefixCls: "components-common-header";
 
     .#{$prefixCls} {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0 0.453333333333333rem;
+        position: relative;
         width: 100%;
         height: 100px;
         background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
-        z-index: 999;
-
-        .left {
+        .w {
+            position: relative;
             display: flex;
             align-items: center;
-        }
+            justify-content: space-between;
 
-        .page-logo {
-            margin-right: 41px;
-            font-size: 28px;
-            font-weight: 700;
-
-            img {
-                width: 170px;
-                height: 60px;
-            }
-        }
-
-        .page-tabs {
-            display: flex;
-            align-items: center;
-            height: 100px;
-
-            .tab-item {
-                display: flex;
-                align-items: center;
-                position: relative;
-                margin-right: 17px;
-                padding: 0 10px;
-                height: 100%;
-                cursor: pointer;
-                opacity: 1;
-                color: #fff;
-                font-size: 18px;
-                transition: color 0.7s;
-
-                &.tab-active {
-                    color: #fff;
-                    border-bottom: 2px solid #fff;
-                }
-
-                &:last-child {
-                    margin-right: 0;
+            &.home-tab {
+                &::after {
+                    content: "";
+                    position: absolute;
+                    top: 0;
+                    left: -1.2rem;
+                    width: 11.693333333333333rem;
+                    height: 3.453333333333333rem;
+                    background: #000 url('../../assets/images/tab-bg.png');
+                    background-size: 100% auto;
+                    z-index: -1;
                 }
             }
-        }
 
-        .right {
-            display: flex;
-            align-items: center;
 
-            .pc-adoge-balance {
-                color: #fff;
-                font-size: .24rem;
-            }
-
-            .header-above-slideicon {
-                display: none;
-            }
-
-            .user {
-                position: relative;
-                margin-right: 20px;
-            }
-
-            .connect,
-            .wallet {
+            .left {
                 display: flex;
                 align-items: center;
-                height: 40px;
-                line-height: 40px;
-                border: 1px solid #fff;
-                border-radius: 0.68rem;
-                padding: 0 10px;
-                font-size: 14px;
-                color: #fff;
-                cursor: pointer;
+            }
+
+            .page-logo {
+                margin-right: .8rem;
 
                 img {
-                    vertical-align: middle;
+                    width: 2.96rem;
+                    height: .6rem;
                 }
             }
 
-            .adoge-num {
-                // width: 100px;
-                // white-space: nowrap;
-                // overflow: hidden;
-                // text-overflow: ellipsis;
-                margin-right: 20px;
-                color: #fff;
-                font-size: 18px;
+            .page-tabs {
+                display: flex;
+                align-items: center;
+                height: 100px;
+
+                .tab-item {
+                    display: flex;
+                    align-items: center;
+                    position: relative;
+                    margin-right: 17px;
+                    padding: 0 10px;
+                    height: 100%;
+                    cursor: pointer;
+                    opacity: 1;
+                    color: #fff;
+                    font-size: .213333333333333rem;
+                    transition: color 0.7s;
+
+                    &.tab-active {
+                        color: #fff;
+                        border-bottom: 2px solid #fff;
+                    }
+
+                    &:last-child {
+                        margin-right: 0;
+                    }
+                }
             }
 
-            .lang-opt {
-                position: relative;
-                margin-left: 20px;
+            .right {
+                display: flex;
+                align-items: center;
 
-                .item {
-                    width: 51px;
+                .pc-adoge-balance {
+                    color: #fff;
+                    font-size: .24rem;
+                }
+
+                .header-above-slideicon {
+                    display: none;
+                }
+
+                .user {
+                    position: relative;
+                    margin-right: 20px;
+                }
+
+                .connect,
+                .wallet {
+                    display: flex;
+                    align-items: center;
                     height: 40px;
-                    border-radius: 51px;
-                    background: #fff;
-                    color: $--color-success;
-                    text-align: center;
                     line-height: 40px;
-                    font-size: 14px;
+                    border: 1px solid #fff;
+                    border-radius: 0.68rem;
+                    padding: 0 .133333333333333rem;
+                    font-size: 12px;
+                    color: #fff;
                     cursor: pointer;
+                    background: rgba(255, 255, 255, 0.1);
+
+                    img {
+                        vertical-align: middle;
+                    }
+                }
+
+                .adoge-num {
+                    // width: 100px;
+                    // white-space: nowrap;
+                    // overflow: hidden;
+                    // text-overflow: ellipsis;
+                    margin-right: 20px;
+                    color: #fff;
+                    font-size: 18px;
+                }
+
+                .lang-opt {
+                    position: relative;
+                    margin-left: 20px;
+
+                    .item {
+                        width: 51px;
+                        height: 40px;
+                        border-radius: 51px;
+                        background: rgba(255, 255, 255, 0.1);
+                        color: #fff;
+                        text-align: center;
+                        line-height: 40px;
+                        font-size: 14px;
+                        cursor: pointer;
+                    }
                 }
             }
         }
@@ -596,6 +616,7 @@
             }
         }
 
+
         .code-dialog {
             text-align: center;
 
@@ -622,107 +643,116 @@
             }
         }
 
-        .header-slideout {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 0;
-            min-height: 100%;
+
+    }
+
+    .#{$prefixCls}-drawer {
+        .el-drawer__header {
+            display: none;
+        }
+
+        .el-drawer__body {
+            padding: .666666666666667rem 0;
+            overflow-y: auto;
             background: #1d2633;
-            color: #fff;
-            z-index: 99;
-            transition: all 0.3s;
 
-            .content {
-                margin: 1.28rem 0.853333333333333rem 1.333333333333333rem 0.853333333333333rem;
-            }
+            .header-slideout {
+                min-height: 100%;
+                color: #fff;
+                z-index: 999;
+                transition: all 0.3s;
 
-            .close {
-                margin-bottom: 0.64rem;
-                width: 0.853333333333333rem;
-                height: 0.853333333333333rem;
-                background: url("../../assets/images/close.png");
-                background-size: cover;
-                cursor: pointer;
-            }
-
-            nav {
-                .item {
-                    display: block;
-                    width: 100%;
-                    height: 1.92rem;
-                    line-height: 1.92rem;
-                    font-size: 0.48rem;
-                    color: #fff;
-                    background: url("../../assets/images/link.png");
-                    background-repeat: no-repeat;
-                    background-position: right center;
-
-                    img {
-                        width: 0.586666666666667rem;
-                        height: 0.586666666666667rem;
-                        margin-right: 0.2rem;
-                        vertical-align: text-top;
-                    }
-
-                    &.lang {
-                        background: none;
-
-                        span {
-                            font-weight: bolder;
-                        }
-                    }
+                .content {
+                    margin: 1.28rem 0.853333333333333rem 1.333333333333333rem 0.853333333333333rem;
                 }
-            }
 
-            .bottom {
-                margin-top: 2.666666666666667rem;
-            }
+                .close {
+                    margin-bottom: 0.64rem;
+                    width: 0.853333333333333rem;
+                    height: 0.853333333333333rem;
+                    background: url("../../assets/images/close.png");
+                    background-size: cover;
+                    cursor: pointer;
+                }
 
-            .user-info {
-                .user-h5 {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
+                nav {
+                    .item {
+                        display: block;
+                        width: 100%;
+                        height: 1.92rem;
+                        line-height: 1.92rem;
+                        font-size: 0.48rem;
+                        color: #fff;
+                        background: url("../../assets/images/link.png");
+                        background-repeat: no-repeat;
+                        background-position: right center;
 
-                    .head-img {
                         img {
-                            width: 1.066666666666667rem;
-                            height: 1.066666666666667rem;
-                            vertical-align: middle;
+                            width: 0.586666666666667rem;
+                            height: 0.586666666666667rem;
+                            margin-right: 0.2rem;
+                            vertical-align: text-top;
+                        }
+
+                        &.lang {
+                            background: none;
+
+                            span {
+                                font-weight: bolder;
+                            }
                         }
                     }
+                }
 
-                    .num-info {
-                        flex: 1;
-                        margin: 0 0.4rem;
-                        font-size: 0.426666666666667rem;
-                    }
+                .bottom {
+                    margin-top: 2.666666666666667rem;
+                }
 
-                    .buy-btn {
-                        padding: 0 0.4rem;
-                        height: 0.8rem;
-                        line-height: 0.8rem;
-                        background: #00cf08;
-                        font-size: 0.373333333333333rem;
-                        border-radius: 0.533333333333333rem;
-                        cursor: pointer;
+                .user-info {
+                    .user-h5 {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+
+                        .head-img {
+                            img {
+                                width: 1.066666666666667rem;
+                                height: 1.066666666666667rem;
+                                vertical-align: middle;
+                            }
+                        }
+
+                        .num-info {
+                            flex: 1;
+                            margin: 0 0.4rem;
+                            font-size: 0.426666666666667rem;
+                        }
+
+                        .buy-btn {
+                            padding: 0 0.4rem;
+                            height: 0.8rem;
+                            line-height: 0.8rem;
+                            background: #00cf08;
+                            font-size: 0.373333333333333rem;
+                            border-radius: 0.533333333333333rem;
+                            cursor: pointer;
+                        }
                     }
                 }
-            }
 
-            .out-link {
-                margin-top: 0.773333333333333rem;
-                text-align: center;
+                .out-link {
+                    margin-top: 0.773333333333333rem;
+                    text-align: center;
 
-                a {
-                    img {
-                        width: 0.72rem;
-                        height: 0.72rem;
-                    }
+                    a {
+                        img {
+                            width: 0.72rem;
+                            height: 0.72rem;
+                        }
 
-                    &:first-child img {
-                        margin-right: 0.8rem;
+                        &:first-child img {
+                            margin-right: 0.8rem;
+                        }
                     }
                 }
             }
@@ -786,15 +816,33 @@
                 }
             }
 
-            .page-logo {
-                img {
-                    width: 3.093333333333333rem;
-                    height: 1.2rem;
+
+            .w {
+                padding: .8rem .533333333333333rem .533333333333333rem .533333333333333rem;
+
+                .page-logo {
+                    margin-right: .7rem;
+
+                    img {
+                        width: 4rem;
+                        height: auto;
+                    }
+                }
+
+                &.home-tab {
+                    &::after {
+                        width: 100%;
+                        height: 6.266666666666667rem;
+                        left: 0;
+                        top: 0;
+                        background: #000 url('../../assets/images/tab-h5-bg.png');
+                        background-size: 100% auto;
+                    }
                 }
             }
 
             .page-tabs {
-                display: none;
+                display: none !important;
             }
 
             .adoge-num,
