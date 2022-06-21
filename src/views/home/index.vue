@@ -22,7 +22,7 @@
                             <img src="../../assets/images/adoge-token.png" alt="">
                         </div>
                         <div class="right-info">
-                            <p class="name">Adog
+                            <p class="name">Adoge
                                 <!-- <span class="add-num">
                                     + 20%
                                 </span> -->
