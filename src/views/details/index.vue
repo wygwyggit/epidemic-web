@@ -107,7 +107,7 @@
                                     </div>
                                     <div class="card-opt">
                                         <div class="price">
-                                            {{ rowInfo.amount }} Adoge
+                                            {{ rowInfo.unit_amount || rowInfo.amount }} Adoge
                                             <div class="price-bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
                                         </div>
                                         <div class="bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
