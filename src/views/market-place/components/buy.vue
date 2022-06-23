@@ -79,7 +79,7 @@
         },
         computed: {
             totalPrice() {
-                return this.row.amount * this.num
+                return (this.row.unit_amount || this.row.amount) * this.num
             },
             ...mapState({
                 userInfo: state => state.userInfo

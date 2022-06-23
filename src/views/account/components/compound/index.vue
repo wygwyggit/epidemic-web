@@ -40,8 +40,10 @@
                             <div v-if="row.type_id == 24">{{ $t("exchange.you-will-burn-100-Panamera")}}</div>
                             <template v-if="row.type_id == 2 || row.type_id == 3">
                                 <div>
-                                    
-                                    {{ $t("exchange.compound-tip-a")}} {{ row.type_id == 3 ? $t("account.bronze-medal") : $t("exchange.sliver-pack") }} {{ $t("exchange.compound-tip-b")}}
+
+                                    {{ $t("exchange.compound-tip-a")}}
+                                    {{ row.type_id == 3 ? $t("account.bronze-medal") : $t("exchange.sliver-pack") }}
+                                    {{ $t("exchange.compound-tip-b")}}
                                     <span v-if="row.type_id == 3"
                                         class="type-name">{{ $t("exchange.sliver-pack") }}</span>
                                     <span v-if="row.type_id == 2"
@@ -57,7 +59,7 @@
                             </template>
                         </template>
                     </div>
-                    <el-button type="primary" class="syn" @click="doCompound" :disabled="maxContent <= 0"
+                    <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
                         v-if="row.belong_type !== -2">
                         {{ $t("account.synthetic") }}</el-button>
                     <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>
@@ -87,7 +89,7 @@
                         </el-form-item>
                         <el-form-item>
                             <div class="btn-wrapper">
-                                <el-button type="primary" class="syn" @click="submitForm">
+                                <el-button type="primary" class="syn"  v-debounce="submitForm">
                                     {{ $t("exchange.confirm-exchange") }}</el-button>
                             </div>
 

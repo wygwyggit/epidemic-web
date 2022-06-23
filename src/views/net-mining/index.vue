@@ -160,7 +160,7 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="beforeApprove">
+                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
                         {{ $t("common.confirmed")}}
                     </el-button>
                     <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
@@ -216,7 +216,7 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" @click="beforeApprove">
+                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove" >
                         {{ $t("common.confirmed")}}
                     </el-button>
                     <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"

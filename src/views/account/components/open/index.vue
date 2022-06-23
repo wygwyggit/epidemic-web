@@ -17,7 +17,7 @@
             </ul>
 
             <div class="opt-btn">
-                <el-button class="btn" :loading="isLoading" @click="doOpenGift">{{$t("common.confirmed") }} </el-button>
+                <el-button class="btn" :loading="isLoading" v-debounce="doOpenGift">{{$t("common.confirmed") }} </el-button>
             </div>
         </el-dialog>
     </div>

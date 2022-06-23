@@ -1,8 +1,8 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="row.amount ? $t('account.revise') : $t('account.sale')" :visible.sync="isShowDialog"
-            width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"  :show-close="!submitLoading"
-            :close-on-click-modal="false">
+            width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"
+            :show-close="!submitLoading" :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
             <div v-loading="isLoading">
                 <template v-if="row.belong_type < 0">
@@ -14,7 +14,8 @@
                         <li class="item">
                             <div class="key">{{ $t("account.quantity-for-sale") }}</div>
                             <div class="val">
-                                <el-input-number v-model="saleQuantity" :min="1" :max="row.num" :disabled="row.amount"></el-input-number>
+                                <el-input-number v-model="saleQuantity" :min="1" :max="row.num" :disabled="row.amount">
+                                </el-input-number>
                             </div>
                         </li>
                         <li class="input-box">
@@ -42,7 +43,7 @@
                 </template>
                 <div class="opt-btn">
                     <el-button class="btn" :class="{'confirmed': salePrice.length}" :loading="submitLoading"
-                        @click="doSubmit">{{$t("common.confirmed") }} </el-button>
+                        v-debounce="doSubmit">{{$t("common.confirmed") }} </el-button>
                 </div>
             </div>
         </el-dialog>

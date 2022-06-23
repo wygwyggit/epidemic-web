@@ -534,21 +534,28 @@
                     closeOnClickModal: false,
                     width: '6.4rem'
                 }).then(async () => {
-                    const idName = row.num ? 'type_id' : 'goods_id'
-                    myAjax({
-                        url: row.num ? 'goods/sale/others/cancel' : 'goods/sale/nft/cancel',
-                        data: {
-                            body: {
-                                [idName]: row[idName],
-                                record_id: row.record_id || ''
+                    let flag = true
+                    if (flag) {
+                        flag = false
+                        const idName = row.num ? 'type_id' : 'goods_id'
+                        myAjax({
+                            url: row.num ? 'goods/sale/others/cancel' : 'goods/sale/nft/cancel',
+                            data: {
+                                body: {
+                                    [idName]: row[idName],
+                                    record_id: row.record_id || ''
+                                }
                             }
-                        }
-                    }).then(res => {
-                        if (res.ok) {
-                            this.$showOk(this.$t("common.ope-suc"))
-                            this.getLiist()
-                        }
-                    })
+                        }).then(res => {
+                            if (res.ok) {
+                                this.$showOk(this.$t("common.ope-suc"))
+                                this.getLiist()
+                            }
+                        }).finally(() => {
+                            flag = true
+                        })
+                    }
+
                 })
             },
             doReviseSale(row) {

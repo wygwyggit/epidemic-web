@@ -35,41 +35,6 @@
             <div class="opt-buttom">
                 <slot></slot>
             </div>
-            <!-- <template v-if="type === 'sale'">
-                <div class="card-info" v-if="!itemInfo.on_sale">
-                    <div class="sale">
-                        <div class="lv">LV-{{itemInfo.class}}</div>
-                    </div>
-                    <div class="btn-groups">
-                        <div class="deliver-btn btn" @click="doDeliver(itemInfo)">{{$t("common.deliver")}}</div>
-                        <div class="sale-btn btn" @click="sale(itemInfo.id)">{{$t("account.sale")}}</div>
-                    </div>
-                </div>
-                <div class="card-info" v-else>
-                    <div class="on-sale">
-                        <p class="price-txt">{{$t("account.price")}}</p>
-                        <p class="price">{{itemInfo.price}} Adoge</p>
-                    </div>
-                    <div class="btn-groups">
-                        <div class="revise-btn btn" @click="doRevise(itemInfo)">{{$t("account.revise")}}</div>
-                        <div class="cancel-btn btn" @click="cancel(itemInfo.id)">{{$t("account.cancel-sale")}}</div>
-                    </div>
-                </div>
-            </template>
-            <template v-else-if="type === 'staking'">
-                <div class="card-info">
-                    <div class="sale">
-                        <div class="lv">LV-{{itemInfo.class}}</div>
-                    </div>
-                    <div class="btn-groups">
-                        <div class="cancel-btn btn" @click="cancelStaking(itemInfo.id)" v-if="itemInfo.on_staking">
-                            {{$t("net-mining.cancel-staking")}}</div>
-                        <div class="sale-btn btn" @click="staking(itemInfo.id)" v-else>
-                            {{$t("common.staking")}}</div>
-
-                    </div>
-                </div>
-            </template> -->
         </li>
     </div>
 </template>
