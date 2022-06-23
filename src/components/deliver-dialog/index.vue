@@ -13,7 +13,7 @@
                 <div class="tip">
                     {{$t('common.transferred-tip')}}
                 </div>
-                <el-button type="primary" :disabled="!addressTxt && user_give_left_count <= 0" :loading="submitLoading"
+                <el-button type="primary" :disabled="!addressTxt || userInfo.user_give_left_count <= 0" :loading="submitLoading"
                     @click="doNftApprove">
                     {{$t('common.deliver')}}</el-button>
             </div>
@@ -58,7 +58,6 @@
                 isLoading: true,
                 submitLoading: false,
                 addressTxt: '',
-                user_give_left_count: '',
             }
         },
         computed: {
