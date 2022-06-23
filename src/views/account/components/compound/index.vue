@@ -92,15 +92,11 @@
                                 <el-button type="primary" class="syn"  v-debounce="submitForm">
                                     {{ $t("exchange.confirm-exchange") }}</el-button>
                             </div>
-
                         </el-form-item>
                     </el-form>
                 </div>
 
             </div>
-            <!-- <div class="close">
-                <img src="../../../../assets/images/g-close.png" alt="" @click="doClose">
-            </div> -->
         </el-dialog>
 
     </div>

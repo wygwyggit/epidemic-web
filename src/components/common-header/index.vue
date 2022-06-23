@@ -14,7 +14,7 @@
             </div>
 
             <div class="right">
-                <div class="pc-adoge-balance" v-if="adoge_balance">
+                <div class="pc-adoge-balance" v-if="adoge_balance !== undefined">
                     {{ adoge_balance }}
                     adoge
                 </div>
@@ -144,6 +144,12 @@
     import {
         mainDomain
     } from "@/config/config.js";
+    import {
+        mapMutations,
+    } from 'vuex'
+    import {
+        mapState
+    } from 'vuex'
     import Cookie from "@/utils/cookie.js";
     import utils from "@/utils";
     import myAjax from "@/utils/ajax.js";
@@ -166,7 +172,6 @@
                 isConnect: false,
                 isShowConnectDialog: false,
                 myBgColor: "",
-                adoge_balance: '',
                 isShowSlider: false,
                 isShowLangDialog: false,
                 isShowCodeDialog: false,
@@ -211,6 +216,9 @@
                 let lastCode = this.account.slice(-4);
                 return `${firstCode}...${lastCode}`;
             },
+            ...mapState({
+                adoge_balance: state => state.adoge_balance
+            })
         },
         watch: {
             $route: {
@@ -257,6 +265,9 @@
         },
         beforeDestroy() {},
         methods: {
+            ...mapMutations([
+                'UPDATE_ADOGE_BALANCE',
+            ]),
             getAdogeBalance() {
                 return new Promise((resolve, reject) => {
                     myAjax({
@@ -268,7 +279,7 @@
                             }
                         }
                     }).then(res => {
-                        this.adoge_balance = res.data.balance || 0
+                        this.UPDATE_ADOGE_BALANCE(res.data.balance || 0)
                     })
                 })
             },
@@ -281,6 +292,7 @@
                         Cookie.setCookie("__account__", this.account);
                         await this.regUser()
                         const data = await this.getNonce()
+                        Cookie.delCookie("ad_token")
                         web3Tool.sign({
                             dataToSign: `You are signing a onetime nonce: ${data.nonce}`,
                             addr: this.account || '',
@@ -460,6 +472,7 @@
         height: 100px;
         background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
+
         .w {
             position: relative;
             display: flex;

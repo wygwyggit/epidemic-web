@@ -70,7 +70,7 @@
                                 v-if="!netList.length && !isLoading">
                             </el-empty>
                             <template v-if="netList.length && !isLoading">
-                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
+                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" :isShowNum="currentTabId == 2"
                                     @goDetail="goCardDetail(item)">
                                     <div class="btns-wrap">
                                         <template v-if="item.status == 0">

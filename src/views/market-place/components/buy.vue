@@ -41,7 +41,8 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" @click="doSubmit" :loading="submitLoading">{{$t("common.confirmed") }}
+                    <el-button class="btn" @click="doSubmit" :disabled="adoge_balance < totalPrice"
+                        :loading="submitLoading">{{$t("common.confirmed") }}
                     </el-button>
                 </div>
             </div>
@@ -79,10 +80,11 @@
         },
         computed: {
             totalPrice() {
-                return (this.row.unit_amount || this.row.amount) * this.num
+                return (this.row.unit_amount || this.row.amount) * this.row.num
             },
             ...mapState({
-                userInfo: state => state.userInfo
+                userInfo: state => state.userInfo,
+                adoge_balance: state => state.adoge_balance
             }),
         },
         watch: {},
@@ -307,10 +309,10 @@
                     background: #00a73a;
                     cursor: pointer;
 
-                    // &.confirmed {
-                    //     background: #00a73a;
-                    //     cursor: pointer;
-                    // }
+                    &.is-disabled {
+                        background: #777E90;
+                        cursor: not-allowed;
+                    }
                 }
             }
         }

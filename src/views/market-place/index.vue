@@ -165,7 +165,7 @@
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="No items for sale" v-if="!list.length && !isLoading">
                         </el-empty>
-                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
+                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" :isShowNum="currentTabId == 2"
                             @goDetail="goCardDetail(item)">
                             <div class="price">
                                 Price
@@ -404,6 +404,7 @@
     import Buy from './components/buy'
     import Details from '../details'
 
+
     export default {
         name: '',
         components: {
@@ -507,7 +508,7 @@
                     return true
                 }
                 return false
-            }
+            },
         },
         mounted() {},
         beforeDestroy() {},
@@ -644,9 +645,6 @@
                         const data = res.data || {}
                         this.list = (data.items || []).map(x => {
                             delete x.goods_level
-                            if (this.currentTabId === 1) {
-                                delete x.num
-                            }
                             return x
                         })
                         this.tabs[this.currentTabId - 1].num = data.total || 0

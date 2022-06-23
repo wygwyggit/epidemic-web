@@ -21,7 +21,7 @@
                 <div class="img-content">
                     <img :src="netImgBaseUrl + itemInfo.image">
                 </div>
-                <template v-if="itemInfo.num">
+                <template v-if="isShowNum">
                     <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
                 </template>
                 <template v-else>
@@ -52,6 +52,10 @@
                 default: () => {
                     return {}
                 }
+            },
+            isShowNum: {
+                type: Boolean,
+                default: false
             },
             type: {
                 type: String,
