@@ -14,7 +14,7 @@
             </div>
 
             <div class="right">
-                <div class="pc-adoge-balance" v-if="adoge_balance !== undefined">
+                <div class="pc-adoge-balance" v-if="adoge_balance !== undefined && account">
                     {{ adoge_balance }}
                     adoge
                 </div>
@@ -261,6 +261,8 @@
         mounted() {
             // 监听账号变化
             this.listenerAccountChange()
+            this.listenerAccountDisconnect()
+            this.listenerChainChanged()
             this.getAdogeBalance()
         },
         beforeDestroy() {},
@@ -282,6 +284,23 @@
                         this.UPDATE_ADOGE_BALANCE(res.data.balance || 0)
                     })
                 })
+            },
+            listenerAccountDisconnect() {
+                ethereum.on('disconnect', (error) => {
+                   
+                });
+            },
+            listenerChainChanged() {
+                ethereum.on('chainChanged', (chainId) => {
+                    if (chainId !== '0x38') {
+                        this.$showError('please select Binance Smart Chain Mainnet')
+                        setTimeout(() => {
+                            this.disconnected()
+                        }, 1000);
+                    } else {
+                        this.connectWalletMetaMask()
+                    }
+                });
             },
             listenerAccountChange() {
                 ethereum.on('accountsChanged', async accounts => {
