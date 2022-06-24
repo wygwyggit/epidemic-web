@@ -74,13 +74,13 @@
                 dialogLoading: false,
                 isShowDialog: true,
                 submitLoading: false,
-                num: '',
+                num: 1,
                 saleQuantity: 1,
             }
         },
         computed: {
             totalPrice() {
-                return (this.row.unit_amount || this.row.amount) * this.row.num
+                return (this.row.unit_amount || this.row.amount) * this.num
             },
             ...mapState({
                 userInfo: state => state.userInfo,
