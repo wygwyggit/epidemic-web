@@ -271,6 +271,7 @@
                 'UPDATE_ADOGE_BALANCE',
             ]),
             getAdogeBalance() {
+                if (!this.account) return false
                 return new Promise((resolve, reject) => {
                     myAjax({
                         url: 'user/balance_query',
@@ -287,7 +288,7 @@
             },
             listenerAccountDisconnect() {
                 ethereum.on('disconnect', (error) => {
-                   
+
                 });
             },
             listenerChainChanged() {

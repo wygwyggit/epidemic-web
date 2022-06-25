@@ -1,8 +1,7 @@
 <template>
     <div class="offline-notice-page">
         <el-dialog :title="$t('common.off-line-title')" :visible.sync="offLineDialogVisible" width="8.9rem"
-            custom-class="logout-dialog" :close-on-click-modal="false" :close-on-press-escape="false"
-            :show-close="false">
+            custom-class="logout-dialog" :close-on-click-modal="false" :close-on-press-escape="false">
             <div class="dialog-content">
                 <div class="icon">
                     <img src="../no-connect-wallet/no-wallet.png" alt="">
@@ -12,6 +11,7 @@
                 </div>
                 <span slot="footer" class="dialog-footer">
                     <el-button type="primary" @click="sign">{{ $t("common.please-authorize") }}</el-button>
+                    <el-button @click="logOut">{{ $t("common.log-out") }}</el-button>
                 </span>
             </div>
         </el-dialog>
@@ -22,24 +22,43 @@
     import {
         signMixin
     } from '../../mixin/index'
+    import store from '@/store/index'
     import {
-        mapState
+        mapState,
+        mapMutations
     } from 'vuex'
+    import Cookie from "@/utils/cookie.js";
     export default {
         name: 'offline-notice',
         mixins: [signMixin],
         data() {
             return {}
         },
-        created() {
-        },
+        created() {},
         computed: {
             ...mapState({
                 userInfo: state => state.userInfo,
-                offLineDialogVisible: state => state.offLineDialogVisible
+
             }),
+            offLineDialogVisible: {
+                get() {
+                    return store.state.offLineDialogVisible
+                },
+                set(val) {
+                    store.dispatch('upDateOffLineDialog', val)
+                }
+            }
         },
         methods: {
+            logOut() {
+                Cookie.delCookie("ad_token")
+                Cookie.delCookie("__account__")
+                this.UPDATE_USERINFO({})
+                location.reload()
+            },
+            ...mapMutations([
+                'UPDATE_USERINFO'
+            ]),
         }
     }
 </script>
@@ -69,6 +88,12 @@
             .el-button {
                 margin-top: 47px;
                 width: 204px;
+                color: #fff;
+
+                &.el-button--default {
+                    background: #FF5E1A;
+
+                }
             }
         }
     }

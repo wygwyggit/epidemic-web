@@ -168,7 +168,7 @@
                         inActiveImgUrl: require('./images/level/vip7-inactive.png'),
                         label: 'VIP7',
                         desc: `VIP6 + ${this.$t("ego-wall.a-purple-NFT")}`,
-                        getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x60`,
+                        getConditionsTxt: `${this.$t("ego-wall.number-of-open")} x300`,
                         rightInterests: `<p>${this.$t("ego-wall.VIP7-badge-lights-up")}</p>
                                          <p>VIP6 + ${this.$t("ego-wall.a-purple-NFT")}</p>`
                     }

@@ -1,5 +1,6 @@
 {
     "common": {
+        "log-out": "退出登录",
         "home": "首页",
         "blind-box": "盲盒",
         "marketplace": "市场",

@@ -42,7 +42,7 @@
                 </template>
                 <div class="opt-btn">
                     <el-button class="btn" @click="doSubmit" :disabled="adoge_balance < totalPrice"
-                        :loading="submitLoading">{{$t("common.confirmed") }}
+                        :loading="submitLoading">  {{ adoge_balance &lt; totalPrice ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
                 </div>
             </div>
@@ -97,6 +97,7 @@
         },
         beforeDestroy() {},
         methods: {
+ 
             doSubmit() {
                 if (this.userInfo.addr === this.row.owner_addr) {
                     return this.$showError(this.$t("marketplace.do-not-buy"))

@@ -7,7 +7,7 @@ export default new Vuex.Store({
     state: {
         userInfo: {},
         offLineDialogVisible: false,
-        adoge_balance: undefined
+        adoge_balance: 0
     },
     mutations: {
         UPDATE_USERINFO: (state, data) => {
@@ -16,15 +16,15 @@ export default new Vuex.Store({
         UPDATE_ADOGE_BALANCE: (state, data) => {
             state.adoge_balance = data
         },
-        SHOW_OFFLINEDIALOGVISIBLE: state => {
-            state.offLineDialogVisible = true
+        UPDATE_OFFLINEDIALOGVISIBLE: (state, data) => {
+            state.offLineDialogVisible = data
         }
     },
     actions: {
-        showOffLineDialog: ( {
+        upDateOffLineDialog: ( {
             commit
-        }) => {
-            commit('SHOW_OFFLINEDIALOGVISIBLE')
+        }, data) => {
+            commit('UPDATE_OFFLINEDIALOGVISIBLE', data)
         }
     },
     modules: {}

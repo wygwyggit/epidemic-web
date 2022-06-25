@@ -49,7 +49,7 @@ const myAjax = (options) => {
                     })
                     break;
                 case 403:
-                    store.dispatch('showOffLineDialog')
+                    store.dispatch('upDateOffLineDialog', true)
                     break;
                 default:
                     break;

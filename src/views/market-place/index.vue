@@ -165,8 +165,8 @@
                     <div class="list clearfix">
                         <el-empty :image="emptyImage" description="No items for sale" v-if="!list.length && !isLoading">
                         </el-empty>
-                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item" :isShowNum="currentTabId == 2"
-                            @goDetail="goCardDetail(item)">
+                        <item-card v-for="(item, index) of list" :key="index" :itemInfo="item"
+                            :isShowNum="currentTabId == 2" @goDetail="goCardDetail(item)">
                             <div class="price">
                                 Price
                                 <div class="money_w">
@@ -403,7 +403,9 @@
     } from '@/config/config.js'
     import Buy from './components/buy'
     import Details from '../details'
-
+    import {
+        mapMutations,
+    } from 'vuex'
 
     export default {
         name: '',
@@ -513,6 +515,25 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
+            ...mapMutations([
+                'UPDATE_USERINFO',
+            ]),
+            getUserInfo() {
+                return new Promise((resolve, reject) => {
+                    if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token')) {
+                        return resolve()
+                    }
+                    myAjax({
+                            url: 'user/user_info',
+                            isPassFalse: true
+                        }).then(res => {
+                            if (res.ok) {
+                                this.UPDATE_USERINFO(res.data || {})
+                            }
+                            resolve()
+                        }).catch(error => {})
+                })
+            },
             detailsDrawerClose(updata) {
                 if (updata) {
                     this.getLiist()
@@ -537,6 +558,7 @@
                 this.page.curPage = 1
                 this.buyReviseDialog = false
                 this.getLiist()
+                this.getUserInfo()
             },
             doBuy(row) {
                 this.currentGoodRow = row
