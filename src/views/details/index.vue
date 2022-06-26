@@ -99,7 +99,7 @@
                                 </div>
 
                             </template>
-                            <template v-if="rowInfo.status == 8 && isConnectAndSignin">
+                            <template v-if="rowInfo.status == 8">
                                 <div class="opts-wrap border">
                                     <div class="opts-title top">
                                         <img src="../../assets/images/price_tag.png" />
@@ -107,13 +107,13 @@
                                     </div>
                                     <div class="card-opt">
                                         <div class="price">
-                                            {{ rowInfo.unit_amount || rowInfo.amount }} Adoge
+                                            {{ (rowInfo.unit_amount || rowInfo.amount) | formatPriceData }} Adoge
                                             <div class="price-bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
                                         </div>
                                         <div class="bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
                                         <!-- 状态区分 -->
 
-                                        <div class="btns">
+                                        <div class="btns" v-if="isConnectAndSignin">
                                             <el-button class="btn-buy" v-if="from === 'marketplace' && !isOwnerProduct"
                                                 @click="doBuy">
                                                 {{ $t("detail.buy") }}</el-button>

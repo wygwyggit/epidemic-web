@@ -51,7 +51,7 @@ module.exports = {
     },
     chainWebpack: config => {
         config.plugin('html').tap(args => {
-            args[0].title = 'DogeNFT';
+            args[0].title = 'ADogeNFT';
             return args;
         })
     }

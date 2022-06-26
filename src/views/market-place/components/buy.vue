@@ -18,7 +18,7 @@
                             <div class="key">{{ $t("marketplace.price")}}:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                                {{ row.amount }} Adoge
+                                {{ row.amount | formatPriceData }} Adoge
                             </div>
                         </li>
                     </ul>
@@ -35,7 +35,7 @@
                             <div class="key">{{ $t("marketplace.total-price") }}:</div>
                             <div class="val">
                                 <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                                {{ totalPrice }} Adoge
+                                {{ totalPrice | formatPriceData }} Adoge
                             </div>
                         </li>
                     </ul>

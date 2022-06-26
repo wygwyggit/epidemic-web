@@ -171,7 +171,7 @@
                                 Price
                                 <div class="money_w">
                                     <div class="money">
-                                        {{ item.amount }}
+                                        {{ item.amount | formatPriceData }}
                                     </div>
                                     <img class="amount-icon" src="../../assets/images/group.png" alt="" />
                                 </div>

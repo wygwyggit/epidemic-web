@@ -147,7 +147,8 @@
                         url = 'goods/sale/nft/update'
                         params = {
                             amount: Number(this.salePrice),
-                            goods_id: this.row.goods_id
+                            goods_id: this.row.goods_id,
+                            record_id: this.row.record_id
                         }
                     } else {
                         url = 'goods/sale/nft'
