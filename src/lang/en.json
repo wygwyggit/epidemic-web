@@ -207,6 +207,8 @@
         "sale": "Sale"
     },
     "marketplace": {
+        "physical": "Physical",
+        "energy": "Energy",
         "order-locked": "Order locked",
         "do-not-buy": "You cannot buy your own products",
         "nft-name": "NFT Name",

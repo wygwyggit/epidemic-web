@@ -207,6 +207,8 @@
         "sale": "出售"
     },
     "marketplace": {
+        "physical": "Physical",
+        "energy": "Energy",
         "order-locked": "订单已锁定",
         "do-not-buy": "你不能购买自己的商品",
         "nft-name": "NFT名称",

@@ -30,12 +30,25 @@
                                 <div class="attr-name">
                                     <div class="item">
                                         <label class="label"> {{ $t("detail.color") }}:</label>
-                                        <p class="con" :style="{color: rowInfo.rarity}">
-                                            {{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</p>
+                                        <span class="con" :style="{color: rowInfo.rarity}">
+                                            {{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</span>
                                     </div>
                                     <div class="item">
+
                                         <label class="label">{{ $t("account.level") }}:</label>
-                                        <p class="con">Lv{{ rowInfo.goods_level }}</p>
+                                        <span class="con">Lv{{ rowInfo.goods_level }}</span>
+
+                                    </div>
+
+                                </div>
+                                <div class="attr-name">
+                                    <div class="item" v-for="(value, key, index) in rowInfo.goods_attr" :key="index">
+
+                                        <label class="label">{{ $t(`marketplace.${key}`) }}:</label>
+                                        <span class="con" v-if="key === 'physical'">{{ value }}</span>
+                                        <template v-if="key === 'energy'">
+                                            <span class="star" v-for="item in Number(value)" :key="item"></span>
+                                        </template>
                                     </div>
                                 </div>
                             </div>
@@ -397,6 +410,7 @@
                         }
                     }).then(res => {
                         if (res.ok) {
+                            res.data.goods_attr = JSON.parse(res.data.goods_attr)
                             this.rowInfo = res.data
                         }
                     }).finally(() => {
@@ -505,18 +519,21 @@
                             padding: .266666666666667rem .16rem;
 
                             .item {
-                                padding: 0 .16rem;
                                 display: flex;
                                 align-items: center;
+                                padding: 0 .16rem;
                                 flex: 1;
 
-                                &:first-child {
-                                    border-right: 1px solid #29374B;
+                                .star {
+                                    width: .266666666666667rem;
+                                    height: .266666666666667rem;
+                                    margin-left: .16rem;
+                                    display: inline-block;
+                                    background: url('../../assets/images/star.png');
+                                    background-size: cover;
+                                    background-repeat: no-repeat;
                                 }
 
-                                &:last-child {
-                                    padding-left: .7rem;
-                                }
                             }
 
                             .label {
