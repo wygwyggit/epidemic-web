@@ -377,7 +377,10 @@
                         }
                     }).then(res => {
                         if (res.ok) {
-                            this.list = (res.data || {}).items || []
+                            const items = (res.data || {}).items || []
+                            if (this.currentTabId === 0) {
+                                 this.list = items.filter(x => x.can_pawn)
+                            }
                             this.list = this.list.map(x => ({
                                 ...x,
                                 goods_level: '',
