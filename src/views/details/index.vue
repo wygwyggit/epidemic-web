@@ -41,7 +41,7 @@
                                     </div>
 
                                 </div>
-                                <div class="attr-name">
+                                <div class="attr-name" v-if="rowInfo.goods_attr">
                                     <div class="item" v-for="(value, key, index) in rowInfo.goods_attr" :key="index">
 
                                         <label class="label">{{ $t(`marketplace.${key}`) }}:</label>
@@ -410,7 +410,10 @@
                         }
                     }).then(res => {
                         if (res.ok) {
-                            res.data.goods_attr = JSON.parse(res.data.goods_attr)
+                            if (res.data.goods_attr) {
+                                res.data.goods_attr = JSON.parse(res.data.goods_attr)
+                            }
+
                             this.rowInfo = res.data
                         }
                     }).finally(() => {

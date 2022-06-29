@@ -377,11 +377,11 @@
                         }
                     }).then(res => {
                         if (res.ok) {
-                            const items = (res.data || {}).items || []
+                            let items = (res.data || {}).items || []
                             if (this.currentTabId === 0) {
-                                 this.list = items.filter(x => x.can_pawn)
+                                 items = items.filter(x => x.can_pawn)
                             }
-                            this.list = this.list.map(x => ({
+                            this.list = items.map(x => ({
                                 ...x,
                                 goods_level: '',
                                 select: false
