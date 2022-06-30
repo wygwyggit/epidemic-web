@@ -312,7 +312,7 @@
                 let feePrice = 0
                 for (let key in this.stakingRarityMap) {
                     const count = this.stakingRarityMap[key].length
-                    feePrice+= count * netMiningFee[key]
+                    feePrice+= utils.mul(count, netMiningFee[key])
                 }
                 return utils.mul(feePrice, this.pledgeParams.time)
             }
