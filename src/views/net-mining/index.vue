@@ -160,13 +160,13 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <!-- <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
+                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
                         {{ $t("common.confirmed")}}
-                    </el-button> -->
-                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    </el-button>
+                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         v-debounce="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button>
+                    </el-button> -->
                 </div>
             </div>
 
@@ -216,13 +216,13 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <!-- <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove" >
+                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove" >
                         {{ $t("common.confirmed")}}
-                    </el-button> -->
-                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    </el-button>
+                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         v-debounce="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button>
+                    </el-button> -->
                 </div>
             </div>
 
@@ -231,6 +231,10 @@
 </template>
 
 <script>
+    import {
+        netMiningFee
+    } from '@/config/constant.js'
+    import utils from '@/utils/index'
     import eventBus from "@/utils/eventBus";
     import myAjax from '@/utils/ajax.js'
     import itemCard from '@/components/item-card'
@@ -275,8 +279,8 @@
                 dialogVisible: false,
                 drawer: false,
                 pledgeTimes: [{
-                    id: 1,
-                    title: this.$t('net-mining.1-day')
+                    id: 3,
+                    title: this.$t('net-mining.3-day')
                 }, {
                     id: 10,
                     title: this.$t('net-mining.10-days')
@@ -285,7 +289,7 @@
                     title: this.$t('net-mining.30-days')
                 }],
                 pledgeParams: {
-                    time: 1
+                    time: 3
                 },
                 balanceCount: 0,
                 page: {
@@ -305,7 +309,12 @@
                 return this.list.filter(x => x.select)
             },
             needAmazing() {
-                return this.selectIds.length * this.pledgeParams.time * 0.08
+                let feePrice = 0
+                for (let key in this.stakingRarityMap) {
+                    const count = this.stakingRarityMap[key].length
+                    feePrice+= count * netMiningFee[key]
+                }
+                return utils.mul(feePrice, this.pledgeParams.time)
             }
 
         },
@@ -379,7 +388,7 @@
                         if (res.ok) {
                             let items = (res.data || {}).items || []
                             if (this.currentTabId === 0) {
-                                 items = items.filter(x => x.can_pawn)
+                                items = items.filter(x => x.can_pawn)
                             }
                             this.list = items.map(x => ({
                                 ...x,

@@ -76,6 +76,10 @@
                                             @click="() => this.isShowDeliverDialog = true">
                                             {{ $t("common.deliver") }}
                                         </el-button>
+                                        <!-- <el-button type="primary" class="btn-upgrade"
+                                            @click="() => this.isShowUpgradeDialog = true">
+                                            {{ $t("ego-wall.upgrade") }}
+                                        </el-button> -->
                                     </div>
                                 </div>
                                 <div class="card-opt" v-if="rowInfo.belong_type == -1">
@@ -263,6 +267,8 @@
             @compoundSuc="compoundSuc"></compound>
         <buy :row="rowInfo" v-if="buyReviseDialog" @close="() => this.buyReviseDialog = false" @sendBuyOk="sendBuyOk">
         </buy>
+        <adoge-upgrade :row="rowInfo" v-if="isShowUpgradeDialog" @close="() => this.isShowUpgradeDialog = false" @upgradeOk="adogeUpgradeOk">
+        </adoge-upgrade>
     </div>
 </template>
 
@@ -276,6 +282,7 @@
     import Compound from '../account/components/compound'
     import emptyImage from '@/assets/images/empty.png'
     import Buy from '../market-place/components/buy.vue'
+    import AdogeUpgrade from '../account/components/adoge-upgrade'
     import {
         netImgBaseUrl
     } from '@/config/config.js'
@@ -286,7 +293,8 @@
             GiftBag,
             Open,
             Compound,
-            Buy
+            Buy,
+            AdogeUpgrade
         },
         props: {
             row: {
@@ -327,6 +335,7 @@
                 isShowGiftBag: false,
                 isShowCompound: false,
                 buyReviseDialog: false,
+                isShowUpgradeDialog: false,
                 netImgBaseUrl,
                 emptyImage,
                 isUpdate: false,
@@ -339,6 +348,9 @@
             })
         },
         methods: {
+            adogeUpgradeOk() {
+
+            },
             doBuy() {
                 this.buyReviseDialog = true
             },
