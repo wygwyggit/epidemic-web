@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls" :style="{ background: myBgColor }">
-        <div class="w" :class="{'home-tab': currentTab === 'home'}">
+        <div class="header-nav" :class="{'home-tab': currentTab === 'home'}">
             <div class="left">
                 <div class="page-logo">
                     <img src="../../assets/images/logo.png" alt="" />
@@ -493,11 +493,12 @@
         background: $--color-success;
         box-shadow: 0 5px 20px 0 rgba(0, 0, 0, 0.05);
 
-        .w {
+        .header-nav {
             position: relative;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            padding: 0 .8rem;
 
             &.home-tab {
                 &::after {

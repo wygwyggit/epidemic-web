@@ -84,6 +84,12 @@
                             <img src="../../assets/images/bsc.png" alt="">
                         </a>
                     </li>
+                    <li class="item-img">
+                        <a href="https://0.plus/amazingdoge_cn"
+                            target="_blank">
+                            <img src="../../assets/images/btok.png" alt="">
+                        </a>
+                    </li>
 
                 </div>
             </div>

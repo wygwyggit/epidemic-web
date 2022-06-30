@@ -22,7 +22,7 @@
                             <div class="label">
                                 <span>Adoge</span>
                             </div>
-                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')"
+                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')" maxlength='11'
                                 onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </li>
                     </ul>
@@ -36,14 +36,14 @@
                         <div class="label">
                             <span>Adoge</span>
                         </div>
-                        <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')"
+                        <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')" maxlength='11'
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                     </div>
                     <p class="price-tip" v-if="row.amount">{{$t("common.net-price-modified-tip")}}</p>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" :class="{'confirmed': salePrice.length}" :loading="submitLoading"
-                        v-debounce="doSubmit">{{$t("common.confirmed") }} </el-button>
+                    <el-button class="btn" :disabled="!salePrice.length || ( salePrice > 30000000000)" :loading="submitLoading" v-debounce="doSubmit">
+                        {{$t("common.confirmed") }} </el-button>
                 </div>
             </div>
         </el-dialog>
@@ -308,12 +308,9 @@
                     font-size: 0.32rem;
                     color: #fff;
                     border-radius: 0.133333333333333rem;
-                    background: #777e90;
-                    cursor: not-allowed;
-
-                    &.confirmed {
-                        background: #00a73a;
-                        cursor: pointer;
+                    background: #00a73a;
+                    &.is-disabled {
+                        background: #777E90;
                     }
                 }
             }

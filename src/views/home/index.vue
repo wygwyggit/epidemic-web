@@ -158,15 +158,6 @@
             </div>
             <ul class="support-list">
                 <li class="list-item">
-                    <a href="https://twitter.com/cz_binance/status/1522167716194533376?s=21&t=_HjweO4mUL9TV8JL8A6Y_w"
-                        target="_blank">
-                        <div class="img-wrap">
-                            <img src="../../assets/images/home/third-floor-img1.png" alt="">
-                        </div>
-                        <p class="intro">CZ 🔶 Binance</p>
-                    </a>
-                </li>
-                <li class="list-item">
                     <a href="https://twitter.com/amazingdogecoin/status/1516857489412685824" target="_blank">
                         <div class="img-wrap">
                             <img src="../../assets/images/home/third-floor-img2.png" alt="">
@@ -389,9 +380,14 @@
                         target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img22.png" alt="">
                     </a>
-                    <a href="https://www.binance.com/zh-CN/price/amazingdoge" target="_blank">
-                        <img src="../../assets/images/home/sixth-floor-img23.png" alt="">
-                    </a>
+
+                </div>
+            </div>
+            <div class="cooperation-media-item">
+                <div class="item-title">
+                    {{ $t("home.has-been-recorded") }}
+                </div>
+                <div class="item-content">
                     <a href="https://www.coinbase.com/price/amazingdoge" target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img24.png" alt="">
                     </a>
@@ -400,6 +396,7 @@
                     </a>
                 </div>
             </div>
+
         </div>
     </div>
 </template>
@@ -757,6 +754,7 @@
                 flex-wrap: wrap;
                 justify-content: space-around;
                 margin-top: .2rem;
+                padding: 0 1rem;
 
                 .list-item {
                     width: 1.6rem;
@@ -764,7 +762,7 @@
                     margin-right: 1.6rem;
                     text-align: center;
 
-                    &:nth-child(5n) {
+                    &:nth-child(4n) {
                         margin-right: 0;
                     }
                 }
@@ -978,16 +976,18 @@
                 padding: 1.333333333333333rem .533333333333333rem;
 
                 .support-list {
+                    padding: 0;
+
                     .list-item {
                         width: 2.133333333333333rem;
                         margin-right: 1.066666666666667rem;
 
-                        &:nth-child(5n) {
-                            margin-right: 1.066666666666667rem;
-                        }
-
                         &:nth-child(3n) {
                             margin-right: 0;
+                        }
+
+                        &:nth-child(4n) {
+                            margin-right: 1.066666666666667rem;
                         }
 
                     }
