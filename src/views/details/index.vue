@@ -76,10 +76,10 @@
                                             @click="() => this.isShowDeliverDialog = true">
                                             {{ $t("common.deliver") }}
                                         </el-button>
-                                        <!-- <el-button type="primary" class="btn-upgrade"
+                                        <el-button type="primary" class="btn-upgrade"
                                             @click="() => this.isShowUpgradeDialog = true">
                                             {{ $t("ego-wall.upgrade") }}
-                                        </el-button> -->
+                                        </el-button>
                                     </div>
                                 </div>
                                 <div class="card-opt" v-if="rowInfo.belong_type == -1">

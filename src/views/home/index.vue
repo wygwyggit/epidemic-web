@@ -364,19 +364,20 @@
                     {{ $t("home.listed-exchanges") }}
                 </div>
                 <div class="item-content">
-                    <a href="https://coinmarketcap.com/zh/currencies/amazingdoge" target="_blank">
-                        <img src="../../assets/images/home/sixth-floor-img18.png" alt="">
-                    </a>
-                    <a href="https://www.mexc.com/zh-CN/exchange/ADOGE_USDT" target="_blank">
+                    <a href="https://www.mexc.com/exchange/ADOGE_USDT" target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img19.png" alt="">
                     </a>
-                    <a href="https://twitter.com/Coinw_exchange/status/1537001553537556480" target="_blank">
+                    <a href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x0ebc30459551858e81306d583025d12c7d795fa2" target="_blank">
+                        <img src="../../assets/images/home/sixth-floor-img18.png" alt="">
+                    </a>
+
+                    <a href="https://www.coinw.com/front/fastTrading?symbol=900" target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img20.png" alt="">
                     </a>
                     <a href="https://www.ztb.im/exchange?coin=ADOGE_USDT" target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img21.png" alt="">
                     </a>
-                    <a href="https://twitter.com/babyswap_bsc/status/1516750024612270082?s=20&t=7Q33Dj4nibTJ3skzo4MjOA"
+                    <a href="https://exchange.babyswap.finance/#/swap?inputCurrency=BNB&outputCurrency=0x0ebc30459551858e81306d583025d12c7d795fa2"
                         target="_blank">
                         <img src="../../assets/images/home/sixth-floor-img22.png" alt="">
                     </a>
