@@ -1,10 +1,10 @@
 <template>
     <div :class="prefixCls">
         <el-dialog :title="$t('ego-wall.upgrade')" :custom-class="prefixCls + '-dialog'" :close-on-click-modal="false"
-            :visible.sync="isShowDialog" width="9.06rem" v-if="isShowDialog">
+            :visible.sync="isShowDialog" width="9.06rem" v-if="isShowDialog" @close="doClose">
             <div class="content">
                 <p class="tip-info">
-                    Please select props to complete the NFT upgrade
+                    {{ $t("upgrade.please-select-props")}}
                 </p>
                 <div class="props-main">
                     <div class="nft-select">
@@ -27,19 +27,47 @@
                         </div>
                         <img src="../../../account/components/upgrade/images/add.png" alt="" class="add-icon">
                         <div class="select-wrap">
-                            <template>
-                                <div v-if="!selectPropList.length" class="no-select">
-                                    <img src="./images/what.png" alt="">
-                                    <el-button type="primary">
-                                        Select
-                                    </el-button>
-                                </div>
+                            <template v-if="row.rarity === 'red' && row.goods_level == 1">
+                                <ul>
+                                    <li class="select-item">
+                                        <div v-if="!selectHatList.length" class="no-select">
+                                            <img src="./images/what.png" alt="">
+                                            <el-button type="primary" @click="selectProps('hot')">
+                                                {{ $t("upgrade.hat")}}
+                                            </el-button>
+                                        </div>
+                                        <div v-else class="item-info">
+                                        </div>
+                                    </li>
+                                    <li class="select-item">
+                                        <div v-if="!selectClothingList.length" class="no-select">
+                                            <img src="./images/what.png" alt="">
+                                            <el-button type="primary" @click="selectProps('clothing')">
+                                                {{ $t("upgrade.clothing")}}
+                                            </el-button>
+                                        </div>
+                                        <div v-else class="item-info">
+                                        </div>
+                                    </li>
+                                </ul>
+                            </template>
+                            <template v-else>
+                                <ul>
+                                    <li>
+                                        <div v-if="!selectPropList.length" class="no-select">
+                                            <img src="./images/what.png" alt="">
+                                            <el-button type="primary" @click="selectProps">
+                                                {{ $t("upgrade.select")}}
+                                            </el-button>
+                                        </div>
+                                    </li>
+                                </ul>
                             </template>
                         </div>
                     </div>
                     <div class="fee">
                         <div class="label">
-                            Upgrade Fee
+                            {{ $t("upgrade.upgrade-fee")}}
                         </div>
                         <div class="price">
                             <img src="../../../../assets/images/adoge-token.png" alt="">
@@ -49,10 +77,13 @@
                     </div>
                 </div>
                 <div class="submit-btn">
-                    <el-button type="primary">主要按钮</el-button>
+                    <el-button type="primary">
+
+                    </el-button>
                 </div>
             </div>
         </el-dialog>
+        <select-props v-if="isShowSelectProps" @close="selectPropsClose"/>
     </div>
 </template>
 
@@ -60,9 +91,12 @@
     import {
         netImgBaseUrl
     } from '@/config/config.js'
+    import SelectProps from './components/select-props'
     export default {
         name: '',
-        components: {},
+        components: {
+            SelectProps
+        },
 
         props: {
             row: {
@@ -74,8 +108,9 @@
             return {
                 prefixCls: 'views-account-adoge-upgrade',
                 isShowDialog: true,
+                isShowSelectProps: false,
                 netImgBaseUrl,
-                selectHotList: [],
+                selectHatList: [],
                 selectClothingList: [],
                 selectPropList: []
             }
@@ -86,7 +121,15 @@
         mounted() {},
         beforeDestroy() {},
         methods: {
-
+            doClose() {
+                this.$emit('close')
+            },
+            selectProps() {
+                this.isShowSelectProps = true
+            },
+            selectPropsClose() {
+                this.isShowSelectProps = false
+            }
         },
     }
 </script>
@@ -102,6 +145,7 @@
 
         .props-main {
             margin-top: .36rem;
+
             .nft-select {
                 display: flex;
                 justify-content: space-between;
@@ -109,7 +153,9 @@
                 color: #fff;
 
                 .current-nft {
+                    height: 4.706666666666667rem;
                     padding: .133333333333333rem .133333333333333rem .266666666666667rem .133333333333333rem;
+                    overflow: hidden;
 
                     .id-type {
                         padding-bottom: .133333333333333rem;
@@ -123,6 +169,7 @@
 
                     .nft-image {
                         text-align: center;
+
                         img {
                             width: 100%;
                             height: 3.266666666666667rem;
@@ -152,18 +199,63 @@
             }
 
             .select-wrap {
+
+                height: 4.706666666666667rem;
+
+                >ul {
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+
+                    li {
+                        display: grid;
+                        text-align: center;
+                        width: 100%;
+                        flex: 1;
+                    }
+                }
+
+
+
                 .no-select {
+                    margin: auto;
                     text-align: center;
-                    padding: .84rem 0 .253333333333333rem;
 
                     img {
+                        display: block;
+                        margin: auto;
                         width: 1.6rem;
                     }
+
                     .el-button {
                         margin-top: .533333333333333rem;
+                        padding: 0;
+                        height: .693333333333333rem;
+                        line-height: .693333333333333rem;
                         width: 2.733333333333333rem;
                         background: #45B26B;
                         font-size: .293333333333333rem;
+                    }
+                }
+
+                .select-item {
+                    .no-select {
+                        padding: .16rem .213333333333333rem;
+                        background: #131922;
+                        border: 1px solid #29374B;
+                        border-radius: .133333333333333rem;
+
+                        img {
+                            width: .853333333333333rem;
+                        }
+
+                        .el-button {
+                            margin-top: .133333333333333rem;
+                            width: 1.44rem;
+                            height: .426666666666667rem;
+                            line-height: .426666666666667rem;
+                            font-size: .213333333333333rem;
+                        }
                     }
                 }
             }
@@ -216,9 +308,10 @@
             }
         }
     }
-     .#{$prefixCls}-dialog {
+
+    .#{$prefixCls}-dialog {
         .el-dialog__body {
             padding: .6rem;
         }
-     }
+    }
 </style>

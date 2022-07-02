@@ -283,7 +283,7 @@
         "staking-information": "质押信息",
         "please-confirm-the-staking-content": "请确认质押内容",
         "staking-time": "质押时长",
-        "3-day": "3天",
+        "1-day": "1天",
         "10-days": "10天",
         "30-days": "30天",
         "staking-tickets": "质押所需门票",
@@ -350,5 +350,21 @@
         "congratulations-on-getting-a-Panamera": "恭喜您获得帕拉梅拉 请等待确认",
         "congratulations-on-getting-a-iphone": "恭喜您获得iPhone13 Pro 请等待确认",
         "congratulations-on-getting-a-mercedes": "恭喜您获得梅赛德斯奔驰 请等待确认"
+    },
+    "upgrade": {
+        "upgrade": "升级",
+        "please-select-props": "请选择升级道具完成NFT升级",
+        "select": "选择",
+        "upgrade-fee": "升级费",
+        "please-select": "请选择道具",
+        "please-click": "请点击道具选择",
+        "confirm": "确认",
+        "insufficient": "ADOGE余额不足",
+        "update-successed": "升级成功",
+        "congratulations-on": "恭喜你获得Lv2 NFT",
+        "hat": "帽子",
+        "clothing": "衣服",
+        "no-props": "没有升级道具",
+        "you-can-get-it": "您可以开礼包获得或在市场直接购买道具"
     }
 }

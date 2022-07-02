@@ -17,14 +17,15 @@
                     <div class="r" v-if="itemInfo.rarity">{{ $t(`account.${itemInfo.rarity}`)}}</div>
                 </div>
             </template>
-            <div class="img-mid-content" :class="{'can-detail': ![3, 16, 17].includes(itemInfo.type_id)}" @click="goCardDetail">
+            <div class="img-mid-content" :class="{'can-detail': ![3, 16, 17].includes(itemInfo.type_id)}"
+                @click="goCardDetail">
                 <div class="img-content">
                     <img :src="netImgBaseUrl + itemInfo.image">
                 </div>
                 <template v-if="isShowNum">
                     <div class="card-num"><i>x</i>{{ itemInfo.num || 1 }}</div>
                 </template>
-                <template v-else>
+                <template v-if="isShowName">
                     <div class="mid-content"
                         :style="{'justify-content': itemInfo.goods_level ? 'space-between' : 'center'}">
                         <span class="name">{{itemInfo.name}}</span>
@@ -56,6 +57,10 @@
             isShowNum: {
                 type: Boolean,
                 default: false
+            },
+            isShowName: {
+                type: Boolean,
+                default: true
             },
             type: {
                 type: String,

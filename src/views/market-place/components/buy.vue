@@ -144,7 +144,8 @@
                 let url = 'goods/market/buy/goods',
                     params = {
                         record_id: this.row.record_id,
-                        pay_amount: this.row.amount * (this.num || 1),
+                        pay_amount: (this.row.unit_amount || this.row.amount) * (this.num || 1),
+                        amount: (this.row.unit_amount || this.row.amount),
                         remark: '',
                         num: this.num || 1,
                         type: this.row.belong_type < 0 ? 2 : 1,

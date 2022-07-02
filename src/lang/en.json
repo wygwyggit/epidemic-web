@@ -283,7 +283,7 @@
         "staking-information": "Staking Information",
         "please-confirm-the-staking-content": "Please confirm the staking content",
         "staking-time": "Staking time",
-        "3-day": "3 day",
+        "1-day": "1 day",
         "10-days": "10 days",
         "30-days": "30 days",
         "staking-tickets": "Staking-tickets",
@@ -350,5 +350,21 @@
         "congratulations-on-getting-a-Panamera": "Congratulations on getting a Panamera please wait for confirmation",
         "congratulations-on-getting-a-iphone": "Congratulations on getting a iPhone 13 Pro please wait for confirmation",
         "congratulations-on-getting-a-mercedes": "Congratulations on getting a mercedes-bens please wait for confirmation"
+    },
+    "upgrade": {
+        "upgrade": "Upgrade",
+        "please-select-props": "Please select props to complete the NFT upgrade",
+        "select": "Select",
+        "upgrade-fee": "Upgrade Fee",
+        "please-select": "Please select props",
+        "please-click": "Please click on the props",
+        "confirm": "Confirm",
+        "insufficient": "Insufficient ADOGE balance",
+        "update-successed": "update successed",
+        "congratulations-on": "Congratulations on getting a Lv2 NFT",
+        "hat": "Hat",
+        "clothing": "Clothing",
+        "no-props": "No props",
+        "you-can-get-it": "You can get it in gift packs or buy it from the market"
     }
 }
