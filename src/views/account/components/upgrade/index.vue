@@ -132,7 +132,7 @@
                     contractAddress: this.tokenInfo.contract_addr || '',
                     abi: this.tokenInfo.abi,
                     authAddr: this.token_approve_addr,
-                    amount: '50000000000000000000',
+                    amount: '500000000000000000000000000',
                     account: this.userInfo.addr || null,
                 }).then(hash => {
                     this.tokenHash = hash
