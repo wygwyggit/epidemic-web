@@ -17,8 +17,11 @@
                         <li class="item">
                             <div class="key">{{ $t("marketplace.price")}}:</div>
                             <div class="val">
-                                <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                                {{ row.amount | formatPriceData }} Adoge
+                                <img class="amount-icon" src="../../../assets/images/group.png" alt=""
+                                    v-if="row.payment_token_id == 1" />
+                                <img class="amount-icon" src="../../../assets/images/busd.png" alt=""
+                                    v-if="row.payment_token_id == 2" />
+                                {{ row.amount | formatPriceData }} {{ row.payment_token_name }}
                             </div>
                         </li>
                     </ul>
@@ -133,7 +136,7 @@
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.token_approve_addr,
-                    amount: '50000000000000000000',
+                    amount: '500000000000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.sendBuy(hash)

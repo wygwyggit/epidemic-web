@@ -486,7 +486,7 @@
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.token_approve_addr,
-                    amount: '50000000000000000000',
+                    amount: '500000000000000000000000000',
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.stakingConfirm(hash)
