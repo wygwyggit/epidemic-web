@@ -30,7 +30,7 @@
                 <template v-else>
                     <p class="tit">
                         <span>{{ $t("account.price") }}</span>
-                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}</span>
+                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}{{ row.payment_token_name }}</span>
                     </p>
                     <div class="input-box">
                         <div class="label" :class="{'busd': row.payment_token_id == 2}">
