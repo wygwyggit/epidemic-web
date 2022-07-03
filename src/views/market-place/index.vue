@@ -173,8 +173,10 @@
                                     <div class="money">
                                         {{ item.amount | formatPriceData }}
                                     </div>
-                                    <img class="amount-icon" src="../../assets/images/group.png" alt="" v-if="item.payment_token_id == 1" />
-                                     <img class="amount-icon" src="../../assets/images/busd.png" alt="" v-if="item.payment_token_id == 2" />
+                                    <img class="amount-icon" src="../../assets/images/group.png" alt=""
+                                        v-if="item.payment_token_id == 1" />
+                                    <img class="amount-icon" src="../../assets/images/busd.png" alt=""
+                                        v-if="item.payment_token_id == 2" />
                                 </div>
                             </div>
 
@@ -194,7 +196,7 @@
             </div>
         </div>
         <el-dialog title="Order record" custom-class="recored-dialog" :visible.sync="isShowRecored"
-            :close-on-click-modal="false" width="70%">
+            :close-on-click-modal="false" width="80%">
             <div slot="title" class="header-title">
                 <img src="../../assets/images/clock.png" alt="">
                 <span>Order record</span>
@@ -525,14 +527,14 @@
                         return resolve()
                     }
                     myAjax({
-                            url: 'user/user_info',
-                            isPassFalse: true
-                        }).then(res => {
-                            if (res.ok) {
-                                this.UPDATE_USERINFO(res.data || {})
-                            }
-                            resolve()
-                        }).catch(error => {})
+                        url: 'user/user_info',
+                        isPassFalse: true
+                    }).then(res => {
+                        if (res.ok) {
+                            this.UPDATE_USERINFO(res.data || {})
+                        }
+                        resolve()
+                    }).catch(error => {})
                 })
             },
             detailsDrawerClose(updata) {

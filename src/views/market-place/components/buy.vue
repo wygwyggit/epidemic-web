@@ -34,15 +34,19 @@
                         <li class="item">
                             <div class="key">{{ $t("marketplace.total-price") }}:</div>
                             <div class="val">
-                                <img class="amount-icon" src="../../../assets/images/group.png" alt="" />
-                                {{ totalPrice | formatPriceData }} Adoge
+                                <img class="amount-icon" src="../../../assets/images/group.png" alt=""
+                                    v-if="row.payment_token_id == 1" />
+                                <img class="amount-icon" src="../../../assets/images/busd.png" alt=""
+                                    v-if="row.payment_token_id == 2" />
+                                {{ totalPrice | formatPriceData }} {{ row.payment_token_name }}
                             </div>
                         </li>
                     </ul>
                 </template>
                 <div class="opt-btn">
                     <el-button class="btn" @click="doSubmit" :disabled="adoge_balance < totalPrice"
-                        :loading="submitLoading">  {{ adoge_balance &lt; totalPrice ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
+                        :loading="submitLoading">
+                        {{ adoge_balance &lt; totalPrice ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
                 </div>
             </div>
@@ -97,7 +101,7 @@
         },
         beforeDestroy() {},
         methods: {
- 
+
             doSubmit() {
                 if (this.userInfo.addr === this.row.owner_addr) {
                     return this.$showError(this.$t("marketplace.do-not-buy"))
@@ -160,7 +164,7 @@
                         this.$emit('sendBuyOk')
                     }
                 }).finally(() => {
-                    this.dialogLoading = false
+                    this.dialogLoading = this.submitLoading = false
                 })
             },
             saleReviseDialogClosed() {
