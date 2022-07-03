@@ -76,10 +76,10 @@
                                             @click="() => this.isShowDeliverDialog = true">
                                             {{ $t("common.deliver") }}
                                         </el-button>
-                                        <!-- <el-button type="primary" class="btn-upgrade"
+                                        <el-button type="primary" class="btn-upgrade"
                                             @click="() => this.isShowUpgradeDialog = true">
                                             {{ $t("ego-wall.upgrade") }}
-                                        </el-button> -->
+                                        </el-button>
                                     </div>
                                 </div>
                                 <div class="card-opt" v-if="rowInfo.belong_type == -1">
@@ -124,7 +124,7 @@
                                     </div>
                                     <div class="card-opt">
                                         <div class="price">
-                                            {{ (rowInfo.unit_amount || rowInfo.amount) | formatPriceData }} Adoge
+                                            {{ (rowInfo.unit_amount || rowInfo.amount) | formatPriceData }} {{ rowInfo.payment_token_name }}
                                             <div class="price-bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>
                                         </div>
                                         <div class="bnb">≈ {{ rowInfo.unit_bnb }} BNB</div>

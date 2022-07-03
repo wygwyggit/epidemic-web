@@ -158,7 +158,7 @@
             </div>
             <ul class="support-list">
                 <li class="list-item">
-                    <a href="https://twitter.com/amazingdogecoin/status/1516857489412685824" target="_blank">
+                    <a href="https://www.canadavoices.com/abc-voto-news-elon-musk-mentions-meme-token-in-abc-voto-news-interview/" target="_blank">
                         <div class="img-wrap">
                             <img src="../../assets/images/home/third-floor-img2.png" alt="">
                         </div>

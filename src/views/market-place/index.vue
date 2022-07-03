@@ -173,7 +173,8 @@
                                     <div class="money">
                                         {{ item.amount | formatPriceData }}
                                     </div>
-                                    <img class="amount-icon" src="../../assets/images/group.png" alt="" />
+                                    <img class="amount-icon" src="../../assets/images/group.png" alt="" v-if="item.payment_token_id == 1" />
+                                     <img class="amount-icon" src="../../assets/images/busd.png" alt="" v-if="item.payment_token_id == 2" />
                                 </div>
                             </div>
 

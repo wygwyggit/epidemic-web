@@ -19,6 +19,23 @@ const approveUtils = {
         })
 
     },
+    getTokenContractInfo(token_id) {
+        return new Promise((resolve, reject) => {
+            myAjax({
+                url: `chain/token_contract_info?token_id=${token_id}`,
+                method: 'GET',
+
+            }).then(res => {
+                const contract_addr_abi = {
+                    contract_addr: res.data.contract_addr,
+                    abi: res.data.abi
+                }
+                resolve(contract_addr_abi)
+            }).catch(err => {
+                reject(err)
+            })
+        })
+    },
     getApproveAddress(type) {
         return new Promise((resolve, reject) => {
             myAjax({
@@ -30,7 +47,7 @@ const approveUtils = {
                 } else {
                     resolve(res.data.nft_approve_addr)
                 }
-                
+
             }).catch(err => {
                 reject(err)
             })

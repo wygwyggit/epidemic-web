@@ -90,7 +90,7 @@
         watch: {},
         created() {},
         async mounted() {
-            const data = await Approve.getChainInfo(5)
+            const data = await Approve.getTokenContractInfo(this.row.payment_token_id)
             this.contract_addr = data.contract_addr
             this.abi = data.abi
             this.isLoading = false
@@ -125,7 +125,6 @@
                 })
             },
             doNftApprove() {
-                console.log(this.contract_addr)
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,

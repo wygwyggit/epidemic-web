@@ -19,8 +19,8 @@
                             </div>
                         </li>
                         <li class="input-box">
-                            <div class="label">
-                                <span>Adoge</span>
+                            <div class="label" :class="{'busd': row.payment_token_id == 2}">
+                                <span>{{ row.payment_token_name }}</span>
                             </div>
                             <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')" maxlength='11'
                                 onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
@@ -33,8 +33,8 @@
                         <span class="mini-tip">{{ $t("account.sale-price-mini") }}</span>
                     </p>
                     <div class="input-box">
-                        <div class="label">
-                            <span>Adoge</span>
+                        <div class="label" :class="{'busd': row.payment_token_id == 2}">
+                            <span>{{ row.payment_token_name }}</span>
                         </div>
                         <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')" maxlength='11'
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
@@ -270,6 +270,9 @@
                     background-position: 0.133333333333333rem center;
                     background-size: 0.32rem 0.32rem;
                     border-right: 1px solid #131922;
+                    &.busd {
+                        background-image: url('../../../../assets/images/busd.png');
+                    }
                 }
 
                 .el-input {
