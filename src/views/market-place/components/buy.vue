@@ -47,7 +47,7 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" @click="doSubmit" :disabled="adoge_balance < totalPrice"
+                    <el-button class="btn" @click="doSubmit" :disabled="(adoge_balance < totalPrice) || !validQuantity"
                         :loading="submitLoading">
                         {{ adoge_balance &lt; totalPrice ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
@@ -87,7 +87,19 @@
             }
         },
         computed: {
+            validQuantity() {
+                if (this.row.belong_type < 0) {
+                    if (!this.num) {
+                        return false
+                    } else {
+                        return true
+                    }
+                } else {
+                    return true
+                }
+            },
             totalPrice() {
+                if (!this.num) return 0
                 return (this.row.unit_amount || this.row.amount) * this.num
             },
             ...mapState({
