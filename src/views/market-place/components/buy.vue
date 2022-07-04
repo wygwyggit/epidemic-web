@@ -62,6 +62,7 @@
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
     import web3Tool from '@/utils/web3'
+    import utils from '@/utils/index'
     import {
         mapState
     } from 'vuex'
@@ -97,7 +98,12 @@
         watch: {},
         created() {},
         async mounted() {
-            const data = await Approve.getTokenContractInfo(this.row.payment_token_id)
+            let data = null
+            if (this.row.payment_token_id == 1) {
+                data = await Approve.getChainInfo(5)
+            } else if (this.row.payment_token_id == 2) {
+                data = await Approve.getTokenContractInfo(this.row.payment_token_id)
+            }
             this.contract_addr = data.contract_addr
             this.abi = data.abi
             this.isLoading = false
@@ -132,11 +138,17 @@
                 })
             },
             doNftApprove() {
+                let amount
+                if (this.row.payment_token_id == 1) {
+                    amount = '500000000000000000000000000'
+                } else if (this.row.payment_token_id == 2) {
+                    amount = Number(utils.mul(this.totalPrice, 1000000000000000000)) + 500000000000000000000
+                }
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
                     abi: this.abi,
                     authAddr: this.token_approve_addr,
-                    amount: '500000000000000000000000000',
+                    amount: String(amount),
                     account: Cookie.getCookie("__account__") || null,
                 }).then(hash => {
                     this.sendBuy(hash)

@@ -22,15 +22,15 @@
                             <div class="label" :class="{'busd': row.payment_token_id == 2}">
                                 <span>{{ row.payment_token_name }}</span>
                             </div>
-                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')" maxlength='11'
-                                onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
+                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')"
+                                maxlength='11' onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </li>
                     </ul>
                 </template>
                 <template v-else>
                     <p class="tit">
                         <span>{{ $t("account.price") }}</span>
-                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}{{ row.payment_token_name }}</span>
+                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}{{row.min_price}} {{ row.payment_token_name }}</span>
                     </p>
                     <div class="input-box">
                         <div class="label" :class="{'busd': row.payment_token_id == 2}">
@@ -42,7 +42,8 @@
                     <p class="price-tip" v-if="row.amount">{{$t("common.net-price-modified-tip")}}</p>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" :disabled="!salePrice.length || ( salePrice > 30000000000)" :loading="submitLoading" v-debounce="doSubmit">
+                    <el-button class="btn" :disabled="!salePrice.length || !validPrice" :loading="submitLoading"
+                        v-debounce="doSubmit">
                         {{$t("common.confirmed") }} </el-button>
                 </div>
             </div>
@@ -74,7 +75,20 @@
                 saleQuantity: 1,
             }
         },
-        computed: {},
+        computed: {
+            validPrice() {
+                const {
+                    min_price,
+                    max_price
+                } = this.row
+                let num = parseFloat(this.salePrice)
+                if (num <= max_price && num >= min_price) {
+                    return true
+                } else {
+                    return false
+                }
+            }
+        },
         watch: {},
         created() {},
         mounted() {
@@ -96,6 +110,9 @@
         },
         beforeDestroy() {},
         methods: {
+            isRangeIn(str, min, max) {
+
+            },
             doSubmit() {
                 if (!this.salePrice) return
                 if (this.row.belong_type < 0 || this.row.amount) {
@@ -270,6 +287,7 @@
                     background-position: 0.133333333333333rem center;
                     background-size: 0.32rem 0.32rem;
                     border-right: 1px solid #131922;
+
                     &.busd {
                         background-image: url('../../../../assets/images/busd.png');
                     }
@@ -312,6 +330,7 @@
                     color: #fff;
                     border-radius: 0.133333333333333rem;
                     background: #00a73a;
+
                     &.is-disabled {
                         background: #777E90;
                     }
