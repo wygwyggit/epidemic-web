@@ -33,5 +33,8 @@ router.beforeEach((to, from, next) => {
     }
 })
 router.afterEach(() => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+    window.pageYOffset = 0
     NProgress.done() // 结束Progress
 })

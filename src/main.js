@@ -20,11 +20,6 @@ Vue.prototype.Web3 = Web3
 Object.keys(Filters).map(filtName => {
     Vue.filter(filtName, Filters[filtName])
 })
-router.afterEach((to, from, next) => {
-    document.body.scrollTop = 0
-    document.documentElement.scrollTop = 0
-    window.pageYOffset = 0
-})
 new Vue({
     router,
     store,

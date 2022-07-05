@@ -14,7 +14,7 @@
             </div>
 
             <div class="right">
-                <div class="pc-adoge-balance" v-if="adoge_balance !== undefined && account">
+                <div class="pc-adoge-balance" v-if="adoge_balance !== undefined && walletAddr">
                     {{ adoge_balance }}
                     adoge
                 </div>
@@ -401,6 +401,10 @@
             },
             disconnected() {
                 store.dispatch('logOut')
+                this.$router.push({
+                    path: '/'
+                })
+
             },
             connectWalletMetaMask(flag) {
                 web3Tool.init.call(this, async account => {

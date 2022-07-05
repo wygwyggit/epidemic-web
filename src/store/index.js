@@ -50,6 +50,7 @@ export default new Vuex.Store({
         logOut: ({ commit }) => {
             commit('UPDATE_USERINFO', {})
             commit('SET_WALLETADDR', '')
+            commit('UPDATE_ADOGE_BALANCE', '')
             removeSignToken()
             removeWalletAddr()
         },
