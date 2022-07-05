@@ -47,9 +47,9 @@
                     </ul>
                 </template>
                 <div class="opt-btn">
-                    <el-button class="btn" @click="doSubmit" :disabled="(adoge_balance < totalPrice) || !validQuantity"
+                    <el-button class="btn" @click="doSubmit" :disabled="!hasBalance || !validQuantity"
                         :loading="submitLoading">
-                        {{ adoge_balance &lt; totalPrice ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
+                        {{ !hasBalance ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
                 </div>
             </div>
@@ -84,6 +84,7 @@
                 submitLoading: false,
                 num: 1,
                 saleQuantity: 1,
+                busd_balance: 0,
             }
         },
         computed: {
@@ -106,6 +107,15 @@
                 userInfo: state => state.userInfo,
                 adoge_balance: state => state.adoge_balance
             }),
+            hasBalance() {
+                if (this.row.payment_token_id == 1) {
+                    return this.adoge_balance >= this.totalPrice
+                } else if (this.row.payment_token_id == 2) {
+                    return this.busd_balance >= this.totalPrice
+                } else {
+                    return false
+                }
+            }
         },
         watch: {},
         created() {},
@@ -116,13 +126,36 @@
             } else if (this.row.payment_token_id == 2) {
                 data = await Approve.getTokenContractInfo(this.row.payment_token_id)
             }
+            if (this.row.payment_token_id == 2) {
+                await this.getBusdBalance()
+            }
+
+
             this.contract_addr = data.contract_addr
             this.abi = data.abi
             this.isLoading = false
         },
         beforeDestroy() {},
         methods: {
-
+            getBusdBalance() {
+                return new Promise((resolve, reject) => {
+                    myAjax({
+                        url: 'user/balance_query',
+                        data: {
+                            body: {
+                                type: 'busd_token'
+                            }
+                        }
+                    }).then(res => {
+                        if (res.ok) {
+                            this.busd_balance = (res.data || {}).balance || 0
+                        }
+                        resolve()
+                    }).catch(err => {
+                        reject(err)
+                    })
+                })
+            },
             doSubmit() {
                 if (this.userInfo.addr === this.row.owner_addr) {
                     return this.$showError(this.$t("marketplace.do-not-buy"))
@@ -154,7 +187,7 @@
                 if (this.row.payment_token_id == 1) {
                     amount = '500000000000000000000000000'
                 } else if (this.row.payment_token_id == 2) {
-                    amount = Number(utils.mul(this.totalPrice, 1000000000000000000)) + 500000000000000000000
+                    amount = BigInt(utils.mul(this.totalPrice, 1000000000000000000) + 10000000000000000000)
                 }
                 web3Tool.contract({
                     contractAddress: this.contract_addr || '',
@@ -165,6 +198,7 @@
                 }).then(hash => {
                     this.sendBuy(hash)
                 }).catch(err => {
+                    console.log(err)
                     this.submitLoading = false
                 })
             },

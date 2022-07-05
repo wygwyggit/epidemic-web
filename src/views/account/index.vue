@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <div class="page-title" v-if="isSign && isConnectWallet">
+        <div class="page-title">
             <div class="w">
                 <div class="tit">
                     <img src="../../assets/images/nav-my-account.png" alt="">
@@ -41,104 +41,97 @@
             </div>
         </div>
         <div class="main">
-            <template v-if="isSign && isConnectWallet">
-                <div class="w">
-                    <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
-                    <div class="top-search">
-                        <div class="filter-wrap">
-                            <div class="filter-content">
-                                <ul class="check-list">
-                                    <li class="check-item">
-                                        <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
-                                        <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                                            @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}
-                                        </el-checkbox>
-                                        <el-checkbox-group v-model="checkListFilter"
-                                            @change="handleCheckedCitiesChange">
-                                            <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
-                                                :key="row.id" :checked="row.isActive">
-                                                {{ row.val }}</el-checkbox>
-                                        </el-checkbox-group>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="list-content" v-loading="isLoading">
-                        <div class="list clearfix">
-                            <el-empty :image="emptyImage" :description="$t('common.no-data')"
-                                v-if="!netList.length && !isLoading">
-                            </el-empty>
-                            <template v-if="netList.length && !isLoading">
-                                <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item" :isShowNum="currentTabId == 2"
-                                    @goDetail="goCardDetail(item)">
-                                    <div class="btns-wrap">
-                                        <template v-if="item.status == 0">
-                                            <div class="btn btn-open" :class="{'disable': !item.can_open}"
-                                                v-if="item.belong_type == -1" @click="openGiftBag(item)">
-                                                {{$t("account.open")}}
-                                            </div>
-                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                                v-if="item.type_id == 2" @click="doSynthetic(item)">
-                                                {{$t("account.synthetic")}}</div>
-                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                                v-if="item.type_id == 3" @click="doSynthetic(item)">
-                                                {{$t("account.synthetic")}}</div>
-                                            <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
-                                                v-if="item.type_id == 16" @click="doUpgrade(item)">
-                                                {{$t("ego-wall.upgrade")}}</div>
-                                            <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
-                                                v-if="item.type_id == 17" @click="doUpgrade(item)">
-                                                {{$t("ego-wall.upgrade")}}</div>
-                                            <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                                v-if="item.belong_type == -2" @click="doSynthetic(item)">
-                                                {{$t("exchange.exchange")}}</div>
-                                            <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
-                                                @click="doDeliver(item)" v-if="item.belong_type == 1">
-                                                {{$t("common.deliver")}}</div>
-                                            <div class="btn btn-sale" :class="{'disable': !item.can_sale}"
-                                                @click="doSale(item)">{{$t("account.sale")}}</div>
-                                        </template>
-
-                                        <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
-                                        <template v-if="item.status == 8">
-                                            <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
-                                            <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
-                                                {{ $t("account.cancel-sale")}}</div>
-                                            <div class="btn btn-revise" @click="doRevise(item)">
-                                                {{ $t("account.revise")}}</div>
-                                        </template>
-                                        <template v-if="item.status == 2">
-                                            <div class="btn btn-on-processing">{{ $t("account.processing")}}</div>
-                                        </template>
-                                        <template v-if="item.status == 1">
-                                            <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
-                                        </template>
-                                        <template
-                                            v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
-                                            <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
-                                        </template>
-                                    </div>
-                                </item-card>
-                            </template>
-
-                        </div>
-                        <div class="page-warp" v-if="netList.length && !isLoading">
-                            <div class="r">
-                                <el-pagination background :hide-on-single-page="true" layout="total, prev, pager, next"
-                                    @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
-                                    :page-size="Number(page.pageSize)" :total="Number(total)"
-                                    :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]">
-                                </el-pagination>
-                            </div>
+            <div class="w">
+                <page-tabs :tabs="tabs" :currentTabId="currentTabId" @on-select="onSelectTab"></page-tabs>
+                <div class="top-search">
+                    <div class="filter-wrap">
+                        <div class="filter-content">
+                            <ul class="check-list">
+                                <li class="check-item">
+                                    <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
+                                    <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
+                                        @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}
+                                    </el-checkbox>
+                                    <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
+                                        <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
+                                            :key="row.id" :checked="row.isActive">
+                                            {{ row.val }}</el-checkbox>
+                                    </el-checkbox-group>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>
-            </template>
-            <template>
-                <no-connect-wallet v-if="!isConnectWallet"></no-connect-wallet>
-                <no-sign v-if="isConnectWallet && !isSign"></no-sign>
-            </template>
+                <div class="list-content" v-loading="isLoading">
+                    <div class="list clearfix">
+                        <el-empty :image="emptyImage" :description="$t('common.no-data')"
+                            v-if="!netList.length && !isLoading">
+                        </el-empty>
+                        <template v-if="netList.length && !isLoading">
+                            <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
+                                :isShowNum="currentTabId == 2" @goDetail="goCardDetail(item)">
+                                <div class="btns-wrap">
+                                    <template v-if="item.status == 0">
+                                        <div class="btn btn-open" :class="{'disable': !item.can_open}"
+                                            v-if="item.belong_type == -1" @click="openGiftBag(item)">
+                                            {{$t("account.open")}}
+                                        </div>
+                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                            v-if="item.type_id == 2" @click="doSynthetic(item)">
+                                            {{$t("account.synthetic")}}</div>
+                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                            v-if="item.type_id == 3" @click="doSynthetic(item)">
+                                            {{$t("account.synthetic")}}</div>
+                                        <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
+                                            v-if="item.type_id == 16" @click="doUpgrade(item)">
+                                            {{$t("ego-wall.upgrade")}}</div>
+                                        <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
+                                            v-if="item.type_id == 17" @click="doUpgrade(item)">
+                                            {{$t("ego-wall.upgrade")}}</div>
+                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                            v-if="item.belong_type == -2" @click="doSynthetic(item)">
+                                            {{$t("exchange.exchange")}}</div>
+                                        <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
+                                            @click="doDeliver(item)" v-if="item.belong_type == 1">
+                                            {{$t("common.deliver")}}</div>
+                                        <div class="btn btn-sale" :class="{'disable': !item.can_sale}"
+                                            @click="doSale(item)">{{$t("account.sale")}}</div>
+                                    </template>
+
+                                    <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
+                                    <template v-if="item.status == 8">
+                                        <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
+                                        <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
+                                            {{ $t("account.cancel-sale")}}</div>
+                                        <div class="btn btn-revise" @click="doRevise(item)">
+                                            {{ $t("account.revise")}}</div>
+                                    </template>
+                                    <template v-if="item.status == 2">
+                                        <div class="btn btn-on-processing">{{ $t("account.processing")}}</div>
+                                    </template>
+                                    <template v-if="item.status == 1">
+                                        <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
+                                    </template>
+                                    <template
+                                        v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
+                                        <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
+                                    </template>
+                                </div>
+                            </item-card>
+                        </template>
+
+                    </div>
+                    <div class="page-warp" v-if="netList.length && !isLoading">
+                        <div class="r">
+                            <el-pagination background :hide-on-single-page="true" layout="total, prev, pager, next"
+                                @current-change="onPageChange" @prev-click="onPageChange" @next-click="onPageChange"
+                                :page-size="Number(page.pageSize)" :total="Number(total)"
+                                :current-page="Number(page.curPage)" :page-sizes="[10, 20, 50, 100]">
+                            </el-pagination>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -182,8 +175,6 @@
     import compound from './components/compound'
     import Sale from './components/sale'
     import Open from './components/open'
-    import NoConnectWallet from '@/components/no-connect-wallet'
-    import NoSign from '@/components/no-sign'
     import Upgrade from './components/upgrade'
     import Details from '../details'
     import {
@@ -200,8 +191,6 @@
             compound,
             Sale,
             Open,
-            NoConnectWallet,
-            NoSign,
             Upgrade,
             Details
         },
@@ -293,18 +282,14 @@
             if (width < 768) {
                 this.page.pageSize = 100000
             }
-            this.initSignConnectData()
-            if (this.isSign && this.isConnectWallet) {
-                Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
-                    this.isLoading = false
-                })
-            } else {
+            Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                 this.isLoading = false
-            }
+            })
+
 
         },
         mounted() {
-            eventBus.$on('sign-fail', this.initSignConnectData)
+            //eventBus.$on('sign-fail', this.initSignConnectData)
         },
         beforeDestroy() {},
         methods: {
@@ -350,10 +335,6 @@
                         }
                     })
                 })
-            },
-            initSignConnectData() {
-                this.isSign = cookie.getCookie('ad_token') || null
-                this.isConnectWallet = cookie.getCookie('__account__') || null
             },
             sendSaleOk() {
                 this.saleReviseDialog = false

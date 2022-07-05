@@ -1,5 +1,5 @@
 <template>
-    <div :class="prefixCls">
+    <div :class="prefixCls" v-loading.fullscreen.lock="isLoading">
         <div class="content">
             <img src="./no-wallet.png" alt="">
             <p>{{ $t("common.connect-you") }}</p>
@@ -12,13 +12,17 @@
     import myAjax from "@/utils/ajax.js";
     import web3Tool from '@/utils/web3'
     import Cookie from "@/utils/cookie.js";
+    import {
+        mapMutations
+    } from 'vuex'
     export default {
         name: 'components-no-connect-wallet',
         components: {},
         props: {},
         data() {
             return {
-                prefixCls: 'components-no-connect-wallet'
+                prefixCls: 'components-no-connect-wallet',
+                isLoading: false
             }
         },
         computed: {},
@@ -31,6 +35,7 @@
                 web3Tool.init.call(this, async account => {
                     this.account = account
                     Cookie.setCookie("__account__", this.account);
+                    this.SET_WALLETADDR(account)
                     await this.regUser()
                     const data = await this.getNonce()
                     web3Tool.sign({
@@ -60,6 +65,7 @@
 
             },
             getToken(signature) {
+                this.isLoading = true
                 myAjax({
                     url: 'auth/auth',
                     notHeaderParams: true,
@@ -72,9 +78,11 @@
                 }).then(res => {
                     if (res.ok) {
                         const token = (res.data || {}).token
-                        token && (Cookie.setCookie('ad_token', token))
+                        this.isLoading = false
+                        this.$emit('connectOk', token)
+                        // token && (Cookie.setCookie('ad_token', token))
                     }
-                    location.reload()
+                    //this.$router.push({ path: '/' })
                 })
             },
             regUser() {
@@ -94,6 +102,9 @@
                     })
                 })
             },
+            ...mapMutations([
+                "SET_WALLETADDR"
+            ])
         },
     }
 </script>

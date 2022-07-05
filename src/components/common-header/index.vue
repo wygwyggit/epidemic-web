@@ -18,7 +18,7 @@
                     {{ adoge_balance }}
                     adoge
                 </div>
-                <template v-if="!account">
+                <template v-if="!walletAddr">
                     <div class="user-pc">
                         <div class="connect" @click="connectWalletMetaMask(false)">
                             {{ $t("common.connect") }}
@@ -111,7 +111,7 @@
                     </nav>
                     <div class="bottom">
                         <div class="user-info">
-                            <template v-if="account">
+                            <template v-if="walletAddr">
                                 <div class="user-h5">
                                     <div class="head-img">
                                         <img src="../../assets/images/reward-token.png" alt="" />
@@ -167,7 +167,6 @@
         data() {
             return {
                 prefixCls: "components-common-header",
-                account: null,
                 chainId: 0,
                 isConnect: false,
                 isShowConnectDialog: false,
@@ -212,11 +211,12 @@
                 return this.$t("common.connect");
             },
             smallAccount() {
-                let firstCode = this.account.slice(0, 6);
-                let lastCode = this.account.slice(-4);
+                let firstCode = this.walletAddr.slice(0, 6);
+                let lastCode = this.walletAddr.slice(-4);
                 return `${firstCode}...${lastCode}`;
             },
             ...mapState({
+                walletAddr: state => state.walletAddr,
                 adoge_balance: state => state.adoge_balance
             })
         },

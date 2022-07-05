@@ -12,6 +12,7 @@ import './element'
 import './style/common.scss'
 import './style/element-rewrite.scss'
 import '../rem.js'
+import './permission'
 import directives from './directives'
 Vue.use(directives)
 Vue.config.productionTip = false

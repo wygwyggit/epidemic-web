@@ -47,7 +47,6 @@
                             if (width < 768) {
                                 this.isShowFooter = false
                             }
-                            this.getUserInfo()
                             this.bgColor = "#32A3FF"
                             break;
                         case 'account':
@@ -55,9 +54,6 @@
                         case 'marketplace':
                         case 'account/egoWall':
                             this.bgColor = "#32A3FF"
-                            if (Cookie.getCookie('__account__')) {
-                                this.getUserInfo()
-                            }
                             break;
                         default:
                             this.bgColor = "#32A3FF"
@@ -71,25 +67,25 @@
         async mounted() {},
         beforeDestroy() {},
         methods: {
-            getUserInfo() {
-                return new Promise((resolve, reject) => {
-                    if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token')) {
-                        return resolve()
-                    }
-                    myAjax({
-                            url: 'user/user_info',
-                            isPassFalse: true
-                        }).then(res => {
-                            if (res.ok) {
-                                this.UPDATE_USERINFO(res.data || {})
-                            }
-                            resolve()
-                        }).catch(error => {})
-                        .finally(err => {
-                            eventBus.$emit('initUserOk')
-                        })
-                })
-            },
+            // getUserInfo() {
+            //     return new Promise((resolve, reject) => {
+            //         if (!Cookie.getCookie('__account__') || !Cookie.getCookie('ad_token')) {
+            //             return resolve()
+            //         }
+            //         myAjax({
+            //                 url: 'user/user_info',
+            //                 isPassFalse: true
+            //             }).then(res => {
+            //                 if (res.ok) {
+            //                     this.UPDATE_USERINFO(res.data || {})
+            //                 }
+            //                 resolve()
+            //             }).catch(error => {})
+            //             .finally(err => {
+            //                 eventBus.$emit('initUserOk')
+            //             })
+            //     })
+            // },
             doConnectAccount() {
                 this.$refs.commonHeader.connectWalletMetaMask(true)
             },

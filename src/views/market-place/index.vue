@@ -442,7 +442,7 @@
                 checkListPack: [],
                 query: {
                     keywords: '',
-                    sortField: 0,
+                    sortField: 2,
                     tabFilterIndex: 0
                 },
                 options: [{

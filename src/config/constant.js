@@ -4,6 +4,8 @@ const netMiningFee = {
     red: '0.5',
     blue: '1.5'
 }
+const TokenKey = '__account__'
 export {
-    netMiningFee
+    netMiningFee,
+    TokenKey
 }
