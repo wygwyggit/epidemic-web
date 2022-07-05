@@ -108,14 +108,13 @@
                 adoge_balance: state => state.adoge_balance
             }),
             hasBalance() {
-                // if (this.row.payment_token_id == 1) {
-                //     return this.adoge_balance >= this.totalPrice
-                // } else if (this.row.payment_token_id == 2) {
-                //     return this.busd_balance >= this.totalPrice
-                // } else {
-                //     return false
-                // }
-                return true
+                if (this.row.payment_token_id == 1) {
+                    return this.adoge_balance >= this.totalPrice
+                } else if (this.row.payment_token_id == 2) {
+                    return this.busd_balance >= this.totalPrice
+                } else {
+                    return false
+                }
             }
         },
         watch: {},
