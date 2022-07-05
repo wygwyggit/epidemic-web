@@ -5,7 +5,9 @@ const netMiningFee = {
     blue: '1.5'
 }
 const TokenKey = '__account__'
+const signKey = 'ad_token'
 export {
     netMiningFee,
-    TokenKey
+    TokenKey,
+    signKey
 }

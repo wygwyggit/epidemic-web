@@ -1,5 +1,5 @@
 import Cookie from './cookie'
-import { TokenKey } from '@/config/constant'
+import { TokenKey, signKey } from '@/config/constant'
 export const getWalletAddr = () => {
     return Cookie.getCookie(TokenKey)
 }
@@ -10,5 +10,9 @@ export const setWalletAddr = (value) => {
 
 export const removeWalletAddr = () => {
     return Cookie.delCookie(TokenKey);
+}
+
+export const removeSignToken = () => {
+    return Cookie.delCookie(signKey);
 }
 

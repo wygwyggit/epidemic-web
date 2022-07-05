@@ -151,6 +151,7 @@
         mapState
     } from 'vuex'
     import Cookie from "@/utils/cookie.js";
+    import store from '@/store'
     import utils from "@/utils";
     import myAjax from "@/utils/ajax.js";
     import eventBus from "@/utils/eventBus";
@@ -399,10 +400,7 @@
                 //this.isShowConnectDialog = false
             },
             disconnected() {
-                Cookie.delCookie("__account__");
-                Cookie.delCookie("ad_token")
-                this.account = null;
-                location.reload();
+                store.dispatch('logOut')
             },
             connectWalletMetaMask(flag) {
                 web3Tool.init.call(this, async account => {

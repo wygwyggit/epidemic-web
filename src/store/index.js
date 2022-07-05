@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {
-    getWalletAddr
+    getWalletAddr,
+    removeSignToken,
+    removeWalletAddr
 } from '@/utils/auth'
 import { getUserInfo } from '@/api/user'
 Vue.use(Vuex)
@@ -44,6 +46,12 @@ export default new Vuex.Store({
                     reject(err)
                 })
             })
+        },
+        logOut: ({ commit }) => {
+            commit('UPDATE_USERINFO', {})
+            commit('SET_WALLETADDR', '')
+            removeSignToken()
+            removeWalletAddr()
         },
         upDateOffLineDialog: ( {
             commit
