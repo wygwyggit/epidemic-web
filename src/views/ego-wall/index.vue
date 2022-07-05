@@ -84,7 +84,6 @@
 
 <script>
     import myAjax from '@/utils/ajax.js'
-    import eventBus from '@/utils/eventBus.js'
     import {
         mapState
     } from 'vuex'
@@ -221,10 +220,10 @@
         mounted() {
             if (!this.userInfo.addr) {
                 this.$router.replace({
-					name:'account',
+					name:'login',
 				})
             }
-            eventBus.$on('initUserOk', this.initPageData)
+            this.initPageData()
             let width = window.innerWidth;
             if (width < 768) {
                 this.dialogWidth = "8.9rem";
