@@ -8,7 +8,7 @@ const busdGuidancePrice = {
     yellow: 300,
     orange: 1100,
     red: 10000,
-    blue: 3000,
+    blue: 30000,
     shoes: 300
 }
 const TokenKey = '__account__'
