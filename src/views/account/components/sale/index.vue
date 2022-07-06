@@ -36,7 +36,7 @@
                 <template v-else>
                     <div class="tit">
                         <span>{{ $t("account.price") }}</span>
-                        <div v-if="row.payment_token_id == 2" class="tip-wrap">
+                        <div v-if="row.payment_token_id == 2 && [4,5,6,7,8,9,10,25,26,27].includes(row.type_id)" class="tip-wrap">
                             <p class="mini-tip">
                                 {{ $t("account.guidance-price")}}: {{ row.type_id == 10 ? busdGuidancePrice.shoes : busdGuidancePrice[row.rarity] }} BUSD
                             </p>
@@ -44,7 +44,7 @@
                                 {{ $t("account.otherwise-handling-fee") }}
                             </p>
                         </div>
-                        <div v-if="row.payment_token_id == 1" class="tip-wrap">
+                        <div v-else class="tip-wrap">
                             <p class="mini-tip">
                                 {{ $t("account.sale-price-mini") }} {{row.min_price}} {{ row.payment_token_name }}
                             </p>
