@@ -373,9 +373,11 @@
                 }).then(res => {
                     if (res.ok) {
                         const token = (res.data || {}).token
-                        token && (Cookie.setCookie('ad_token', token))
+                        token && store.dispatch('updateSignToken', token)
                     }
-                    location.reload()
+                    this.$router.push({
+                        path: '/'
+                    })
                 })
             },
             regUser() {

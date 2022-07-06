@@ -34,11 +34,23 @@
 
                 </template>
                 <template v-else>
-                    <p class="tit">
+                    <div class="tit">
                         <span>{{ $t("account.price") }}</span>
-                        <span class="mini-tip">{{ $t("account.sale-price-mini") }}{{row.min_price}}
-                            {{ row.payment_token_name }}</span>
-                    </p>
+                        <div v-if="row.payment_token_id == 2" class="tip-wrap">
+                            <p class="mini-tip">
+                                {{ $t("account.guidance-price")}}: {{ row.type_id == 10 ? busdGuidancePrice.shoes : busdGuidancePrice[row.rarity] }} BUSD
+                            </p>
+                            <p class="mini-tip">
+                                {{ $t("account.otherwise-handling-fee") }}
+                            </p>
+                        </div>
+                        <div v-if="row.payment_token_id == 1" class="tip-wrap">
+                            <p class="mini-tip">
+                                {{ $t("account.sale-price-mini") }} {{row.min_price}} {{ row.payment_token_name }}
+                            </p>
+                        </div>
+
+                    </div>
                     <div class="input-box">
                         <div class="label" :class="{'busd': row.payment_token_id == 2}">
                             <span>{{ row.payment_token_name }}</span>
@@ -59,6 +71,7 @@
 </template>
 
 <script>
+    import { busdGuidancePrice } from '@/config/constant'
     import Cookie from "@/utils/cookie.js";
     import Approve from '@/utils/approve.js'
     import myAjax from '@/utils/ajax.js'
@@ -80,6 +93,7 @@
                 submitLoading: false,
                 salePrice: '',
                 saleQuantity: 1,
+                busdGuidancePrice
             }
         },
         computed: {
@@ -279,7 +293,10 @@
                 font-weight: 600;
                 color: #777e90;
                 font-size: 0.32rem;
-
+                .tip-wrap {
+                    text-align: right;
+                    font-weight: normal;
+                }
                 .mini-tip {
                     font-size: .213333333333333rem;
                 }

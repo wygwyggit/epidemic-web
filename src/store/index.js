@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {
     getWalletAddr,
+    getSignToken,
+    setSignToken,
     removeSignToken,
     removeWalletAddr
 } from '@/utils/auth'
@@ -11,6 +13,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         walletAddr: getWalletAddr(),
+        signToken: getSignToken(),
         userInfo: {},
         offLineDialogVisible: false,
         adoge_balance: 0
@@ -21,6 +24,9 @@ export default new Vuex.Store({
     mutations: {
         SET_WALLETADDR: (state, data) => {
             state.walletAddr = data
+        },
+        SET_SIGNTOKEN: (state, data) => {
+            state.signToken = data
         },
         UPDATE_USERINFO: (state, data) => {
             state.userInfo = data
@@ -51,6 +57,7 @@ export default new Vuex.Store({
             commit('UPDATE_USERINFO', {})
             commit('SET_WALLETADDR', '')
             commit('UPDATE_ADOGE_BALANCE', '')
+            commit('SET_SIGNTOKEN', '')
             removeSignToken()
             removeWalletAddr()
         },
@@ -58,6 +65,12 @@ export default new Vuex.Store({
             commit
         }, data) => {
             commit('UPDATE_OFFLINEDIALOGVISIBLE', data)
+        },
+        updateSignToken: ({
+            commit
+        }, data) => {
+            commit('SET_SIGNTOKEN', data)
+            setSignToken(data)
         }
     },
     modules: {}

@@ -187,9 +187,11 @@
         "silver": "Silver",
         "gold": "Gold",
         "processing": "Processing",
-        "sale-price-mini": "Minimum  ",
         "quantity-for-sale": "Quantity for sale",
-        "quantity-for-open": "Open quantity"
+        "quantity-for-open": "Open quantity",
+        "sale-price-mini": "Minimum",
+        "guidance-price": "Guidance price",
+        "otherwise-handling-fee": "Otherwise, a 20% handling fee will be charged"
     },
     "detail": {
         "attribute": "Attribute",

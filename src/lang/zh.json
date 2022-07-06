@@ -187,9 +187,11 @@
         "silver": "银徽章",
         "gold": "金徽章",
         "processing": "上架中",
-        "sale-price-mini": "至少",
         "quantity-for-sale": "销售的数量",
-        "quantity-for-open": "开启数量"
+        "quantity-for-open": "开启数量",
+        "sale-price-mini": "至少",
+        "guidance-price": "官方指导价",
+        "otherwise-handling-fee": "低于该价格将收取20%手续费"
     },
     "detail": {
         "attribute": "属性",

@@ -6,7 +6,7 @@
 
 <script>
     import NoConnectWallet from '@/components/no-connect-wallet'
-    import Cookie from "@/utils/cookie.js";
+    import store from '@/store'
     export default {
         name: 'login',
         components: {
@@ -25,7 +25,7 @@
         beforeDestroy() {},
         methods: {
             connectOk(data) {
-                data && (Cookie.setCookie('ad_token', data))
+                data && store.dispatch('updateSignToken', data)
                 this.$router.push({
                     path: '/'
                 })
