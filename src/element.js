@@ -3,7 +3,7 @@
  * @author wyg
  */
 import Vue from 'vue'
-import { i18n } from './vueI18n'
+import i18n from './lang'
 import ElementUI, {
     Message,
     Loading
@@ -51,6 +51,5 @@ Vue.mixin({
         }
     },
 
-    methods: {
-    }
+    methods: {}
 });

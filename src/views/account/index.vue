@@ -4,7 +4,7 @@
             <div class="w">
                 <div class="tit">
                     <img src="../../assets/images/nav-my-account.png" alt="">
-                    {{$t("account.my-account")}}
+                    {{$$t("account", "my-account")}}
                 </div>
                 <div class="my-rewards">
                     <ul>
@@ -13,7 +13,7 @@
                                 <img src="../../assets/images/net-header.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p class="li-tit">{{ $t("account.bronze-medal") }}</p>
+                                <p class="li-tit">{{ $$t("account", "bronze-medal") }}</p>
                                 <p class="dot-num">x {{ userInfo.copper_count || 0 }}</p>
                             </div>
                         </li>
@@ -22,18 +22,18 @@
                                 <img src="../../assets/images/reward.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p>{{ $t("ego-wall.ego-wall") }}</p>
+                                <p>{{ $$t("ego-wall.ego-wall") }}</p>
                             </div>
                         </li>
                         <li class="sign-in">
                             <div class="sign-btn" @click="signIn">
                                 <img src="../../assets/images/sign-in.png" alt="">
                                 <span>
-                                    {{ userInfo.is_sign ? $t('account.signed-in') : $t('account.sign-in')}}
+                                    {{ userInfo.is_sign ? $$t("account", "signed-in") : $$t('account', 'sign-in')}}
                                 </span>
 
                             </div>
-                            <p class="txt">{{ userInfo.continuous_sign_days || 0 }} {{ $t("account.days-in-a-row")}}
+                            <p class="txt">{{ userInfo.continuous_sign_days || 0 }} {{ $$t("account", "days-in-a-row")}}
                             </p>
                         </li>
                     </ul>
@@ -50,7 +50,7 @@
                                 <li class="check-item">
                                     <div class="label-name">{{ checkObj[currentTabId].label }}：</div>
                                     <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll"
-                                        @change="handleCheckAllChange" class="all">{{ $t("marketplace.all") }}
+                                        @change="handleCheckAllChange" class="all">{{ $$t("common", "all") }}
                                     </el-checkbox>
                                     <el-checkbox-group v-model="checkListFilter" @change="handleCheckedCitiesChange">
                                         <el-checkbox v-for="row in checkObj[currentTabId].list" :label="row.id"
@@ -64,7 +64,7 @@
                 </div>
                 <div class="list-content" v-loading="isLoading">
                     <div class="list clearfix">
-                        <el-empty :image="emptyImage" :description="$t('common.no-data')"
+                        <el-empty :image="emptyImage" :description="$$t('common', 'no-data')"
                             v-if="!netList.length && !isLoading">
                         </el-empty>
                         <template v-if="netList.length && !isLoading">
@@ -74,47 +74,47 @@
                                     <template v-if="item.status == 0">
                                         <div class="btn btn-open" :class="{'disable': !item.can_open}"
                                             v-if="item.belong_type == -1" @click="openGiftBag(item)">
-                                            {{$t("account.open")}}
+                                            {{$$t("account", "open")}}
                                         </div>
                                         <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                             v-if="item.type_id == 2" @click="doSynthetic(item)">
-                                            {{$t("account.synthetic")}}</div>
-                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                            v-if="item.type_id == 3" @click="doSynthetic(item)">
-                                            {{$t("account.synthetic")}}</div>
+                                            {{$$t("account", "synthetic")}}</div>
+                                        <!-- <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
+                                            v-if="item.type_id == 2" @click="doSynthetic(item)">
+                                            {{$$t("account.synthetic")}}</div> -->
                                         <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
                                             v-if="item.type_id == 16" @click="doUpgrade(item)">
-                                            {{$t("ego-wall.upgrade")}}</div>
+                                            {{$$t("account", "upgrade")}}</div>
                                         <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
                                             v-if="item.type_id == 17" @click="doUpgrade(item)">
-                                            {{$t("ego-wall.upgrade")}}</div>
-                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                            v-if="item.belong_type == -2" @click="doSynthetic(item)">
-                                            {{$t("exchange.exchange")}}</div>
+                                            {{$$t("ego-wall.upgrade")}}</div>
+                                        <div class="btn btn-synthetic" v-if="item.can_exchange"
+                                            @click="doSynthetic(item)">
+                                            {{$$t("exchange.exchange")}}</div>
                                         <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
                                             @click="doDeliver(item)" v-if="item.belong_type == 1">
-                                            {{$t("common.deliver")}}</div>
+                                            {{$$t("common.deliver")}}</div>
                                         <div class="btn btn-sale" :class="{'disable': !item.can_sale}"
-                                            @click="doSale(item)">{{$t("account.sale")}}</div>
+                                            @click="doSale(item)">{{$$t("account.sale")}}</div>
                                     </template>
 
-                                    <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
+                                    <!-- <div class="btn btn-on-sale">{{ $$t("account.on-sale")}}</div> -->
                                     <template v-if="item.status == 8">
-                                        <!-- <div class="btn btn-on-sale">{{ $t("account.on-sale")}}</div> -->
+                                        <!-- <div class="btn btn-on-sale">{{ $$t("account.on-sale")}}</div> -->
                                         <div class="btn btn-cancel-sale" @click="doCancelSale(item)">
-                                            {{ $t("account.cancel-sale")}}</div>
+                                            {{ $$t("account.cancel-sale")}}</div>
                                         <div class="btn btn-revise" @click="doRevise(item)">
-                                            {{ $t("account.revise")}}</div>
+                                            {{ $$t("account.revise")}}</div>
                                     </template>
                                     <template v-if="item.status == 2">
-                                        <div class="btn btn-on-processing">{{ $t("account.processing")}}</div>
+                                        <div class="btn btn-on-processing">{{ $$t("account.processing")}}</div>
                                     </template>
                                     <template v-if="item.status == 1">
-                                        <div class="btn btn-on-staking">{{ $t("account.staking")}}</div>
+                                        <div class="btn btn-on-staking">{{ $$t("account.staking")}}</div>
                                     </template>
                                     <template
                                         v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
-                                        <div class="btn btn-on-sending">{{ $t("account.sending")}}</div>
+                                        <div class="btn btn-on-sending">{{ $$t("account.sending")}}</div>
                                     </template>
                                 </div>
                             </item-card>
@@ -214,46 +214,46 @@
                 isLoading: true,
                 tabs: [{
                     id: 1,
-                    title: this.$t("marketplace.nfts"),
+                    title: this.$$t("marketplace.nfts"),
                     num: 0
                 }, {
                     id: 2,
-                    title: this.$t("marketplace.other"),
+                    title: this.$$t("marketplace.other"),
                     num: 0
                 }],
                 selectedStatus: 0,
                 currentTabId: 1,
                 checkObj: {
                     1: {
-                        label: this.$t("account.status"),
+                        label: this.$$t("account.status"),
                         list: [{
                             id: 0,
-                            val: this.$t("account.available")
+                            val: this.$$t("account.available")
                         }, {
                             id: 8,
-                            val: this.$t("account.on-sale")
+                            val: this.$$t("account.on-sale")
                         }, {
                             id: 1,
-                            val: this.$t("account.staking")
+                            val: this.$$t("account.staking")
                         }, {
                             id: 4,
-                            val: this.$t("account.sending")
+                            val: this.$$t("account.sending")
                         }, {
                             id: 2,
-                            val: this.$t("account.processing")
+                            val: this.$$t("account.processing")
                         }]
                     },
                     2: {
-                        label: this.$t("account.status"),
+                        label: this.$$t("account.status"),
                         list: [{
                             id: 0,
-                            val: this.$t("account.available")
+                            val: this.$$t("account.available")
                         }, {
                             id: 8,
-                            val: this.$t("account.on-sale")
+                            val: this.$$t("account.on-sale")
                         }, {
                             id: 4,
-                            val: this.$t("account.sending")
+                            val: this.$$t("account.sending")
                         }]
                     }
                 },
@@ -270,7 +270,7 @@
         },
         computed: {
             placeholderTxt() {
-                return this.$t("account.search-id-name")
+                return this.$$t("account.search-id-name")
             },
             ...mapState({
                 userInfo: state => state.userInfo
@@ -509,8 +509,8 @@
             },
             doCancelSale(row) {
                 this.currentGoodRow = row
-                this.$confirm(`${this.$t("common.cancel-sale-tip")}?`, this.$t("common.remind"), {
-                    confirmButtonText: this.$t("common.yes"),
+                this.$confirm(`${this.$$t("common.cancel-sale-tip")}?`, this.$$t("common.remind"), {
+                    confirmButtonText: this.$$t("common.yes"),
                     showCancelButton: false,
                     closeOnClickModal: false,
                     width: '6.4rem'
@@ -529,7 +529,7 @@
                             }
                         }).then(res => {
                             if (res.ok) {
-                                this.$showOk(this.$t("common.ope-suc"))
+                                this.$showOk(this.$$t("common.ope-suc"))
                                 this.getLiist()
                             }
                         }).finally(() => {
@@ -542,7 +542,7 @@
             doReviseSale(row) {
                 this.saleReviseDialog = true
                 this.nets.salePrice = row.price
-                this.saleReviseDialogTitle = this.$t("account.revise")
+                this.saleReviseDialogTitle = this.$$t("account.revise")
             },
             doClearSearchQuery(val) {
                 this[val] = []

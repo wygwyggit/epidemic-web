@@ -4,10 +4,7 @@ import router from './router'
 import store from './store'
 import Filters from '@/filters'
 import Web3 from 'web3'
-import './vueI18n'
-import {
-    i18n
-} from './vueI18n'
+import i18n from './lang'
 import './element'
 import './style/common.scss'
 import './style/element-rewrite.scss'

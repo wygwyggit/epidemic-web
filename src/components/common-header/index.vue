@@ -8,7 +8,7 @@
                 <div class="page-tabs">
                     <div class="tab-item" :data-hover="tab.text" v-for="tab in tabs" :key="tab.name"
                         :class="{ 'tab-active': tab.name == currentTab }" @click="redirectTo(tab)">
-                        {{ $t(`common.${tab.text}`) }}
+                        {{ generateTitle(tab.text) }}
                     </div>
                 </div>
             </div>
@@ -800,6 +800,7 @@
     @media (max-width: 768px) {
         .#{$prefixCls} {
             height: 2.186666666666667rem;
+            line-height: 2.186666666666667rem;
             background: #14181f;
 
             .pc-adoge-balance {
@@ -889,8 +890,9 @@
             }
 
             .header-above-slideicon {
-                margin-left: 0.266666666666667rem;
                 display: block !important;
+                margin-left: 0.266666666666667rem;
+                line-height: 0;
             }
         }
     }

@@ -7,9 +7,21 @@
                     {{$t("common.net-mining")}}
                 </div>
                 <div class="right">
-                    <div class="net-n">
-                        <p>{{$t("account.staking")}}</p>
-                        <p style="margin-top:3px">{{ coinCountData.count }} NFTs</p>
+                    <div class="memory-warp">
+                        <img src="./images/memory.png" alt="" @click="openMemoryStakingRom">
+                        <div class="center-progress">
+                            <p class="label-name">
+                                Staking ROM
+                            </p>
+                            <el-progress :percentage="50" :show-text="false" color="#F6D440"></el-progress>
+                            <p>AVAIL: <span>
+                                    1.5 / 10
+                                </span> </p>
+                        </div>
+                        <div class="right-btns">
+                            <el-button type="primary" round @click="openExpDialog">EXP</el-button>
+                            <el-button type="warning" round @click="openTtoDialog">TTO</el-button>
+                        </div>
                     </div>
                     <ul>
                         <li v-for="(value, key, index) in coinCountData.items" :key="index">
@@ -46,7 +58,7 @@
                                     <el-checkbox v-model="isSelectAll" @change="doSelectAll">
                                         {{ $t("net-mining.select-all") }}</el-checkbox>
                                 </div>
-                                <div class="staking" @click="doPledge(1)" :class="{'active': selectIds.length > 0}">
+                                <div class="staking" @click="openStakingConfirm" :class="{'active': selectIds.length > 0}">
                                     {{ $t("net-mining.stacking-now") }}
                                 </div>
                             </div>
@@ -61,7 +73,7 @@
                                         {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
                                 </div>
-                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">
+                                <el-button type="primary" @click="openStakingConfirm" :disabled="selectIds.length <= 0">
                                     {{ $t("net-mining.stacking-now") }}
                                 </el-button>
                             </div>
@@ -227,6 +239,10 @@
             </div>
 
         </el-drawer>
+        <expand v-if="isShowMemoryExpand" @close="() => this.isShowMemoryExpand = false"></expand>
+        <take-out v-if="isShowMemoryTakeOut" @close="() => this.isShowMemoryTakeOut = false" />
+        <staking-rom v-if="isShowMemoryStakingRom" @close="() => this.isShowMemoryStakingRom = false"/>
+        <staking v-if="isShowStakingComfirm" :ids="selectIds" @close="() => this.isShowStakingComfirm = false" />
     </div>
 </template>
 
@@ -245,13 +261,21 @@
     import web3Tool from '@/utils/web3'
     import NoConnectWallet from '@/components/no-connect-wallet'
     import NoSign from '@/components/no-sign'
+    import Expand from './components/expand'
+    import TakeOut from './components/take-out';
+    import StakingRom from './components/staking-rom'
+    import Staking from './components/staking'
     export default {
         name: '',
         components: {
             PageTabs,
             itemCard,
             NoConnectWallet,
-            NoSign
+            NoSign,
+            Expand,
+            TakeOut,
+            StakingRom,
+            Staking
         },
         props: {},
         data() {
@@ -278,6 +302,10 @@
                 isSelectAll: false,
                 dialogVisible: false,
                 drawer: false,
+                isShowMemoryExpand: false,
+                isShowMemoryTakeOut: false,
+                isShowMemoryStakingRom: false,
+                isShowStakingComfirm: false,
                 pledgeTimes: [{
                     id: 3,
                     title: this.$t('net-mining.3-day')
@@ -312,7 +340,7 @@
                 let feePrice = 0
                 for (let key in this.stakingRarityMap) {
                     const count = this.stakingRarityMap[key].length
-                    feePrice+= utils.mul(count, netMiningFee[key])
+                    feePrice += utils.mul(count, netMiningFee[key])
                 }
                 return utils.mul(feePrice, this.pledgeParams.time)
             }
@@ -337,6 +365,15 @@
         },
         beforeDestroy() {},
         methods: {
+            openMemoryStakingRom() {
+                this.isShowMemoryStakingRom = true
+            },
+            openTtoDialog() {
+                this.isShowMemoryTakeOut = true
+            },
+            openExpDialog() {
+                this.isShowMemoryExpand = true
+            },
             getPledgeContent() {
                 const obj = {}
                 this.selectIds.map(x => {
@@ -434,6 +471,9 @@
                 } else {
                     this.isSelectAll = false
                 }
+            },
+            openStakingConfirm() {
+                this.isShowStakingComfirm = true
             },
             doPledge(flag) {
                 if (!this.selectIds.length) return
@@ -828,18 +868,47 @@
                     border: 1px solid #29374B;
                     border-radius: 12px 12px 12px 12px;
 
-                    .net-n {
-                        margin-right: 60px;
+                    .memory-warp {
+                        display: flex;
+                        align-items: center;
+                        border-right: 1px solid #29374B;
+                        padding-right: .3rem;
 
-                        p:first-child {
+                        img {
+                            width: .666666666666667rem;
+                            cursor: pointer;
+                        }
+
+                        .center-progress {
+                            margin: 0 .066666666666667rem;
                             color: #777E90;
-                            font-size: 14px;
+                            font-size: .16rem;
+
+                            .el-progress {
+                                margin: 5px 0;
+                            }
+
                         }
 
-                        p:last-child {
-                            color: #fff;
-                            font-size: 20px;
+                        .right-btns {
+                            padding-left: .266666666666667rem;
+
+                            .el-button {
+                                display: block;
+                                margin: 0;
+                                padding: 0;
+                                height: .266666666666667rem;
+                                line-height: .266666666666667rem;
+                                width: .666666666666667rem;
+                                font-size: .16rem;
+                                text-align: center;
+
+                                &.el-button--warning {
+                                    margin-top: .133333333333333rem;
+                                }
+                            }
                         }
+
                     }
 
                     ul {
@@ -1042,17 +1111,27 @@
                         margin: .266666666666667rem 0 0 0;
                         padding: .266666666666667rem 0;
 
-                        .net-n {
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            top: .55rem;
+                            left: 50%;
+                            width: .026666666666667rem;
+                            height: 1.066666666666667rem;
+                            background: #29374B;
+                            transform: translateX(-50%);
+                        }
+
+                        .memory-warp {
                             position: absolute;
                             top: .55rem;
                             left: .5rem;
-
-                            p:first-child {
-                                font-size: .32rem;
+                            border: 0;
+                            img {
+                                width: 1.066666666666667rem;
                             }
-
-                            p:last-child {
-                                font-size: .426666666666667rem;
+                            .right-btns {
+                                display: none;
                             }
                         }
 
@@ -1071,8 +1150,9 @@
 
                         .received-box {
                             position: absolute;
-                            right: .5rem;
-                            top: .5rem;
+                            right: .7rem;
+                            top: .7rem;
+                            border: 0;
 
                             .my-reward {
                                 img {
@@ -1080,9 +1160,6 @@
                                     height: 40px;
                                 }
                             }
-
-
-                            .opt {}
                         }
 
                     }

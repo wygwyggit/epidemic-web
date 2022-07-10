@@ -191,7 +191,7 @@
                 <el-pagination background layout="total, prev, pager, next" @current-change="onPageChange"
                     :page-size="Number(page.pageSize)" @prev-click="onPageChange" @next-click="onPageChange"
                     :total="Number(total)" :hide-on-single-page="true" :current-page="Number(page.curPage)"
-                    v-if="list.length && !isLoading">
+                    v-if="list.length">
                 </el-pagination>
             </div>
         </div>
@@ -686,8 +686,11 @@
                 this.isFilterDrawer = false
             },
             onPageChange(page) {
+                this.isLoading = true
                 this.page.curPage = page
-                this.getLiist()
+                this.getLiist().then(() => {
+                    this.isLoading = false
+                })
             },
             onPageChange2(page) {
                 this.page2.curPage = page

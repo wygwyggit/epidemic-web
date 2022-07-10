@@ -1,5 +1,5 @@
 const netMiningFee = {
-    yellow: '0.1',
+    yellow: '0.07',
     orange: '0.16',
     red: '0.5',
     blue: '1.5'

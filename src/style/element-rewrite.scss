@@ -32,6 +32,11 @@
     background: $--color-success;
     border-color: $--color-success;
 }
+.el-button--warning {
+    background: $--color-warning;
+    border-color: $--color-warning;
+}
+
 
 .el-loading-mask {
     background: #131922 !important;

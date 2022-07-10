@@ -60,7 +60,7 @@
                         </template>
                     </div>
                     <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
-                        v-if="row.belong_type !== -2">
+                        v-if="[2, 3].includes(row.type_id)">
                         {{ $t("account.synthetic") }}</el-button>
                     <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>
                         {{ $t("exchange.next") }}
@@ -175,7 +175,10 @@ type_id: 24  帕拉梅拉碎片
         },
         watch: {},
         created() {
-            if (this.row.type_id == 2 || this.row.type_id == 3) {
+            if (this.row.type_id == 2) {
+                this.needNum = 7
+            }
+            if (this.row.type_id == 3) {
                 this.needNum = 10
             }
             let width = window.innerWidth;

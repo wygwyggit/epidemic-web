@@ -417,7 +417,7 @@
                                 type_id: Number(this.row.type_id),
                                 status: Number(this.row.status),
                                 owner_addr: this.row.owner_addr,
-                                record_id: Number(this.row.record_id) || null
+                                record_id: this.row.record_id || null
                             }
                         }
                     }).then(res => {
