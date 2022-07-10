@@ -175,7 +175,10 @@ type_id: 24  帕拉梅拉碎片
         },
         watch: {},
         created() {
-            if (this.row.type_id == 2 || this.row.type_id == 3) {
+            if (this.row.type_id == 2) {
+                this.needNum = 7
+            }
+            if (this.row.type_id == 3) {
                 this.needNum = 10
             }
             let width = window.innerWidth;
