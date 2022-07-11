@@ -10,6 +10,8 @@ export default {
         "purple": "Purple",
         "diamond": "Diamond",
         "copper": "Copper",
+        "silver": "Silver",
+        "gold": "Gold",
         "insufficient-adoge-balance": 'Insufficient ADOGE balance',
         "insufficient-balance": "Insufficient Balance",
         "no-data": "No data",

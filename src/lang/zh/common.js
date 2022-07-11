@@ -10,6 +10,8 @@ export default {
         "purple": "紫色",
         "diamond": "钻石色",
         "copper": "铜",
+        "silver": "银",
+        "gold": "金",
         "insufficient-adoge-balance": 'ADOGE余额不足',
         "insufficient-balance": "余额不足",
         "no-data": "暂无数据",
