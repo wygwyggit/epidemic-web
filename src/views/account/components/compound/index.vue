@@ -5,7 +5,7 @@
             <div slot="title" v-if="!isShowFormWrapper">
                 <div class="compound-thing">
                     <img :src="netImgBaseUrl + row.image" v-if="row.belong_type === -10" alt="" class="material-nft">
-                    <img :src="require(`./images/${row.name.toLowerCase().replace(/\s+/g, '-')}.png`)" v-else alt="">
+                    <img :src="require(`./images/${row.big_img_name.toLowerCase().replace(/\s+/g, '-')}.png`)" v-else alt="">
                 </div>
             </div>
             <div slot="title" v-else>
@@ -53,17 +53,17 @@
                         </div>
                     </div>
                     <!-- <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
-                        v-if="[2, 3].includes(row.type_id)">
+                        v-if="row.can_merge">
                         {{ $$t("account.synthetic") }}</el-button> -->
                     <!-- <el-button type="primary" class="syn" @click="doNext"
                         :disabled="maxContent <= 0 && row.belong_type !== -10" v-else>
                         {{ $$t("exchange", "next") }}
                     </el-button> -->
                      <el-button type="primary" class="syn" v-debounce="doCompound"
-                        v-if="[2, 3].includes(row.type_id)">
+                        v-if="row.can_merge">
                         {{ $$t("account.synthetic") }}</el-button>
                     <el-button type="primary" class="syn" @click="doNext"
-                         v-else>
+                         v-if="row.can_exchange">
                         {{ $$t("exchange", "next") }}
                     </el-button>
 

@@ -28,6 +28,7 @@ export default {
         "silver": "Silver",
         "gold": "Gold",
         "processing": "Processing",
-        "successfully": "successfully"
+        "successfully": "successfully",
+        "cancel-sale-tip": "Cancel the sale",
     },
 }

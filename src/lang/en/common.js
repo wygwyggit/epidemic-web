@@ -25,6 +25,8 @@ export default {
         "language": "Language",
         "result": "Result",
         "accept": "Accept",
+        "remind": "Remind",
+        "yes": "Yes",
     }
 
 }

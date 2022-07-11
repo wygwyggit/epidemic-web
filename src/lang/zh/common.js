@@ -25,6 +25,8 @@ export default {
         "language": "语言",
         "result": "结果",
         "accept": "确认",
+        "remind": "提示",
+        "yes": "确认",
     }
 
 }

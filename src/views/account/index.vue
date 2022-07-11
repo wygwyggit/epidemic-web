@@ -505,7 +505,7 @@
             },
             doCancelSale(row) {
                 this.currentGoodRow = row
-                this.$confirm(`${this.$$t("common.cancel-sale-tip")}?`, this.$$t("common.remind"), {
+                this.$confirm(`${this.$$t("account.cancel-sale-tip")}?`, this.$$t("common.remind"), {
                     confirmButtonText: this.$$t("common.yes"),
                     showCancelButton: false,
                     closeOnClickModal: false,

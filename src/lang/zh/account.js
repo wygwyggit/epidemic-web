@@ -27,6 +27,7 @@ export default {
         "silver": "银徽章",
         "gold": "金徽章",
         "processing": "上架中",
-        "successfully": "签到成功"
+        "successfully": "签到成功",
+        "cancel-sale-tip": "取消出售",
     },
 }
