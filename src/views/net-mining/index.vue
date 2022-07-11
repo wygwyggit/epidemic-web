@@ -7,7 +7,7 @@
                     {{$t("route.net-mining")}}
                 </div>
                 <div class="right">
-                    <div class="memory-warp">
+                    <!-- <div class="memory-warp">
                         <img src="./images/memory.png" alt="" @click="openMemoryStakingRom">
                         <div class="center-progress">
                             <p class="label-name">
@@ -22,7 +22,7 @@
                             <el-button type="primary" round @click="openExpDialog">EXP</el-button>
                             <el-button type="warning" round @click="openTtoDialog">TTO</el-button>
                         </div>
-                    </div>
+                    </div> -->
                     <ul>
                         <li v-for="(value, key, index) in coinCountData.items" :key="index">
                             <p class="color" :style="{color: key}">{{$t(`common.${key}`)}}</p>
@@ -58,7 +58,7 @@
                                     <el-checkbox v-model="isSelectAll" @change="doSelectAll">
                                         {{ $t("net-mining.select-all") }}</el-checkbox>
                                 </div>
-                                <div class="staking" @click="openStakingConfirm" :class="{'active': selectIds.length > 0}">
+                                <div class="staking" @click="doPledge(1)" :class="{'active': selectIds.length > 0}">
                                     {{ $t("net-mining.stacking-now") }}
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                                         {{ $t("net-mining.selected") }}: {{selectIds.length}}
                                     </span>
                                 </div>
-                                <el-button type="primary" @click="openStakingConfirm" :disabled="selectIds.length <= 0">
+                                <el-button type="primary" @click="doPledge(0)" :disabled="selectIds.length <= 0">
                                     {{ $t("net-mining.stacking-now") }}
                                 </el-button>
                             </div>
@@ -125,17 +125,17 @@
 
 
         </div>
-        <!-- <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px"
+        <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px"
             :close-on-click-modal="false" custom-class="pledge-dialog" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
-                        {{ $t('net-mining.please-confirm-the-staking-content') }}
+                        {{ $t('net-mining.pledge-quantity') }}
                     </div>
                     <div class="con">
                         <ul>
                             <li v-for="(value, key) in stakingRarityMap" :key="key">
-                                <div class="key" :style="{color: key}">{{ $t(`account.${key}`) }}</div>
+                                <div class="key" :style="{color: key}">{{ $t(`common.${key}`) }}</div>
                                 <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
@@ -179,17 +179,17 @@
                 </div>
             </div>
 
-        </el-dialog> -->
-        <!-- <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt" :show-close="!comfirmLoading">
+        </el-dialog>
+        <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
-                        {{ $t('net-mining.please-confirm-the-staking-content') }}
+                        {{ $t('net-mining.pledge-quantity') }}
                     </div>
                     <div class="con">
                         <ul>
                             <li v-for="(value, key) in stakingRarityMap" :key="key">
-                                <div class="key" :style="{color: key}">{{ $t(`account.${key}`) }}</div>
+                                <div class="key" :style="{color: key}">{{ $t(`common.${key}`) }}</div>
                                 <div class="val">{{  value.length || 0 }}</div>
                             </li>
                         </ul>
@@ -232,7 +232,7 @@
                 </div>
             </div>
 
-        </el-drawer> -->
+        </el-drawer>
         <expand v-if="isShowMemoryExpand" @close="() => this.isShowMemoryExpand = false"></expand>
         <take-out v-if="isShowMemoryTakeOut" @close="() => this.isShowMemoryTakeOut = false" />
         <staking-rom v-if="isShowMemoryStakingRom" @close="() => this.isShowMemoryStakingRom = false"/>
