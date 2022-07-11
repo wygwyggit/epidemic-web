@@ -53,18 +53,18 @@
                             </el-input-number>
                         </div>
                     </div>
-                    <!-- <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
+                    <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
                         v-if="row.can_merge">
-                        {{ $$t("account.synthetic") }}</el-button> -->
-                    <!-- <el-button type="primary" class="syn" @click="doNext"
+                        {{ $$t("account.synthetic") }}</el-button>
+                    <el-button type="primary" class="syn" @click="doNext"
                         :disabled="maxContent <= 0 && row.belong_type !== -10" v-else>
                         {{ $$t("exchange", "next") }}
-                    </el-button> -->
-                    <el-button type="primary" class="syn" v-debounce="doCompound" v-if="row.can_merge">
+                    </el-button>
+                    <!-- <el-button type="primary" class="syn" v-debounce="doCompound" v-if="row.can_merge">
                         {{ $$t("account.synthetic") }}</el-button>
                     <el-button type="primary" class="syn" @click="doNext" v-if="row.can_exchange">
                         {{ $$t("exchange", "next") }}
-                    </el-button>
+                    </el-button> -->
 
                 </div>
                 <div class="form-cot" v-else>

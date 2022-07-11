@@ -9,7 +9,7 @@ export default {
         "next": "下一步",
         "gold-pack": "金礼包",
         "sliver-pack": "银礼包",
-        "compound-tip-a": "消耗10个",
+        "compound-tip-a": "消耗",
         "compound-tip-b": "可合成1个",
         "compound-tip-c": "请输入你想要合成的",
         "compound-tip-d": "数量",

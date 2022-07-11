@@ -17,7 +17,7 @@
                     <div class="r" v-if="itemInfo.rarity">{{ $$t("common", itemInfo.rarity)}}</div>
                 </div>
             </template>
-            <div class="img-mid-content" :class="{'can-detail': ![3, 16, 17].includes(itemInfo.type_id) && itemInfo.belong_type !== -10}"
+            <div class="img-mid-content" :class="{'can-detail': ![3, 16, 17, 18].includes(itemInfo.type_id) && itemInfo.belong_type !== -10}"
                 @click="goCardDetail">
                 <div class="img-content">
                     <img :src="netImgBaseUrl + itemInfo.image">
@@ -80,7 +80,7 @@
         beforeDestroy() {},
         methods: {
             goCardDetail() {
-                if ([3, 16, 17].includes(this.itemInfo.type_id) || this.itemInfo.belong_type === -10) return false
+                if ([3, 16, 17, 18].includes(this.itemInfo.type_id) || this.itemInfo.belong_type === -10) return false
                 this.$emit('goDetail', this.itemInfo)
             },
             selectCard(row) {
