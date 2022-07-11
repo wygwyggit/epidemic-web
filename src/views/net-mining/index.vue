@@ -160,13 +160,14 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
+                    <!-- <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
                         {{ $t("common.confirmed")}}
                     </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                     -->
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         v-debounce="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button> -->
+                    </el-button> 
                 </div>
             </div>
 
