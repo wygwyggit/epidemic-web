@@ -4,11 +4,8 @@
             :width="dialogWidth" v-if="isShowDialog" @close="doClose">
             <div slot="title" v-if="!isShowFormWrapper">
                 <div class="compound-thing">
-                    <img src="./images/silver-gift/main.png" alt="" v-if="row.type_id == 2">
-                    <img src="./images/bronze/main.png" alt="" v-if="row.type_id == 3">
-                    <img src="./images/phone-fragments/main.png" alt="" v-if="row.type_id == 22">
-                    <img src="./images/car-fragments/main.png" alt="" v-if="row.type_id == 23">
-                    <img src="./images/parramera-fragment/main.png" alt="" v-if="row.type_id == 24">
+                    <img :src="netImgBaseUrl + row.image" v-if="row.belong_type === -10" alt="" class="material-nft">
+                    <img :src="require(`./images/${row.name.toLowerCase().replace(/\s+/g, '-')}.png`)" v-else alt="">
                 </div>
             </div>
             <div slot="title" v-else>
@@ -18,79 +15,83 @@
             </div>
             <div class="compound-content">
                 <div class="main-cot" v-if="!isShowFormWrapper">
-                    <div class="arrow-icon">
-                        <img src="./images/arrow.png" alt="">
-                    </div>
-                    <div class="debris-thing">
-                        <img src="./images/silver-gift/small.png" alt="" v-if="row.type_id == 2">
-                        <img src="./images/bronze/small.png" alt="" v-if="row.type_id == 3">
-                        <img src="./images/phone-fragments/small.png" alt="" v-if="row.type_id == 22">
-                        <img src="./images/car-fragments/small.png" alt="" v-if="row.type_id == 23">
-                        <img src="./images/parramera-fragment/small.png" alt="" v-if="row.type_id == 24">
-                        <div class="count-info">
-                            <span class="has-count">{{ row.num || 0}} </span>
-                            /
-                            <span class="consume-count">{{ needNum }}</span>
+                    <template v-if="row.belong_type != -10">
+                        <div class="arrow-icon">
+                            <img src="./images/arrow.png" alt="">
+                        </div>
+                        <div class="debris-thing">
+                            <img :src="netImgBaseUrl + row.image" />
+                            <div class="count-info">
+                                <span class="has-count">{{ row.num || 0}} </span>
+                                /
+                                <span class="consume-count">{{ needNum }}</span>
+                            </div>
+                        </div>
+                    </template>
+
+                    <div class="tip-count">
+                        <div v-if="row.type_id == 2 || row.type_id == 3">
+                            {{ $$t("exchange", "compound-tip-a")}}{{ needNum || 0 }}
+                            {{ row.type_id == 3 ? $$t("account.bronze-medal") : $$t("exchange" ,"sliver-pack") }}
+                            {{ $$t("exchange", "compound-tip-b")}}
+                            <span v-if="row.type_id == 3" class="type-name">{{ $$t("exchange", "sliver-pack") }}</span>
+                            <span v-if="row.type_id == 2" class="type-name">{{ $$t("exchange", "gold-pack") }}</span>
+                        </div>
+                        <div v-else-if="row.belong_type === -10">
+                            {{ $$t("exchange", "you-will-trade") }}{{ row.name }}{{ $$t("exchange", "card") }}{{ $$t("exchange", "for-real") }}{{ row.name }}
+                        </div>
+                        <div v-else>
+                            {{ $$t("exchange", "you-will-burn") }}{{ needNum || 0 }}{{ $$t("exchange", "shards") }}{{ $$t("exchange", "to-get") }}{{ translateName }}
+                        </div>
+                        <div v-if="row.can_merge">
+                            <span>{{ $$t("exchange", "compound-tip-c")}}
+                                <!-- {{row.type_id == 2 ? $$t("exchange", "gold-pack") : $$t("exchange", "sliver-pack")}}{{ $$t("exchange", "compound-tip-d")}} -->
+                            </span>
+                            <el-input-number v-model="num" size="mini" @change="handleChange"
+                                @keydown.native="e => e.returnValue = ''" :min="0" :max="maxContent">
+                            </el-input-number>
                         </div>
                     </div>
-                    <div class="tip-count">
-                        <template>
-                            <div v-if="row.type_id == 22">{{ $t("exchange.you-will-burn-100-Phone")}}</div>
-                            <div v-if="row.type_id == 23">{{ $t("exchange.you-will-burn-100-Car")}}</div>
-                            <div v-if="row.type_id == 24">{{ $t("exchange.you-will-burn-100-Panamera")}}</div>
-                            <template v-if="row.type_id == 2 || row.type_id == 3">
-                                <div>
-
-                                    {{ $t("exchange.compound-tip-a")}}
-                                    {{ row.type_id == 3 ? $t("account.bronze-medal") : $t("exchange.sliver-pack") }}
-                                    {{ $t("exchange.compound-tip-b")}}
-                                    <span v-if="row.type_id == 3"
-                                        class="type-name">{{ $t("exchange.sliver-pack") }}</span>
-                                    <span v-if="row.type_id == 2"
-                                        class="type-name">{{ $t("exchange.gold-pack") }}</span>
-                                </div>
-                                <div>
-                                    <span>{{ $t("exchange.compound-tip-c")}}{{row.type_id == 2 ? $t("exchange.gold-pack") : $t("exchange.sliver-pack")}}{{ $t("exchange.compound-tip-d")}}</span>
-                                    <el-input-number v-model="num" size="mini" @change="handleChange"
-                                        @keydown.native="e => e.returnValue = ''" :min="0" :max="maxContent">
-                                    </el-input-number>
-                                </div>
-
-                            </template>
-                        </template>
-                    </div>
-                    <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
+                    <!-- <el-button type="primary" class="syn" v-debounce="doCompound" :disabled="maxContent <= 0"
                         v-if="[2, 3].includes(row.type_id)">
-                        {{ $t("account.synthetic") }}</el-button>
-                    <el-button type="primary" class="syn" @click="doNext" :disabled="maxContent <= 0" v-else>
-                        {{ $t("exchange.next") }}
+                        {{ $$t("account.synthetic") }}</el-button> -->
+                    <!-- <el-button type="primary" class="syn" @click="doNext"
+                        :disabled="maxContent <= 0 && row.belong_type !== -10" v-else>
+                        {{ $$t("exchange", "next") }}
+                    </el-button> -->
+                     <el-button type="primary" class="syn" v-debounce="doCompound"
+                        v-if="[2, 3].includes(row.type_id)">
+                        {{ $$t("account.synthetic") }}</el-button>
+                    <el-button type="primary" class="syn" @click="doNext"
+                         v-else>
+                        {{ $$t("exchange", "next") }}
                     </el-button>
 
                 </div>
                 <div class="form-cot" v-else>
                     <div class="tip">
-                        {{ $t("exchange.please-fill-in-the-complete-information") }}
+                        {{ $$t("exchange" ,"please-fill-in-the-complete-information") }}
                     </div>
                     <el-form ref="ruleForm" :rules="rules" :model="form" label-position="top" label-width="80px">
-                        <el-form-item :label="$t('exchange.name')" prop="name">
+                        <el-form-item :label="$$t('exchange', 'name')" prop="name">
                             <el-input v-model="form.name"></el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('exchange.phone-number')" prop="phone">
+                        <el-form-item :label="$$t('exchange', 'phone-number')" prop="phone">
                             <el-input v-model="form.phone"></el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('exchange.telegram')" prop="telegram">
+                        <el-form-item :label="$$t('exchange', 'telegram')" prop="telegram">
                             <el-input v-model="form.telegram"></el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('exchange.e-mail')" prop="email">
+                        <el-form-item :label="$$t('exchange', 'e-mail')" prop="email">
                             <el-input v-model="form.email"></el-input>
                         </el-form-item>
-                        <el-form-item :label="$t('exchange.delivery-address')" prop="delivery_addr">
+                        <el-form-item :label="$$t('exchange', 'delivery-address')" prop="delivery_addr">
                             <el-input type="textarea" v-model="form.delivery_addr"></el-input>
                         </el-form-item>
                         <el-form-item>
                             <div class="btn-wrapper">
-                                <el-button type="primary" class="syn"  v-debounce="submitForm">
-                                    {{ $t("exchange.confirm-exchange") }}</el-button>
+                                <el-button type="primary" class="syn" v-debounce="submitForm">
+                                    {{ $$t("exchange", "confirm-exchange") }}</el-button>
                             </div>
                         </el-form-item>
                     </el-form>
@@ -112,8 +113,9 @@ type_id: 24  帕拉梅拉碎片
 
 */
     import myAjax from '@/utils/ajax.js'
-
-
+    import {
+        netImgBaseUrl
+    } from '@/config/config.js'
     export default {
         name: 'compound',
         components: {},
@@ -126,11 +128,12 @@ type_id: 24  帕拉梅拉碎片
         data() {
             return {
                 prefixCls: 'views-account-compound',
+                netImgBaseUrl,
                 isShowDialog: true,
                 isShowFormWrapper: false,
                 submitLoading: false,
-                needNum: 100,
                 dialogWidth: '480px',
+                needNum: 0,
                 num: '',
                 form: {
                     name: '',
@@ -170,17 +173,16 @@ type_id: 24  帕拉梅拉碎片
         },
         computed: {
             maxContent() {
+                if (!this.needNum) return 0
                 return parseInt(this.row.num / this.needNum)
+            },
+            translateName() {
+                return this.row.name.replace(/Shards/ig, '').replace('-', '')
             }
         },
         watch: {},
         created() {
-            if (this.row.type_id == 2) {
-                this.needNum = 7
-            }
-            if (this.row.type_id == 3) {
-                this.needNum = 10
-            }
+            this.getNeedNum()
             let width = window.innerWidth;
             if (width < 768) {
                 this.dialogWidth = "8.9rem";
@@ -189,6 +191,14 @@ type_id: 24  帕拉梅拉碎片
         mounted() {},
         beforeDestroy() {},
         methods: {
+            getNeedNum() {
+                if (this.row.can_merge) {
+                    this.needNum = this.row.merge_num || 0
+                } else if (this.row.can_exchange) {
+                    this.needNum = this.row.exchange_num || 0
+                }
+                console.log(this.row)
+            },
             doNext() {
                 this.isShowFormWrapper = true
             },
@@ -209,7 +219,7 @@ type_id: 24  帕拉梅拉碎片
                             }
                         }).then(res => {
                             if (res.ok) {
-                                this.$showOk(this.$t("common.ope-suc"))
+                                this.$showOk(this.$$t("common.ope-suc"))
                                 this.isShowDialog = this.submitLoading = false
                                 const data = [res.data]
                                 this.$emit('compoundSuc', data)
@@ -225,7 +235,7 @@ type_id: 24  帕拉梅拉碎片
                     data: {
                         body: {
                             type_id: this.row.type_id,
-                            num: this.num * 10
+                            num: this.num * this.needNum
                         }
                     }
                 }).then(res => {
@@ -296,6 +306,11 @@ type_id: 24  帕拉梅拉碎片
                 width: 100%;
                 height: 4rem;
             }
+
+            .material-nft {
+                height: auto;
+            }
+
         }
 
         .compound-back {

@@ -4,7 +4,7 @@
             <div class="w">
                 <div class="left">
                     <img src="../../assets/images/net-mining.png" alt="">
-                    {{$t("common.net-mining")}}
+                    {{$t("route.net-mining")}}
                 </div>
                 <div class="right">
                     <div class="memory-warp">
@@ -25,7 +25,7 @@
                     </div>
                     <ul>
                         <li v-for="(value, key, index) in coinCountData.items" :key="index">
-                            <p class="color" :style="{color: key}">{{$t(`account.${key}`)}}</p>
+                            <p class="color" :style="{color: key}">{{$t(`common.${key}`)}}</p>
                             <p class="num">{{ value }}</p>
                         </li>
                     </ul>
@@ -125,7 +125,7 @@
 
 
         </div>
-        <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px"
+        <!-- <el-dialog :title="$t('net-mining.staking-information')" :visible.sync="dialogVisible" width="480px"
             :close-on-click-modal="false" custom-class="pledge-dialog" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
@@ -172,18 +172,15 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove">
-                        {{ $t("common.confirmed")}}
-                    </el-button>
-                    <!-- <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
+                    <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         v-debounce="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
-                    </el-button> -->
+                    </el-button>
                 </div>
             </div>
 
-        </el-dialog>
-        <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt" :show-close="!comfirmLoading">
+        </el-dialog> -->
+        <!-- <el-drawer title="Pledge Information" :visible.sync="drawer" direction="btt" :show-close="!comfirmLoading">
             <div class="content" v-loading="dialogLoading">
                 <div class="info-item pledge-content">
                     <div class="tit">
@@ -228,9 +225,6 @@
                     </div>
                 </div>
                 <div class="btn-wrap">
-                    <!-- <el-button type="primary" :loading="comfirmLoading" v-debounce="beforeApprove" >
-                        {{ $t("common.confirmed")}}
-                    </el-button> -->
                     <el-button type="primary" :disabled="balanceCount < needAmazing" :loading="comfirmLoading"
                         v-debounce="beforeApprove">
                         {{ balanceCount &lt; needAmazing ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
@@ -238,7 +232,7 @@
                 </div>
             </div>
 
-        </el-drawer>
+        </el-drawer> -->
         <expand v-if="isShowMemoryExpand" @close="() => this.isShowMemoryExpand = false"></expand>
         <take-out v-if="isShowMemoryTakeOut" @close="() => this.isShowMemoryTakeOut = false" />
         <staking-rom v-if="isShowMemoryStakingRom" @close="() => this.isShowMemoryStakingRom = false"/>
@@ -289,7 +283,7 @@
                 },
                 tabs: [{
                     id: 1,
-                    title: this.$t("common.staking"),
+                    title: this.$t("staking.staking"),
                     num: 0
                 }, {
                     id: 0,

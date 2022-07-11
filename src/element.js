@@ -11,6 +11,7 @@ import ElementUI, {
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(ElementUI, {
+    size: 'mediun',
     i18n: (key, value) => i18n.t(key, value)
 })
 

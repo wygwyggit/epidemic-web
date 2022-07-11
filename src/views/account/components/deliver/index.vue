@@ -1,21 +1,21 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="$t('common.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
+        <el-dialog :title="$t('deliver.deliver')" custom-class="deliver-dialog" :close-on-click-modal="false"
             :visible.sync="isShowDialog" @close="doClose" width="6.4rem" v-if="isShowDialog" :show-close="!submitLoading">
             <div class="content" v-loading="isLoading">
                 <div class="addr">
-                    <div class="tit">{{$t('common.enter-address')}}</div>
-                    <el-input v-model="addressTxt" :placeholder="$t('common.enter-ad-tip')"></el-input>
+                    <div class="tit">{{$t('deliver.enter-address')}}</div>
+                    <el-input v-model="addressTxt" :placeholder="$t('deliver.enter-ad-tip')"></el-input>
                 </div>
                 <div class="remaining-times">
-                    {{$t('common.remain-times')}}: <span>{{ userInfo.user_give_left_count }}</span>
+                    {{$t('deliver.remain-times')}}: <span>{{ userInfo.user_give_left_count }}</span>
                 </div>
                 <div class="tip">
-                    {{$t('common.transferred-tip')}}
+                    {{$t('deliver.transferred-tip')}}
                 </div>
                 <el-button type="primary" :disabled="!addressTxt || userInfo.user_give_left_count <= 0" :loading="submitLoading"
                     @click="doNftApprove">
-                    {{$t('common.deliver')}}</el-button>
+                    {{$t('deliver.deliver')}}</el-button>
             </div>
         </el-dialog>
     </div>
@@ -29,7 +29,7 @@
         mapState
     } from 'vuex'
     export default {
-        name: '',
+        name: 'account-deliver',
         components: {
 
         },
@@ -53,7 +53,7 @@
         },
         data() {
             return {
-                prefixCls: 'deliver-dialog',
+                prefixCls: 'views-account-deliver',
                 isShowDialog: true,
                 isLoading: true,
                 submitLoading: false,
@@ -122,7 +122,7 @@
 </script>
 
 <style lang="scss">
-    $prefixCls: "deliver-dialog";
+    $prefixCls: "views-account-deliver";
 
     .#{$prefixCls} {
         .deliver-dialog {

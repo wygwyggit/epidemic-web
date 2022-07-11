@@ -5,7 +5,7 @@
                 <div class="tit-tab">
                     <div class="left">
                         <img src="../../assets/images/nav-marketplace.png" alt="">
-                        {{ $t("common.marketplace")}}
+                        {{ $t("route.marketplace")}}
                     </div>
                     <div class="right" @click="handleRecored">
                         <img src="../../assets/images/clock.png" alt="">
@@ -76,7 +76,7 @@
                         <div class="filter-content">
                             <ul class="check-list" v-if="currentTabId === 1">
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("account.sale")}}：</div>
+                                    <div class="label-name">{{$t("sale.sale")}}：</div>
                                     <el-radio-group v-model="checkListSale">
                                         <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                         <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
@@ -85,15 +85,15 @@
                                 <li class="check-item">
                                     <div class="label-name">{{$t("detail.color")}}：</div>
                                     <el-checkbox-group v-model="checkListColor">
-                                        <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}
+                                        <el-checkbox label="yellow" class="yellow">{{$t("common.yellow")}}
                                         </el-checkbox>
-                                        <el-checkbox label="orange" class="orange">{{$t("account.orange")}}
+                                        <el-checkbox label="orange" class="orange">{{$t("common.orange")}}
                                         </el-checkbox>
-                                        <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
-                                        <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                                        <el-checkbox label="purple" class="purple">{{$t("account.purple")}}
+                                        <el-checkbox label="red" class="red">{{$t("common.red")}}</el-checkbox>
+                                        <el-checkbox label="blue" class="blue">{{$t("common.blue")}}</el-checkbox>
+                                        <el-checkbox label="purple" class="purple">{{$t("common.purple")}}
                                         </el-checkbox>
-                                        <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
+                                        <el-checkbox label="diamond">{{$t("common.diamond")}}</el-checkbox>
                                     </el-checkbox-group>
                                 </li>
                                 <li class="check-item">
@@ -122,7 +122,7 @@
                             </ul>
                             <ul class="check-list" v-else>
                                 <li class="check-item">
-                                    <div class="label-name">{{$t("account.sale")}}：</div>
+                                    <div class="label-name">{{$t("sale.sale")}}：</div>
                                     <el-radio-group v-model="checkListSale">
                                         <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                         <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
@@ -182,7 +182,7 @@
 
                             <div class="btns-wrap" v-if="item.status === 8 && isCanBuy">
                                 <template>
-                                    <div class="btn btn-sale" @click="doBuy(item)">{{$t("detail.buy")}}</div>
+                                    <div class="btn btn-sale" @click="doBuy(item)">{{$t("common.buy")}}</div>
                                 </template>
                             </div>
                         </item-card>
@@ -315,7 +315,7 @@
                 <ul class="check-list">
                     <ul class="check-list" v-if="currentTabId === 1">
                         <li class="check-item">
-                            <div class="label-name">{{$t("account.sale")}}</div>
+                            <div class="label-name">{{$t("sale.sale")}}</div>
                             <el-radio-group v-model="checkListSale">
                                 <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                 <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>
@@ -324,12 +324,12 @@
                         <li class="check-item">
                             <div class="label-name">{{$t("detail.color")}}</div>
                             <el-checkbox-group v-model="checkListColor">
-                                <el-checkbox label="yellow" class="yellow">{{$t("account.yellow")}}</el-checkbox>
-                                <el-checkbox label="orange" class="orange">{{$t("account.orange")}}</el-checkbox>
-                                <el-checkbox label="red" class="red">{{$t("account.red")}}</el-checkbox>
-                                <el-checkbox label="blue" class="blue">{{$t("account.blue")}}</el-checkbox>
-                                <el-checkbox label="purple" class="purple">{{$t("account.purple")}}</el-checkbox>
-                                <el-checkbox label="diamond">{{$t("account.diamond")}}</el-checkbox>
+                                <el-checkbox label="yellow" class="yellow">{{$t("common.yellow")}}</el-checkbox>
+                                <el-checkbox label="orange" class="orange">{{$t("common.orange")}}</el-checkbox>
+                                <el-checkbox label="red" class="red">{{$t("common.red")}}</el-checkbox>
+                                <el-checkbox label="blue" class="blue">{{$t("common.blue")}}</el-checkbox>
+                                <el-checkbox label="purple" class="purple">{{$t("common.purple")}}</el-checkbox>
+                                <el-checkbox label="diamond">{{$t("common.diamond")}}</el-checkbox>
                             </el-checkbox-group>
                         </li>
                         <li class="check-item">
@@ -358,7 +358,7 @@
                     </ul>
                     <ul class="check-list" v-else>
                         <li class="check-item">
-                            <div class="label-name">{{$t("account.sale")}}：</div>
+                            <div class="label-name">{{$t("sale.sale")}}：</div>
                             <el-radio-group v-model="checkListSale">
                                 <el-radio :label="1">{{$t("marketplace.all-sale")}}</el-radio>
                                 <el-radio :label="2">{{$t("marketplace.my-sale")}}</el-radio>

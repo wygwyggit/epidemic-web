@@ -102,7 +102,7 @@
                                 v-if="tab.name === 'marketplace'" />
                             <img src="../../assets/images/nav-my-account-m.png" alt="" v-if="tab.name === 'account'" />
                             <img src="../../assets/images/net-mining.png" alt="" v-if="tab.name === 'netMining'" />
-                            {{ $t(`common.${tab.text}`) }}</a>
+                            {{ $t(`route.${tab.text}`) }}</a>
                         <a href="javascript:;" class="item lang" @click="selectLang">
                             <img src="../../assets/images/nav-lang.png" alt="" />
                             {{ $t("common.language") }}
@@ -764,6 +764,10 @@
                             flex: 1;
                             margin: 0 0.4rem;
                             font-size: 0.426666666666667rem;
+
+                            p {
+                                line-height: .6rem;
+                            }
                         }
 
                         .buy-btn {

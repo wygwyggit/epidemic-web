@@ -1,17 +1,17 @@
 <template>
     <div class="offline-notice-page">
-        <el-dialog :title="$t('common.off-line-title')" :visible.sync="offLineDialogVisible" width="8.9rem"
+        <el-dialog :title="$$t('offLine', 'off-line-title')" :visible.sync="offLineDialogVisible" width="8.9rem"
             custom-class="logout-dialog" :close-on-click-modal="false" :close-on-press-escape="false">
             <div class="dialog-content">
                 <div class="icon">
                     <img src="../no-connect-wallet/no-wallet.png" alt="">
                 </div>
                 <div class="tips">
-                    {{ $t("common.off-line")}}
+                    {{ $$t("offLine", "off-line")}}
                 </div>
                 <span slot="footer" class="dialog-footer">
-                    <el-button type="primary" @click="sign">{{ $t("common.please-authorize") }}</el-button>
-                    <el-button @click="logOut">{{ $t("common.log-out") }}</el-button>
+                    <el-button type="primary" @click="sign">{{ $$t("offLine", "please-authorize") }}</el-button>
+                    <el-button @click="logOut">{{ $$t("offLine", "log-out") }}</el-button>
                 </span>
             </div>
         </el-dialog>

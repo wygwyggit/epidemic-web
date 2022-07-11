@@ -9,7 +9,7 @@
                     </div>
                     <ul class="con">
                         <li class="con-item" v-for="(value, key) in stakingRarityMap" :key="key">
-                            <div class="key" :style="{color: key}">{{ $t(`account.${key}`) }}</div>
+                            <div class="key" :style="{color: key}">{{ $t(`common.${key}`) }}</div>
                             <div class="val">{{  value.length || 0 }}</div>
                         </li>
                     </ul>
@@ -63,7 +63,7 @@
                             <a class="buy"
                                 href="https://pancakeswap.finance/swap?inputCurrency=BNB&outputCurrency=0x44ece1031e5b5e2d9169546cc10ea5c95ba96237"
                                 target="_blank">
-                                {{ $t('detail.buy') }}
+                                {{ $t('common.buy') }}
                             </a>
                         </div>
                     </div>

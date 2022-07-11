@@ -49,7 +49,7 @@
                 <div class="opt-btn">
                     <el-button class="btn" @click="doSubmit" :disabled="!hasBalance || !validQuantity"
                         :loading="submitLoading">
-                        {{ !hasBalance ? $t("net-mining.insufficient-balance") : $t("common.confirmed")}}
+                        {{ !hasBalance ? $t("common.insufficient-balance") : $t("common.confirmed")}}
                     </el-button>
                 </div>
             </div>
@@ -198,7 +198,6 @@
                 }).then(hash => {
                     this.sendBuy(hash)
                 }).catch(err => {
-                    console.log(err)
                     this.submitLoading = false
                 })
             },

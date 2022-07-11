@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="row.amount ? $t('account.revise') : $t('account.sale')" :visible.sync="isShowDialog"
+        <el-dialog :title="row.amount ? $t('account.revise') : $t('sale.sale')" :visible.sync="isShowDialog"
             width="6.4rem" @close="saleReviseDialogClosed" custom-class="sale-revise-dialog"
             :show-close="!submitLoading" :close-on-click-modal="false">
             <!-- 有Num表示是碎片或礼包 -->
@@ -13,7 +13,7 @@
                             <div class="val">{{ row.num }}</div>
                         </li>
                         <li class="item">
-                            <div class="key">{{ $t("account.quantity-for-sale") }}</div>
+                            <div class="key">{{ $t("sale.quantity-for-sale") }}</div>
                             <div class="val">
                                 <el-input-number v-model="saleQuantity" :min="1" :max="row.num" :disabled="row.amount">
                                 </el-input-number>
@@ -27,7 +27,7 @@
                                 maxlength='11' onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </li>
                         <li class="item">
-                            <span class="mini-tip">{{ $t("account.sale-price-mini") }}{{row.min_price}}
+                            <span class="mini-tip">{{ $t("sale.sale-price-mini") }}{{row.min_price}}
                                 {{ row.payment_token_name }}</span>
                         </li>
                     </ul>
@@ -38,15 +38,15 @@
                         <span>{{ $t("account.price") }}</span>
                         <div v-if="row.payment_token_id == 2 && [4,5,6,7,8,9,10,25,26,27].includes(row.type_id)" class="tip-wrap">
                             <p class="mini-tip">
-                                {{ $t("account.guidance-price")}}: {{ row.type_id == 10 ? busdGuidancePrice.shoes : busdGuidancePrice[row.rarity] }} BUSD
+                                {{ $t("sale.guidance-price")}}: {{ row.type_id == 10 ? busdGuidancePrice.shoes : busdGuidancePrice[row.rarity] }} BUSD
                             </p>
                             <p class="mini-tip">
-                                {{ $t("account.otherwise-handling-fee") }}
+                                {{ $t("sale.otherwise-handling-fee") }}
                             </p>
                         </div>
                         <div v-else class="tip-wrap">
                             <p class="mini-tip">
-                                {{ $t("account.sale-price-mini") }} {{row.min_price}} {{ row.payment_token_name }}
+                                {{ $t("sale.sale-price-mini") }} {{row.min_price}} {{ row.payment_token_name }}
                             </p>
                         </div>
 
@@ -58,7 +58,7 @@
                         <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')" maxlength='11'
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                     </div>
-                    <p class="price-tip" v-if="row.amount">{{$t("common.net-price-modified-tip")}}</p>
+                    <p class="price-tip" v-if="row.amount">{{$t("sale.net-price-modified-tip")}}</p>
                 </template>
                 <div class="opt-btn">
                     <el-button class="btn" :disabled="!validQuantity || !validPrice" :loading="submitLoading"

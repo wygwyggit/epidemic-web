@@ -22,7 +22,7 @@
                                 <img src="../../assets/images/reward.png" alt="">
                             </div>
                             <div class="right-info">
-                                <p>{{ $$t("ego-wall.ego-wall") }}</p>
+                                <p>{{ $$t("ego-wall", "ego-wall") }}</p>
                             </div>
                         </li>
                         <li class="sign-in">
@@ -69,33 +69,33 @@
                         </el-empty>
                         <template v-if="netList.length && !isLoading">
                             <item-card v-for="(item, index) of netList" :key="index" :itemInfo="item"
-                                :isShowNum="currentTabId == 2" @goDetail="goCardDetail(item)">
+                                :isShowNum="currentTabId == 2" :isShowName="currentTabId == 1" @goDetail="goCardDetail(item)">
                                 <div class="btns-wrap">
                                     <template v-if="item.status == 0">
                                         <div class="btn btn-open" :class="{'disable': !item.can_open}"
                                             v-if="item.belong_type == -1" @click="openGiftBag(item)">
-                                            {{$$t("account", "open")}}
+                                            {{ $$t("account", "open") }}
                                         </div>
-                                        <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
-                                            v-if="item.type_id == 2" @click="doSynthetic(item)">
-                                            {{$$t("account", "synthetic")}}</div>
+                                        <div class="btn btn-synthetic"
+                                            v-if="item.can_merge" @click="doSynthetic(item)">
+                                            {{ $$t("account", "synthetic") }}</div>
                                         <!-- <div class="btn btn-synthetic" :class="{'disable': !item.can_merge}"
                                             v-if="item.type_id == 2" @click="doSynthetic(item)">
                                             {{$$t("account.synthetic")}}</div> -->
                                         <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
                                             v-if="item.type_id == 16" @click="doUpgrade(item)">
-                                            {{$$t("account", "upgrade")}}</div>
+                                            {{ $$t("account", "upgrade") }}</div>
                                         <div class="btn btn-upgrade" :class="{'disable': !item.can_level_up}"
                                             v-if="item.type_id == 17" @click="doUpgrade(item)">
-                                            {{$$t("ego-wall.upgrade")}}</div>
+                                            {{ $$t("account", "upgrade") }}</div>
                                         <div class="btn btn-synthetic" v-if="item.can_exchange"
                                             @click="doSynthetic(item)">
-                                            {{$$t("exchange.exchange")}}</div>
+                                            {{ $$t("exchange", "exchange") }}</div>
                                         <div class="btn btn-deliver" :class="{'disable': !item.can_pawn}"
                                             @click="doDeliver(item)" v-if="item.belong_type == 1">
-                                            {{$$t("common.deliver")}}</div>
+                                            {{ $$t("deliver", "deliver") }}</div>
                                         <div class="btn btn-sale" :class="{'disable': !item.can_sale}"
-                                            @click="doSale(item)">{{$$t("account.sale")}}</div>
+                                            @click="doSale(item)">{{ $$t("sale", "sale") }}</div>
                                     </template>
 
                                     <!-- <div class="btn btn-on-sale">{{ $$t("account.on-sale")}}</div> -->
@@ -107,14 +107,14 @@
                                             {{ $$t("account.revise")}}</div>
                                     </template>
                                     <template v-if="item.status == 2">
-                                        <div class="btn btn-on-processing">{{ $$t("account.processing")}}</div>
+                                        <div class="btn btn-on-processing">{{ $$t("account", "processing")}}</div>
                                     </template>
                                     <template v-if="item.status == 1">
-                                        <div class="btn btn-on-staking">{{ $$t("account.staking")}}</div>
+                                        <div class="btn btn-on-staking">{{ $$t("account", "staking")}}</div>
                                     </template>
                                     <template
                                         v-if="item.status == -2 || item.status == 4 || item.status == 9 || item.status == -1">
-                                        <div class="btn btn-on-sending">{{ $$t("account.sending")}}</div>
+                                        <div class="btn btn-on-sending">{{ $$t("account", "sending")}}</div>
                                     </template>
                                 </div>
                             </item-card>
@@ -137,9 +137,9 @@
 
         <sale :row="currentGoodRow" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
             @sendSaleOk="sendSaleOk"></sale>
-        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
+        <deliver v-if="isShowDeliverDialog" :goods_id="currentGoodRow.goods_id" :goods_name="currentGoodRow.name"
             :addr="currentGoodRow.user_addr" :belong_type="currentGoodRow.belong_type" @sendOk="deliverSuccess"
-            @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
+            @close="() => this.isShowDeliverDialog = false"></deliver>
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <compound v-if="isShowCompound" :row="currentGoodRow" @close="() => this.isShowCompound = false"
             @compoundSuc="compoundSuc"></compound>
@@ -151,7 +151,7 @@
             :visible.sync="isShowSignInSuccessDialog" width="7.46rem">
             <div class="sign-in-content">
                 <div class="success-main">
-                    <p class="txt">successfully</p>
+                    <p class="txt">{{ $$t("account", "successfully") }}</p>
                 </div>
                 <div class="close">
                     <img src="../../assets/images/g-close.png" alt=""
@@ -164,12 +164,10 @@
 </template>
 
 <script>
-    import eventBus from "@/utils/eventBus";
     import myAjax from '@/utils/ajax.js'
-    import cookie from "@/utils/cookie.js";
     import PageTabs from '@/components/page-tabs'
     import itemCard from '@/components/item-card'
-    import DeliverDialog from '@/components/deliver-dialog'
+    import Deliver from './components/deliver'
     import emptyImage from '@/assets/images/empty.png'
     import giftBag from './components/gift-bag'
     import compound from './components/compound'
@@ -186,7 +184,7 @@
         components: {
             PageTabs,
             itemCard,
-            DeliverDialog,
+            Deliver,
             giftBag,
             compound,
             Sale,
@@ -214,46 +212,46 @@
                 isLoading: true,
                 tabs: [{
                     id: 1,
-                    title: this.$$t("marketplace.nfts"),
+                    title: this.$$t("common", "nft"),
                     num: 0
                 }, {
                     id: 2,
-                    title: this.$$t("marketplace.other"),
+                    title: this.$$t("common", "other"),
                     num: 0
                 }],
                 selectedStatus: 0,
                 currentTabId: 1,
                 checkObj: {
                     1: {
-                        label: this.$$t("account.status"),
+                        label: this.$$t("account", "status"),
                         list: [{
                             id: 0,
-                            val: this.$$t("account.available")
+                            val: this.$$t("account", "available")
                         }, {
                             id: 8,
-                            val: this.$$t("account.on-sale")
+                            val: this.$$t("account", "on-sale")
                         }, {
                             id: 1,
-                            val: this.$$t("account.staking")
+                            val: this.$$t("account", "staking")
                         }, {
                             id: 4,
-                            val: this.$$t("account.sending")
+                            val: this.$$t("account", "sending")
                         }, {
                             id: 2,
-                            val: this.$$t("account.processing")
+                            val: this.$$t("account", "processing")
                         }]
                     },
                     2: {
-                        label: this.$$t("account.status"),
+                        label: this.$$t("account", "status"),
                         list: [{
                             id: 0,
-                            val: this.$$t("account.available")
+                            val: this.$$t("account","available")
                         }, {
                             id: 8,
-                            val: this.$$t("account.on-sale")
+                            val: this.$$t("account", "on-sale")
                         }, {
                             id: 4,
-                            val: this.$$t("account.sending")
+                            val: this.$$t("account", "sending")
                         }]
                     }
                 },
@@ -285,8 +283,6 @@
             Promise.all([this.getTotalInfo(), this.getLiist()]).then(res => {
                 this.isLoading = false
             })
-
-
         },
         mounted() {
             //eventBus.$on('sign-fail', this.initSignConnectData)
@@ -305,7 +301,8 @@
             openCompoundDialog() {
                 this.currentGoodRow = {
                     type_id: 3,
-                    num: this.userInfo.copper_count || 0
+                    num: this.userInfo.copper_count || 0,
+                    name: 'Bronze medal'
                 }
                 this.isShowCompound = true
             },
@@ -357,7 +354,6 @@
                 this.getLiist()
             },
             doSynthetic(row) {
-                if (!row.can_merge) return
                 this.currentGoodRow = row
                 this.isShowCompound = true
             },

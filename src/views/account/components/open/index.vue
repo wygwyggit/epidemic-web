@@ -1,6 +1,6 @@
 <template>
     <div :class="prefixCls">
-        <el-dialog :title="$t('account.open')" :visible.sync="isShowDialog" width="6.4rem" @close="openGiftDialogClosed"
+        <el-dialog :title="$t('open.open')" :visible.sync="isShowDialog" width="6.4rem" @close="openGiftDialogClosed"
             custom-class="open-gift-dialog" :close-on-click-modal="false">
 
             <ul>
@@ -9,7 +9,7 @@
                     <div class="val">{{ row.num }}</div>
                 </li>
                 <li class="item">
-                    <div class="key">{{ $t("account.quantity-for-open") }}</div>
+                    <div class="key">{{ $t("open.quantity-for-open") }}</div>
                     <div class="val">
                         <el-input-number v-model="openQuantity" :min="1" :max="row.num > 5 ? 5 : row.num"></el-input-number>
                     </div>

@@ -31,7 +31,7 @@
                                     <div class="item">
                                         <label class="label"> {{ $t("detail.color") }}:</label>
                                         <span class="con" :style="{color: rowInfo.rarity}">
-                                            {{ rowInfo.rarity ? $t(`account.${rowInfo.rarity}`) : '-'}}</span>
+                                            {{ rowInfo.rarity ? $t(`common.${rowInfo.rarity}`) : '-'}}</span>
                                     </div>
                                     <div class="item">
 
@@ -60,12 +60,12 @@
                                 <div class="opts-wrap border">
                                     <div class="opts-title top">
                                         <img src="../../assets/images/price_tag.png" />
-                                        {{ $t("account.sale") }}
+                                        {{ $t("sale.sale") }}
                                     </div>
                                     <div class="card-opt">
                                         <div class="btns">
                                             <el-button type="primary" class="btn-sale" :disabled="!rowInfo.can_sale"
-                                                @click="() => this.saleReviseDialog = true"> {{ $t("account.sale") }}
+                                                @click="() => this.saleReviseDialog = true"> {{ $t("sale.sale") }}
                                             </el-button>
                                         </div>
                                     </div>
@@ -74,7 +74,7 @@
                                     <div class="btns">
                                         <el-button type="primary" class="btn-deliver" :disabled="!rowInfo.can_pawn"
                                             @click="() => this.isShowDeliverDialog = true">
-                                            {{ $t("common.deliver") }}
+                                            {{ $t("deliver.deliver") }}
                                         </el-button>
                                         <!-- <el-button type="primary" class="btn-upgrade"
                                             @click="() => this.isShowUpgradeDialog = true">
@@ -133,14 +133,14 @@
                                         <div class="btns" v-if="isConnectAndSignin">
                                             <el-button class="btn-buy" v-if="from === 'marketplace' && !isOwnerProduct"
                                                 @click="doBuy">
-                                                {{ $t("detail.buy") }}</el-button>
+                                                {{ $t("common.buy") }}</el-button>
                                             <template
                                                 v-if="from === 'account' || (from === 'marketplace' && isOwnerProduct)">
                                                 <el-button class="btn-revise"
                                                     @click="() => this.saleReviseDialog = true">
-                                                    {{ $t("detail.revise") }}</el-button>
+                                                    {{ $t("account.revise") }}</el-button>
                                                 <el-button class="btn-cancel-sale" @click="doCancelSale">
-                                                    {{ $t("detail.cancelSale") }}
+                                                    {{ $t("account.cancel-sale") }}
                                                 </el-button>
                                             </template>
                                         </div>
@@ -258,9 +258,9 @@
         <gift-bag v-if="isShowGiftBag" :rowList="giftBagList" @close="doGiftClose"></gift-bag>
         <sale :row="rowInfo" v-if="saleReviseDialog" @close="() => this.saleReviseDialog = false"
             @sendSaleOk="sendSaleOk"></sale>
-        <deliver-dialog v-if="isShowDeliverDialog" :goods_id="rowInfo.goods_id" :goods_name="rowInfo.name"
+        <deliver v-if="isShowDeliverDialog" :goods_id="rowInfo.goods_id" :goods_name="rowInfo.name"
             :addr="rowInfo.owner_addr" :belong_type="rowInfo.belong_type" @sendOk="deliverSuccess"
-            @close="() => this.isShowDeliverDialog = false"></deliver-dialog>
+            @close="() => this.isShowDeliverDialog = false"></deliver>
         <open :row="rowInfo" v-if="isShowOpenGift" @close="() => this.isShowOpenGift = false" @openGiftOk="openGiftOk">
         </open>
         <compound v-if="isShowCompound" :row="rowInfo" @close="() => this.isShowCompound = false"
@@ -276,7 +276,7 @@
     import Cookie from "@/utils/cookie.js";
     import myAjax from '@/utils/ajax.js'
     import Sale from '../account/components/sale'
-    import DeliverDialog from '@/components/deliver-dialog'
+    import Deliver from '../account/components/deliver'
     import GiftBag from '../account/components/gift-bag'
     import Open from '../account/components/open'
     import Compound from '../account/components/compound'
@@ -289,7 +289,7 @@
     export default {
         components: {
             Sale,
-            DeliverDialog,
+            Deliver,
             GiftBag,
             Open,
             Compound,

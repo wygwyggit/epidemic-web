@@ -7,7 +7,7 @@
                 </span>
                 <el-popover placement="bottom-start" width="340" trigger="click" :visible-arrow="false"
                     popper-class="el-popover-black">
-                    <div class="pop-tip" slot="reference">{{ $t("common.rules") }}</div>
+                    <div class="pop-tip" slot="reference">{{ $t("blind-box.rules") }}</div>
                     <div class="item">
                         <p class="highlight-color">
                             {{ $t("blind-box.pay-with-adoge-tokens") }}

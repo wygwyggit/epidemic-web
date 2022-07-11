@@ -10,11 +10,11 @@ Vue.use(VueI18n)
 Vue.mixin(I18nFn)
 
 const langFiles = {
-    'en': {
+    'ZH': {
         ...elementZhLocale,
         ...zhLocale
     },
-    'zh': {
+    'EN': {
         ...elementEnLocale,
         ...enLocale
     }
@@ -24,18 +24,19 @@ export function getLanguage() {
     if (chooseLanguage) {
         return chooseLanguage
     }
-    const language = (navigator.language || navigator.browserLanguage).toLowerCase()
+    const language = (navigator.language || navigator.browserLanguage).toUpperCase()
     const locales = Object.keys(langFiles)
     for (const locale of locales) {
         if (language.indexOf(locale) > -1) {
             return locale
         }
     }
-    return 'en'
+    return 'EN'
 }
 const i18n = new VueI18n({
     locale: getLanguage(), 
-    messages: langFiles, 
+    messages: langFiles,
+    // silentTranslationWarn: true
 })
 
 export default i18n
