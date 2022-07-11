@@ -1,11 +1,12 @@
 <template>
     <div :class="prefixCls">
         <el-dialog custom-class="compound-dialog" :close-on-click-modal="false" top="11vh" :visible.sync="isShowDialog"
-            :width="dialogWidth" v-if="isShowDialog" @close="doClose">
+            :width="dialogWidth" v-if="isShowDialog" @close="doClose" v-loading.fullscreen="submitLoading">
             <div slot="title" v-if="!isShowFormWrapper">
                 <div class="compound-thing">
                     <img :src="netImgBaseUrl + row.image" v-if="row.belong_type === -10" alt="" class="material-nft">
-                    <img :src="require(`./images/${row.big_img_name.toLowerCase().replace(/\s+/g, '-')}.png`)" v-else alt="">
+                    <img :src="require(`./images/${row.big_img_name.toLowerCase().replace(/\s+/g, '-')}.png`)" v-else
+                        alt="">
                 </div>
             </div>
             <div slot="title" v-else>
@@ -59,11 +60,9 @@
                         :disabled="maxContent <= 0 && row.belong_type !== -10" v-else>
                         {{ $$t("exchange", "next") }}
                     </el-button> -->
-                     <el-button type="primary" class="syn" v-debounce="doCompound"
-                        v-if="row.can_merge">
+                    <el-button type="primary" class="syn" v-debounce="doCompound" v-if="row.can_merge">
                         {{ $$t("account.synthetic") }}</el-button>
-                    <el-button type="primary" class="syn" @click="doNext"
-                         v-if="row.can_exchange">
+                    <el-button type="primary" class="syn" @click="doNext" v-if="row.can_exchange">
                         {{ $$t("exchange", "next") }}
                     </el-button>
 
@@ -230,6 +229,7 @@ type_id: 24  帕拉梅拉碎片
             },
             doCompound() {
                 if (!this.num) return
+                this.submitLoading = true
                 myAjax({
                     url: 'user/prize/merge',
                     data: {
@@ -248,6 +248,7 @@ type_id: 24  帕拉梅拉碎片
                                 x.title = x.name
                             }
                         });
+                        this.submitLoading = false
                         this.$emit('compoundSuc', data)
                     }
                 })

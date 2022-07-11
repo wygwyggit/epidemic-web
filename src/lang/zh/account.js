@@ -18,6 +18,7 @@ export default {
         "available": "可使用",
         "on-sale": "出售中",
         "staking": "质押中",
+        "open": "开礼包",
         "sending": "发送中",
         "upgrade": "升级",
         "synthetic": "融合",

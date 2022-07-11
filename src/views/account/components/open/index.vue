@@ -63,7 +63,7 @@
                         const data = (res.data || {}).rewards
                         data.forEach(x => {
                             if (x.name.includes('-')) {
-                                x.title = x.name.split('-')[3]
+                                x.title = x.name.split('-')[0]
                             } else {
                                 x.title = x.name
                             }
