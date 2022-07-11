@@ -23,7 +23,7 @@
                             <div class="label" :class="{'busd': row.payment_token_id == 2}">
                                 <span>{{ row.payment_token_name }}</span>
                             </div>
-                            <el-input v-model="salePrice" :placeholder="$t('common.please-enter-unit-price')"
+                            <el-input v-model="salePrice" :placeholder="$t('sale.please-enter-unit-price')"
                                 maxlength='11' onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                         </li>
                         <li class="item">
