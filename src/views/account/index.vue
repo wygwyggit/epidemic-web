@@ -302,7 +302,11 @@
                 this.currentGoodRow = {
                     type_id: 3,
                     num: this.userInfo.copper_count || 0,
-                    name: 'Bronze medal'
+                    image: "bronze_medal.jpg",
+                    big_img_name: 'Bronze medal',
+                    can_merge: 1,
+                    can_exchange: 0,
+                    merge_num: 10
                 }
                 this.isShowCompound = true
             },
