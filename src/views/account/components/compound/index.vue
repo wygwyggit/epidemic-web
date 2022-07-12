@@ -219,10 +219,12 @@ type_id: 24  帕拉梅拉碎片
                         }).then(res => {
                             if (res.ok) {
                                 this.$showOk(this.$$t("common.ope-suc"))
-                                this.isShowDialog = this.submitLoading = false
+                                this.isShowDialog = false
                                 const data = [res.data]
                                 this.$emit('compoundSuc', data)
                             }
+                        }).finally(() => {
+                            this.submitLoading = false
                         })
                     }
                 });
@@ -248,9 +250,10 @@ type_id: 24  帕拉梅拉碎片
                                 x.title = x.name
                             }
                         });
-                        this.submitLoading = false
                         this.$emit('compoundSuc', data)
                     }
+                }).finally(() => {
+                    this.submitLoading = false
                 })
             },
             doClose() {
