@@ -45,8 +45,8 @@
                                     <div class="item" v-for="(value, key, index) in rowInfo.goods_attr" :key="index">
 
                                         <label class="label">{{ $t(`marketplace.${key}`) }}:</label>
-                                        <span class="con" v-if="key === 'physical'">{{ value }}</span>
-                                        <template v-if="key === 'energy'">
+                                        <span class="con" v-if="key === 'energy'">{{ value }}</span>
+                                        <template v-if="key === 'physical'">
                                             <span class="star" v-for="item in Number(value)" :key="item"></span>
                                         </template>
                                     </div>
