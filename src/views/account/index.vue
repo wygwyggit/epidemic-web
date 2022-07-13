@@ -536,7 +536,6 @@
                             flag = true
                         })
                     }
-
                 })
             },
             doReviseSale(row) {

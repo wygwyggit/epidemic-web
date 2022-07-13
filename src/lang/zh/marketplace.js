@@ -1,7 +1,7 @@
 export default {
     marketplace: {
         "physical": "Physical",
-        "energy": "Energy",
+        "energy": "活力",
         "order-locked": "订单已锁定",
         "do-not-buy": "你不能购买自己的商品",
         "nft-name": "NFT名称",
@@ -55,7 +55,6 @@ export default {
         "panamera-fragments": "帕拉梅拉碎片",
         "car-fragments": "汽车碎片",
         "phone-fragments": "手机碎片",
-        "energy": "活力",
         "when-you-collect-100-panamera-fragments": "当您收集到100个帕拉梅拉碎片时，您可以合成一辆帕拉梅拉真车",
         "when-you-collect-100-phone-fragments": "当您收集到100个手机碎片时，您可以合成一部真手机",
         "when-you-collect-100-car-fragments": "当您收集到100个汽车碎片时，您可以合成一辆真车",

@@ -55,7 +55,7 @@
                         <div class="label" :class="{'busd': row.payment_token_id == 2}">
                             <span>{{ row.payment_token_name }}</span>
                         </div>
-                        <el-input v-model="salePrice" :placeholder="$t('common.please-enter-price')" maxlength='11'
+                        <el-input v-model="salePrice" :placeholder="$t('sale.please-enter-price')" maxlength='11'
                             onkeyup="value=value.replace(/[^\d]/g,'')"></el-input>
                     </div>
                     <p class="price-tip" v-if="row.amount">{{$t("sale.net-price-modified-tip")}}</p>
